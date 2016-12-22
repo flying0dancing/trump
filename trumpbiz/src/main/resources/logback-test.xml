@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configuration>
+    <!--<statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>-->
+    <property name="output_folder" value="target/result/logs/"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <!--<discriminator class="org.yiwan.webcore.util.ScenarioBasedDiscriminator"/>-->
+        <discriminator>
+            <key>scenario</key>
+            <defaultValue>${output_folder}default.log</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="${scenario}" class="ch.qos.logback.core.FileAppender">
+                <file>${output_folder}${scenario}</file>
+                <Append>false</Append>
+                <!--<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">-->
+                    <!--<layout class="ch.qos.logback.classic.html.HTMLLayout">-->
+                        <!--<pattern>%d{HH:mm:ss.SSS}%thread%level%logger%msg</pattern>-->
+                    <!--</layout>-->
+                <!--</encoder>-->
+                <layout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+                </layout>
+                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                    <level>DEBUG</level>
+                </filter>
+            </appender>
+        </sift>
+    </appender>
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${output_folder}error.log</File>
+        <Append>true</Append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${output_folder}error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+    <logger name="org.yiwan" level="DEBUG">
+        <appender-ref ref="SIFT"/>
+    </logger>
+    <logger name="com.lombardrisk" level="DEBUG">
+        <appender-ref ref="SIFT"/>
+    </logger>
+    <logger name="org.littleshoot.proxy" level="ERROR"/>
+    <logger name="net.lightbody.bmp" level="ERROR"/>
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="DEBUG"/>
+        <appender-ref ref="ERROR"/>
+    </root>
+</configuration>

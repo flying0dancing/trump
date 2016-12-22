@@ -1,0 +1,93 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.lombardrisk</groupId>
+    <artifactId>trump</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>trumpsel</artifactId>
+  
+  <properties> 
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+    <argLine>-Dfile.encoding=UTF-8</argLine>  
+    <reportng.version>1.1.4</reportng.version>  
+    <guice.version>3.0</guice.version>  
+    <xmlFileName>suites/TestTP.xml</xmlFileName> 
+    <reportOutput>${resultFolder}/reportng-reports</reportOutput>
+  </properties>  
+  <dependencies> 
+    <dependency> 
+      <groupId>com.lombardrisk</groupId>  
+      <artifactId>trumpbiz</artifactId>  
+      <version>${project.version}</version>
+    </dependency>  
+    <dependency> 
+      <groupId>com.google.inject</groupId>  
+      <artifactId>guice</artifactId>  
+      <version>${guice.version}</version>  
+      <scope>test</scope> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.uncommons</groupId>  
+      <artifactId>reportng</artifactId>  
+      <version>${reportng.version}</version>  
+      <scope>test</scope>  
+      <exclusions> 
+        <exclusion> 
+          <groupId>org.testng</groupId>  
+          <artifactId>testng</artifactId> 
+        </exclusion> 
+      </exclusions> 
+    </dependency> 
+  </dependencies>  
+  <build> 
+    <plugins> 
+      <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+         <version>2.3.2</version>
+         <configuration>
+         	<source>1.7</source>
+         	<target>1.7</target>
+         </configuration>
+      </plugin>
+      <plugin> 
+        <groupId>org.apache.maven.plugins</groupId>  
+        <artifactId>maven-surefire-plugin</artifactId>  
+        <version>2.19</version>  
+        <configuration> 
+          <suiteXmlFiles> 
+            <suiteXmlFile>${xmlFileName}</suiteXmlFile> 
+          </suiteXmlFiles>  
+          <testFailureIgnore>true</testFailureIgnore>  
+          <properties> 
+            <property> 
+              <name>usedefaultlisteners</name>  
+              <value>false</value> 
+            </property>  
+            <property> 
+              <name>listener</name>  
+              <value>org.uncommons.reportng.HTMLReporter, org.uncommons.reportng.JUnitXMLReporter
+                <!-- org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.yiwan.webcore.testng.ResultListener,org.yiwan.webcore.testng.RetryListener --> 
+              </value> 
+            </property> 
+          </properties>  
+          <systemPropertyVariables> 
+            <org.uncommons.reportng.title>Aigle Report For Product Report</org.uncommons.reportng.title>  
+            <org.uncommons.reportng.escape-output>false</org.uncommons.reportng.escape-output> 
+          </systemPropertyVariables>  
+          <reportsDirectory>${reportOutput}</reportsDirectory> 
+        </configuration>  
+        <dependencies> 
+          <dependency> 
+            <groupId>org.apache.maven.surefire</groupId>  
+            <artifactId>surefire-testng</artifactId>  
+            <version>2.19.1</version> 
+          </dependency> 
+        </dependencies> 
+      </plugin> 
+    </plugins> 
+    
+    
+  </build> 
+</project>
