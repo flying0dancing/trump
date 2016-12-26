@@ -109,9 +109,9 @@ public class TestManager extends TestBase implements IComFolder {
 		  DBInfo.setDBInfo();
 		  List<String> regulators=DBInfo.getRegulatorDescription();
 		  int copyCount=0;
+		  Reporter.log("copy folders...");
 		  for(String regulator:regulators)
 		  {
-			  //System.out.println("regulator:"+regulator);
 			  if(new File(SOURCE_EXPECTATION_FOLDER+regulator).exists() && new File(SOURCE_IMPORT_FOLDER+regulator).exists())
 			  {
 				  if(!new File(TARGET_EXPECTATION_FOLDER+regulator).exists())
@@ -130,8 +130,8 @@ public class TestManager extends TestBase implements IComFolder {
 		  {
 			  FileUtil.copyDirectory(new File(SOURCE_FOLDER).getAbsolutePath(), new File(TARGET_FOLDER).getAbsolutePath());
 		  }
-		  
-		  System.out.println("Database Language:"+DBInfo.getLanguage());
+		  Reporter.log("copy folders(done)");
+		  Reporter.log("Database Language:"+DBInfo.getLanguage());
 		  
 		  getWebDriverWrapper().navigate().to(DBInfo.getApplicationServer_Url());
 		  report(Helper.getTestReportStyle(DBInfo.getApplicationServer_Url(), "open test server url"));
@@ -157,7 +157,7 @@ public class TestManager extends TestBase implements IComFolder {
 
   @BeforeMethod
   public void beforeMethod(Method method) throws Exception {
-	  logger.info(getClass().getName()+" beforeMethod("+method.getName()+") running!"); 
+	  logger.info(System.getProperty("line.separator")+getClass().getName()+" beforeMethod("+method.getName()+") running!"); 
 
 	 /* getWebDriverWrapper().navigate().to(DBInfo.getApplicationServer_Url());
 	  report(Helper.getTestReportStyle(DBInfo.getApplicationServer_Url(), "open test server url"));*/

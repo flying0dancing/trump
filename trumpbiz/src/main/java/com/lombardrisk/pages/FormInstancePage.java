@@ -715,8 +715,87 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		}
 		return importFileDlg;
 	}
+	
 	/**
-	 * click export to file button, and click "Export To Excel" to download file.<br> If successfully return full file path, others return null.
+	 * click export to file button, and click "Export To PDF" to download file.<br> If successfully return full file path, others return null.<br>
+	 * it suits for AgileREPORTER version greater than or equal 1.15.0<br>
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public String exportToPDF() throws Exception
+	{
+		Boolean flag=false;
+		if(lockDownloadDir(downloadFolder))
+		{
+			flag=clickExportToFile("Export To PDF");
+		}
+		if(!flag)
+		{
+			unlockDownloadDir(downloadFolder);
+			return null;
+		}
+		String sourceFileFullPath=exportToFile();
+		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTTOPDF+")/");
+		unlockDownloadDir(downloadFolder);
+		Runtime.getRuntime().gc();
+		return destFileFullPath;
+	}
+	
+	/**
+	 * click export to file button, and click "Export To Excel(Apply Scale)" to download file.<br> If successfully return full file path, others return null.<br>
+	 * it suits for AgileREPORTER version greater than or equal 1.15.1<br>
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public String exportToExcelApplyScale() throws Exception
+	{
+		Boolean flag=false;
+		if(lockDownloadDir(downloadFolder))
+		{
+			flag=clickExportToFile("Export To Excel(Apply Scale)");
+		}
+		if(!flag)
+		{
+			unlockDownloadDir(downloadFolder);
+			return null;
+		}
+		String sourceFileFullPath=exportToFile();
+		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")/");
+		unlockDownloadDir(downloadFolder);
+		Runtime.getRuntime().gc();
+		return destFileFullPath;
+	}
+	
+	/**
+	 * click export to file button, and click "Export To Excel(No Scale)" to download file.<br> If successfully return full file path, others return null.<br>
+	 * it suits for AgileREPORTER version greater than or equal 1.15.1<br>
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public String exportToExcelNoScale() throws Exception
+	{
+		Boolean flag=false;
+		if(lockDownloadDir(downloadFolder))
+		{
+			flag=clickExportToFile("Export To Excel(No Scale)");
+		}
+		if(!flag)
+		{
+			unlockDownloadDir(downloadFolder);
+			return null;
+		}
+		String sourceFileFullPath=exportToFile();
+		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")/");
+		unlockDownloadDir(downloadFolder);
+		Runtime.getRuntime().gc();
+		return destFileFullPath;
+	}
+	/**
+	 * click export to file button, and click "Export To Excel" to download file.<br> If successfully return full file path, others return null.<br>
+	 * it suits for AgileREPORTER version less than or equal 1.15.0<br>
 	 * @author kun shen
 	 * @return
 	 * @throws Exception

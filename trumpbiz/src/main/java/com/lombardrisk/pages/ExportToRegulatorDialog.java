@@ -1,5 +1,6 @@
 package com.lombardrisk.pages;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.yiwan.webcore.test.TestCaseManager;
@@ -15,23 +16,11 @@ import com.lombardrisk.test.pojo.Form;
 public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
 	private Form form;
 	private String title;
-	//private String downloadFolder;
 	
 	public ExportToRegulatorDialog(IWebDriverWrapper webDriverWrapper, Form form,String title) {
 		super(webDriverWrapper);
 		this.form=form;
 		this.title=title;
-		/*if(PropHelper.ENABLE_FILE_DOWNLOAD)
-		{
-			downloadFolder=new File(PropHelper.DOWNLOAD_FOLDER).getAbsolutePath();
-			if(!new File(PropHelper.DOWNLOAD_FOLDER).exists())
-			{
-				FileUtil.createDirectory(downloadFolder);
-			}
-		}else
-		{
-			downloadFolder=System.getProperty("user.home")+"/downloads/";
-		}*/
 		
 	}
 	/**
@@ -170,15 +159,28 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		unlockDownloadDir(downloadFolder);
 		if(destFileFullPath!=null && !destFileFullPath.trim().equals(""))
 		{
-			String destDir=destFileFullPath.substring(0,destFileFullPath.lastIndexOf("."))+System.getProperty("file.separator");
-			FileUtil.createDirectory(destDir);
-			unCompressDestFiles=FileUtil.unCompress(destFileFullPath, destDir);
-			if(unCompressDestFiles!=null && unCompressDestFiles.size()>=1)
+			if(destFileFullPath.lastIndexOf(".")>0 && destFileFullPath.lastIndexOf(System.getProperty("file.separator"))<destFileFullPath.lastIndexOf("."))
 			{
-				for(int i=0;i<unCompressDestFiles.size();i++)
+				String destDir=destFileFullPath.substring(0,destFileFullPath.lastIndexOf("."))+System.getProperty("file.separator");
+				
+				FileUtil.createDirectory(destDir);
+				unCompressDestFiles=FileUtil.unCompress(destFileFullPath, destDir);
+				if(unCompressDestFiles!=null && unCompressDestFiles.size()>=1)
 				{
-					unCompressDestFiles.set(i, destDir+unCompressDestFiles.get(i));
+					for(int i=0;i<unCompressDestFiles.size();i++)
+					{
+						unCompressDestFiles.set(i, destDir+unCompressDestFiles.get(i));
+					}
+				}else
+				{
+					FileUtil.deleteDirectory(destDir);
+					unCompressDestFiles=new ArrayList<String>();
+					unCompressDestFiles.add(destFileFullPath);
 				}
+			}else
+			{
+				unCompressDestFiles=new ArrayList<String>();
+				unCompressDestFiles.add(destFileFullPath);
 			}
 			
 		}
@@ -202,15 +204,13 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			if(element("td.exportButton",title).isEnabled())
 			{
 				logger.info("click export button");
-				/*element("td.exportButton",title).click();
-				loadingDlg();*/
+				
 				if (PropHelper.ENABLE_FILE_DOWNLOAD)
 				{
 					TestCaseManager.getTestCase().startTransaction("");
 					TestCaseManager.getTestCase().setPrepareToDownload(true);
 					element("td.exportButton",title).click();
 					loadingDlg();
-					//waitThat("fipf.message").toBePresent();
 					if(element("fipf.message").isPresent()){errFlag=true;waitThat("fipf.message").toBeInvisible();}
 					TestCaseManager.getTestCase().stopTransaction();
 					
@@ -219,7 +219,6 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				{
 					element("td.exportButton",title).click();
 					loadingDlg();
-					//waitThat("fipf.message").toBePresent();
 					if(element("fipf.message").isPresent()){errFlag=true;waitThat("fipf.message").toBeInvisible();}
 				}
 				//click log button

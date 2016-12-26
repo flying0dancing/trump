@@ -26,7 +26,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 	private final static Logger logger = LoggerFactory.getLogger(Comparison.class);
 	private Comparison(){}
 	
-	/**compare expectation with UI display values, return compare result(pass, fail, error:abc). <br>If expectation file is existed in ExecFuncFolder, form will be reset expectationFile.
+	/**compare expectation with UI display values, return compare result(pass, fail, error:...). <br>
 	 * @author kun shen
 	 * @param formInstancePage
 	 * @param form
@@ -59,11 +59,8 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			logger.error(testRstFlag);
 		}else
 		{
-			//File expectedFile=new File(expectationFolder+form.getExpectationFile());
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
-			
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
-			//form.setExpectationFile(newFileName);//comment at 2016-12-12
 			form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
 			File newFile=new File(newFilePath);
@@ -121,7 +118,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 	}
 	/** compare with UI display value, and check value one by one, return compare result(pass, fail, error:abc)<br>
 	 *column index start from 0..., indexOfCellName=0,indexOfRowId=1,indexOfInstance=2,indexOfExpectedValue=4,indexOfActualValue=5,indexOfTestResult=8
-	 *<br>If expectation file is existed in ExecFuncFolder, form will be reset expectationFile.
+	 *<br>
 	 * @author kun shen
 	 * @param formInstancePage
 	 * @param form
@@ -142,8 +139,8 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		return testRstFlag;
 	}
 	
-	/** compare with UI display value, and check value one by one, return compare result(pass, fail, error:abc)
-	 * <br>If expectation file is existed in ExecFuncFolder, form will be reset expectationFile.
+	/** compare with UI display value, and check value one by one, return compare result(pass, fail, error:...)
+	 * <br>
 	 * @author kun shen
 	 * @param formInstancePage
 	 * @param form
@@ -176,7 +173,6 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
 			
-			//form.setExpectationFile(newFileName);//comment at 2016-12-12
 			form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
 			File newFile=new File(newFilePath);
@@ -241,8 +237,16 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		return testRstFlag;
 	}
 	
-	//@SuppressWarnings("static-access")
-	public static String compareWithExportedExcel(Form form, String exportedFileFullPath) throws Exception
+	/**
+	 * compare expected excel with "export to excel"/"export to excel(Apply Scale)"/"export to excel(No Scale)"'s download file, return values(pass,fail:...)<br>
+	 * @author kun shen
+	 * @param form
+	 * @param exportedFileFullPath
+	 * @param functionFolderName
+	 * @return
+	 * @throws Exception
+	 */
+	public static String compareWithExportedExcel(Form form, String exportedFileFullPath,String functionFolderName) throws Exception
 	{
 		logger.info("Begin verify \"export to excel\" file");
 		long begin = System.currentTimeMillis();
@@ -253,10 +257,9 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		File expectationFile = new File(expectationFolder+form.getExpectationFile());
 		if(expectationFile.exists())
 		{
-			String reslutFolder=expectationFolder+EXPORTTOEXCEL+"/";
+			String reslutFolder=expectationFolder+functionFolderName+"/";
 			
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
-			//form.setExpectationFile(newFileName);//comment at 2016-12-12
 			form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
 			
@@ -281,16 +284,16 @@ public class Comparison implements IComFolder,IExecFuncFolder
 					compareRstFile.delete();
 				}else
 				{
-					returnStatus="fail: File Not Find " +compareRstFile.getAbsolutePath();
+					returnStatus="fail:File Not Find " +compareRstFile.getAbsolutePath();
 				}
 				
 			}else
 			{
-				returnStatus="fail: File Not Find:"+exportedFile.getAbsolutePath();
+				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
 			}
 		}else
 		{
-			returnStatus="fail: File Not Find:"+expectationFile.getAbsolutePath();
+			returnStatus="fail:File Not Find:"+expectationFile.getAbsolutePath();
 		}
 		
 		
@@ -305,9 +308,8 @@ public class Comparison implements IComFolder,IExecFuncFolder
 	}
 	
 	/**
+	 * compare expected csv with "export to csv"'s download file(csv), return values(pass,fail,fail:...,error:...)<br>
 	 * @author kun shen
-	 * compare expected csv with "export to csv"'s download file(csv)
-	 * <br>If expectation file is existed in ExecFuncFolder, form will be reset expectationFile.
 	 * @param form
 	 * @param exportedFileFullPath
 	 * @return
@@ -329,8 +331,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			{
 				String reslutFolder=expectationFolder+EXPORTTOCSV+"/";
 				String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
-				//form.setExpectationFile(newFileName);//comment at 2016-12-12
-				form.setExec_ExpectationFile(newFileName);//comment at 2016-12-12
+				form.setExec_ExpectationFile(newFileName);
 				String newFilePath=reslutFolder+newFileName;
 				
 				File newFile=new File(newFilePath);
@@ -389,11 +390,11 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				}
 			}else
 			{
-				returnStatus="fail: File Not Find:"+exportedFile.getAbsolutePath();
+				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
 			}
 		}else
 		{
-			returnStatus="fail: File Not Find:"+expectationFile.getAbsolutePath();
+			returnStatus="fail:File Not Find:"+expectationFile.getAbsolutePath();
 		}
 		
 		long end = System.currentTimeMillis();
@@ -402,6 +403,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 	}
 
 	/**
+	 * compare exported file with "export to regulator"'s download file, return values(pass,fail,fail:...,error:...)<br>
 	 * @author kun shen
 	 * @param form
 	 * @param exportedFileFullPath
@@ -481,11 +483,11 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				returnStatus=lines.toString();
 			}else
 			{
-				returnStatus="fail: File Not Find:"+exportedFile.getAbsolutePath();
+				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
 			}
 		}else
 		{
-			returnStatus="fail: File Not Find:"+expectationFile.getAbsolutePath();
+			returnStatus="fail:File Not Find:"+expectationFile.getAbsolutePath();
 		}
 		
 		
@@ -528,5 +530,71 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		}
 		
 		return epectationFiles;
+	}
+	
+	/**
+	 * compare expected pdf with "export to PDF"'s download file(pdf), return values(pass,fail,fail:...,error:...)<br>
+	 * @author kun shen
+	 * @param form
+	 * @param exportedFileFullPath
+	 * @return
+	 * @throws Exception
+	 */
+	public static String compareWithExportedPDF(Form form, String exportedFileFullPath) throws Exception
+	{
+		logger.info("Begin verify \"export to PDF\" file");
+		long begin = System.currentTimeMillis();
+		String cmdLine="";
+		String returnStatus=null;
+		String regulator=form.getRegulator();
+		String expectationFolder=TARGET_EXPECTATION_FOLDER.replace("\\", "/").replace("/", System.getProperty("file.separator"))+regulator+System.getProperty("file.separator");
+		String expectationFileName=form.getExpectationFile();
+		File expectationFile = new File(expectationFolder+expectationFileName);
+		if(expectationFile.exists())
+		{
+			String reslutFolder=expectationFolder+EXPORTTOPDF+System.getProperty("file.separator");
+			String reportName=expectationFileName.substring(0,expectationFileName.lastIndexOf("."))+".html";
+			String newReportName=FileUtil.copyToNewFile(reslutFolder,reslutFolder,reportName);
+			
+			form.setExec_ExpectationFile(newReportName);
+			
+			String newReportPath=reslutFolder+newReportName;
+			
+			File exportedFile = new File(exportedFileFullPath);
+			if(exportedFile.exists())
+			{
+				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
+				logger.info("Expectation File:"+newReportPath);
+				String path_BComp=new File(System.getProperty("user.dir")).getParent().replace("\\", "/").replace("/", System.getProperty("file.separator"))+PropHelper.getProperty("path.BComp").replace("..", "").replace("\\", "/").replace("/", System.getProperty("file.separator"));
+				
+				cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + exportedFileFullPath.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" "+"\"" + expectationFolder+expectationFileName + "\" "+ "\""+newReportPath+"\"";
+				
+				logger.info(cmdLine);
+				Process process = Runtime.getRuntime().exec(cmdLine);
+				
+				BufferedReader input=new BufferedReader(new InputStreamReader(process.getInputStream()));
+				StringBuffer lines=new StringBuffer();
+				String line=null;
+				while((line=input.readLine())!=null)
+				{
+					lines.append(line.trim());
+				}
+				input.close();
+				logger.info("subprocess result[code]:"+String.valueOf(process.waitFor()));
+				
+				process.destroy();
+				returnStatus=lines.toString();
+			}else
+			{
+				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
+			}
+		}else
+		{
+			returnStatus="fail:File Not Find:"+expectationFile.getAbsolutePath();
+		}
+		
+		long end = System.currentTimeMillis();
+		logger.info("used time[seconds]:"+(end-begin)/1000.00F +" result:"+returnStatus);
+		return returnStatus;
 	}
 }
