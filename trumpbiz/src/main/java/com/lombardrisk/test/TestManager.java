@@ -39,6 +39,7 @@ public class TestManager extends TestBase implements IComFolder {
 	private static int indexAppServer;
 	private static int indexDBServer;
 	private static int indexToolsetDBServer;
+	private static long startSuiteTime;
 
 	public static TestEnvironment getTestEnv()
 	{
@@ -61,12 +62,12 @@ public class TestManager extends TestBase implements IComFolder {
 	
 	 @BeforeSuite
 	  public void beforeSuite() {
+		  startSuiteTime=System.currentTimeMillis();
 		  System.out.println(" beforeSuite running!");
 		  Reporter.log(" beforeSuite running~~~~<br>");
 		  //delete older test target folder, and create news.
 		  FileUtil.deleteDirectory(TARGET_FOLDER);
 		  FileUtil.createDirectory(TARGET_FOLDER);
-		  FileUtil.createDirectory(TARGET_LOG_FOLDER);
 		  FileUtil.createDirectory(TARGET_SCENARIOS_FOLDER);
 		  FileUtil.createDirectory(TARGET_DOWNLOAD_FOLDER);
 		  
@@ -78,7 +79,7 @@ public class TestManager extends TestBase implements IComFolder {
 	  public void afterSuite() {
 		  System.out.println(" afterSuite running!"); 
 		  Reporter.log(" afterSuite running~~~~<br>");
-		  FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER).getAbsolutePath(), new File(TARGET_LOG_FOLDER).getAbsolutePath());
+		  FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER).getAbsolutePath(), new File(TARGET_LOG_FOLDER).getAbsolutePath(),startSuiteTime);
 		  
 	  }
 	
@@ -109,7 +110,7 @@ public class TestManager extends TestBase implements IComFolder {
 		  DBInfo.setDBInfo();
 		  List<String> regulators=DBInfo.getRegulatorDescription();
 		  int copyCount=0;
-		  Reporter.log("copy folders...");
+		  logger.info("copy folders...");
 		  for(String regulator:regulators)
 		  {
 			  if(new File(SOURCE_EXPECTATION_FOLDER+regulator).exists() && new File(SOURCE_IMPORT_FOLDER+regulator).exists())
@@ -130,7 +131,7 @@ public class TestManager extends TestBase implements IComFolder {
 		  {
 			  FileUtil.copyDirectory(new File(SOURCE_FOLDER).getAbsolutePath(), new File(TARGET_FOLDER).getAbsolutePath());
 		  }
-		  Reporter.log("copy folders(done)");
+		  logger.info("copy folders(done)");
 		  Reporter.log("Database Language:"+DBInfo.getLanguage());
 		  
 		  getWebDriverWrapper().navigate().to(DBInfo.getApplicationServer_Url());

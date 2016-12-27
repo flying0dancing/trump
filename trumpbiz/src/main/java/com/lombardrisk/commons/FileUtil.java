@@ -290,6 +290,53 @@ public class FileUtil extends FileUtils
 		{e.printStackTrace();}
 		
 	}
+	/**
+	 * copy files and folders newer than startTime
+	 * @author kun shen
+	 * @param sourcePath
+	 * @param destPath
+	 * @param startTime
+	 */
+	public static void copyDirectory(String sourcePath, String destPath,long startTime)
+	{
+		try
+		{
+			if(sourcePath!=null && destPath!=null)
+			{
+				File sourceFile=new File(sourcePath);
+				File destFile=new File(destPath);
+				if(!destFile.exists()){createDirectory(destPath);}
+				if(sourceFile.isDirectory())
+				{
+					File[] subfiles = sourceFile.listFiles();
+					if(subfiles.length>0)
+					{
+						for(File subfile:subfiles)
+						{
+							if(subfile.isFile() && subfile.lastModified()>=startTime)
+							{
+								copyFile(subfile,new File(destPath+subfile.getAbsolutePath().replace(sourcePath, "")));
+							}
+							if(subfile.isDirectory())
+							{
+								String destSubDirectory=destPath+subfile.getAbsolutePath().replace(sourcePath, "");
+								copyDirectory(subfile.getAbsolutePath(),destSubDirectory,startTime);
+							}
+						}
+					}
+					
+				}
+				if(sourceFile.isFile() && sourceFile.lastModified()>=startTime)
+				{
+					copyFile(sourceFile,destFile);
+				}
+			}
+		
+		}catch(Exception e)
+		{e.printStackTrace();}
+
+	}
+	
 	public static void copyDirectory(String sourcePath, String destPath)
 	{
 		try
