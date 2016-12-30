@@ -754,7 +754,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		Boolean flag=false;
 		if(lockDownloadDir(downloadFolder))
 		{
-			flag=clickExportToFile("Export To Excel(Apply Scale)");
+			flag=clickExportToFile("Export To Excel (Apply Scale)");
 		}
 		if(!flag)
 		{
@@ -780,7 +780,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		Boolean flag=false;
 		if(lockDownloadDir(downloadFolder))
 		{
-			flag=clickExportToFile("Export To Excel(No Scale)");
+			flag=clickExportToFile("Export To Excel (No Scale)");
 		}
 		if(!flag)
 		{

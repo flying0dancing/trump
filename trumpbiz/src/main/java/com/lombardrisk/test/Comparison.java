@@ -297,7 +297,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		}
 		
 		
-		if(returnStatus.startsWith("fail"))
+		if(returnStatus.toLowerCase().startsWith("fail"))
 		{
 			returnStatus=returnStatus+System.getProperty("line.separator")+cmdLine;
 		}

@@ -70,7 +70,7 @@ public class TestManager extends TestBase implements IComFolder {
 		  FileUtil.createDirectory(TARGET_FOLDER);
 		  FileUtil.createDirectory(TARGET_SCENARIOS_FOLDER);
 		  FileUtil.createDirectory(TARGET_DOWNLOAD_FOLDER);
-		  
+		  FileUtil.createDirectory(TARGET_LOG_FOLDER);//
 		  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".xsl", TARGET_SCENARIOS_FOLDER);
 		  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".css", TARGET_SCENARIOS_FOLDER);
 		 
