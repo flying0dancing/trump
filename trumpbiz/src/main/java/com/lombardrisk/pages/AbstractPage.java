@@ -537,6 +537,41 @@ public abstract class AbstractPage extends PageBase
 		}
 		return fileFullPath;
 	}
+	
+	/**
+	 * rename file
+	 * @author kun shen
+	 * @param path
+	 * @param oldname
+	 * @param newname
+	 */
+	protected String  renameFile(String oldFileFullPath, String newNameWithoutSuffix)
+	{
+		String newFileFullPath=null;
+		File oldFile=new File(oldFileFullPath);
+		if(oldFile.exists())
+		{
+			String fileName=oldFile.getName();
+			String fileName_Prefix=fileName.substring(0, fileName.lastIndexOf("."));
+			String fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix;
+			String fileName_Suffix=fileName.replace(fileName_Prefix, "");
+			String filePath=oldFileFullPath.replace(fileName, "");
+			newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
+			int i=1;
+			while(new File(newFileFullPath).exists())
+			{
+				fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix+"("+String.valueOf(i)+")";
+				newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
+				i++;
+			}
+		}else
+		{
+			logger.error("No File Found "+oldFileFullPath);
+		}
+		
+		return newFileFullPath;
+	}
+	
 	/**
 	 * select options in select element. 
 	 * @author kun shen

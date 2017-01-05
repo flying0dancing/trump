@@ -8,5 +8,7 @@ public interface IExecFuncFolder {
 	String EXPORTTOPDF="ExportToPDF";
 	String EXPORTTOEXCELAPPLYSCALE="ExportToExcelApplyScale";
 	String EXPORTTOEXCELNOSCALE="ExportToExcelNoScale";
+	String EXPORTVALIDATION="ExportValidation";
+	String EXPORTPROBLEMS="ExportProblems";
 	
 }

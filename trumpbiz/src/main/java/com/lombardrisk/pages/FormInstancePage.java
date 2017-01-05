@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 
 
+
+
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -716,6 +718,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		return importFileDlg;
 	}
 	
+	
 	/**
 	 * click export to file button, and click "Export To PDF" to download file.<br> If successfully return full file path, others return null.<br>
 	 * it suits for AgileREPORTER version greater than or equal 1.15.0<br>
@@ -844,7 +847,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	
 	}
 	/**
-	 * click export to file button, and click "Export To Excel" or "Export To CSV" to download file.<br>
+	 * click export to file button, and click "Export To Excel" or "Export To CSV" or ... to download file.<br>
 	 * return true if click export button without error. others return false. 
 	 * @author kun shen
 	 * @param type
@@ -951,5 +954,107 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		
 		return td;
 	
+	}
+	
+	/**
+	 * click Adjustments->View adjustment log, if error occurs return null.
+	 * @author kun shen
+	 * @return FormInstanceBottomPage
+	 * @throws Exception
+	 */
+	public FormInstanceBottomPage viewAdjustmentLog() throws Exception
+	{
+		FormInstanceBottomPage fibp=null;
+		element("fipf.adjust_button").click();
+		waitThat("fipf.checkAdjustLog").toBeVisible();
+		element("fipf.checkAdjustLog").click();
+		loadingDlg();
+		if(element("fidf.bottomPage").isDisplayed())
+		{
+			fibp=new FormInstanceBottomPage(getWebDriverWrapper(),form);
+		}
+		
+		return fibp;
+	}
+	
+	/**
+	 * check status of "Live Validation". Return true if it is live, return false if it isn't live.
+	 * @author kun shen
+	 * @return
+	 * @throws Exception 
+	 */
+	public Boolean validationLiveStatus() throws Exception
+	{
+		Boolean flag=false;
+		if(element("fipf.doValidationBtn").isPresent())
+		{
+			flag=true;
+		}
+		return flag;
+	}
+	
+	/**
+	 * click "Live Validation". Return true if it is live, return false if it isn't live.
+	 * @author kun shen
+	 * @throws Exception
+	 */
+	public Boolean clickValidationLive() throws Exception
+	{
+		Boolean flag=false;
+		if(element("fipf.doValidationBtn").isPresent())
+		{
+			element("fipf.doValidationBtn").click();//not live
+			loadingDlg();
+		}else
+		{
+			if(element("fipf.unDoValidationBtn").isPresent())
+			{
+				element("fipf.unDoValidationBtn").click();//live
+				loadingDlg();
+			}
+		}
+		if(element("fipf.doValidationBtn").isPresent())
+		{
+			flag=true;
+		}
+		return flag;
+	}
+	
+	/**
+	 * click "Live Validation" if it isn't live. return true if it is live, others return false.
+	 * @author kun shen
+	 * @return
+	 * @throws Exception 
+	 */
+	public Boolean validationLive() throws Exception
+	{
+		Boolean flag=false;
+		if(element("fipf.unDoValidationBtn").isPresent())
+		{
+			element("fipf.unDoValidationBtn").click();
+			loadingDlg();
+		}
+		if(element("fipf.doValidationBtn").isPresent())
+		{
+			flag=true;
+		}
+		return flag;
+	}
+	
+	/**
+	 * click "Validate Now" button in menu, if this button is enabled,click it and return true. others return false.
+	 * @author kun shen
+	 * @throws Exception
+	 */
+	public Boolean validationNow() throws Exception
+	{
+		Boolean flag=false;
+		if(element("fipf.validateNowBtn").isEnabled())
+		{
+			element("fipf.validateNowBtn").click();
+			loadingDlg();
+			flag=true;
+		}
+		return flag;
 	}
 }

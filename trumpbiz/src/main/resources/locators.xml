@@ -1878,7 +1878,8 @@
     	<locator id="fipf.warnConfirmBtn" type="WebButton" by="id" expression="warnConfirm" name="warnConfirmBtn" description="warnConfirmBtn"/>
     	<locator id="fipf.adjustmentLogTable_data" type="WebElement" by="xpath" expression="//tbody[@id='formInstDetailFooterTabView:adjustmentLogForm:adjustmentLogTable_data']/tr[contains(td,'No records found')]/td" name="adjustmentLogTable_data" description="adjustmentLogTable_data"/>
     	<locator id="fipf.adjust_button" type="WebButton" by="id" expression="formHeader:adjust_button" name="adjust_button" description="adjust_button"/>
-    	<locator id="fipf.importAdjustLog" type="WebElement" by="xpath" expression="//a[@id='formHeader:importAdjustLog']/span" name="importAdjustLog" description="importAdjustLog"/>
+    	<locator id="fipf.importAdjustLog" type="WebElement" by="xpath" expression="//a[@id='formHeader:importAdjustLog']/span" name="importAdjustLog" description="Import adjustments"/>
+    	<locator id="fipf.checkAdjustLog" type="WebElement" by="xpath" expression="//a[@id='formHeader:checkAdjustLog']/span" name="checkAdjustLog" description="View adjustment log"/>
     	<locator id="fipf.exportToFile_button" type="WebButton" by="id" expression="formHeader:exportToFile_button" name="exportToFile_button" description="exportToFile_button"/>
     	<locator id="fipf.exportToFile_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a[span='?']/span" name="exportToFile_menu" description="exportToFile_menu"/>
     	<locator id="fipf.exportToFile4Fed_button" type="WebButton" by="id" expression="formHeader:exportToFile4Fed_button" name="exportToFile4Fed_button" description="exportToFile4Fed_button"/>
@@ -1887,6 +1888,9 @@
     	<locator id="fipf.exportToFile_li_Txt" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li[?]/a/span" name="exportToFile_li_Txt" description="exportToFile_li_Txt"/>
     	<locator id="fipf.lockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:lockBtn'][@title='Unlock']/span[2]" name="lockBtn" description="click it to lock form which status is unlock"/>
     	<locator id="fipf.unlockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:unlockBtn'][@title='Lock']/span[2] " name="unlockBtn" description="click it to unlock form which status is lock"/>
+    	<locator id="fipf.validateNowBtn" type="WebButton" by="id" expression="formHeader:validateNowBtn" name="validateNow" description="click validate Now Button"/>
+    	<locator id="fipf.doValidationBtn" type="WebButton" by="id" expression="formHeader:doValidationBtn" name="doValidationBtn" description="click Live Validation Button"/>
+    	<locator id="fipf.unDoValidationBtn" type="WebButton" by="id" expression="formHeader:unDoValidationBtn" name="unDoValidationBtn" description="click Live Validation Button"/>
     </page>
     
     <page id="ifd" name="importformdialog" description="import form dialog created by Kun Shen">
@@ -2029,5 +2033,14 @@
     
     </page>
     
+    <page id="fidf" name="formInstDetailFooterTabView" description="form instance bottom page created by Kun Shen">
+	<locator id="fidf.bottomPage" type="WebElement" by="id" expression="formInstDetailFooterTabView" name="formInstDetailFooterTabView" description="formInstDetailFooterTabView"/>
+    <locator id="fidf.linkTab" type="WebElement" by="linkText" expression="?" name="linkTab" description="link Tab in left panel" />
+    <locator id="fidf.linkText" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//a[text()='?']" name="linkText" description="link Tab(text) in left panel" />
+    <locator id="fidf.export" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//a[@title='Export']" name="export" description="export in buttom page" />
+    <locator id="fidf.noRecordsFound" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//tr//td[starts-with(text(),'No records found')]" name="noRecordsFound" description="no Records Found" />
+    <locator id="fidf.close" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//img[contains(@id,'minimizeArrow')]" name="closeButtomPage" description="close buttom page" />
+   
+    </page>
     
 </locatorBean>
