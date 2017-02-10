@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import com.lombardrisk.test.*;
 import com.lombardrisk.test.pojo.Form;
 
- class Mock extends TestManager {
+public class Mock extends TestManager {
 	//private static int formCount=0;
 	
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
