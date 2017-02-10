@@ -263,6 +263,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	{
 		List<String> unCompressDestFiles=null;
 		Boolean flag=false;
+		//TODO update downloadFolder
 		if(lockDownloadDir(downloadFolder))
 		{
 			flag=clickExport();

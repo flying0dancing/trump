@@ -16,6 +16,7 @@ private String cloneData;
 private String initToZero;
 private String deleteExistent;
 private Transmission transmission;
+private String retrieveDownloadFolder;
 private String importFile;
 private String expectationFile;
 private String executionStatus;
@@ -152,6 +153,14 @@ public String toString()
 		}
 	}
 	return stringBuffer.toString();
+}
+
+public String getRetrieveDownloadFolder() {
+	return retrieveDownloadFolder;
+}
+
+public void setRetrieveDownloadFolder(String retrieveDownloadFolder) {
+	this.retrieveDownloadFolder = retrieveDownloadFolder;
 }
 
 }
