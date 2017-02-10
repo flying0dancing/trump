@@ -365,6 +365,7 @@ public abstract class AbstractPage extends PageBase
 				loadingDlg();
 			}else
 			{
+				
 				Assert.fail("cannot select year:"+year);
 			}
 		}else
