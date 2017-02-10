@@ -1,6 +1,5 @@
 public
-suites
-!suites/TestTP.xml
+suite
 target
 test-output
 /src

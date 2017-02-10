@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="mock" parallel="false">
+   <test name="mock">
+  	<parameter name="indexAppServers" value="10"/>
+  	<parameter name="indexDBServers" value="10"/>
+  	<parameter name="scenarioName" value="ForKun_mock.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.Mock">
+      
+      <methods>
+      <include name="testMock"/>
+      </methods>
+      </class>
+    </classes>
+  </test>
+    
+</suite> <!-- Suite -->
