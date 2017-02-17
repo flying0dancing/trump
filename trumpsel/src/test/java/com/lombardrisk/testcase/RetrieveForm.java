@@ -45,7 +45,7 @@ public class RetrieveForm extends TestManager{
 							
 						}else
 						{
-							form.setExecutionStatus("fail on select information");
+							form.setExecutionStatus("fail on select information on retrieve dialog");
 						}
 					}
 					else

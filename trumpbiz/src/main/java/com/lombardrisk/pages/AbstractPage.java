@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractPage extends PageBase
 {
 	protected static String format=DBInfo.getLanguage();
-	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());
+	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());//old one
 	protected final static String LOCKNAME="TP.lock";
 	protected String downloadFolder;
 	public enum Month
@@ -70,18 +70,23 @@ public abstract class AbstractPage extends PageBase
 		super(webDriverWrapper);
 		if(PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
-			downloadFolder=new File(PropHelper.DOWNLOAD_FOLDER).getAbsolutePath();
+			/*downloadFolder=new File(PropHelper.DOWNLOAD_FOLDER).getAbsolutePath();
+			if(!new File(PropHelper.DOWNLOAD_FOLDER).exists())
+			{
+				FileUtil.createDirectory(downloadFolder);
+			}*/
+			downloadFolder=PropHelper.DOWNLOAD_FOLDER;
 			if(!new File(PropHelper.DOWNLOAD_FOLDER).exists())
 			{
 				FileUtil.createDirectory(downloadFolder);
 			}
 		}else
 		{
-			downloadFolder=System.getProperty("user.home")+"/downloads/";
+			downloadFolder=System.getProperty("user.home")+System.getProperty("file.separator")+"downloads"+System.getProperty("file.separator");
 		}
-		if(new File(downloadFolder+"/"+LOCKNAME).exists())
+		if(new File(downloadFolder+System.getProperty("file.separator")+LOCKNAME).exists())
 		{
-			new File(downloadFolder+"/"+LOCKNAME).delete();
+			new File(downloadFolder+System.getProperty("file.separator")+LOCKNAME).delete();
 		}
 	}
 
@@ -269,7 +274,54 @@ public abstract class AbstractPage extends PageBase
 		actions().sendKeys(Keys.ENTER).perform();
 		Thread.sleep(500);
 	}
-
+	
+	/**
+	 * uniform date to format MM/DD/YYYY
+	 * @param date
+	 * @return
+	 * @throws Exception
+	 */
+	protected String uniformDate(String date, String dateFormat) throws Exception
+	{
+		String year = null;
+		String month = null;
+		String day = null;
+		//String format=PropHelper.getProperty("Regional.language").trim();
+		if(format==null || format.trim().equals("")){
+			format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
+		}
+		if (format.equalsIgnoreCase("en_US") || format.equals(""))
+		{
+			month = date.substring(0, 2);
+			day = date.substring(3, 5);
+			year = date.substring(6);
+		}else if (format.equalsIgnoreCase("en_GB"))
+		{
+			day = date.substring(0, 2);
+			month = date.substring(3, 5);
+			year = date.substring(6);
+		}else if (format.equalsIgnoreCase("zh_CN"))
+		{
+			year = date.substring(0, 4);
+			month = date.substring(5, 7);
+			day = date.substring(8);
+		}
+		String returnDate=month+"/"+day+"/"+year;
+		if(dateFormat.equalsIgnoreCase("MM/DD/YYYY"))
+		{
+			returnDate=month+"/"+day+"/"+year;
+		}
+		if(dateFormat.equalsIgnoreCase("YYYYMMDD"))
+		{
+			returnDate=year+month+day;
+		}
+		if(dateFormat.equalsIgnoreCase("DD/MM/YYYY"))
+		{
+			returnDate=day+"/"+month+"/"+year;
+		}
+		
+		return returnDate;
+	}
 	/**
 	 * Select date
 	 * @author kun shen
@@ -332,6 +384,7 @@ public abstract class AbstractPage extends PageBase
 				loadingDlg();
 			}else
 			{
+				
 				Assert.fail("cannot select year:"+year);
 			}
 		}else
@@ -437,7 +490,7 @@ public abstract class AbstractPage extends PageBase
 		if (dir == null)
 			return null;
 		String fileName = null;
-		long latestFileLockedTime=new File(dir+"/"+LOCKNAME).lastModified();
+		long latestFileLockedTime=new File(dir+System.getProperty("file.separator")+LOCKNAME).lastModified();
 		boolean flag = true;
 		
 		while(flag)
@@ -451,7 +504,7 @@ public abstract class AbstractPage extends PageBase
 				continue;
 			}else
 			{
-				if(!fileName.endsWith(".tmp") && !fileName.endsWith(".crdownload"))
+				if(!fileName.endsWith(".tmp") && !fileName.endsWith(".crdownload") && !fileName.endsWith(".part"))
 				{
 					flag = false;
 				}
@@ -511,8 +564,8 @@ public abstract class AbstractPage extends PageBase
 		Boolean flag=true;
 		if (!oldname.equals(newname))
 		{
-			File oldfile = new File(path + "/" + oldname);
-			File newfile = new File(path + "/" + newname);
+			File oldfile = new File(path + System.getProperty("file.separator") + oldname);
+			File newfile = new File(path + System.getProperty("file.separator") + newname);
 			if (!oldfile.exists())
 			{
 				return null;
@@ -564,9 +617,11 @@ public abstract class AbstractPage extends PageBase
 				newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
 				i++;
 			}
+			oldFile.renameTo(new File(newFileFullPath));
+			
 		}else
 		{
-			logger.error("No File Found "+oldFileFullPath);
+			logger.error("no file found "+oldFileFullPath);
 		}
 		
 		return newFileFullPath;
@@ -672,7 +727,7 @@ public abstract class AbstractPage extends PageBase
 		if(new File(downloadDirectory).isDirectory())
 		{
 			int count=0;
-			File lockFile=new File(downloadDirectory+"/"+LOCKNAME);
+			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
 			//waiting 3 minutes
 			if(timeout<180){timeout=180;}
 			while(count<=timeout)
@@ -708,7 +763,7 @@ public abstract class AbstractPage extends PageBase
 		Boolean lock=true;
 		if(new File(downloadDirectory).isDirectory())
 		{
-			File lockFile=new File(downloadDirectory+"/"+LOCKNAME);
+			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
 			
 			while(true)
 			{
@@ -741,7 +796,7 @@ public abstract class AbstractPage extends PageBase
 
 		if(new File(downloadDirectory).isDirectory())
 		{
-			File lockFile=new File(downloadDirectory+"/"+LOCKNAME);
+			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
 			if(lockFile.exists())
 			{
 				while(lockFile.exists())
@@ -774,9 +829,16 @@ public abstract class AbstractPage extends PageBase
 		if (PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
 			String exportedFile = TestCaseManager.getTestCase().getDownloadFile();
-			String oldName = new File(exportedFile).getName();
-			String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
-			filePath=renameFile(downloadFolder, oldName, fileName);
+			if(exportedFile!=null)
+			{
+				String oldName = new File(exportedFile).getName();
+				String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
+				filePath=renameFile(downloadFolder, oldName, fileName);
+			}else
+			{
+				filePath=downloadFile(downloadFolder);
+			}
+			
 		}
 		else
 		{

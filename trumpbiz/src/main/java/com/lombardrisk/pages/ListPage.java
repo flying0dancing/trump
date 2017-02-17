@@ -15,6 +15,14 @@ import com.lombardrisk.test.pojo.Form;
  */
 public class ListPage extends AbstractPage implements IExportTo
 {
+	//TODO
+	public String getLoginUser() throws Exception
+	{
+		String loginUser=element("fipf.lblUserName").getInnerText();
+		loginUser=loginUser.replace("hi  ", "");
+		return loginUser;
+	}
+	
 	
 	/**
 	 * 
@@ -23,9 +31,9 @@ public class ListPage extends AbstractPage implements IExportTo
 	public ListPage(IWebDriverWrapper webDriverWrapper)
 	{
 		super(webDriverWrapper);
+
 	}
 
-	
 	/**
 	 * export to regulator in list page
 	 * @author kun shen
@@ -78,7 +86,8 @@ public class ListPage extends AbstractPage implements IExportTo
 				String js = "document.getElementById('FormInstImpExpMenu:exportToFile_menu').getElementsByTagName('ul')[0].getElementsByTagName('li')["+String.valueOf(i-1)+"].getElementsByTagName('a')[0].getElementsByTagName('span')[0].click();";
 				executeScript(js);
 				loadingDlg();
-				/*List<IWebElementWrapper> elements=element("td.transmitDialogTitle").getAllMatchedElements();
+				//reuse this part of select displayed transmit dialog from 20170113
+				List<IWebElementWrapper> elements=element("td.transmitDialogTitles").getAllMatchedElements();
 				for(IWebElementWrapper element:elements)
 				{
 					if(element.isDisplayed())
@@ -87,8 +96,9 @@ public class ListPage extends AbstractPage implements IExportTo
 						td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
 						break;
 					}
-				}*/
-				IWebElementWrapper element=element("td.transmitDialog4FedTitle");
+				}
+				//unused this part of select displayed transmit dialog, comment at 20170113
+				/*IWebElementWrapper element=element("td.transmitDialog4FedTitle");
 				if(element.isDisplayed())
 				{
 					title=element.getInnerText();
@@ -101,7 +111,7 @@ public class ListPage extends AbstractPage implements IExportTo
 						title=element.getInnerText();
 						td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
 					}
-				}
+				}*/
 				
 			}else{
 				element("filf.exportToFile_button").click();
@@ -318,7 +328,8 @@ public class ListPage extends AbstractPage implements IExportTo
 					loadingDlg();
 					element("drcfd.deleteReturn").click();
 					loadingDlg();
-					waitThat("fipf.message").toBeInvisible();
+					//waitThat("fipf.message").toBeInvisible();
+					waitThat("abstract.message").toBeInvisible();
 					flag=true;
 				}
 			}
@@ -344,7 +355,7 @@ public class ListPage extends AbstractPage implements IExportTo
 	public FormInstancePage openFormInstance(Form form) throws Exception
 	{
 		FormInstancePage fip=null;
-		
+		String userName=getLoginUser();
 		form.setEntity(getRealText(element("filf.clickFormLinkEntity"),form.getEntity()));		
 		form.setName(getRealText(element("filf.clickFormLinkName"),form.getName()));
 		
@@ -356,7 +367,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			loadingDlg();
 			waitForPageLoaded();
 			waitThat("fipf.form").toBeVisible();
-			fip=new FormInstancePage(getWebDriverWrapper(),form);
+			fip=new FormInstancePage(getWebDriverWrapper(),form,userName);
 			if(!fip.isThisPage())
 			{
 				fip=null;
@@ -424,7 +435,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				listPage=hp.loginAs(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
 			}
 		}
-		
+		if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 	}
 	
 	/**
@@ -562,5 +573,24 @@ public class ListPage extends AbstractPage implements IExportTo
 		}
 		return ri;
 	}
+	
+	/**
+	 * logout
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public HomePage logout() throws Exception
+	{
+		element("fipf.lblUser_button").click();
+		waitThat().timeout(1000);
+		if(element("fipf.btnLogout").isDisplayed())
+		{
+			element("fipf.btnLogout").click();
+			loadingDlg();
+		}
+		return new HomePage(getWebDriverWrapper());
+	}
+	
 	
 }

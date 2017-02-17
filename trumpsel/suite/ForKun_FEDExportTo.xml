@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="FED" parallel="false">
+
+<test name="ExportCSV">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>
+  	<!--parameter name="indexToolsetDBServers" value="1"/-->
+  	<parameter name="scenarioName" value="ForKun_FEDExportToRegulator.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+	  <methods>
+      <include name="checkExportToPDF"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+
+</suite>

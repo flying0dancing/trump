@@ -34,17 +34,23 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		loadingDlg();
 	}
 	
-	
+	/** click "validation" link in left panel and then export/download validation rules.<br> If validation rules doesn't exist, return null.<br> If validation rules exists, download it and rename it with form's name_version_entity_processdate
+	 * <br>close this bottom page before return values.
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
 	public String exportValidation() throws Exception
 	{
 		Boolean flag=false;
 		if(lockDownloadDir(downloadFolder))
 		{
-			flag=clickExport("VALIDATION");
+			flag=clickExportToFile("VALIDATION");
 		}
 		if(!flag)
 		{
 			unlockDownloadDir(downloadFolder);
+			closeThisPage();//close bottom page after export.
 			return null;
 		}
 		String sourceFileFullPath=exportToFile();
@@ -53,22 +59,30 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
 		String destFileName=form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
-		renameFile(destFileFullPath, destFileName);
+		destFileFullPath=renameFile(destFileFullPath, destFileName);
 		
+		closeThisPage();//close bottom page after export.
 		Runtime.getRuntime().gc();
 		return destFileFullPath;
 	}
 	
+	/** click "problems" link in left panel and then export/download validation rules.<br> If problems rules doesn't exist, return null.<br> If problems rules exists, download it and rename it with form's name_version_entity_processdate
+	 * <br>close this bottom page before return values.
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
 	public String exportProblems() throws Exception
 	{
 		Boolean flag=false;
 		if(lockDownloadDir(downloadFolder))
 		{
-			flag=clickExport("PROBLEMS");
+			flag=clickExportToFile("PROBLEMS");
 		}
 		if(!flag)
 		{
 			unlockDownloadDir(downloadFolder);
+			closeThisPage();//close bottom page after export.
 			return null;
 		}
 		String sourceFileFullPath=exportToFile();
@@ -77,8 +91,9 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
 		String destFileName=form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
-		renameFile(destFileFullPath, destFileName);
+		destFileFullPath=renameFile(destFileFullPath, destFileName);
 		
+		closeThisPage();//close bottom page after export.
 		Runtime.getRuntime().gc();
 		return destFileFullPath;
 	}
@@ -100,13 +115,14 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	 * @return
 	 * @throws Exception
 	 */
-	private Boolean clickExport(String text) throws Exception
+	private Boolean clickExportToFile(String text) throws Exception
 	{
 		Boolean flag=true;
 		clickLinkText(text);
 		loadingDlg();
 		if(element("fidf.noRecordsFound").isDisplayed())
 		{
+			logger.error("no records found to export.");
 			flag=false;
 		}else
 		{
@@ -117,7 +133,6 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 				element("fidf.export").click();
 				loadingDlg();
 				TestCaseManager.getTestCase().stopTransaction();
-				
 			}
 			else
 			{

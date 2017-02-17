@@ -216,7 +216,7 @@ public class FileUtil extends FileUtils
 		return unTarGZ(tarFile, destDir);
 	}
 
-	public static void createDirectory(String outputDir, String subDir)
+	public static void createDirectory(String outputDir, String subDir) throws Exception
 	{
 		File file = new File(outputDir);
 		if (!(subDir == null || subDir.trim().equals("")))
@@ -228,8 +228,24 @@ public class FileUtil extends FileUtils
 			file.mkdirs();
 		}
 	}
+	/**
+	 * if folderPath existed, return true.
+	 * @param folderPath
+	 * @return
+	 */
+	public static Boolean checkDirectory(String folderPath)
+	{
+		Boolean flag=false;
+		if(folderPath!=null){
+			File folder = new File(folderPath);
+			if(folder.exists()){
+				flag=true;
+			}
+		}
+		return flag;
+	}
 	
-	public static void deleteDirectory(String folderPath)
+	public static void deleteDirectory(String folderPath) throws Exception
 	{
 		if(folderPath!=null){
 			File folder = new File(folderPath);
@@ -263,7 +279,7 @@ public class FileUtil extends FileUtils
 		}
 	}
 
-	public static void copyFileToDirectory(String sourceFolder,final String fileType, String destFolder)
+	public static void copyFileToDirectory(String sourceFolder,final String fileType, String destFolder) throws Exception
 	{
 		try
 		{

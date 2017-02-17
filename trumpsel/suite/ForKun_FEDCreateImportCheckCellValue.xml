@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="FED" parallel="false">
+<test name="CreateImportCheck">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>  	
+  	<parameter name="scenarioName" value="ForKun_FEDRetrieve.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateImportPrecision"/>
+    </classes>
+</test>
+<!--
+<test name="FormExist">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>  	
+  	<parameter name="scenarioName" value="ForKun_FEDCreateImportCheckCellValue.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue"/>
+	  <methods>
+      <include name="checkFormExist"/>
+      </methods>
+    </classes>
+</test>
+<test name="FEDUIDisplay">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>  	
+  	<parameter name="scenarioName" value="ForKun_FEDCreateImportCheckCellValue.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateImportCheckValue"/>
+	  <methods>
+      <include name="createNewImportCheckValue"/>
+      </methods>
+    </classes>
+</test>
+-->
+</suite>

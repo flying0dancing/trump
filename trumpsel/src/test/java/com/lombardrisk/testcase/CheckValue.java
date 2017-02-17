@@ -5,6 +5,7 @@ import java.io.File;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.lombardrisk.pages.FormInstanceBottomPage;
 import com.lombardrisk.pages.FormInstancePage;
 import com.lombardrisk.pages.ListPage;
 import com.lombardrisk.test.Comparison;
@@ -124,7 +125,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	}
 	
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
-	private void checkUIDisplayOneByOne( Form form) throws Exception
+	public void checkUIDisplayOneByOne( Form form) throws Exception
 	{
 		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
 		{
@@ -588,5 +589,92 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 		Assert.assertTrue(form.getExecutionStatus().startsWith("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
 	}
 
+	/**check download validation rules' file. <br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(ExportValidation)<br><br>
+	 * it suits for AgileREPORTER version less than or equal 1.15.0<br><br>
+	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file may contains these columns: expiration<br>
+	 * @author kun shen
+	 * @param form
+	 */
+	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
+	public void checkValidation(Form form)
+	{
+		
+		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		{
+			FormInstancePage formInstancePage=null;
+			try
+			{
+				ListPage listPage=super.getListPage();
+				if(listPage!=null)
+				{
+					listPage.loginAfterTimeout(listPage);
+					if(listPage.selectFormInfo(form))
+					{
+						formInstancePage=listPage.openFormInstance(form);
+						if(formInstancePage!=null)
+						{
+							if(!formInstancePage.validationLiveStatus()){formInstancePage.validationNow();}
+							FormInstanceBottomPage formInstanceBottomPage=formInstancePage.viewAdjustmentLog();
+							String exportedFileFullPath=null;
+							if(formInstanceBottomPage!=null)
+							{
+								exportedFileFullPath=formInstanceBottomPage.exportValidation();
+							}else
+							{
+								form.setExecutionStatus("fail on open form instance's bottom page");
+							}
+							if(formInstancePage.isThisPage())
+							{
+								formInstancePage.closeThisPage();
+							}
+							
+							if(exportedFileFullPath!=null && new File(exportedFileFullPath).exists())
+							{
+								String status=Comparison.compareWithExportedValidation(form, exportedFileFullPath);
+								form.setExecutionStatus(status);
+							}else
+							{
+								form.setExecutionStatus("fail on open not existed file:"+exportedFileFullPath);
+							}
+						}else
+						{
+							form.setExecutionStatus("fail on open form instance");
+						}
+					}else
+					{
+						form.setExecutionStatus("fail on select form");
+					}
+					
+				}
+			
+			}catch(Exception e)
+			{
+				logger.error(e.getMessage());
+				form.setExecutionStatus("error:"+e.getMessage());
+			}
+			finally
+			{
+				try
+				{
+					if(formInstancePage!=null && formInstancePage.isThisPage())
+					{
+						formInstancePage.closeThisPage();
+					}
+				}catch(Exception e)
+				{
+					logger.error(e.getMessage());
+					form.setExecutionStatus("error:"+e.getMessage());
+				}
+				
+			}
+		}else
+		{
+			form.setExecutionStatus("skip");
+		}
+		addReportLink(EXPORTVALIDATION,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
+		
+		Assert.assertTrue(form.getExecutionStatus().startsWith("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+	}
 
 }

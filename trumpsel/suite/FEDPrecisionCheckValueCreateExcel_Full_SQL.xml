@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="FED_FullRegression">
+<test name="FEDPrecision">
+  	<parameter name="indexAppServers" value="10"/>
+  	<parameter name="indexDBServers" value="10"/>
+  	<!--parameter name="indexToolsetDBServers" value="1"/-->
+  	<parameter name="scenarioName" value="FEDCreateImportCheckCellValue_Full.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateImportPrecision"/>
+	  <methods>
+      <include name="createImportPrecision"/>
+      </methods>
+    </classes>
+</test>
+
+
+
+<test name="FEDExportToExcel">
+  	<parameter name="indexAppServers" value="10"/>
+  	<parameter name="indexDBServers" value="10"/>
+  	<parameter name="scenarioName" value="FEDExportToExcel_Full.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+      <methods>
+      <include name="checkExportToExcel"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+
+<!--
+<test name="FEDExportToCSV">
+  	<parameter name="indexAppServers" value="10"/>
+  	<parameter name="indexDBServers" value="10"/>
+  	<parameter name="scenarioName" value="FEDExportToCSV_Full.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+      <methods>
+      <include name="checkExportToCSV"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+
+<test name="FEDTransmission">
+  	<parameter name="indexAppServers" value="10"/>
+  	<parameter name="indexDBServers" value="10"/>
+  	<parameter name="scenarioName" value="FEDTransmission_Full.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.ExportToRegulator">
+      <methods>
+      <include name="checkInForm"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+
+<test name="FEDCreateFromExcel">
+  	<parameter name="indexAppServers" value="10"/>
+  	<parameter name="indexDBServers" value="10"/>
+  	<parameter name="scenarioName" value="FEDCreateFromExcel_Full.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateNewForm">
+      <methods>
+      <include name="createNewFromExcel"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+-->
+</suite>
+

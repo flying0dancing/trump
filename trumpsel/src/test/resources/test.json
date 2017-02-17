@@ -17,8 +17,8 @@
       },
       {
       	"id": 6,
-        "name": "asia_ar1150",
-        "url": "http://172.20.30.228:8105",
+        "name": "asia_ar1150MAS",
+        "url": "http://172.20.30.228:8080",
         "username": "admin",
         "password": "password"
       },
@@ -34,14 +34,16 @@
         "name": "fed",
         "url": "http://sha-com-qa-3:8089",
         "username": "admin",
-        "password": "password"
+        "password": "password",
+        "key": "sha-com-qa-3:22:/home/test/export/:test:password"
       },
       {
       	"id": 9,
         "name": "qatest",
         "url": "http://sha-com-qa-9:8080",
         "username": "admin",
-        "password": "password"
+        "password": "password",
+        "key": "sha-com-qa-9:22:/home/autoarfed/export:autoarfed:password"
       },
       {
       	"id": 10,
@@ -71,7 +73,7 @@
         "name": "ar_database",
         "driver": "oracle",
         "host": "172.20.20.49@ora11g",        
-        "schema": "AR115$OWNER"
+        "schema": "AR115MAS$OWNER"
       },
       {
       	"id": 7,

@@ -11,6 +11,7 @@ public class DBInfo{
 	private static String applicationServer_UserName;
 	private static String applicationServer_Password;
 	private static String applicationServer_Url;
+	private static String applicationServer_Key;
 	
 	private static String databaseServer_Name;
 	private static String databaseServer_Driver;
@@ -91,6 +92,7 @@ public class DBInfo{
 			applicationServer_UserName=testEnv.getApplicationServer(indexAppServer).getUsername();
 			applicationServer_Password=testEnv.getApplicationServer(indexAppServer).getPassword();
 			applicationServer_Url=testEnv.getApplicationServer(indexAppServer).getUrl();
+			applicationServer_Key=testEnv.getApplicationServer(indexAppServer).getKey();
 			indexDBServer=TestManager.getIndexDBServer();
 			databaseServer_Name=testEnv.getDatabaseServer(indexDBServer).getName();
 			databaseServer_Driver=testEnv.getDatabaseServer(indexDBServer).getDriver();
@@ -161,6 +163,9 @@ public class DBInfo{
 	public static String getApplicationServer_Url()
 	{return applicationServer_Url;}
 	
+	public static String getApplicationServer_Key() 
+	{	return applicationServer_Key;}
+	
 	public static String getDatabaseServer_Name()
 	{return databaseServer_Name;}
 	
@@ -212,9 +217,14 @@ public class DBInfo{
 		else
 			return "";
 	}
+	
+	/**
+	 * get Regulator DESCRIPTION list
+	 * @return
+	 */
 	public static List<String> getRegulatorDescription()
 	{
-		String SQL="SELECT \"DESCRIPTION\" FROM \"CFG_INSTALLED_CONFIGURATIONS\" WHERE \"STATUS\"='A' ";;
+		String SQL="SELECT \"DESCRIPTION\" FROM \"CFG_INSTALLED_CONFIGURATIONS\" WHERE \"STATUS\"='A' ";
 		return DBQuery.queryRecords(SQL);
 	}
 	
@@ -230,6 +240,7 @@ public class DBInfo{
 		return DBQuery.queryRecord(SQL);
 
 	}
+	
 	
 	/**
 	 * get Regulator IDRange Start
@@ -296,6 +307,46 @@ public class DBInfo{
 
 		}
 		return DBQuery.queryRecords(SQL);
+	}
+	
+	/**
+	 * get user who created this form instance, if no result in database, return null.
+	 * @author kun shen
+	 * @param regulator
+	 * @param form
+	 * @param version
+	 * @param processDate
+	 * @return
+	 */
+	public static String getFormInstanceCreatedBy(String regulator,String form,String version,String processDate)
+	{
+		String SQL="";
+		String config_Prefix = getRegulatorPrefix(regulator);
+		//processDate format mm/dd/yyyy
+		SQL="select \"CREATED_BY\" from \"FIN_FORM_INSTANCE\" where \"EDITION_STATUS\"='ACTIVE' and \"FORM_CODE\"='"+form+"' and \"FORM_VERSION\"='"+version+"' and \"REFERENCE_DATE\"= to_date('"+processDate+"', 'mm/dd/yyyy')  and \"CONFIG_PREFIX\"='"+config_Prefix+"'";
+		
+		return DBQuery.queryRecord(SQL);
+		
+	}
+	
+	/**
+	 * get user who created this form instance
+	 * @author kun shen
+	 * @param regulator
+	 * @param form
+	 * @param version
+	 * @param processDate
+	 * @return
+	 */
+	public static String getFormInstanceAttestedStatus(String regulator,String form,String version,String processDate)
+	{
+		String SQL="";
+		String config_Prefix = getRegulatorPrefix(regulator);
+		//processDate format mm/dd/yyyy
+		SQL="select \"ATTESTATION_STATUS\" from \"FIN_FORM_INSTANCE\" where \"EDITION_STATUS\"='ACTIVE' and \"FORM_CODE\"='"+form+"' and \"FORM_VERSION\"='"+version+"' and \"REFERENCE_DATE\"= to_date('"+processDate+"', 'mm/dd/yyyy')  and \"CONFIG_PREFIX\"='"+config_Prefix+"'";
+		
+		return DBQuery.queryRecord(SQL);
+		
 	}
 	
 	/**
@@ -390,6 +441,9 @@ public class DBInfo{
 		return language;
 	}
 
+	
+
+	
 
 	
 }

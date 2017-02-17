@@ -40,12 +40,27 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 						if(formInstancePage!=null)
 						{
 							List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
-							String s="";
-							for(String t:status)
+							if(status.size()==1)
 							{
-								s=s+t;
+								form.setExecutionStatus(status.get(0));
+							}else
+							{
+								String s="";
+								Boolean totalStatus=true;
+								for(String t:status)
+								{
+									if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
+									s=s+t+System.getProperty("line.separator");
+								}
+								if(totalStatus)
+								{
+									form.setExecutionStatus(s);
+								}else
+								{
+									form.setExecutionStatus("fail:"+s);
+								}
 							}
-							form.setExecutionStatus(s);
+							
 							if(formInstancePage.isThisPage())
 							{
 								formInstancePage.closeThisPage();
@@ -114,12 +129,32 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 				{
 					listPage.loginAfterTimeout(listPage);
 					List<String> status=ExportToFiles.exportToRegulator(listPage,form);
-					String s="";
+					/*String s="";
 					for(String t:status)
 					{
 						s=s+t+System.getProperty("line.separator");
 					}
-					form.setExecutionStatus(s);
+					form.setExecutionStatus(s);*/
+					if(status.size()==1)
+					{
+						form.setExecutionStatus(status.get(0));
+					}else
+					{
+						String s="";
+						Boolean totalStatus=true;
+						for(String t:status)
+						{
+							if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
+							s=s+t+System.getProperty("line.separator");
+						}
+						if(totalStatus)
+						{
+							form.setExecutionStatus(s);
+						}else
+						{
+							form.setExecutionStatus("fail:"+s);
+						}
+					}
 				}else
 				{
 					form.setExecutionStatus("fail: cannot get list page");

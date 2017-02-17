@@ -242,7 +242,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 	 * @author kun shen
 	 * @param form
 	 * @param exportedFileFullPath
-	 * @param functionFolderName
+	 * @param functionFolderName values:
 	 * @return
 	 * @throws Exception
 	 */
@@ -597,4 +597,143 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		logger.info("used time[seconds]:"+(end-begin)/1000.00F +" result:"+returnStatus);
 		return returnStatus;
 	}
+	
+	/**
+	 * compare expected validations with validation->"export"'s download file, return values(pass,fail:...)<br>
+	 * @author kun shen
+	 * @param form
+	 * @param exportedFileFullPath
+	 * @return
+	 * @throws Exception
+	 */
+	public static String compareWithExportedValidation(Form form, String exportedFileFullPath) throws Exception
+	{
+		logger.info("Begin verify \"export validation rules\"");
+		long begin = System.currentTimeMillis();
+		String returnStatus=null;
+		String cmdLine="";
+		String regulator=form.getRegulator();
+		String expectationFolder=TARGET_EXPECTATION_FOLDER.replace("\\", "/").replace("/", System.getProperty("file.separator"))+regulator+System.getProperty("file.separator");
+		File expectationFile = new File(expectationFolder+form.getExpectationFile());
+		if(expectationFile.exists())
+		{
+			String reslutFolder=expectationFolder+EXPORTVALIDATION+System.getProperty("file.separator");
+			
+			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
+			form.setExec_ExpectationFile(newFileName);
+			String newFilePath=reslutFolder+newFileName;
+			
+			File exportedFile = new File(exportedFileFullPath);
+			
+			if(exportedFile.exists())
+			{
+				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
+				logger.info("Expectation File:"+newFilePath);
+				String[] commons={ PropHelper.getProperty("path.GetValidationResult"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", TARGET_LOG_FOLDER, "Y" };
+				cmdLine=PropHelper.getProperty("path.GetValidationResult")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" "+TARGET_LOG_FOLDER+" \"Y\"";
+				logger.info(cmdLine);
+				Process process = Runtime.getRuntime().exec(commons);
+				process.waitFor();
+				File compareRstFile = new File(TARGET_LOG_FOLDER + "/rule_compareRst.txt");
+				if(compareRstFile.exists())
+				{
+					String rst = TxtUtil.getAllContent(compareRstFile).trim();
+					if (!String.valueOf(rst.substring(0,1)).matches("[a-zA-Z0-9]"))
+						rst = rst.substring(1).toLowerCase();//change to lower case.
+					returnStatus=rst;
+					compareRstFile.delete();
+				}else
+				{
+					returnStatus="fail:File Not Find " +compareRstFile.getAbsolutePath();
+				}
+				
+			}else
+			{
+				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
+			}
+		}else
+		{
+			returnStatus="fail:File Not Find:"+expectationFile.getAbsolutePath();
+		}
+		
+		
+		if(returnStatus.toLowerCase().startsWith("fail"))
+		{
+			returnStatus=returnStatus+System.getProperty("line.separator")+cmdLine;
+		}
+		long end = System.currentTimeMillis();
+		logger.info("used time[seconds]:"+(end-begin)/1000.00F +" result:"+returnStatus);
+		Runtime.getRuntime().gc();
+		return returnStatus;
+	}
+	
+	/**
+	 * compare expected validations with problems->"export"'s download file, return values(pass,fail:...)<br>
+	 * @author kun shen
+	 * @param form
+	 * @param exportedFileFullPath
+	 * @return
+	 * @throws Exception
+	 */
+	public static String compareWithExportedProblems(Form form, String exportedFileFullPath) throws Exception
+	{
+		logger.info("Begin verify \"export problems\"");
+		long begin = System.currentTimeMillis();
+		String returnStatus=null;
+		String cmdLine="";
+		String regulator=form.getRegulator();
+		String expectationFolder=TARGET_EXPECTATION_FOLDER.replace("\\", "/").replace("/", System.getProperty("file.separator"))+regulator+System.getProperty("file.separator");
+		File expectationFile = new File(expectationFolder+form.getExpectationFile());
+		if(expectationFile.exists())
+		{
+			String reslutFolder=expectationFolder+EXPORTPROBLEMS+System.getProperty("file.separator");
+			
+			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
+			form.setExec_ExpectationFile(newFileName);
+			String newFilePath=reslutFolder+newFileName;
+			
+			File exportedFile = new File(exportedFileFullPath);
+			
+			if(exportedFile.exists())
+			{
+				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
+				logger.info("Expectation File:"+newFilePath);
+				String[] commons={ PropHelper.getProperty("path.GetProblemResult"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", TARGET_LOG_FOLDER };
+				cmdLine=PropHelper.getProperty("path.GetProblemResult")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" "+TARGET_LOG_FOLDER;
+				logger.info(cmdLine);
+				Process process = Runtime.getRuntime().exec(commons);
+				process.waitFor();
+				File compareRstFile = new File(TARGET_LOG_FOLDER + "/rule_compareRst.txt");
+				if(compareRstFile.exists())
+				{
+					String rst = TxtUtil.getAllContent(compareRstFile).trim();
+					if (!String.valueOf(rst.substring(0,1)).matches("[a-zA-Z0-9]"))
+						rst = rst.substring(1).toLowerCase();//change to lower case.
+					returnStatus=rst;
+					compareRstFile.delete();
+				}else
+				{
+					returnStatus="fail:File Not Find " +compareRstFile.getAbsolutePath();
+				}
+				
+			}else
+			{
+				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
+			}
+		}else
+		{
+			returnStatus="fail:File Not Find:"+expectationFile.getAbsolutePath();
+		}
+		
+		
+		if(returnStatus.toLowerCase().startsWith("fail"))
+		{
+			returnStatus=returnStatus+System.getProperty("line.separator")+cmdLine;
+		}
+		long end = System.currentTimeMillis();
+		logger.info("used time[seconds]:"+(end-begin)/1000.00F +" result:"+returnStatus);
+		Runtime.getRuntime().gc();
+		return returnStatus;
+	}
+	
 }

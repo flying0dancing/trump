@@ -1829,7 +1829,8 @@
     	<locator id="abstract.importFileUploading" type="WebElement" by="xpath" expression="//div[@id='?:importFileUpload']/div[2]/table/tbody[tr]" name="importFileUploading" description="importFileUploading"/>
     	<locator id="abstract.uploadFileInitToZero" type="WebElement" by="xpath" expression="//*[starts-with(@id,'?:')]/div[ contains(@class,'ui-chkbox-box')][../../span='Initialise to zeros']" name="uploadFileInitToZero" description="uploadFileInitToZero"/>
         <locator id="abstract.uploadFileInitToZeroChecked" type="WebElement" by="xpath" expression="//*[starts-with(@id,'?:')]/div[ contains(@class,'ui-chkbox-box')][../../span='Initialise to zeros']/span[contains(@class,'ui-icon-check')]" name="uploadFileInitToZeroChecked" description="uploadFileInitToZeroChecked"/>
-       
+       	<locator id="abstract.message" type="WebElement" by="xpath" expression="//*[@id='growl_container']/div/div/div[2]/p" name="message" description="message"/>
+    
     </page>
     
     <page id="hm" name="HomePage" description="Home Page">
@@ -1850,8 +1851,10 @@
     </page>
     
     <page id="fipf" name="formInstPageForm" description="form instance page created by Kun Shen">
+    	<locator id="fipf.lblUserName" type="WebElement" by="xpath" expression=".//*[@id='formHeader:lblUser_button']/span[starts-with(text(),'hi ')]" name="lblUserName" description="lblUserName"/>
     	<locator id="fipf.lblUser_button" type="WebElement" by="id" expression="formHeader:lblUser_button" name="lblUser_button" description="lblUser_button"/>
         <locator id="fipf.btnPreferences" type="WebElement" by="id" expression="formHeader:btnPreferences" name="btnPreferences" description="btnPreferences"/>
+        <locator id="fipf.btnLogout" type="WebElement" by="id" expression="formHeader:btnLogout" name="btnLogout" description="btnLogout"/>
         <locator id="fipf.pageTab" type="WebElement" by="id" expression="formInstPageForm:pagesDataTable_data" name="pageTab" description="page table"/>
         <locator id="fipf.pageName" type="WebElement" by="xpath" expression="//*[@id='formInstPageForm:pagesDataTable_data']/tr[?]/td/span[@class='pageContent']" name="pageName" description="page name"/>
     	<locator id="fipf.getCells" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//input[@type!='hidden']" name="getCells" description="get Cells"/> 
@@ -1869,7 +1872,7 @@
     	<locator id="fipf.ajaxErrorBtn" type="WebElement" by="xpath" expression="//div[@id='ajaxErrorHandlerDialog']/div/button[contains(span,'Close warning')]" name="ajaxErrorBtn" description="occur ajaxErrorDialog"/>
     	<locator id="fipf.pageLocalRow" type="WebElement" by="xpath" expression="//*[@id='formInstPageForm:pagesDataTable_data']/tr[?]" name="pageLocalRow" description="page local row"/>
     	<locator id="fipf.form" type="WebElement" by="xpath" expression=".//*[@id='headerMenu']/div[3]/label[1]" name="regulator" description="form info"/>
-    	<locator id="fipf.message" type="WebElement" by="xpath" expression="//*[@id='growl_container']/div/div/div[2]/p" name="message" description="message"/>
+    	<!--<locator id="fipf.message" type="WebElement" by="xpath" expression="//*[@id='growl_container']/div/div/div[2]/p" name="message" description="message"/>  -->
     	<locator id="fipf.importDlgmodal" type="WebElement" by="id" expression="importFilesDialog_modal" name="importFilesDialog_modal" description="importFilesDialog_modal"/>
     	<locator id="fipf.close" type="WebElement" by="id" expression="formHeader:closeFormInstanceBtn" name="closeFormInstanceButton" description="close FormInstance Button"/>
     	<locator id="fipf.formInstContentForm" type="WebElement" by="id" expression="formInstContentForm" name="formInstContentForm" description="formInstContentForm"/>
@@ -1891,6 +1894,10 @@
     	<locator id="fipf.validateNowBtn" type="WebButton" by="id" expression="formHeader:validateNowBtn" name="validateNow" description="click validate Now Button"/>
     	<locator id="fipf.doValidationBtn" type="WebButton" by="id" expression="formHeader:doValidationBtn" name="doValidationBtn" description="click Live Validation Button"/>
     	<locator id="fipf.unDoValidationBtn" type="WebButton" by="id" expression="formHeader:unDoValidationBtn" name="unDoValidationBtn" description="click Live Validation Button"/>
+    	<locator id="fipf.workflow_button" type="WebButton" by="id" expression="formHeader:workflow_button" name="adjust_button" description="workflow_button"/>
+    	<locator id="fipf.workflow_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a[span='?']/span" name="workflow_menu" description="workflow_menu"/>
+    	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']" name="workflow_menu" description="workflow_menu"/>
+    	
     </page>
     
     <page id="ifd" name="importformdialog" description="import form dialog created by Kun Shen">
@@ -1926,7 +1933,7 @@
     <locator id="filf.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/span[1]" name="firstPageSta" description="first page status"/>
     <locator id="filf.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>	
     <locator id="filf.FormRow" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?' and @data-ri]" name="FormRow" description="FormRow"/>
-    
+    	
     </page>
     
     <page id="td" name="transmitDialog" description="transmit(export to regulator) Dialog created by Kun Shen">
@@ -2039,8 +2046,25 @@
     <locator id="fidf.linkText" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//a[text()='?']" name="linkText" description="link Tab(text) in left panel" />
     <locator id="fidf.export" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//a[@title='Export']" name="export" description="export in buttom page" />
     <locator id="fidf.noRecordsFound" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//tr//td[starts-with(text(),'No records found')]" name="noRecordsFound" description="no Records Found" />
-    <locator id="fidf.close" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//img[contains(@id,'minimizeArrow')]" name="closeButtomPage" description="close buttom page" />
+    <locator id="fidf.close" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//img[contains(@id,'minimizeArro')]" name="closeButtomPage" description="close buttom page" />
    
+    </page>
+    
+     <page id="wkld" name="workflowLogDialog" description="workflow Log Dialog created by Kun Shen">
+    <locator id="wkld.title" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog_title']" name="workflowLogTitle" description="workflowLogTitle"/>
+	<locator id="wkld.close" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']/div[1]/a/span" name="closeworkflowLog" description="closeworkflowLog"/>
+    <locator id="wkld.initToZeroCheck" type="WebElement" by="id" expression="workflowLogForm:initToZeroCheck" name="initToZeroCheck" description="initToZeroCheck"/>
+    <locator id="wkld.dataRow" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']//tbody[contains(@id,'workflowLogTable_data')]//tr" name="logdata" description="log data rows"/>
+    <locator id="wkld.dataCol" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']//tbody[contains(@id,'workflowLogTable_data')]//tr/td" name="logdataCols" description="log data columns"/>
+    <locator id="wkld.data" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']//tbody[contains(@id,'workflowLogTable_data')]//tr[?]/td[?]" name="logdata" description="log data"/>
+    <locator id="wkld.noRecordsFound" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']//tr/td[contains(text(),'No records found')]" name="noRecordsFound" description="noRecordsFound"/>
+    	
+    </page>
+    
+    <page id="wkacf" name="workflowApproveCommentForm" description="workflowApproveCommentForm Dialog created by Kun Shen">
+	<locator id="wkacf.Comment" type="WebElement" by="id" expression="approveCommentForm:approveCommentTextarea" name="Comnent" description="comment"/>
+    <locator id="wkacf.ok" type="WebButton" by="id" expression="approveCommentForm:addApproveComment" name="ok" description="ok"/>
+    
     </page>
     
 </locatorBean>

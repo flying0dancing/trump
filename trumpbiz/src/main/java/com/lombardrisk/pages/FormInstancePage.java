@@ -14,6 +14,11 @@ import java.util.regex.Pattern;
 
 
 
+
+
+
+
+
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -28,6 +33,12 @@ import com.lombardrisk.test.pojo.*;
 public class FormInstancePage extends AbstractPage implements IComFolder,IExecFuncFolder,IExportTo
 {
 	private Form form;
+	private String loginUser;
+	
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper)
+	{
+		super(webDriverWrapper);
+	}
 	
 	public FormInstancePage(IWebDriverWrapper webDriverWrapper, Form form)
 	{
@@ -35,6 +46,17 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 		this.form=form;
 	}
 	
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper, Form form,String loginUser)
+	{
+		super(webDriverWrapper);
+		this.form=form;
+		this.loginUser=loginUser;
+	}
+	
+	public String getLoginUser()
+	{
+		return loginUser;
+	}
 	
 	/**
 	 * It will get all cells' vale in all form pages and instances, and saved in some regulator (UIDisplay) folder
@@ -72,6 +94,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					}
 					
 					String fileFullName=regulatorFolder+formName+"_"+form.getVersion()+"_"+instanceCode+"_"+form.getEntity()+"_"+processDateSimple+".csv";
+					
 					File fileToWrite=new File(fileFullName);
 					if(!fileToWrite.exists()){fileToWrite.createNewFile();}
 					//get all normal cells
@@ -81,6 +104,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					//get all extend grid cells
 		    		strBuffer=getExtendGridCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
+		    		logger.info("save displayed values into file " + fileFullName);
 				}
 			}
 			
@@ -511,8 +535,11 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	{
 		if (element("fipf.form").isDisplayed())
 		{
-			if (element("fipf.message").isDisplayed())
-				waitThat("fipf.message").toBeInvisible();
+			/*if (element("fipf.message").isDisplayed())
+				waitThat("fipf.message").toBeInvisible();*/
+
+			if (element("abstract.message").isDisplayed())
+				waitThat("abstract.message").toBeInvisible();
 			if (element("fipf.importDlgmodal").isDisplayed())
 				waitThat("fipf.importDlgmodal").toBeInvisible();
 
@@ -676,7 +703,8 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		{
 			element1.click();
 			waitThat().timeout(1000);
-			waitThat("fipf.message").toBeInvisible();
+			//waitThat("fipf.message").toBeInvisible();
+			waitThat("abstract.message").toBeInvisible();
 		}
 		if(element2.isPresent())
 		{
@@ -866,7 +894,8 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
-			if(element("fipf.message").isPresent()){flag=false;waitThat("fipf.message").toBeInvisible();}
+			//if(element("fipf.message").isPresent()){flag=false;waitThat("fipf.message").toBeInvisible();}
+			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 			TestCaseManager.getTestCase().stopTransaction();
 			
 		}
@@ -875,12 +904,24 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
-			if(element("fipf.message").isPresent()){flag=false;waitThat("fipf.message").toBeInvisible();}
+			//if(element("fipf.message").isPresent()){flag=false;waitThat("fipf.message").toBeInvisible();}
+			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+		}
+		if(flag)
+		{
+			String a=getLatestFile(downloadFolder);
+			String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
+			if(b.equalsIgnoreCase(LOCKNAME))
+			{
+				logger.error("not find download file");
+				flag=false;
+			}
+		
 		}
 		return flag;
 	}
 	
-	
+		
 	/**
 	 * export to regulator in form instance page
 	 * @return
@@ -931,7 +972,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			executeScript(js);
 			if(liTxt.toUpperCase().contains("XBRL")){waitThat().timeout(2000);}
 			loadingDlg();
-			IWebElementWrapper element=element("td.transmitDialog4FedTitle");
+			/*IWebElementWrapper element=element("td.transmitDialog4FedTitle");
 			if(element.isDisplayed())
 			{
 				title=element.getInnerText();
@@ -943,6 +984,18 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				{
 					title=element.getInnerText();
 					td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
+				}
+			}*/
+			
+			//reuse this part of select displayed transmit dialog from 20170113
+			List<IWebElementWrapper> elements=element("td.transmitDialogTitles").getAllMatchedElements();
+			for(IWebElementWrapper element:elements)
+			{
+				if(element.isDisplayed())
+				{
+					title=element.getInnerText();
+					td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
+					break;
 				}
 			}
 			
@@ -1056,5 +1109,231 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			flag=true;
 		}
 		return flag;
+	}
+	
+	/**
+	 * invoke clickSomeWorkflow and then click "ready for approval"
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public Boolean clickReadyForApproval() throws Exception
+	{
+		/*Boolean flag=getFormStatus();
+		if(!flag)
+		{
+			if(lockForm())
+			{
+				flag=clickSomeWorkflow("Ready for approval");
+			}
+		}*/
+		return clickSomeWorkflow("Ready for approval");
+	}
+	
+	/**
+	 * invoke clickSomeWorkflow and then click "Approve"
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public Boolean clickApproval() throws Exception
+	{
+		String createdUser=getUserWhoCreatedIt();
+		Boolean returnFlag=false;
+		if(createdUser!=null)
+		{
+			clickSomeWorkflow("Approve");
+			//confirm dialog
+			IWebElementWrapper approveComment=element("wkacf.Comment");
+			
+			if(approveComment.isDisplayed())
+			{
+				approveComment.type("approved by automation");
+				loadingDlg();
+				element("wkacf.ok").click();
+				loadingDlg();
+				if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+			}
+
+			if(checkSomeWorkflow().equalsIgnoreCase("ATTESTED"))
+			{
+				//returnFlag=true;
+				if(!getLoginUser().equalsIgnoreCase(DBInfo.getApplicationServer_UserName()))
+				{
+					this.closeThisPage();
+					ListPage lp=new ListPage(getWebDriverWrapper());
+					if(lp.isThisPage())
+					{
+						HomePage hp=lp.logout();
+						if(hp.isThisPage())
+						{
+							lp=hp.login(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
+							if(lp.isThisPage())
+							{
+								if(lp.selectFormInfo(form))
+								{
+									FormInstancePage fip=lp.openFormInstance(form);
+									if(fip.isThisPage())
+									{
+										returnFlag=true;
+									}
+									fip=null;
+								}
+							}
+							
+						}else
+						{
+							logger.info("cannot access home page.");
+						}
+						hp=null;
+						
+					}else
+					{
+						logger.info("cannot access dashboard page.");
+					}
+					lp=null;
+				}
+			}else
+			{
+				if(getLoginUser().equalsIgnoreCase(createdUser))
+				{
+					this.closeThisPage();
+					ListPage lp=new ListPage(getWebDriverWrapper());
+					if(lp.isThisPage())
+					{
+						HomePage hp=lp.logout();
+						if(hp.isThisPage())
+						{
+							lp=hp.login(PropHelper.getProperty("approver.user"), PropHelper.getProperty("approver.password"));
+							if(lp.isThisPage())
+							{
+								if(lp.selectFormInfo(form))
+								{
+									FormInstancePage fip=lp.openFormInstance(form);
+									if(fip.isThisPage())
+									{
+										returnFlag=clickApproval();//invoke itself
+									}
+									fip=null;
+								}
+							}
+						}else
+						{
+							logger.info("cannot access home page.");
+						}
+						hp=null;
+					}else
+					{
+						logger.info("cannot access dashboard page.");
+					}
+					lp=null;
+				}
+			}
+		}
+		
+		return returnFlag;
+	}
+	
+	/**
+	 * invoke clickSomeWorkflow and click "Reject"
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public Boolean clickReject() throws Exception
+	{
+		//TODO add more complex
+		return clickSomeWorkflow("Reject");
+	}
+	
+	/*public String getUserWhoseIt() throws Exception
+	{
+		String userName=null;
+		if(clickSomeWorkflow("View workflow log"))
+		{
+			WorkflowLogDialog workflowLogDlg=new WorkflowLogDialog(getWebDriverWrapper());
+			if(workflowLogDlg.isThisPage())
+			{
+				userName=workflowLogDlg.getUserWhoCreatedIt();
+				workflowLogDlg.closeThisPage();
+			}else
+			{
+				logger.info("cannot open workflow log dialog.");
+			}
+		}else
+		{
+			logger.info("cannot click \"View workflow log\" in menu.");
+		}
+		return userName;
+	}*/
+	
+	//getFormInstanceCreatedBy
+	/**
+	 * invoke clickSomeWorkflow and click "View workflow log", get the user's name who create it. return null if no user log
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public String getUserWhoCreatedIt() throws Exception
+	{
+		String processDate=uniformDate(form.getProcessDate(),"MM/DD/YYYY");
+		String userName=DBInfo.getFormInstanceCreatedBy(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
+		return userName;
+	}
+	
+	
+	/**
+	 * click some workflow for attestation, return false if message occurs.
+	 * @author kun shen
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
+	private Boolean clickSomeWorkflow(String type) throws Exception
+	{
+		Boolean flag=true;
+		element("fipf.workflow_button").click();
+		waitThat("fipf.workflow_menu").toBeVisible();
+		if(element("fipf.workflow_menuList",type).isPresent() && element("fipf.workflow_menuList",type).isDisplayed())
+		{
+			element("fipf.workflow_menuList",type).click();
+			loadingDlg();
+			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+		}
+		return flag;
+	}
+	
+	/**
+	 * check some workflow in UI for attestation, return true if the type exists.
+	 * @author kun shen
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	private Boolean checkSomeWorkflow(String type) throws Exception
+	{
+		Boolean flag=false;
+		element("fipf.workflow_button").click();
+		waitThat("fipf.workflow_menu").toBeVisible();
+		if(element("fipf.workflow_menuList",type).isPresent())
+		{
+			flag=true;
+		}
+		element("fipf.workflow_button").click();
+		return flag;
+	}
+	
+	/**
+	 * check some workflow in UI for attestation, return status.
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	private String checkSomeWorkflow() throws Exception
+	{
+		String processDate=uniformDate(form.getProcessDate(),"MM/DD/YYYY");
+		String attestedStatus=DBInfo.getFormInstanceAttestedStatus(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
+		return attestedStatus;
 	}
 }

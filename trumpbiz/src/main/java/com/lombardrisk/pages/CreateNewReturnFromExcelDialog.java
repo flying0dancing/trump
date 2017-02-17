@@ -115,6 +115,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 						fip=new FormInstancePage(getWebDriverWrapper(),form);
 						if(!fip.isThisPage())
 						{
+							logger.info("open a wrong form instance, please check your excel file.");
 							fip.closeThisPage();//for these tester open a wrong form instance.
 							waitThat().timeout(3000);
 							fip=null;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="FED" parallel="tests" thread-count="2">
+
+<test name="ExportRegulator">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>
+  	<parameter name="scenarioName" value="ForKun_FEDExportToRegulator.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.ExportToRegulator">
+	  <methods>
+      <include name="checkInForm"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+</suite>

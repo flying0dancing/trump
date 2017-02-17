@@ -12,11 +12,17 @@ import com.lombardrisk.test.DBInfo;
  */
 public class HomePage extends AbstractPage 
 {
+	private String loginUser;
+	
+	public String getLoginUser()
+	{
+		return loginUser;
+	}
 	public HomePage(IWebDriverWrapper webDriverWrapper)
 	{
 		super(webDriverWrapper);
 	}
-
+	
 	public ListPage logon(String userName,String password) throws Exception
 	{
 
@@ -44,6 +50,7 @@ public class HomePage extends AbstractPage
 
 	public void typeUsername(String userName) throws Exception
 	{
+		this.loginUser=userName;
 		element("hm.name").input(userName);
 	}
 
@@ -96,6 +103,29 @@ public class HomePage extends AbstractPage
 		 
 		return listPage;
 	}
+	
+	public ListPage login(String userName, String password) throws Exception
+	{
+		if(userName==null || userName.trim().equals("")){userName="admin";}
+		if(password==null || password.trim().equals("")){password="password";}
+		logger.info("Login AgileReporter with user [" + userName + "]");
+		typeUsername(userName);
+		typePassword(password);
+		loadingDlg();
+		ListPage listPage = submitLogin();
+		//assertThat("pp.userLabel").innerText().containsIgnoringCase("hi "+userName);
+		if(listPage.isThisPage())
+		{
+			
+		}else
+		{
+			listPage=null;
+			Assert.fail("cannot access to Dashboard.");
+		}
+		 
+		return listPage;
+	}
+	
 	/**
 	 * if this page is this page, return true, others return false.
 	 * @return

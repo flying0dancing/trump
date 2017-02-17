@@ -38,7 +38,7 @@ public class ExportToFiles {
 					form.getTransmission().setModule(module);
 					if(exportToRegulator.selectInfo())
 					{
-						List<String> exportedFileFullPaths=exportToRegulator.export();//debug changed to List<String> filePaths
+						List<String> exportedFileFullPaths=exportToRegulator.export();
 						if(exportedFileFullPaths!=null)
 						{
 							for(String exportedFileFullPath:exportedFileFullPaths)
@@ -46,7 +46,7 @@ public class ExportToFiles {
 								if(exportedFileFullPath!=null && new File(exportedFileFullPath).exists())
 								{
 									String str=Comparison.compareWithExportedToRegulator(form, exportedFileFullPath);
-									status.add(str);
+									status.add(str); 
 									logger.info(str);
 								}else
 								{
@@ -97,7 +97,7 @@ public class ExportToFiles {
 				logger.info("error:"+e.getMessage());
 			}
 		}
-		
+				
 		return status;
 	}
 	
