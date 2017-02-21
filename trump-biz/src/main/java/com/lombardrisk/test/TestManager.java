@@ -97,7 +97,7 @@ public class TestManager extends TestBase implements IComFolder {
 		  System.out.println(" afterSuite running!"); 
 		  Reporter.log(" afterSuite running~~~~<br>");
 		  FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER).getAbsolutePath(), new File(TARGET_LOG_FOLDER).getAbsolutePath(),startSuiteTime);
-		  
+		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime);
 	  }
 	
 	 @BeforeTest
@@ -117,10 +117,9 @@ public class TestManager extends TestBase implements IComFolder {
 	  
 	  @BeforeClass(dependsOnMethods="beforeClass")
 	  public void beforeClassInTestManager() throws Exception {
-		  System.out.println(getClass().getName()+" beforeClass running!"); 
-		  System.out.println(getClass().getName()+" setUpTest running!");
-		  
-		  setScenarioId(getLogName());
+		  System.out.println(getClass().getName()+" beforeClass-setUpTest running!"); 
+		 
+		  setScenarioId(setLogName());
 		  
 		  setUpTest();
 		  testEnv=super.getTestEnvironment();
@@ -152,10 +151,12 @@ public class TestManager extends TestBase implements IComFolder {
 			  FileUtil.copyDirectory(new File(SOURCE_FOLDER).getAbsolutePath(), new File(TARGET_FOLDER).getAbsolutePath());
 		  }
 		  logger.info("copy folders(done)");
-		  Reporter.log("Database Language:"+DBInfo.getLanguage());
+		  logger.info("Database Language:"+DBInfo.getLanguage());
+		 //Reporter.log("Database Language:"+DBInfo.getLanguage()+System.getProperty("line.separator"));
 		  
-		  getWebDriverWrapper().navigate().to(DBInfo.getApplicationServer_Url());
-		  report(Helper.getTestReportStyle(DBInfo.getApplicationServer_Url(), "open test server url"));
+		  String server_Url=DBInfo.getApplicationServer_Url();
+		  getWebDriverWrapper().navigate().to(server_Url);
+		  report(Helper.getTestReportStyle(server_Url, "open test server url ["+server_Url+"]"));
 		   HomePage homePage=new HomePage(getWebDriverWrapper());
 			if(homePage.isThisPage())
 			{
@@ -170,16 +171,16 @@ public class TestManager extends TestBase implements IComFolder {
 
 	  @AfterClass
 	  public void afterClassInTestManager()  throws Exception{
-		  logger.info(getClass().getName()+" afterClass running!"); 
-		  logger.info(getClass().getName()+" tearDownTest running!"); 
+		  //Reporter.log(getClass().getName()+" afterClass-tearDownTest running!"); 
+		  logger.info(" afterClass-tearDownTest running!"); 
 		  tearDownTest();
 	  }
 	  
 
   @BeforeMethod
   public void beforeMethod(Method method) throws Exception {
-	  logger.info(System.getProperty("line.separator")+getClass().getName()+" beforeMethod("+method.getName()+") running!"); 
-
+	  //Reporter.log(System.getProperty("line.separator")+getClass().getName()+" beforeMethod("+method.getName()+") running!"); 
+	  logger.info(" beforeMethod("+method.getName()+") running!");
 	 /* getWebDriverWrapper().navigate().to(DBInfo.getApplicationServer_Url());
 	  report(Helper.getTestReportStyle(DBInfo.getApplicationServer_Url(), "open test server url"));*/
 	  /*listPage=new ListPage(getWebDriverWrapper());
@@ -202,7 +203,8 @@ public class TestManager extends TestBase implements IComFolder {
 	  public void afterMethod(ITestResult result) throws Exception {
 		ITestContext context=result.getTestContext();
 		ITestNGMethod method=result.getMethod();
-		logger.info(getClass().getName()+" afterMethod("+method.getMethodName()+") running!"); 
+		//Reporter.log(getClass().getName()+" afterMethod("+method.getMethodName()+") running!"); 
+		logger.info(" afterMethod("+method.getMethodName()+") running!"); 
 		String resultFile=context.getCurrentXmlTest().getSuite().getName()+"+"+context.getCurrentXmlTest().getName()+"+"+getClass().getSimpleName()+"["+method.getMethodName()+"]+"+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
 		//int count=context.getFailedTests().size()+context.getPassedTests().size()+context.getSkippedTests().size();
 
@@ -249,7 +251,7 @@ public class TestManager extends TestBase implements IComFolder {
 	  return i;
   }
 
- public String getLogName()
+ public String setLogName()
  {
 	 String logNameWithoutSuffix=this.getClass().getSimpleName().toLowerCase();
 	 String simpleName=logNameWithoutSuffix;
@@ -276,11 +278,11 @@ public class TestManager extends TestBase implements IComFolder {
 			
 			if(exec_ExpectationFile!=null && !exec_ExpectationFile.trim().equals("") && new File(TARGET_EXPECTATION_FOLDER + regulator+"/"+execFunctionFolder+"/"+exec_ExpectationFile).exists())
 			{
-				report(Helper.getTestReportStyle(expectationFolder + regulator+"/"+execFunctionFolder+"/"+exec_ExpectationFile, "open expected result file"));
+				report(Helper.getTestReportStyle(expectationFolder + regulator+"/"+execFunctionFolder+"/"+exec_ExpectationFile, "open actual result ["+exec_ExpectationFile+"]"));
 			}
 			else
 			{
-				report(Helper.getTestReportStyle(expectationFolder + regulator+"/"+expectationFile, "open expected file"));
+				report(Helper.getTestReportStyle(expectationFolder + regulator+"/"+expectationFile, "open expectation ["+expectationFile+"]"));
 			}
 		}
 		

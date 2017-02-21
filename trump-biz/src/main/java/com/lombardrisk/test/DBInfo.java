@@ -11,6 +11,7 @@ public class DBInfo{
 	private static String applicationServer_UserName;
 	private static String applicationServer_Password;
 	private static String applicationServer_Url;
+	private static String applicationServer_Key;
 	
 	private static String databaseServer_Name;
 	private static String databaseServer_Driver;
@@ -91,6 +92,7 @@ public class DBInfo{
 			applicationServer_UserName=testEnv.getApplicationServer(indexAppServer).getUsername();
 			applicationServer_Password=testEnv.getApplicationServer(indexAppServer).getPassword();
 			applicationServer_Url=testEnv.getApplicationServer(indexAppServer).getUrl();
+			applicationServer_Key=testEnv.getApplicationServer(indexAppServer).getKey();
 			indexDBServer=TestManager.getIndexDBServer();
 			databaseServer_Name=testEnv.getDatabaseServer(indexDBServer).getName();
 			databaseServer_Driver=testEnv.getDatabaseServer(indexDBServer).getDriver();
@@ -160,6 +162,9 @@ public class DBInfo{
 	
 	public static String getApplicationServer_Url()
 	{return applicationServer_Url;}
+	
+	public static String getApplicationServer_Key() 
+	{	return applicationServer_Key;}
 	
 	public static String getDatabaseServer_Name()
 	{return databaseServer_Name;}
@@ -325,7 +330,7 @@ public class DBInfo{
 	}
 	
 	/**
-	 * get user who created this form instance
+	 * get ATTESTATION_STATUS of this form instance
 	 * @author kun shen
 	 * @param regulator
 	 * @param form
@@ -436,6 +441,9 @@ public class DBInfo{
 		return language;
 	}
 
+	
+
+	
 
 	
 }

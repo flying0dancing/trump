@@ -10,9 +10,12 @@ import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
+import com.lombardrisk.commons.JschUtil;
+import com.lombardrisk.test.DBInfo;
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
 import com.lombardrisk.test.pojo.Form;
+import com.lombardrisk.test.pojo.ServerInfo;
 
 public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
 	private Form form;
@@ -120,7 +123,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				logger.info("select transmission's compress type:" + compressType);
 				flag=selectIt(element,compressType);
 			}else
-			{
+			{//TODO need add if condition for ECR xbrl, comment add at 2017.02.15
 				logger.info("select transmission's default compress type: DZ");
 				flag=selectIt(element,"GZ");
 			}
@@ -148,7 +151,14 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		Boolean flag=false;
 		if(lockDownloadDir(downloadFolder))
 		{
-			flag=clickExport();
+			if(title.equalsIgnoreCase("Export to DataSchedule"))
+			{
+				flag=clickExportToDataSchedule();
+			}else
+			{
+				flag=clickExport();
+			}
+			
 		}
 		if(!flag)
 		{
@@ -214,7 +224,6 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					//TestCaseManager.getTestCase().setDefaultDownloadFileCharset(StandardCharsets.UTF_8);
 					element("td.exportButton",title).click();
 					loadingDlg();
-					//if(element("fipf.message").isPresent()){waitThat("fipf.message").toBeInvisible();}
 					if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 					TestCaseManager.getTestCase().stopTransaction();
 					
@@ -223,10 +232,9 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				{
 					element("td.exportButton",title).click();
 					loadingDlg();
-					//if(element("fipf.message").isPresent()){;waitThat("fipf.message").toBeInvisible();}
 					if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 				}
-				//click log button
+				//click log buttkon
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 				{
 					element("td.logButton").click();
@@ -253,61 +261,85 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		return flag;
 	}
 	
+	//TODO debugging
 	/**
-	 * click export button get download files.<br> If successfully return files' full path, others return null.
+	 * click export button, return true if export without errors, others return false.
 	 * @author kun shen
-	 * @return
 	 * @throws Exception
 	 */
-	public List<String> exportRetrieve() throws Exception
+	private Boolean clickExportToDataSchedule() throws Exception
 	{
-		List<String> unCompressDestFiles=null;
 		Boolean flag=false;
-		//TODO update downloadFolder
-		if(lockDownloadDir(downloadFolder))
+
+		if(!element("td.noRecordsFound").isDisplayed())
 		{
-			flag=clickExport();
-		}
-		if(!flag)
-		{
-			unlockDownloadDir(downloadFolder);
-			return null;
-		}
-		String sourceFileFullPath=exportToFile();
-		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTTOREGULATOR+")/");
-		unlockDownloadDir(downloadFolder);
-		if(destFileFullPath!=null && !destFileFullPath.trim().equals(""))
-		{
-			if(destFileFullPath.lastIndexOf(".")>0 && destFileFullPath.lastIndexOf(System.getProperty("file.separator"))<destFileFullPath.lastIndexOf("."))
+			if(element("td.exportButton",title).isEnabled())
 			{
-				String destDir=destFileFullPath.substring(0,destFileFullPath.lastIndexOf("."))+System.getProperty("file.separator");
+				logger.info("click export button");
 				
-				FileUtil.createDirectory(destDir);
-				unCompressDestFiles=FileUtil.unCompress(destFileFullPath, destDir);
-				if(unCompressDestFiles!=null && unCompressDestFiles.size()>=1)
+				element("td.exportButton",title).click();
+				loadingDlg();
+				if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+				
+				//click log button
+				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 				{
-					for(int i=0;i<unCompressDestFiles.size();i++)
-					{
-						unCompressDestFiles.set(i, destDir+unCompressDestFiles.get(i));
-					}
+					element("td.logButton").click();
+					loadingDlg();
+				}
+				
+				String jobRunType="ExportJob";
+				String prefixOfRegulator=DBInfo.getRegulatorPrefix(form.getRegulator());
+				String jobName=prefixOfRegulator+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
+				
+				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper());
+				lockDownloadDir(downloadFolder);//relock it after new jobResultDialog
+				String status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
+				jrd=null;
+				
+				getDownloadFromServerToLocalSSH(prefixOfRegulator,status);
+							
+				String a=getLatestFile(downloadFolder);
+				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
+				if(b.equalsIgnoreCase(LOCKNAME))
+				{
+					logger.error("not find download file");
 				}else
 				{
-					FileUtil.deleteDirectory(destDir);
-					unCompressDestFiles=new ArrayList<String>();
-					unCompressDestFiles.add(destFileFullPath);
-				}
+					flag=true;
+				}	
 			}else
 			{
-				unCompressDestFiles=new ArrayList<String>();
-				unCompressDestFiles.add(destFileFullPath);
+				logger.error("export button is disable");
 			}
-			
+		}else
+		{
+			logger.error("no records found");
 		}
-		
-		
-		Runtime.getRuntime().gc();
-		return unCompressDestFiles;
+		return flag;
+	}
 	
+	private void getDownloadFromServerToLocalSSH(String prefixOfRegulator,String statusType) throws Exception
+	{
+		logger.info("start downloading export file from server to local.");
+		ServerInfo serverInfo=new ServerInfo();
+		String processDate=uniformDate(form.getProcessDate(),"YYYYMMDD");
+		String downloadFolder_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/";
+		if(statusType.equalsIgnoreCase("fail"))
+		{
+			downloadFolder_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/ValidationErrors/";
+		}
+		if(serverInfo.getDownloadPath().contains("\\"))
+		{
+			downloadFolder_Server=downloadFolder_Server.replace("/", "\\");
+		}
+		logger.info("download folder from server:"+downloadFolder_Server);
+		String downloadFile_Server=prefixOfRegulator+"_"+form.getEntity()+"_"+form.getTransmission().getModule()+"_"+processDate+"*";
+		logger.info("download file name from server:"+downloadFolder_Server);
+		JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
+		JschUtil.downloadFileToLocal(downloadFolder_Server+downloadFile_Server, downloadFolder);
+		JschUtil.close();
+		logger.info("stop downloading export file from server to local.");
 	}
 	
 }

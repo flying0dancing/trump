@@ -72,8 +72,8 @@
             </property>  
             <property> 
               <name>listener</name>  
-              <value>org.uncommons.reportng.HTMLReporter, org.uncommons.reportng.JUnitXMLReporter
-                <!-- org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,org.yiwan.webcore.testng.ResultListener,org.yiwan.webcore.testng.RetryListener --> 
+              <value>org.uncommons.reportng.HTMLReporter, org.uncommons.reportng.JUnitXMLReporter,org.yiwan.webcore.testng.ResultListener,org.yiwan.webcore.testng.RetryListener
+                <!-- ,org.yiwan.webcore.testng.ResultListener,org.yiwan.webcore.testng.RetryListener --> 
               </value> 
             </property> 
           </properties>  

@@ -19,7 +19,7 @@ public class ListPage extends AbstractPage implements IExportTo
 	public String getLoginUser() throws Exception
 	{
 		String loginUser=element("fipf.lblUserName").getInnerText();
-		loginUser=loginUser.replace("hi  ", "");
+		loginUser=loginUser.replace("hi ", "");
 		return loginUser;
 	}
 	
@@ -97,7 +97,7 @@ public class ListPage extends AbstractPage implements IExportTo
 						break;
 					}
 				}
-				//disuse this part of select displayed transmit dialog from 20170113
+				//unused this part of select displayed transmit dialog, comment at 20170113
 				/*IWebElementWrapper element=element("td.transmitDialog4FedTitle");
 				if(element.isDisplayed())
 				{
@@ -355,7 +355,7 @@ public class ListPage extends AbstractPage implements IExportTo
 	public FormInstancePage openFormInstance(Form form) throws Exception
 	{
 		FormInstancePage fip=null;
-		
+		String userName=getLoginUser();
 		form.setEntity(getRealText(element("filf.clickFormLinkEntity"),form.getEntity()));		
 		form.setName(getRealText(element("filf.clickFormLinkName"),form.getName()));
 		
@@ -367,7 +367,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			loadingDlg();
 			waitForPageLoaded();
 			waitThat("fipf.form").toBeVisible();
-			fip=new FormInstancePage(getWebDriverWrapper(),form,getLoginUser());
+			fip=new FormInstancePage(getWebDriverWrapper(),form,userName);
 			if(!fip.isThisPage())
 			{
 				fip=null;

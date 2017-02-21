@@ -34,14 +34,16 @@
         "name": "fed",
         "url": "http://sha-com-qa-3:8089",
         "username": "admin",
-        "password": "password"
+        "password": "password",
+        "key": "sha-com-qa-3:22:/home/test/export/:test:password"
       },
       {
       	"id": 9,
         "name": "qatest",
         "url": "http://sha-com-qa-9:8080",
         "username": "admin",
-        "password": "password"
+        "password": "password",
+        "key": "sha-com-qa-9:22:/home/autoarfed/export:autoarfed:password"
       },
       {
       	"id": 10,
