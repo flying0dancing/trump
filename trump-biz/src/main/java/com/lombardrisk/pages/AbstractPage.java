@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractPage extends PageBase
 {
 	protected static String format=DBInfo.getLanguage();
-	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());
+	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());//old one
 	protected final static String LOCKNAME="TP.lock";
 	protected String downloadFolder;
 	public enum Month
@@ -70,7 +70,12 @@ public abstract class AbstractPage extends PageBase
 		super(webDriverWrapper);
 		if(PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
-			downloadFolder=new File(PropHelper.DOWNLOAD_FOLDER).getAbsolutePath();
+			/*downloadFolder=new File(PropHelper.DOWNLOAD_FOLDER).getAbsolutePath();
+			if(!new File(PropHelper.DOWNLOAD_FOLDER).exists())
+			{
+				FileUtil.createDirectory(downloadFolder);
+			}*/
+			downloadFolder=PropHelper.DOWNLOAD_FOLDER;
 			if(!new File(PropHelper.DOWNLOAD_FOLDER).exists())
 			{
 				FileUtil.createDirectory(downloadFolder);
@@ -276,7 +281,7 @@ public abstract class AbstractPage extends PageBase
 	 * @return
 	 * @throws Exception
 	 */
-	protected String uniformDate(String date) throws Exception
+	protected String uniformDate(String date, String dateFormat) throws Exception
 	{
 		String year = null;
 		String month = null;
@@ -301,7 +306,21 @@ public abstract class AbstractPage extends PageBase
 			month = date.substring(5, 7);
 			day = date.substring(8);
 		}
-		return month+"/"+day+"/"+year;
+		String returnDate=month+"/"+day+"/"+year;
+		if(dateFormat.equalsIgnoreCase("MM/DD/YYYY"))
+		{
+			returnDate=month+"/"+day+"/"+year;
+		}
+		if(dateFormat.equalsIgnoreCase("YYYYMMDD"))
+		{
+			returnDate=year+month+day;
+		}
+		if(dateFormat.equalsIgnoreCase("DD/MM/YYYY"))
+		{
+			returnDate=day+"/"+month+"/"+year;
+		}
+		
+		return returnDate;
 	}
 	/**
 	 * Select date
@@ -365,6 +384,7 @@ public abstract class AbstractPage extends PageBase
 				loadingDlg();
 			}else
 			{
+				
 				Assert.fail("cannot select year:"+year);
 			}
 		}else
@@ -809,9 +829,16 @@ public abstract class AbstractPage extends PageBase
 		if (PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
 			String exportedFile = TestCaseManager.getTestCase().getDownloadFile();
-			String oldName = new File(exportedFile).getName();
-			String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
-			filePath=renameFile(downloadFolder, oldName, fileName);
+			if(exportedFile!=null)
+			{
+				String oldName = new File(exportedFile).getName();
+				String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
+				filePath=renameFile(downloadFolder, oldName, fileName);
+			}else
+			{
+				filePath=downloadFile(downloadFolder);
+			}
+			
 		}
 		else
 		{

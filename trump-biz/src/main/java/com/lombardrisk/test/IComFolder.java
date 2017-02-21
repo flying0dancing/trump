@@ -10,7 +10,10 @@ public interface IComFolder {
 	 String SOURCE_IMPORT_FOLDER = SOURCE_FOLDER+"/import/";
 	 String SOURCE_SCENARIOS_FOLDER=PropHelper.getProperty("test.scenarios").trim().replace("\\", "/")+"/";
 	 String SOURCE_LOG_FOLDER=PropHelper.RESULT_FOLDER+PropHelper.LOG_FOLDER;
-	 String TARGET_LOG_FOLDER = TARGET_FOLDER+"/logs/";
+	 String SOURCE_SCREENSHOT_FOLDER=PropHelper.RESULT_FOLDER+PropHelper.SCREENSHOT_FOLDER;
+	  
+	 String TARGET_LOG_FOLDER = TARGET_FOLDER+"/"+PropHelper.LOG_FOLDER;
+	 String TARGET_SCREENSHOT_FOLDER=TARGET_FOLDER+"/"+PropHelper.SCREENSHOT_FOLDER;
 	 String TARGET_SCENARIOS_FOLDER=TARGET_FOLDER+"/scenarios-result/";
 	 String TARGET_EXPECTATION_FOLDER = TARGET_FOLDER+"/expectation/";
 	 String TARGET_IMPORT_FOLDER = TARGET_FOLDER+"/import/";

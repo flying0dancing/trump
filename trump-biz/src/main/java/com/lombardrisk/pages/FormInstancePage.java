@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 
 
+
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -34,6 +35,11 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 	private Form form;
 	private String loginUser;
 	
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper)
+	{
+		super(webDriverWrapper);
+	}
+	
 	public FormInstancePage(IWebDriverWrapper webDriverWrapper, Form form)
 	{
 		super(webDriverWrapper);
@@ -44,12 +50,15 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 	{
 		super(webDriverWrapper);
 		this.form=form;
-		this.loginUser=loginUser;
+		this.setLoginUser(loginUser);
 	}
 	
-	public String getLoginUser()
-	{
+	public String getLoginUser() {
 		return loginUser;
+	}
+
+	public void setLoginUser(String loginUser) {
+		this.loginUser = loginUser;
 	}
 	
 	/**
@@ -966,7 +975,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			executeScript(js);
 			if(liTxt.toUpperCase().contains("XBRL")){waitThat().timeout(2000);}
 			loadingDlg();
-			IWebElementWrapper element=element("td.transmitDialog4FedTitle");
+			/*IWebElementWrapper element=element("td.transmitDialog4FedTitle");
 			if(element.isDisplayed())
 			{
 				title=element.getInnerText();
@@ -978,6 +987,18 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				{
 					title=element.getInnerText();
 					td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
+				}
+			}*/
+			
+			//reuse this part of select displayed transmit dialog from 20170113
+			List<IWebElementWrapper> elements=element("td.transmitDialogTitles").getAllMatchedElements();
+			for(IWebElementWrapper element:elements)
+			{
+				if(element.isDisplayed())
+				{
+					title=element.getInnerText();
+					td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
+					break;
 				}
 			}
 			
@@ -1109,6 +1130,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				flag=clickSomeWorkflow("Ready for approval");
 			}
 		}*/
+		
 		return clickSomeWorkflow("Ready for approval");
 	}
 	
@@ -1121,6 +1143,10 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	public Boolean clickApproval() throws Exception
 	{
 		String createdUser=getUserWhoCreatedIt();
+		HomePage hp=null;
+		ListPage lp=null;
+		FormInstancePage fip=null;
+		
 		Boolean returnFlag=false;
 		if(createdUser!=null)
 		{
@@ -1137,16 +1163,16 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 			}
 
-			if(checkSomeWorkflow().equalsIgnoreCase("ATTESTED"))
+			if(checkWorkflowInDB().equalsIgnoreCase("ATTESTED"))
 			{
 				//returnFlag=true;
 				if(!getLoginUser().equalsIgnoreCase(DBInfo.getApplicationServer_UserName()))
 				{
 					this.closeThisPage();
-					ListPage lp=new ListPage(getWebDriverWrapper());
+					lp=new ListPage(getWebDriverWrapper());
 					if(lp.isThisPage())
 					{
-						HomePage hp=lp.logout();
+						hp=lp.logout();
 						if(hp.isThisPage())
 						{
 							lp=hp.login(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
@@ -1154,12 +1180,12 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 							{
 								if(lp.selectFormInfo(form))
 								{
-									FormInstancePage fip=lp.openFormInstance(form);
-									if(fip.isThisPage())
+									fip=lp.openFormInstance(form);
+									this.setLoginUser(fip.getLoginUser());
+									if(isThisPage())
 									{
 										returnFlag=true;
 									}
-									fip=null;
 								}
 							}
 							
@@ -1167,48 +1193,50 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 						{
 							logger.info("cannot access home page.");
 						}
-						hp=null;
 						
 					}else
 					{
 						logger.info("cannot access dashboard page.");
 					}
-					lp=null;
+				}else
+				{
+					returnFlag=true;
 				}
 			}else
 			{
 				if(getLoginUser().equalsIgnoreCase(createdUser))
 				{
 					this.closeThisPage();
-					ListPage lp=new ListPage(getWebDriverWrapper());
+					lp=new ListPage(getWebDriverWrapper());
 					if(lp.isThisPage())
 					{
-						HomePage hp=lp.logout();
+						hp=lp.logout();
 						if(hp.isThisPage())
 						{
-							lp=hp.login(PropHelper.getProperty("approver.user"), PropHelper.getProperty("approver.password"));
+							lp=hp.login(PropHelper.getProperty("test.approver.user"), PropHelper.getProperty("test.approver.password"));
 							if(lp.isThisPage())
 							{
 								if(lp.selectFormInfo(form))
 								{
-									FormInstancePage fip=lp.openFormInstance(form);
-									if(fip.isThisPage())
+									fip=lp.openFormInstance(form);
+									this.setLoginUser(fip.getLoginUser());
+									if(isThisPage())
 									{
 										returnFlag=clickApproval();//invoke itself
 									}
-									fip=null;
+									
 								}
 							}
 						}else
 						{
 							logger.info("cannot access home page.");
 						}
-						hp=null;
+						
 					}else
 					{
 						logger.info("cannot access dashboard page.");
 					}
-					lp=null;
+					
 				}
 			}
 		}
@@ -1228,37 +1256,16 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		return clickSomeWorkflow("Reject");
 	}
 	
-	/*public String getUserWhoseIt() throws Exception
-	{
-		String userName=null;
-		if(clickSomeWorkflow("View workflow log"))
-		{
-			WorkflowLogDialog workflowLogDlg=new WorkflowLogDialog(getWebDriverWrapper());
-			if(workflowLogDlg.isThisPage())
-			{
-				userName=workflowLogDlg.getUserWhoCreatedIt();
-				workflowLogDlg.closeThisPage();
-			}else
-			{
-				logger.info("cannot open workflow log dialog.");
-			}
-		}else
-		{
-			logger.info("cannot click \"View workflow log\" in menu.");
-		}
-		return userName;
-	}*/
 	
-	//getFormInstanceCreatedBy
 	/**
 	 * invoke clickSomeWorkflow and click "View workflow log", get the user's name who create it. return null if no user log
 	 * @author kun shen
 	 * @return
 	 * @throws Exception
 	 */
-	public String getUserWhoCreatedIt() throws Exception
+	protected String getUserWhoCreatedIt() throws Exception
 	{
-		String processDate=uniformDate(form.getProcessDate());
+		String processDate=uniformDate(form.getProcessDate(),"MM/DD/YYYY");
 		String userName=DBInfo.getFormInstanceCreatedBy(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
 		return userName;
 	}
@@ -1274,6 +1281,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	private Boolean clickSomeWorkflow(String type) throws Exception
 	{
 		Boolean flag=true;
+		logger.info("click \""+type+"\"");
 		element("fipf.workflow_button").click();
 		waitThat("fipf.workflow_menu").toBeVisible();
 		if(element("fipf.workflow_menuList",type).isPresent() && element("fipf.workflow_menuList",type).isDisplayed())
@@ -1281,6 +1289,9 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.workflow_menuList",type).click();
 			loadingDlg();
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+		}else
+		{
+			element("fipf.workflow_button").click();
 		}
 		return flag;
 	}
@@ -1307,15 +1318,17 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	}
 	
 	/**
-	 * check some workflow in UI for attestation, return status.
+	 * check some workflow in UI for attestation, return status.(READY_FOR_ATTESTATION,ATTESTED)
 	 * @author kun shen
 	 * @return
 	 * @throws Exception
 	 */
-	private String checkSomeWorkflow() throws Exception
+	private String checkWorkflowInDB() throws Exception
 	{
-		String processDate=uniformDate(form.getProcessDate());
+		String processDate=uniformDate(form.getProcessDate(),"MM/DD/YYYY");
 		String attestedStatus=DBInfo.getFormInstanceAttestedStatus(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
 		return attestedStatus;
 	}
+
+	
 }

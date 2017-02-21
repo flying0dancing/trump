@@ -112,59 +112,33 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 		}
 
 		/**
-		 * search job status(pass,fail:...,error:retrieve timeout,error:canot do retrieve)
+		 * search job status(pass,fail:...,error:job timeout,error:job null,error:job cannot do retrieve)
 		 * @return
 		 * @throws Exception
 		 */
 		public String doRetrieve() throws Exception
 		{
 			String status=null;
-			ListPage listPage=null;
+			//ListPage listPage=null;
 			logger.info("click retrieve button");
 			element("fird.ok").click();
 			loadingDlg();
 			//error messages display
 			if(element("fird.messages").isDisplayed())
 			{
-				status="error:canot do retrieve. "+getAllInnerText(element("fird.messagesDetail"));
+				status="error:job cannot do retrieve. "+getAllInnerText(element("fird.messagesDetail"));
 				element("fird.cancel").click();
 				loadingDlg();
 			}else
 			{
 				loadingDlg();
-				String jobStartTimeLabel=null;
-				if(element("jrd.title").isDisplayed())
-				{
-					if(element("jrd.startedTimeLabel").isPresent())
-					{
-						jobStartTimeLabel=element("jrd.startedTimeLabel").getInnerText();
-						if(jobStartTimeLabel!=null && !jobStartTimeLabel.trim().equals(""))
-						{
-							jobStartTimeLabel=jobStartTimeLabel.trim().replace("Started: ", "");
-							logger.info("job started:"+jobStartTimeLabel);
-							
-						}
-					}else
-					{
-						logger.info("job is already running");
-					}
-					if(jobStartTimeLabel==null)
-					{
-						element("jrd.ok").click();
-						closeThisPage();
-					}else
-					{
-						element("jrd.ok").click();
-						waitThat("jrd.title").toBeInvisible();
-						loadingDlg();
-					}
-					
-				}
+				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper());
+				//String jobStartTimeLabel=jrd.jobStartTime();
 				
-				String runType="RetrieveJob";
-				String name=DBInfo.getRegulatorPrefix(form.getRegulator())+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
-				listPage=new ListPage(getWebDriverWrapper());
+				String jobRunType="RetrieveJob";
+				String jobName=DBInfo.getRegulatorPrefix(form.getRegulator())+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
 				
+				/*listPage=new ListPage(getWebDriverWrapper());
 				JobManagerPage jobManagerPage=listPage.clickJobManager();
 				if(jobManagerPage!=null)
 				{
@@ -178,22 +152,18 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 						long jobEndTime=System.currentTimeMillis();
 						if(jobEndTime-jobStartTime>600000)//wait 10min
 						{
-							status="error:retrieve timeout";
+							status="error:job timeout";
 							break;
 						}
 					}
 					logger.info("job status:"+status);
 					jobManagerPage.closeThisPage();
-				}
+				}*/
 				
+				status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
+				jrd=null;
 			}
-			if(status.equalsIgnoreCase("SUCCESS"))
-			{
-				status="pass";
-			}else if(status.startsWith("FAILURE"))
-			{
-				status=status.replace("FAILURE", "fail");
-			}
+			
 			return status;
 		}
 }
