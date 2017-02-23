@@ -11,7 +11,7 @@
       {
       	"id": 5,
         "name": "asia_ar1150",
-        "url": "http://172.20.31.36:8081",
+        "url": "http://172.20.31.36:8080",
         "username": "admin",
         "password": "password"
       },

@@ -17,7 +17,7 @@
     <reportng.version>1.1.4</reportng.version>  
     <guice.version>3.0</guice.version>  
     <xmlFileName>suites/TestTP.xml</xmlFileName> 
-    <reportOutput>${resultFolder}/reportng-reports</reportOutput>
+	<reportOutput>${resultFolder}/reportng-reports</reportOutput>
   </properties>
   <dependencies> 
    <dependency> 

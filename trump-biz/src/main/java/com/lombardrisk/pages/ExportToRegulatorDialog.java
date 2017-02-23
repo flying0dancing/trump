@@ -322,10 +322,11 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	private void getDownloadFromServerToLocalSSH(String prefixOfRegulator,String statusType) throws Exception
 	{
 		logger.info("start downloading export file from server to local.");
+		String statusTypeL=statusType.toLowerCase();
 		ServerInfo serverInfo=new ServerInfo();
 		String processDate=uniformDate(form.getProcessDate(),"YYYYMMDD");
 		String downloadFolder_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/";
-		if(statusType.equalsIgnoreCase("fail"))
+		if(statusTypeL.startsWith("fail"))
 		{
 			downloadFolder_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/ValidationErrors/";
 		}
@@ -333,13 +334,20 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		{
 			downloadFolder_Server=downloadFolder_Server.replace("/", "\\");
 		}
-		logger.info("download folder from server:"+downloadFolder_Server);
-		String downloadFile_Server=prefixOfRegulator+"_"+form.getEntity()+"_"+form.getTransmission().getModule()+"_"+processDate+"*";
-		logger.info("download file name from server:"+downloadFolder_Server);
-		JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
-		JschUtil.downloadFileToLocal(downloadFolder_Server+downloadFile_Server, downloadFolder);
-		JschUtil.close();
-		logger.info("stop downloading export file from server to local.");
+		if(statusTypeL.startsWith("fail") || statusTypeL.startsWith("pass"))
+		{
+			logger.info("download folder from server:"+downloadFolder_Server);
+			String downloadFile_Server=prefixOfRegulator+"_"+form.getEntity()+"_"+form.getTransmission().getModule()+"_"+processDate+"*";
+			logger.info("download file name from server:"+downloadFolder_Server);
+			JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
+			JschUtil.downloadFileToLocal(downloadFolder_Server+downloadFile_Server, downloadFolder);
+			JschUtil.close();
+			logger.info("stop downloading export file from server to local.");
+		}else
+		{
+			logger.info("no downloading export file in server.");
+		}
+		
 	}
 	
 }
