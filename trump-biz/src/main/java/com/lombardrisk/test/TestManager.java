@@ -63,7 +63,6 @@ public class TestManager extends TestBase implements IComFolder {
 	 @BeforeSuite
 	  public void beforeSuite() {
 		  startSuiteTime=System.currentTimeMillis();
-		  System.out.println(" beforeSuite running!");
 		  Reporter.log(" beforeSuite running~~~~<br>");
 		  //delete older test target folder, and create news.
 		  try
@@ -93,17 +92,16 @@ public class TestManager extends TestBase implements IComFolder {
 		 
 	  }
 	 @AfterSuite
-	  public void afterSuite() {
-		  System.out.println(" afterSuite running!"); 
+	  public void afterSuite() { 
 		  Reporter.log(" afterSuite running~~~~<br>");
-		  FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER).getAbsolutePath(), new File(TARGET_LOG_FOLDER).getAbsolutePath(),startSuiteTime);
-		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime);
+		  //move to afterclass() method
+		  /*FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER).getAbsolutePath(), new File(TARGET_LOG_FOLDER).getAbsolutePath(),startSuiteTime);
+		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime);*/
 	  }
 	
 	 @BeforeTest
 	 @Parameters({"indexAppServers", "indexDBServers", "indexToolsetDBServers"})
 	  public void beforeTest( @Optional String indexAppServers, @Optional String indexDBServers, @Optional String indexToolsetDBServers) {
-		  System.out.println(getClass().getName()+" beforeTest running!"); 
 		  Reporter.log(getClass().getName() + " beforeTest running~~~~<br>");
 		  indexAppServer=changeStringToInt(indexAppServers,0);
 		  indexDBServer=changeStringToInt(indexDBServers,0);
@@ -112,45 +110,51 @@ public class TestManager extends TestBase implements IComFolder {
 	  
 	  @AfterTest
 	  public void afterTest() throws Exception {
-		  System.out.println(getClass().getName()+" afterTest running!"); 
+		  logger.info(getClass().getName()+" afterTest running!"); 
 	  }
 	  
 	  @BeforeClass(dependsOnMethods="beforeClass")
 	  public void beforeClassInTestManager() throws Exception {
-		  System.out.println(getClass().getName()+" beforeClass-setUpTest running!"); 
+		  logger.info(getClass().getName()+" beforeClass-setUpTest running!"); 
 		 
 		  setScenarioId(setLogName());
 		  
 		  setUpTest();
 		  testEnv=super.getTestEnvironment();
 		  DBInfo.setDBInfo();
-		  List<String> regulators=DBInfo.getRegulatorDescription();
-		  int copyCount=0;
-		  logger.info("copy folders...");
-		  for(String regulator:regulators)
+		  
+		  if(!getClass().getSimpleName().equalsIgnoreCase("mock"))
 		  {
-			  logger.info("copy regulator folder \""+regulator+"\" to result folder");
-			  if(new File(SOURCE_EXPECTATION_FOLDER+regulator).exists() && new File(SOURCE_IMPORT_FOLDER+regulator).exists())
+			  List<String> regulators=DBInfo.getRegulatorDescription();
+			  int copyCount=0;
+			  logger.info("copy folders...");
+			  for(String regulator:regulators)
 			  {
-				  if(!new File(TARGET_EXPECTATION_FOLDER+regulator).exists())
+				  logger.info("copy regulator folder \""+regulator+"\" to result folder");
+				  if(new File(SOURCE_EXPECTATION_FOLDER+regulator).exists() && new File(SOURCE_IMPORT_FOLDER+regulator).exists())
 				  {
-					  logger.info("copy folder "+new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
-					  FileUtil.copyDirectory(new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath(), new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
+					  if(!new File(TARGET_EXPECTATION_FOLDER+regulator).exists())
+					  {
+						  logger.info("copy folder "+new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
+						  FileUtil.copyDirectory(new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath(), new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
+					  }
+					  if(!new File(TARGET_IMPORT_FOLDER+regulator).exists())
+					  {
+						  logger.info("copy folder "+new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
+						  FileUtil.copyDirectory(new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath(), new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
+					  }
+					  if(new File(TARGET_EXPECTATION_FOLDER+regulator).exists() && new File(TARGET_IMPORT_FOLDER+regulator).exists())
+					  {copyCount++;}
 				  }
-				  if(!new File(TARGET_IMPORT_FOLDER+regulator).exists())
-				  {
-					  logger.info("copy folder "+new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
-					  FileUtil.copyDirectory(new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath(), new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
-				  }
-				  copyCount++;
+				  
 			  }
-			  
+			  if(copyCount==0)
+			  {
+				  FileUtil.copyDirectory(new File(SOURCE_FOLDER).getAbsolutePath(), new File(TARGET_FOLDER).getAbsolutePath());
+			  }
+			  logger.info("copy folders(done)");
 		  }
-		  if(copyCount==0)
-		  {
-			  FileUtil.copyDirectory(new File(SOURCE_FOLDER).getAbsolutePath(), new File(TARGET_FOLDER).getAbsolutePath());
-		  }
-		  logger.info("copy folders(done)");
+		  
 		  logger.info("Database Language:"+DBInfo.getLanguage());
 		 //Reporter.log("Database Language:"+DBInfo.getLanguage()+System.getProperty("line.separator"));
 		  
@@ -164,6 +168,8 @@ public class TestManager extends TestBase implements IComFolder {
 			}
 			else
 			{
+				logger.error("error: cannot access to homePage");
+				afterClassInTestManager();
 				Assert.fail("cannot access to homePage");
 			}
 		  
@@ -173,6 +179,8 @@ public class TestManager extends TestBase implements IComFolder {
 	  public void afterClassInTestManager()  throws Exception{
 		  //Reporter.log(getClass().getName()+" afterClass-tearDownTest running!"); 
 		  logger.info(" afterClass-tearDownTest running!"); 
+		  FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER).getAbsolutePath(), new File(TARGET_LOG_FOLDER).getAbsolutePath(),startSuiteTime);
+		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime);
 		  tearDownTest();
 	  }
 	  

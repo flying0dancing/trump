@@ -35,6 +35,8 @@ public class ExcelUtil
 {
 	private final static Logger logger = LoggerFactory.getLogger(ExcelUtil.class);
 	private static int indexOfColumn=0;
+	private static CellStyle cellStyle2 = null;//TODO
+	private static short formatNo;
 	private ExcelUtil(){}
 	public static int getColumnNums(File file, String sheetName) throws Exception
 	{
@@ -840,6 +842,9 @@ public static Workbook openWorkbook(File filename) throws Exception
 	FileInputStream inp = new FileInputStream(filename);
 	 Workbook workBook = WorkbookFactory.create(inp);
 	 inp.close();
+	 cellStyle2 = workBook.createCellStyle();//TODO debugging
+	 DataFormat format = workBook.createDataFormat();
+	 formatNo=format.getFormat("@");
 	 return workBook;
 }
 /**
@@ -949,9 +954,9 @@ public static void editCell(Workbook workBook,String sheetName, int rowIndex, in
 		Cell cell = row.getCell(colIndex);
 		if (cell == null)
 			cell = row.createCell(colIndex);
-		CellStyle cellStyle2 = workBook.createCellStyle();
-		DataFormat format = workBook.createDataFormat();
-		cellStyle2.setDataFormat(format.getFormat("@"));
+		/*CellStyle cellStyle2 = workBook.createCellStyle();//TODO
+		DataFormat format = workBook.createDataFormat();*/
+		cellStyle2.setDataFormat(formatNo);
 		cell.setCellStyle(cellStyle2);
 		cell.setCellValue(value);
 		

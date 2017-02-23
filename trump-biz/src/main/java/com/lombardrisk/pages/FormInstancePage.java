@@ -142,7 +142,10 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
 		{
     		 String cellValue=null;
     		 String cellType=element.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("checkbox"))
+    		 if(cellType.equalsIgnoreCase("text"))
+    		 {
+    			 cellValue=element.getAttribute("value").trim();
+    		 } else if(cellType.equalsIgnoreCase("checkbox"))
     		 {
     			 String checked=element.getAttribute("checked");
     			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
@@ -152,9 +155,6 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
     			 {
     				 cellValue="0";
     			 }
-    		 }else if(cellType.equalsIgnoreCase("text"))
-    		 {
-    			 cellValue=element.getAttribute("value").trim();
     		 }
     		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
     
@@ -184,7 +184,10 @@ private StringBuffer getNormalCells(String instanceCode,String cellName) throws 
 		{
     		 String cellValue=null;
     		 String cellType=element.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("checkbox"))
+    		 if(cellType.equalsIgnoreCase("text"))
+    		 {
+    			 cellValue=element.getAttribute("value").trim();
+    		 } else if(cellType.equalsIgnoreCase("checkbox"))
     		 {
     			 String checked=element.getAttribute("checked");
     			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
@@ -194,9 +197,6 @@ private StringBuffer getNormalCells(String instanceCode,String cellName) throws 
     			 {
     				 cellValue="0";
     			 }
-    		 }else if(cellType.equalsIgnoreCase("text"))
-    		 {
-    			 cellValue=element.getAttribute("value").trim();
     		 }
     		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
     
@@ -283,7 +283,10 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     		 String cellName=id.replace(gridPrefix+data_rk, "");
     		 String cellValue=null;
     		 String cellType=gridCellElement.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("checkbox"))
+    		 if(cellType.equalsIgnoreCase("text"))
+    		 {
+    			 cellValue=gridCellElement.getAttribute("value").trim();
+    		 }else if(cellType.equalsIgnoreCase("checkbox"))
     		 {
     			 String checked=gridCellElement.getAttribute("checked").trim();
     			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
@@ -293,9 +296,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     			 {
     				 cellValue="0";
     			 }
-    		 }else if(cellType.equalsIgnoreCase("text"))
-    		 {
-    			 cellValue=gridCellElement.getAttribute("value").trim();
     		 }
     		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
     		 //String cellreadonly=gridCellElement.getAttribute("readonly")==null?"false":"true" ;
@@ -381,7 +381,10 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     	 {
     		 String cellValue=null;
     		 String cellType=gridCellElement.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("checkbox"))
+    		 if(cellType.equalsIgnoreCase("text"))
+    		 {
+    			 cellValue=gridCellElement.getAttribute("value").trim();
+    		 }else if(cellType.equalsIgnoreCase("checkbox"))
     		 {
     			 String checked=gridCellElement.getAttribute("checked").trim();
     			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
@@ -391,9 +394,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     			 {
     				 cellValue="0";
     			 }
-    		 }else if(cellType.equalsIgnoreCase("text"))
-    		 {
-    			 cellValue=gridCellElement.getAttribute("value").trim();
     		 }
     		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
     		 //String cellreadonly=gridCellElement.getAttribute("readonly")==null?"false":"true" ;
@@ -538,9 +538,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	{
 		if (element("fipf.form").isDisplayed())
 		{
-			/*if (element("fipf.message").isDisplayed())
-				waitThat("fipf.message").toBeInvisible();*/
-
 			if (element("abstract.message").isDisplayed())
 				waitThat("abstract.message").toBeInvisible();
 			if (element("fipf.importDlgmodal").isDisplayed())
@@ -591,24 +588,30 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 * @param formVersion
 	 * @param pageName
 	 * @param instanceCode
+	 * @return
 	 * @throws Exception
 	 */
-	protected void selectInstance(String regulator,String formName, String formVersion,String pageName,String instanceCode) throws Exception
+	protected String selectInstance(String regulator,String formName, String formVersion,String pageName,String instanceCode) throws Exception
 	{
+		String instanceLabel=null;
 		if (regulator!=null && formName!=null && formVersion!=null && pageName != null)
 		{
 			if(instanceCode == null || instanceCode.equals("")){instanceCode="1";}
-			String instanceLabel=DBInfo.getInstance(regulator, formName, formVersion,pageName,instanceCode,DBInfo.InstanceType.CODE);
-			if(instanceLabel.equals("-1"))
+			instanceLabel=DBInfo.getInstance(regulator, formName, formVersion,pageName,instanceCode,DBInfo.InstanceType.CODE);
+			if(instanceLabel==null)
+			{
+				logger.info("error: not find instance label in DB with code["+instanceCode+"]");
+			}else if(instanceLabel.equals("-1"))
 			{
 				instanceLabel=instanceCode;
 			}
+			
 			this.selectInstance(instanceLabel);
 		}
-
+		return instanceLabel;
 	}
 	/**
-	 * get cell display value in UI<br> return cell display value if success, return "fail:..."if fail.<br>
+	 * get cell display value in UI<br> return cell display value if success, return "fail:..."if fail, return null if not find.<br>
 	 * @author kun shen
 	 * @param regulator
 	 * @param formName
@@ -630,7 +633,8 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			if(pageNameT!=null)
 			{
 				logger.info("current page[" + pageNameT+"]");
-				selectInstance(regulator,formName, formVersion, pageNameT,instanceCode);
+				String instanceLabel=selectInstance(regulator,formName, formVersion, pageNameT,instanceCode);
+				if(instanceLabel==null){break;}
 				if(rowId==null || rowId.trim().equals("")){rowId="";}
 				String tmp=cellName+","+rowId+","+instanceCode+",";
 				String strCells=null;
@@ -897,7 +901,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
-			//if(element("fipf.message").isPresent()){flag=false;waitThat("fipf.message").toBeInvisible();}
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 			TestCaseManager.getTestCase().stopTransaction();
 			
@@ -907,7 +910,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
-			//if(element("fipf.message").isPresent()){flag=false;waitThat("fipf.message").toBeInvisible();}
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 		}
 		if(flag)
@@ -1303,6 +1305,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 * @return
 	 * @throws Exception
 	 */
+	@Deprecated
 	@SuppressWarnings("unused")
 	private Boolean checkSomeWorkflow(String type) throws Exception
 	{

@@ -59,6 +59,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			logger.error(testRstFlag);
 		}else
 		{
+			long begin_Comparison=System.currentTimeMillis();
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
 			form.setExec_ExpectationFile(newFileName);
@@ -103,14 +104,15 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						}
 					}
 				}
-				
+				if(i%5000==0){ExcelUtil.saveWorkbook(newFile, xwb);}
 			}
 			ExcelUtil.saveWorkbook(newFile, xwb);
 			logger.info("Expectation File:"+newFile+" size:"+newFile.length()/1024+"KB, row count:"+String.valueOf(amt));
 			
 			long end=System.currentTimeMillis();
 			if(testRstFlag==null){testRstFlag="error: no expectation value.";}
-			logger.info("used time[seconds]:"+(end-begin)/1000.00F +" result:"+testRstFlag);
+			logger.info("comparison used time[seconds]:"+(end-begin_Comparison)/1000.00F);
+			logger.info("totally, used time[seconds]:"+(end-begin)/1000.00F +" result:"+testRstFlag);
 
 		}
 		Runtime.getRuntime().gc();
@@ -168,8 +170,9 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		String regulator=form.getRegulator();
 		String expectationFolder=TARGET_EXPECTATION_FOLDER+regulator+"/";
 		File expectedFile=new File(expectationFolder+form.getExpectationFile());
-		if(expectedFile.exists())
+		if(expectedFile.exists() && compareCount!=0)
 		{
+			long begin_Comparison=System.currentTimeMillis();
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
 			
@@ -180,7 +183,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			Workbook xwb =ExcelUtil.openWorkbook(newFile);
 			int amt = ExcelUtil.getRowNum(xwb, null);
 			
-			if(compareCount<=0){compareCount=amt;}
+			if(compareCount<0){compareCount=amt;}
 			int count=1;
 			for (int i = 1; i <= amt; i++)
 			{
@@ -221,18 +224,28 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						
 					}
 				}
-				
+				if(i%5000==0){ExcelUtil.saveWorkbook(newFile, xwb);}
 				if(count==compareCount){break;}
 				count++;
 			}
 			
 			ExcelUtil.saveWorkbook(newFile, xwb);
 			logger.info("Expectation File:"+newFile+" size:"+newFile.length()/1024+"KB, row count:"+String.valueOf(amt));
-			
+			logger.info("comparison used time[seconds]:"+(System.currentTimeMillis()-begin_Comparison)/1000.00F);
+		}
+		
+		if(testRstFlag==null)
+		{
+			if(compareCount==0)
+			{
+				testRstFlag="error: no need compare.";
+			}else
+			{
+				testRstFlag="error: no expectation value.";
+			}
 		}
 		long end=System.currentTimeMillis();
-		if(testRstFlag==null){testRstFlag="error: no expectation value.";}
-		logger.info("used time[seconds]:"+(end-begin)/1000.00F +" result:"+testRstFlag);
+		logger.info("totally, used time[seconds]:"+(end-begin)/1000.00F +" result:"+testRstFlag);
 		Runtime.getRuntime().gc();
 		return testRstFlag;
 	}
