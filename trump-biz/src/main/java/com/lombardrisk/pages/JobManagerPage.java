@@ -108,10 +108,11 @@ public class JobManagerPage extends AbstractPage
 	 */
 	private String getGridCells(String name,String referenceDate,String runType,String started) throws Exception
 	{
-		String status=element("ficmptd.getStatus",name,referenceDate,runType,started).getInnerText();
+		String started_StartsWith=started.substring(0, started.length()-1);
+		String status=element("ficmptd.getStatus",name,referenceDate,runType,started_StartsWith).getInnerText();
 		if(status!=null && status.equalsIgnoreCase("FAILURE"))
 		{
-			status="FAILURE:"+element("ficmptd.getStatusMessage",name,referenceDate,runType,started).getInnerText();
+			status="FAILURE:"+element("ficmptd.getStatusMessage",name,referenceDate,runType,started_StartsWith).getInnerText();
 		}
 		if(status!=null && status.trim().equals(""))
 		{
