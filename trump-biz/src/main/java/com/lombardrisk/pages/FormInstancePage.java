@@ -140,12 +140,11 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
 	//get all normal cells
 	if(element("fipf.getCells").isPresent())	
 	{
-		String cellValue,cellType,checked;
+		String cellValue,checked;
 		String blankStr="";
 		String OneStr="1";
 		String ZeroStr="0";
-		String NullStr="null";
-		cellValue=blankStr;
+		//String NullStr="null";
 		/*List<IWebElementWrapper> elements=element("fipf.getCells").getAllMatchedElements();
 		for (IWebElementWrapper element:elements)
 		{
@@ -171,14 +170,13 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
 		List<IWebElementWrapper> elements=element("fipf.getCells_textNULL").getAllMatchedElements();
 		for (IWebElementWrapper element:elements)
 		{
-			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator); 
+			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+blankStr+"\""+lineSeparator); 
 		}
 		
 		elements=element("fipf.getCells_textNotNULL").getAllMatchedElements();
 		for (IWebElementWrapper element:elements)
 		{
-			cellValue=element.getAttribute("value").trim();
-			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator); 
+			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+element.getAttribute("value").trim()+"\""+lineSeparator); 
 		}
 		
 		elements=element("fipf.getCells_checkbox").getAllMatchedElements();
