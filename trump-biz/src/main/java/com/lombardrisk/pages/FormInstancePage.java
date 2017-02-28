@@ -302,11 +302,10 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	//next used in for(int row=0;row<gridRowCount;row++)
 	String data_ri,data_rk;
 	//next used in for(IWebElementWrapper gridCellElement:gridCellElements)
-	String id,cellName,cellValue,cellType,checked;
+	String id,cellName,cellValue,checked;
 	String blankStr="";
 	String OneStr="1";
 	String ZeroStr="0";
-	String NullStr="null";
 	//print this grid tables's rows
 	//get ./tr
     List<IWebElementWrapper> gridRowElements=element("fipf.getGridTr",tbodyId).getAllMatchedElements();
@@ -316,8 +315,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     	data_ri=gridRowElements.get(row).getAttribute("data-ri");
     	data_rk=gridRowElements.get(row).getAttribute("data-rk");
     	//get ./td/input
-    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
-    	 
+    	/*List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
     	for(IWebElementWrapper gridCellElement:gridCellElements)
     	 {
     		 id=gridCellElement.getAttribute("id");
@@ -339,11 +337,40 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     				 cellValue=ZeroStr;
     			 }
     		 }
-    		 
-    		 //String cellreadonly=gridCellElement.getAttribute("readonly")==null?"false":"true" ;
     		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
-
+    	 }*/
+    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells_textNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+blankStr+"\""+lineSeparator);
     	 }
+    	
+    	gridCellElements=element("fipf.getGridCells_textNotNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+gridCellElement.getAttribute("value").trim()+"\""+lineSeparator);
+    	 }
+    	
+    	gridCellElements=element("fipf.getGridCells_checkbox",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 checked=gridCellElement.getAttribute("checked").trim();
+			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
+			 {
+				 cellValue=OneStr;
+			 }else
+			 {
+				 cellValue=ZeroStr;
+			 }
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+    	 }
+    	
     }
     return strBuffer;
 }
