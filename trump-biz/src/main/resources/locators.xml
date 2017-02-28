@@ -1858,6 +1858,9 @@
         <locator id="fipf.pageTab" type="WebElement" by="id" expression="formInstPageForm:pagesDataTable_data" name="pageTab" description="page table"/>
         <locator id="fipf.pageName" type="WebElement" by="xpath" expression="//*[@id='formInstPageForm:pagesDataTable_data']/tr[?]/td/span[@class='pageContent']" name="pageName" description="page name"/>
     	<locator id="fipf.getCells" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//input[@type!='hidden']" name="getCells" description="get Cells"/> 
+    	<locator id="fipf.getCells_textNULL" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//input[@type='text' and @value='NULL']" name="getCells_textNULL" description="get Cells text NULL"/> 
+    	<locator id="fipf.getCells_textNotNULL" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//input[@type='text' and @value!='NULL']" name="getCells_textNotNULL" description="get Cells text Not NULL"/> 
+    	<locator id="fipf.getCells_checkbox" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//input[@type='checkbox']" name="getCells_checkbox" description="get Cells checkbox"/> 
    		<locator id="fipf.getOneCell" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//input[@type!='hidden'][@id='?']" name="getOneCell" description="get one cell"/> 
    		<locator id="fipf.getGridTbody" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']/table/tbody/tr/td//table[@role='grid']/tbody[contains(@id,'formInstContentForm:')]" name="getGridTbody" description="get Grid Tbody"/>   
         <locator id="fipf.getGridTr" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']/table/tbody/tr/td//table[@role='grid']/tbody[@id='?']/tr" name="getGridTr"  description="get Grid row"/>

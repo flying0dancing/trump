@@ -39,11 +39,11 @@
       },
       {
       	"id": 9,
-        "name": "qatest",
-        "url": "http://sha-com-qa-9:8080",
+        "name": "TrumpTest",
+        "url": "http://sha-com-qa-11:8083",
         "username": "admin",
         "password": "password",
-        "key": "sha-com-qa-9:22:/home/autoarfed/export:autoarfed:password"
+        "key": "sha-com-qa-11:22:/home/testp/export:testp:password"
       },
       {
       	"id": 10,
@@ -94,7 +94,7 @@
         "name": "ar_database",
         "driver": "oracle",
         "host": "172.20.20.49@ora11g",        
-        "schema": "ARFED_1141_B8860$OWNER"
+        "schema": "auto_trump_11$OWNER"
       } ,
       {
       	"id": 10,
