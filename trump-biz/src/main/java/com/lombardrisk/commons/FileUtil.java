@@ -13,6 +13,8 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -27,8 +29,9 @@ import java.util.zip.ZipOutputStream;
  */
 public class FileUtil extends FileUtils
 {
+	private final static Logger logger = LoggerFactory.getLogger(FileUtil.class);
 	public static int BUFFER_SIZE = 2048;
-
+	private FileUtil(){}
 	public static void ZipFiles(ArrayList<String> fileNames, String zipfile)
 	{
 		byte[] buf = new byte[1024];
@@ -52,6 +55,7 @@ public class FileUtil extends FileUtils
 		catch (IOException e)
 		{
 			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -94,6 +98,7 @@ public class FileUtil extends FileUtils
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw e;
 		}
 		finally
@@ -244,6 +249,30 @@ public class FileUtil extends FileUtils
 		}
 		return flag;
 	}
+	/**
+	 * find a new folder name if there has some existed folders 
+	 * @author kun shen
+	 * @param rootPath
+	 * @param folderName
+	 * @return
+	 * @throws Exception
+	 */
+	public static String findNewNameForFolder(String rootPath,String folderName) throws Exception
+	{
+		String newFolderName=null;
+		if(rootPath!=null && folderName!=null)
+		{
+			int i=1;
+			newFolderName=folderName;
+			while(new File(rootPath+newFolderName).isDirectory())
+			{
+				newFolderName=folderName+"("+String.valueOf(i)+")";
+				i++;
+			}
+		}
+		
+		return newFolderName;
+	}
 	
 	public static void deleteDirectory(String folderPath) throws Exception
 	{
@@ -303,7 +332,7 @@ public class FileUtil extends FileUtils
 			}
 		
 		}catch(Exception e)
-		{e.printStackTrace();}
+		{logger.error(e.getMessage());}
 		
 	}
 	/**
@@ -349,7 +378,7 @@ public class FileUtil extends FileUtils
 			}
 		
 		}catch(Exception e)
-		{e.printStackTrace();}
+		{logger.error(e.getMessage());}
 
 	}
 	
@@ -365,7 +394,7 @@ public class FileUtil extends FileUtils
 			}
 		
 		}catch(Exception e)
-		{e.printStackTrace();}
+		{logger.error(e.getMessage());}
 
 	}
 	public static List<String> unZip(String zipfilePath, String destDir) throws Exception
@@ -408,7 +437,7 @@ public class FileUtil extends FileUtils
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw e;
 		}
 		finally
@@ -448,6 +477,7 @@ public class FileUtil extends FileUtils
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return fileNames;
@@ -570,7 +600,7 @@ public class FileUtil extends FileUtils
 			strBuffer=null;
 		
 		} catch (IOException e) {
-			
+			logger.error(e.getMessage());
 		}finally
 		{
 			Runtime.getRuntime().gc();
@@ -662,6 +692,7 @@ public class FileUtil extends FileUtils
 			exportReader.close();
 		} catch (Exception e) {
 			status="error:"+e.getMessage();
+			logger.error(e.getMessage());
 		}finally
 		{
 			if(exportReader!=null)

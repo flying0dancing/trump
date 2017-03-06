@@ -297,7 +297,17 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				String status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
 				jrd=null;
 				
-				getDownloadFromServerToLocalSSH(prefixOfRegulator,status);
+				String downloadFileName_Server=null;
+				IWebElementWrapper _exportFileLoation=element("filf.exportFileLoation", form.getEntity(),form.getName(),form.getVersion().substring(1),form.getProcessDate());
+				if(_exportFileLoation.isPresent() && _exportFileLoation.isDisplayed())
+				{
+					_exportFileLoation.click();
+					loadingDlg();
+					ExportedFileLocationDialog efld=new ExportedFileLocationDialog(getWebDriverWrapper());
+					downloadFileName_Server=efld.exportedFileName();
+				}
+				
+				getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server);
 							
 				String a=getLatestFile(downloadFolder);
 				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
@@ -319,7 +329,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		return flag;
 	}
 	
-	private void getDownloadFromServerToLocalSSH(String prefixOfRegulator,String statusType) throws Exception
+	private void getDownloadFromServerToLocalSSH(String prefixOfRegulator,String statusType, String downloadFile_Server) throws Exception
 	{
 		logger.info("start downloading export file from server to local.");
 		String statusTypeL=statusType.toLowerCase();
@@ -337,7 +347,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		if(statusTypeL.startsWith("fail") || statusTypeL.startsWith("pass"))
 		{
 			logger.info("download folder from server:"+downloadFolder_Server);
-			String downloadFile_Server=prefixOfRegulator+"_"+form.getEntity()+"_"+form.getTransmission().getModule()+"_"+processDate+"*";
+			//String downloadFile_Server=prefixOfRegulator+"_"+form.getEntity()+"_"+form.getTransmission().getModule()+"_"+processDate+"*";
 			logger.info("download file name from server:"+downloadFolder_Server);
 			JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
 			JschUtil.downloadFileToLocal(downloadFolder_Server+downloadFile_Server, downloadFolder);

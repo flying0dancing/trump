@@ -18,6 +18,7 @@ public interface IComFolder {
 	 String TARGET_EXPECTATION_FOLDER = TARGET_FOLDER+"/expectation/";
 	 String TARGET_IMPORT_FOLDER = TARGET_FOLDER+"/import/";
 	 String TARGET_DOWNLOAD_FOLDER = TARGET_FOLDER+"/download/";
-	 String PARAMETER_SCENARIOS_NAME="scenarioName";
 	 
+	 String PARAMETER_SCENARIOS_NAME="scenarioName";
+	 String PARAMETER_SCENARIOS_SHEET="scenarioSheet";
 }

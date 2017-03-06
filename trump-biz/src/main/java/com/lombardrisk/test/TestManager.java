@@ -40,7 +40,8 @@ public class TestManager extends TestBase implements IComFolder {
 	private static int indexDBServer;
 	private static int indexToolsetDBServer;
 	private static long startSuiteTime;
-
+	private String logName;
+	
 	public static TestEnvironment getTestEnv()
 	{
 		return testEnv;
@@ -63,11 +64,10 @@ public class TestManager extends TestBase implements IComFolder {
 	 @BeforeSuite
 	  public void beforeSuite() {
 		  startSuiteTime=System.currentTimeMillis();
-		  Reporter.log(" beforeSuite running~~~~<br>");
 		  //delete older test target folder, and create news.
 		  try
 		  {
-			  if(FileUtil.checkDirectory(TARGET_FOLDER))
+			  /*if(FileUtil.checkDirectory(TARGET_FOLDER))
 			  {
 				  logger.info(" delete directory:"+TARGET_FOLDER);
 				  FileUtil.deleteDirectory(TARGET_FOLDER);
@@ -82,6 +82,30 @@ public class TestManager extends TestBase implements IComFolder {
 			  FileUtil.createDirectory(TARGET_LOG_FOLDER);//
 			  logger.info(" copy *.xsl and *.css to directory:"+TARGET_SCENARIOS_FOLDER);
 			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".xsl", TARGET_SCENARIOS_FOLDER);
+			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".css", TARGET_SCENARIOS_FOLDER);*/
+			  if(!FileUtil.checkDirectory(TARGET_FOLDER))
+			  {
+				  logger.info(" create directory:"+TARGET_FOLDER);
+				  FileUtil.createDirectory(TARGET_FOLDER);
+			  }
+			  if(!FileUtil.checkDirectory(TARGET_SCENARIOS_FOLDER))
+			  {
+				  logger.info(" create directory:"+TARGET_SCENARIOS_FOLDER);
+				  FileUtil.createDirectory(TARGET_SCENARIOS_FOLDER);
+			  }
+			  if(!FileUtil.checkDirectory(TARGET_DOWNLOAD_FOLDER))
+			  {
+				  logger.info(" create directory:"+TARGET_DOWNLOAD_FOLDER);
+				  FileUtil.createDirectory(TARGET_DOWNLOAD_FOLDER);
+			  }
+			  if(!FileUtil.checkDirectory(TARGET_LOG_FOLDER))
+			  {
+				  logger.info(" create directory:"+TARGET_LOG_FOLDER);
+				  FileUtil.createDirectory(TARGET_LOG_FOLDER);
+			  }
+			  
+			  logger.info(" copy *.xsl and *.css to directory:"+TARGET_SCENARIOS_FOLDER);
+			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".xsl", TARGET_SCENARIOS_FOLDER);
 			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".css", TARGET_SCENARIOS_FOLDER);
 			  
 		  }catch(Exception e)
@@ -93,10 +117,6 @@ public class TestManager extends TestBase implements IComFolder {
 	  }
 	 @AfterSuite
 	  public void afterSuite() { 
-		  Reporter.log(" afterSuite running~~~~<br>");
-		  //move to afterclass() method
-		  /*FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER).getAbsolutePath(), new File(TARGET_LOG_FOLDER).getAbsolutePath(),startSuiteTime);
-		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime);*/
 	  }
 	
 	 @BeforeTest
@@ -110,14 +130,14 @@ public class TestManager extends TestBase implements IComFolder {
 	  
 	  @AfterTest
 	  public void afterTest() throws Exception {
-		  logger.info(getClass().getName()+" afterTest running!"); 
 	  }
 	  
 	  @BeforeClass(dependsOnMethods="beforeClass")
-	  public void beforeClassInTestManager() throws Exception {
+	  public void beforeClassInTestManager(ITestContext context) throws Exception {
 		  logger.info(getClass().getName()+" beforeClass-setUpTest running!"); 
 		 
-		  setScenarioId(setLogName());
+		  setLogName();
+		  setScenarioId(getLogName());
 		  
 		  setUpTest();
 		  testEnv=super.getTestEnvironment();
@@ -127,20 +147,20 @@ public class TestManager extends TestBase implements IComFolder {
 		  {
 			  List<String> regulators=DBInfo.getRegulatorDescription();
 			  int copyCount=0;
-			  logger.info("copy folders...");
+			  logger.info("copy folders(start)");
 			  for(String regulator:regulators)
 			  {
-				  logger.info("copy regulator folder \""+regulator+"\" to result folder");
+				  logger.info("try to copying regulator folder \""+regulator+"\" to result folder");
 				  if(new File(SOURCE_EXPECTATION_FOLDER+regulator).exists() && new File(SOURCE_IMPORT_FOLDER+regulator).exists())
 				  {
 					  if(!new File(TARGET_EXPECTATION_FOLDER+regulator).exists())
 					  {
-						  logger.info("copy folder "+new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
+						  logger.info("copying folder "+new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
 						  FileUtil.copyDirectory(new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath(), new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
 					  }
 					  if(!new File(TARGET_IMPORT_FOLDER+regulator).exists())
 					  {
-						  logger.info("copy folder "+new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
+						  logger.info("copying folder "+new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
 						  FileUtil.copyDirectory(new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath(), new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
 					  }
 					  if(new File(TARGET_EXPECTATION_FOLDER+regulator).exists() && new File(TARGET_IMPORT_FOLDER+regulator).exists())
@@ -156,7 +176,6 @@ public class TestManager extends TestBase implements IComFolder {
 		  }
 		  
 		  logger.info("Database Language:"+DBInfo.getLanguage());
-		 //Reporter.log("Database Language:"+DBInfo.getLanguage()+System.getProperty("line.separator"));
 		  
 		  String server_Url=DBInfo.getApplicationServer_Url();
 		  getWebDriverWrapper().navigate().to(server_Url);
@@ -169,70 +188,61 @@ public class TestManager extends TestBase implements IComFolder {
 			else
 			{
 				logger.error("error: cannot access to homePage");
-				afterClassInTestManager();
+				afterClassInTestManager(context);
 				Assert.fail("cannot access to homePage");
 			}
 		  
 	  }
 
 	  @AfterClass
-	  public void afterClassInTestManager()  throws Exception{
-		  //Reporter.log(getClass().getName()+" afterClass-tearDownTest running!"); 
+	  public void afterClassInTestManager(ITestContext context)  throws Exception{
 		  logger.info(" afterClass-tearDownTest running!"); 
-		  FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER).getAbsolutePath(), new File(TARGET_LOG_FOLDER).getAbsolutePath(),startSuiteTime);
-		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime);
 		  tearDownTest();
+		  String detailsLogPath=context.getCurrentXmlTest().getSuite().getName()+"/"+context.getCurrentXmlTest().getName();
+		  FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER+detailsLogPath).getAbsolutePath(), new File(TARGET_LOG_FOLDER+detailsLogPath).getAbsolutePath(),startSuiteTime);
+		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime);
+		  
 	  }
 	  
 
   @BeforeMethod
-  public void beforeMethod(Method method) throws Exception {
-	  //Reporter.log(System.getProperty("line.separator")+getClass().getName()+" beforeMethod("+method.getName()+") running!"); 
-	  logger.info(" beforeMethod("+method.getName()+") running!");
-	 /* getWebDriverWrapper().navigate().to(DBInfo.getApplicationServer_Url());
-	  report(Helper.getTestReportStyle(DBInfo.getApplicationServer_Url(), "open test server url"));*/
-	  /*listPage=new ListPage(getWebDriverWrapper());
-	  if(!listPage.isThisPage())
-	  {
-		  HomePage homePage=new HomePage(getWebDriverWrapper());
-			if(homePage.isThisPage())
-			{
-				listPage=homePage.loginAs(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
-			}
-			else
-			{
-				Assert.fail("cannot access to homePage");
-			}
-	  }*/
-	 
+  public void beforeMethod(Method method) throws Exception 
+  {
 	  
   }
-	  @AfterMethod
-	  public void afterMethod(ITestResult result) throws Exception {
-		ITestContext context=result.getTestContext();
-		ITestNGMethod method=result.getMethod();
-		//Reporter.log(getClass().getName()+" afterMethod("+method.getMethodName()+") running!"); 
-		logger.info(" afterMethod("+method.getMethodName()+") running!"); 
-		String resultFile=context.getCurrentXmlTest().getSuite().getName()+"+"+context.getCurrentXmlTest().getName()+"+"+getClass().getSimpleName()+"["+method.getMethodName()+"]+"+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
-		//int count=context.getFailedTests().size()+context.getPassedTests().size()+context.getSkippedTests().size();
+  
+  @AfterMethod
+  public void afterMethod(ITestResult result) throws Exception {
+	ITestContext context=result.getTestContext();
+	ITestNGMethod method=result.getMethod();
 
-		  if(method.getParameterInvocationCount()==method.getCurrentInvocationCount())
+	logger.info(" afterMethod("+method.getMethodName()+") running!"); 
+	String resultFile=context.getCurrentXmlTest().getSuite().getName()+"+"+context.getCurrentXmlTest().getName()+"+"+getClass().getSimpleName()+"["+method.getMethodName()+"]+"+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
+	//int count=context.getFailedTests().size()+context.getPassedTests().size()+context.getSkippedTests().size();
+
+	 
+	  if(method.getParameterInvocationCount()==method.getCurrentInvocationCount())
+	  {
+		  if(resultFile.endsWith(".xml"))
 		  {
-			  if(resultFile.endsWith(".xml"))
-			  {
-				  Dom4jUtil.writeFormsToMethodXml(FormsDataProvider.getForms(), TARGET_SCENARIOS_FOLDER+resultFile, "formlist.xsl");
-			  }
-			  if(resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls"))
-			  {
-				  ExcelUtil.WriteFormsToExcel(FormsDataProvider.getForms(), TARGET_SCENARIOS_FOLDER+resultFile);
-				  ExcelUtil.WriteFormsToExcel(FormsDataProvider.getForms(), TARGET_SCENARIOS_FOLDER+"total.xlsx");
-			  }
+			  Dom4jUtil.writeFormsToMethodXml(FormsDataProvider.getForms(), TARGET_SCENARIOS_FOLDER+resultFile, "formlist.xsl");
 		  }
-		  
-		  Dom4jUtil.writeFormsToXml(resultFile,FormsDataProvider.getForms(),TARGET_SCENARIOS_FOLDER+"total.xml","formsTotal.xsl");
-		  
-		 
+		  if(resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls"))
+		  {
+			  String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
+			  ExcelUtil.WriteFormsToExcel(FormsDataProvider.getForms(), TARGET_SCENARIOS_FOLDER+resultFile,scenarioSheet);
+			  ExcelUtil.WriteFormsToExcel(FormsDataProvider.getForms(), TARGET_SCENARIOS_FOLDER+"total.xlsx",scenarioSheet);
+		  }
 	  }
+	  StringBuffer identifier=new StringBuffer(resultFile);
+	  String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
+	  if(scenarioSheet!=null && (resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls")) )
+	  {identifier.append("["+scenarioSheet+"]");}
+	  identifier.append("-"+DBInfo.getApplicationServer_Url().toLowerCase()+"-log:"+getLogName());
+	  Dom4jUtil.writeFormsToXml(identifier.toString(),FormsDataProvider.getForms(),TARGET_SCENARIOS_FOLDER+"total.xml","formsTotal.xsl");
+	  
+	 
+  }
  
 
   public int changeStringToInt(String str,int defaultInt)
@@ -259,7 +269,7 @@ public class TestManager extends TestBase implements IComFolder {
 	  return i;
   }
 
- public String setLogName()
+ public void setLogName()
  {
 	 String logNameWithoutSuffix=this.getClass().getSimpleName().toLowerCase();
 	 String simpleName=logNameWithoutSuffix;
@@ -275,12 +285,17 @@ public class TestManager extends TestBase implements IComFolder {
 		 }
 	 }
 	 
-	 return logNameWithoutSuffix;
+	 this.logName = logNameWithoutSuffix;
  }
  
+ public String getLogName() {
+		return logName;
+	}
+
  public void addReportLink(String execFunctionFolder,String regulator,String expectationFile,String exec_ExpectationFile)
 	{
-		String expectationFolder="../../expectation/";
+		String expectationFolder=TARGET_EXPECTATION_FOLDER.replace(TARGET_FOLDER, "../..");// "../../expectation/";
+		
 		if(execFunctionFolder!=null && regulator!=null && expectationFile!=null )
 		{
 			
@@ -295,7 +310,6 @@ public class TestManager extends TestBase implements IComFolder {
 		}
 		
 	}
- 
 
 
 }
