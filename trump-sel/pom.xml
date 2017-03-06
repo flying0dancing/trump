@@ -17,7 +17,7 @@
     <reportng.version>1.1.4</reportng.version>  
     <guice.version>3.0</guice.version>  
     <xmlFileName>suites/TestTP.xml</xmlFileName> 
-	<reportOutput>${resultFolder}/reportng-reports</reportOutput>
+	<reportOutput>reportng-reports</reportOutput>
   </properties>
   <dependencies> 
    <dependency> 
@@ -61,9 +61,9 @@
         <artifactId>maven-surefire-plugin</artifactId>  
         <version>2.19</version>  
         <configuration> 
-          <suiteXmlFiles> 
-            <suiteXmlFile>${xmlFileName}</suiteXmlFile> 
-          </suiteXmlFiles>  
+          <suiteXmlFiles>
+            <suiteXmlFile>${xmlFileName}</suiteXmlFile>
+          </suiteXmlFiles>
           <testFailureIgnore>true</testFailureIgnore>  
           <properties> 
             <property> 
@@ -80,8 +80,9 @@
           <systemPropertyVariables> 
             <org.uncommons.reportng.title>Aigle Report For Product Report</org.uncommons.reportng.title>  
             <org.uncommons.reportng.escape-output>false</org.uncommons.reportng.escape-output> 
+            <org.uncommons.reportng.xml-dialect>testng</org.uncommons.reportng.xml-dialect> 
           </systemPropertyVariables>  
-          <reportsDirectory>${reportOutput}</reportsDirectory> 
+          <reportsDirectory>${resultFolder}/${reportOutput}</reportsDirectory> 
         </configuration>  
         <dependencies> 
           <dependency> 

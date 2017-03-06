@@ -100,13 +100,16 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					
 					File fileToWrite=new File(fileFullName);
 					if(!fileToWrite.exists()){fileToWrite.createNewFile();}
+					long begin=System.currentTimeMillis();
 					//get all normal cells
 					StringBuffer strBuffer=getNormalCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
-		    		
+		    		logger.info("getNormalCells used time[seconds]:"+(System.currentTimeMillis()-begin)/1000.00F);
+		    		begin=System.currentTimeMillis();
 					//get all extend grid cells
 		    		strBuffer=getExtendGridCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
+		    		logger.info("getExtendGridCells used time[seconds]:"+(System.currentTimeMillis()-begin)/1000.00F);
 		    		logger.info("save displayed values into file " + fileFullName);
 				}
 			}
@@ -137,30 +140,59 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
 	//get all normal cells
 	if(element("fipf.getCells").isPresent())	
 	{
-		List<IWebElementWrapper> elements=element("fipf.getCells").getAllMatchedElements();
+		String cellValue,checked;
+		String blankStr="";
+		String OneStr="1";
+		String ZeroStr="0";
+		//String NullStr="null";
+		/*List<IWebElementWrapper> elements=element("fipf.getCells").getAllMatchedElements();
 		for (IWebElementWrapper element:elements)
 		{
-    		 String cellValue=null;
-    		 String cellType=element.getAttribute("type").trim();
+			cellValue=blankStr;
+    		 cellType=element.getAttribute("type").trim();
     		 if(cellType.equalsIgnoreCase("text"))
     		 {
     			 cellValue=element.getAttribute("value").trim();
+    			 cellValue=cellValue.equalsIgnoreCase(NullStr)?blankStr:cellValue;
     		 } else if(cellType.equalsIgnoreCase("checkbox"))
     		 {
-    			 String checked=element.getAttribute("checked");
+    			 checked=element.getAttribute("checked");
     			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
     			 {
-    				 cellValue="1";
+    				 cellValue=OneStr;
     			 }else
     			 {
-    				 cellValue="0";
+    				 cellValue=ZeroStr;
     			 }
     		 }
-    		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
-    
-    		 strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
-    		 
+    		 strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator); 
+		}*/
+		List<IWebElementWrapper> elements=element("fipf.getCells_textNULL").getAllMatchedElements();
+		for (IWebElementWrapper element:elements)
+		{
+			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+blankStr+"\""+lineSeparator); 
 		}
+		
+		elements=element("fipf.getCells_textNotNULL").getAllMatchedElements();
+		for (IWebElementWrapper element:elements)
+		{
+			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+element.getAttribute("value").trim()+"\""+lineSeparator); 
+		}
+		
+		elements=element("fipf.getCells_checkbox").getAllMatchedElements();
+		for (IWebElementWrapper element:elements)
+		{
+			checked=element.getAttribute("checked");
+			if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
+			 {
+				 cellValue=OneStr;
+			 }else
+			 {
+				 cellValue=ZeroStr;
+			 }
+			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+		}
+		
 	}
 	return strBuffer;
 }
@@ -267,41 +299,78 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 {
 	StringBuffer strBuffer=new StringBuffer();
 	String lineSeparator=System.getProperty("line.separator");
+	//next used in for(int row=0;row<gridRowCount;row++)
+	String data_ri,data_rk;
+	//next used in for(IWebElementWrapper gridCellElement:gridCellElements)
+	String id,cellName,cellValue,checked;
+	String blankStr="";
+	String OneStr="1";
+	String ZeroStr="0";
 	//print this grid tables's rows
 	//get ./tr
     List<IWebElementWrapper> gridRowElements=element("fipf.getGridTr",tbodyId).getAllMatchedElements();
     int gridRowCount=gridRowElements.size();
     for(int row=0;row<gridRowCount;row++)
     {
-    	String data_ri=gridRowElements.get(row).getAttribute("data-ri");
-    	String data_rk=gridRowElements.get(row).getAttribute("data-rk");
+    	data_ri=gridRowElements.get(row).getAttribute("data-ri");
+    	data_rk=gridRowElements.get(row).getAttribute("data-rk");
     	//get ./td/input
-    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	/*List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
     	for(IWebElementWrapper gridCellElement:gridCellElements)
     	 {
-    		 String id=gridCellElement.getAttribute("id");
-    		 String cellName=id.replace(gridPrefix+data_rk, "");
-    		 String cellValue=null;
-    		 String cellType=gridCellElement.getAttribute("type").trim();
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 cellValue=blankStr;
+    		 cellType=gridCellElement.getAttribute("type").trim();
     		 if(cellType.equalsIgnoreCase("text"))
     		 {
     			 cellValue=gridCellElement.getAttribute("value").trim();
+    			 cellValue=cellValue.equalsIgnoreCase(NullStr)?blankStr:cellValue;
     		 }else if(cellType.equalsIgnoreCase("checkbox"))
     		 {
-    			 String checked=gridCellElement.getAttribute("checked").trim();
+    			 checked=gridCellElement.getAttribute("checked").trim();
     			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
     			 {
-    				 cellValue="1";
+    				 cellValue=OneStr;
     			 }else
     			 {
-    				 cellValue="0";
+    				 cellValue=ZeroStr;
     			 }
     		 }
-    		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
-    		 //String cellreadonly=gridCellElement.getAttribute("readonly")==null?"false":"true" ;
     		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
-
+    	 }*/
+    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells_textNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+blankStr+"\""+lineSeparator);
     	 }
+    	
+    	gridCellElements=element("fipf.getGridCells_textNotNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+gridCellElement.getAttribute("value").trim()+"\""+lineSeparator);
+    	 }
+    	
+    	gridCellElements=element("fipf.getGridCells_checkbox",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 checked=gridCellElement.getAttribute("checked").trim();
+			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
+			 {
+				 cellValue=OneStr;
+			 }else
+			 {
+				 cellValue=ZeroStr;
+			 }
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+    	 }
+    	
     }
     return strBuffer;
 }

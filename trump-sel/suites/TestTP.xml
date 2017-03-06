@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="mock" parallel="false">
-   <test name="mock">
+   <test name="mock" enabled="false">
   	<parameter name="indexAppServers" value="10"/>
   	<parameter name="indexDBServers" value="10"/>
   	<parameter name="scenarioName" value="ForKun_mock.xlsx"/>

@@ -36,51 +36,8 @@ public class DBInfo{
 	private static int indexAppServer;
 	private static int indexDBServer;
 	private static int indexToolsetDBServer;
-	
 	private DBInfo(){}
-	/*
-	{
-    "applicationServers": [
-      {
-        "id": 0,
-        "name": "default",
-        "url": "http://172.20.30.75:8085",
-        "username": "admin",
-        "password": "password"
-      }
-    ],
-    "databaseServers": [
-      {
-        "id": 0,
-        "name": "ar_database",
-        "driver": "oracle",
-        "host": "172.20.31.239@ora12c",
-        "schema": "AR_AUTO_TOOLSET_OWNER"
-      },
-      {
-        "id": 1,
-        "name": "toolset_database",
-        "driver": "oracle",
-        "host": "172.20.20.49@ora12c",
-        "schema": "ECR_HKMA_AUTO_SYSTEM"
-      },
-      {
-       "id": 0,
-        "name": null,
-        "driver": null,
-        "url": null,
-        "host": null,
-        "port": null,
-        "version": null,
-        "instance": null,
-        "schema": null,
-        "dump": null,
-        "username": null,
-        "password": null,}
-    ]
-  }
-	*/
-	
+		
 	public static void setDBInfo()
 	{
 		try
