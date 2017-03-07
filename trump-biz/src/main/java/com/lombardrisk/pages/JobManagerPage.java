@@ -77,7 +77,7 @@ public class JobManagerPage extends AbstractPage
 			}
 			IWebElementWrapper nextPageBar=element("ficmptd.nextPageSta");
 			while(nextPageBar.isDisplayed() && !nextPageBar.getAttribute("class").contains("ui-state-disabled"))
-			{
+			{	
 				status=getGridCells(name,referenceDate,runType,started);
 				if(status!=null && (status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
 				{
@@ -108,8 +108,10 @@ public class JobManagerPage extends AbstractPage
 	 */
 	private String getGridCells(String name,String referenceDate,String runType,String started) throws Exception
 	{
-		String started_StartsWith=started.substring(0, started.length()-1);
-		String status=element("ficmptd.getStatus",name,referenceDate,runType,started_StartsWith).getInnerText();
+		String started_StartsWith=started.substring(0, started.length()-2);
+		IWebElementWrapper _getStatus=element("ficmptd.getStatus",name,referenceDate,runType,started_StartsWith);
+		if(!_getStatus.isPresent()){return null;}
+		String status=_getStatus.getInnerText();
 		if(status!=null && status.equalsIgnoreCase("FAILURE"))
 		{
 			status="FAILURE:"+element("ficmptd.getStatusMessage",name,referenceDate,runType,started_StartsWith).getInnerText();
