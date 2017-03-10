@@ -381,30 +381,6 @@ public class ListPage extends AbstractPage implements IExportTo
 	}
 	
 	
-	
-	/**
-	 * for case-insensitive
-	 * @author kun shen
-	 * @param element
-	 * @param importText
-	 * @return
-	 */
-	@Deprecated
-	private String getRealText(String regulator)
-	{
-		String label=regulator;
-		List<String> regulatorDes=DBInfo.getRegulatorDescription();
-		for(String str:regulatorDes)
-		{
-			if(regulator.equalsIgnoreCase(str))
-			{
-				label=str;
-				break;
-			}
-		}
-		return label;
-	}
-	
 	/**
 	 * if this page is this page, return true, others return false.
 	 * @return
