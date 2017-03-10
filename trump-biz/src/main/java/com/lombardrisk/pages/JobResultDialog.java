@@ -1,9 +1,6 @@
 package com.lombardrisk.pages;
 
-import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
-
-import com.lombardrisk.test.DBInfo;
 
 public class JobResultDialog extends AbstractPage {
 

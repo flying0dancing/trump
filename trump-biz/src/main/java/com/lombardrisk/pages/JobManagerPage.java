@@ -2,7 +2,6 @@ package com.lombardrisk.pages;
 
 import java.util.Date;
 
-import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 

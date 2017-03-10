@@ -3,13 +3,12 @@ package com.lombardrisk.pages;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
-import com.lombardrisk.test.DBInfo;
 
 public class ExportedFileLocationDialog extends AbstractPage {
 
 	public ExportedFileLocationDialog(IWebDriverWrapper webDriverWrapper) {
 		super(webDriverWrapper);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	/**
