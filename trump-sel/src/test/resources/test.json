@@ -40,7 +40,7 @@
       {
       	"id": 9,
         "name": "TrumpTest",
-        "url": "http://sha-com-qa-11:8083",
+        "url": "http://sha-com-qa-11:8084",
         "username": "admin",
         "password": "password",
         "key": "sha-com-qa-11:22:/home/testp/export:testp:password"

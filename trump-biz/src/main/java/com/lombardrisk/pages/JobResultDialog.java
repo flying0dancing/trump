@@ -87,7 +87,7 @@ public class JobResultDialog extends AbstractPage {
 		}
 		if(element("filf.formInstanceListForm").isDisplayed())
 		{
-			waitThat().timeout(PropHelper.TIMEOUT_INTERVAL*1000);
+			waitThat().timeout(10000);
 			listPage=new ListPage(getWebDriverWrapper());
 			JobManagerPage jobManagerPage=listPage.clickJobManager();
 			if(jobManagerPage!=null && jobStartTimeLabel!=null)

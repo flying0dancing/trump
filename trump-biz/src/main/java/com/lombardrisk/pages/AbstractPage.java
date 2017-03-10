@@ -16,9 +16,12 @@ import com.lombardrisk.test.DBInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,7 +31,8 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractPage extends PageBase
 {
-	protected static String format=DBInfo.getLanguage();
+	protected static String dateFormat=getFormat();
+	protected static String simpleDateFormat=getSimpleDateFormat();
 	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());//old one
 	protected final static String LOCKNAME="TP.lock";
 	protected String downloadFolder;
@@ -286,25 +290,22 @@ public abstract class AbstractPage extends PageBase
 		String year = null;
 		String month = null;
 		String day = null;
-		//String format=PropHelper.getProperty("Regional.language").trim();
-		if(format==null || format.trim().equals("")){
-			format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
-		}
-		if (format.equalsIgnoreCase("en_US") || format.equals(""))
-		{
-			month = date.substring(0, 2);
-			day = date.substring(3, 5);
-			year = date.substring(6);
-		}else if (format.equalsIgnoreCase("en_GB"))
+		
+		if (dateFormat.equalsIgnoreCase("en_GB"))
 		{
 			day = date.substring(0, 2);
 			month = date.substring(3, 5);
 			year = date.substring(6);
-		}else if (format.equalsIgnoreCase("zh_CN"))
+		}else if (dateFormat.equalsIgnoreCase("zh_CN"))
 		{
 			year = date.substring(0, 4);
 			month = date.substring(5, 7);
 			day = date.substring(8);
+		}else//dateFormat.equalsIgnoreCase("en_US") || dateFormat.equals("")
+		{
+			month = date.substring(0, 2);
+			day = date.substring(3, 5);
+			year = date.substring(6);
 		}
 		String returnDate=month+"/"+day+"/"+year;
 		if(dateFormat.equalsIgnoreCase("MM/DD/YYYY"))
@@ -334,25 +335,22 @@ public abstract class AbstractPage extends PageBase
 		String month = null;
 		String day = null;
 		int monthNumber=0;
-		//String format=PropHelper.getProperty("Regional.language").trim();
-		if(format==null || format.trim().equals("")){
-			format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
-		}
-		if (format.equalsIgnoreCase("en_US") || format.equals(""))
-		{
-			month = date.substring(0, 2);
-			day = date.substring(3, 5);
-			year = date.substring(6);
-		}else if (format.equalsIgnoreCase("en_GB"))
+		
+		if (dateFormat.equalsIgnoreCase("en_GB"))
 		{
 			day = date.substring(0, 2);
 			month = date.substring(3, 5);
 			year = date.substring(6);
-		}else if (format.equalsIgnoreCase("zh_CN"))
+		}else if (dateFormat.equalsIgnoreCase("zh_CN"))
 		{
 			year = date.substring(0, 4);
 			month = date.substring(5, 7);
 			day = date.substring(8);
+		}else//dateFormat.equalsIgnoreCase("en_US") || dateFormat.equals("")
+		{
+			month = date.substring(0, 2);
+			day = date.substring(3, 5);
+			year = date.substring(6);
 		}
 		if (day.startsWith("0"))
 		{
@@ -641,17 +639,31 @@ public abstract class AbstractPage extends PageBase
 		if(it==null || it.trim().equals("")){return false;}
 		if (!element.getSelectedText().equals(it))
 		{
-			List<String> list=element.getAllOptionTexts();
-			for(String item:list)
-			{
-				if(it.trim().equalsIgnoreCase(item.trim()))
+			try{
+				element.selectByVisibleText(it.trim());
+				loadingDlg();
+			}catch(Exception e){}
+			finally{
+				if(element.getSelectedText().equals(it.trim()))
 				{
-					element.selectByVisibleText(item);
-					loadingDlg();
 					flag=true;
-					break;
+				}else
+				{
+					List<String> list=element.getAllOptionTexts();
+					for(String item:list)
+					{
+						if(it.trim().equalsIgnoreCase(item.trim()))
+						{
+							element.selectByVisibleText(item);
+							loadingDlg();
+							flag=true;
+							break;
+						}
+					}
 				}
+				
 			}
+			
 		}else
 		{flag=true;}
 		
@@ -902,5 +914,41 @@ public abstract class AbstractPage extends PageBase
 			}
 		}
 		return messageText.toString();
+	}
+	
+	protected static String getSimpleDateFormat()
+	{
+		String simpleDateFormatStr="MM/dd/yyyy HH:mm:ss";
+		if (dateFormat.equalsIgnoreCase("en_GB"))
+		{
+			simpleDateFormatStr="dd/MM/yyyy HH:mm:ss";
+		}else if (dateFormat.equalsIgnoreCase("zh_CN"))
+		{
+			simpleDateFormatStr="yyyy-MM-dd HH:mm:ss";
+		}
+		return simpleDateFormatStr;
+	}
+	
+	protected static String getFormat()
+	{
+		String format=DBInfo.getLanguage();
+		if(format==null || format.trim().equals("")){
+			format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
+		}
+		return format;
+	}
+	
+	protected Date transformStringToDate(String dateStr)
+	{
+		SimpleDateFormat sdf=new SimpleDateFormat(simpleDateFormat);
+		Date date=null;
+		try
+		{
+			date=sdf.parse(dateStr);
+		}catch (ParseException e)
+		{
+			logger.info("error: transform String to Date failed.["+e.getMessage()+"]");
+		}
+		return date;
 	}
 }
