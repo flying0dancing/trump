@@ -981,17 +981,17 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			loadingDlg();
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 		}
-		if(flag)
+		/*if(flag)
 		{
 			String a=getLatestFile(downloadFolder);
 			String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
 			if(b.equalsIgnoreCase(LOCKNAME))
 			{
-				logger.error("not find download file");
+				logger.error("error: not find download file.");
 				flag=false;
 			}
 		
-		}
+		}*/
 		return flag;
 	}
 	
@@ -1247,27 +1247,32 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 						if(hp.isThisPage())
 						{
 							lp=hp.login(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
-							if(lp.isThisPage())
+							if(lp==null)
 							{
-								if(lp.selectFormInfo(form))
+								logger.error("error: cannot login home page.");
+							}else{
+								if(lp.isThisPage())
 								{
-									fip=lp.openFormInstance(form);
-									this.setLoginUser(fip.getLoginUser());
-									if(isThisPage())
+									if(lp.selectFormInfo(form))
 									{
-										returnFlag=true;
+										fip=lp.openFormInstance(form);
+										this.setLoginUser(fip.getLoginUser());
+										if(isThisPage())
+										{
+											returnFlag=true;
+										}
 									}
 								}
 							}
 							
 						}else
 						{
-							logger.info("cannot access home page.");
+							logger.error("error: cannot access home page.");
 						}
 						
 					}else
 					{
-						logger.info("cannot access dashboard page.");
+						logger.error("error: cannot access dashboard page.");
 					}
 				}else
 				{
@@ -1285,19 +1290,26 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 						if(hp.isThisPage())
 						{
 							lp=hp.login(PropHelper.getProperty("test.approver.user"), PropHelper.getProperty("test.approver.password"));
-							if(lp.isThisPage())
+							if(lp==null)
 							{
-								if(lp.selectFormInfo(form))
+								logger.error("error: cannot login home page.");
+							}else
+							{
+								if(lp.isThisPage())
 								{
-									fip=lp.openFormInstance(form);
-									this.setLoginUser(fip.getLoginUser());
-									if(isThisPage())
+									if(lp.selectFormInfo(form))
 									{
-										returnFlag=clickApproval();//invoke itself
+										fip=lp.openFormInstance(form);
+										this.setLoginUser(fip.getLoginUser());
+										if(isThisPage())
+										{
+											returnFlag=clickApproval();//invoke itself
+										}
+										
 									}
-									
 								}
 							}
+							
 						}else
 						{
 							logger.info("cannot access home page.");
@@ -1355,14 +1367,16 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		logger.info("click \""+type+"\"");
 		element("fipf.workflow_button").click();
 		waitThat("fipf.workflow_menu").toBeVisible();
-		if(element("fipf.workflow_menuList",type).isPresent() && element("fipf.workflow_menuList",type).isDisplayed())
+		if(element("fipf.workflow_menuList",type).isPresent())
 		{
 			element("fipf.workflow_menuList",type).click();
 			loadingDlg();
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 		}else
 		{
+			loadingDlg();
 			element("fipf.workflow_button").click();
+			waitThat("fipf.workflow_menu").toBeInvisible();
 		}
 		return flag;
 	}

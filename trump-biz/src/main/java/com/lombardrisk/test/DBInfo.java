@@ -3,6 +3,7 @@ package com.lombardrisk.test;
 
 import java.util.List;
 
+import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.test.pojo.TestEnvironment;
 
 public class DBInfo{
@@ -36,28 +37,40 @@ public class DBInfo{
 	private static int indexAppServer;
 	private static int indexDBServer;
 	private static int indexToolsetDBServer;
-	private DBInfo(){}
-		
-	public static void setDBInfo()
+	protected DBInfo(){}
+	
+	public static void setDBInfo(int _indexAppServer, int _indexDBServer,int _indexToolsetDBServer)
 	{
 		try
 		{
-			testEnv=TestManager.getTestEnv();
+			indexAppServer=_indexAppServer;
+			indexDBServer=_indexDBServer;
+			indexToolsetDBServer=_indexToolsetDBServer;
+			//testEnv=TestManager.getTestEnv();
+			testEnv=TestCaseManager.pollTestEnvironment();
+			while(testEnv==null)
+			{
+				TestCaseManager.offerTestEnvironment(testEnv);
+				testEnv=TestCaseManager.pollTestEnvironment();
+				Thread.sleep(10000);
+			}
+			
+			
 			int countOfDBServers=testEnv.getDatabaseServers().size();
-			indexAppServer=TestManager.getIndexAppServer();
+			//indexAppServer=TestManager.getIndexAppServer();
 			applicationServer_Name=testEnv.getApplicationServer(indexAppServer).getName();
 			applicationServer_UserName=testEnv.getApplicationServer(indexAppServer).getUsername();
 			applicationServer_Password=testEnv.getApplicationServer(indexAppServer).getPassword();
 			applicationServer_Url=testEnv.getApplicationServer(indexAppServer).getUrl();
 			applicationServer_Key=testEnv.getApplicationServer(indexAppServer).getKey();
-			indexDBServer=TestManager.getIndexDBServer();
+			//indexDBServer=TestManager.getIndexDBServer();
 			databaseServer_Name=testEnv.getDatabaseServer(indexDBServer).getName();
 			databaseServer_Driver=testEnv.getDatabaseServer(indexDBServer).getDriver();
 			databaseServer_host=testEnv.getDatabaseServer(indexDBServer).getHost();
 			databaseServer_Schema=testEnv.getDatabaseServer(indexDBServer).getSchema();
 			databaseServer_UserName=testEnv.getDatabaseServer(indexDBServer).getUsername();
 			databaseServer_Password=testEnv.getDatabaseServer(indexDBServer).getPassword();
-			indexToolsetDBServer=TestManager.getIndexToolsetDBServer();
+			//indexToolsetDBServer=TestManager.getIndexToolsetDBServer();
 			if(countOfDBServers>1 && indexToolsetDBServer>=0 && indexDBServer!=indexToolsetDBServer && indexToolsetDBServer<countOfDBServers && testEnv.getDatabaseServer(indexToolsetDBServer)!=null && testEnv.getDatabaseServer(indexToolsetDBServer).getName().toLowerCase().contains("toolset"))
 			{
 				toolSetDatabaseServer_Name=testEnv.getDatabaseServer(indexToolsetDBServer).getName();
@@ -66,6 +79,10 @@ public class DBInfo{
 				toolSetDatabaseServer_Schema=testEnv.getDatabaseServer(indexToolsetDBServer).getSchema();
 				toolSetDatabaseServer_UserName=testEnv.getDatabaseServer(indexToolsetDBServer).getUsername();
 				toolSetDatabaseServer_Password=testEnv.getDatabaseServer(indexToolsetDBServer).getPassword();
+			}
+			if(testEnv!=null)
+			{
+				TestCaseManager.offerTestEnvironment(testEnv);
 			}
 			
 			if(toolSetDatabaseServer_Name==null)

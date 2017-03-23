@@ -337,7 +337,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			
 		}else
 		{
-			logger.error("cannot delete form.");
+			logger.error("error: cannot delete form.");
 		}
 		
 	
@@ -374,7 +374,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			}
 		}else
 		{
-			logger.error("cannot find form.");
+			logger.error("error: cannot find form link.");
 		}
 		
 		return fip;

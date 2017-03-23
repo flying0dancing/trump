@@ -200,9 +200,9 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected void loadingDlg() throws Exception
 	{
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 	}
 	/**
 	 * Wait for ajax dialog disappear
@@ -644,7 +644,7 @@ public abstract class AbstractPage extends PageBase
 				loadingDlg();
 			}catch(Exception e){}
 			finally{
-				if(element.getSelectedText().equals(it.trim()))
+				if(element.getSelectedText().equalsIgnoreCase(it.trim()))
 				{
 					flag=true;
 				}else
@@ -784,7 +784,7 @@ public abstract class AbstractPage extends PageBase
 					lock=false;
 					break;
 				}
-				Thread.sleep(500);
+				Thread.sleep(1500);
 			}
 			
 			if(!lock)
@@ -931,9 +931,9 @@ public abstract class AbstractPage extends PageBase
 	
 	protected static String getFormat()
 	{
-		String format=DBInfo.getLanguage();
+		String format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
 		if(format==null || format.trim().equals("")){
-			format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
+			format=DBInfo.getLanguage();
 		}
 		return format;
 	}

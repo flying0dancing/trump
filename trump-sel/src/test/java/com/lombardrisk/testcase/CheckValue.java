@@ -642,7 +642,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 								form.setExecutionStatus(status);
 							}else
 							{
-								form.setExecutionStatus("fail on open not existed file:"+exportedFileFullPath);
+								form.setExecutionStatus("fail on open not existed file, or no records found to export.");
 							}
 						}else
 						{

@@ -50,8 +50,8 @@ public class ExportToFiles {
 									logger.info(str);
 								}else
 								{
-									status.add("fail: on open not existed file");
-									logger.info("fail: on open not existed file");
+									status.add("fail: on open not existed file.");
+									logger.info("fail: on open not existed file.");
 								}
 							}
 						}

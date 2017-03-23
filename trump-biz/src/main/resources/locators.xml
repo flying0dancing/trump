@@ -1839,6 +1839,7 @@
         <locator id="hm.pwd" type="WebEdit" by="id" expression="loginForm:inputPassword" name="passwordLocator"  description="input password"/>
         <locator id="hm.login" type="WebButton" by="id" expression="loginForm:btnSignIn" name="loginButtonLocator"  description="login button"/>
         <locator id="hm.pageError" type="WebButton" by="xpath" expression="//*[@id='main-message']/h1" name="pageError"  description="page load error"/>
+        <locator id="hm.message" type="WebElement" by="xpath" expression="//*[@id='loginForm:msgs_container']/div/div/div[2]/p" name="loginMessage" description="longin message"/>
     </page>
     
     <page id="prp" name="PreferencePage" description="Preference Page">
@@ -1901,7 +1902,7 @@
     	<locator id="fipf.validateNowBtn" type="WebButton" by="id" expression="formHeader:validateNowBtn" name="validateNow" description="click validate Now Button"/>
     	<locator id="fipf.doValidationBtn" type="WebButton" by="id" expression="formHeader:doValidationBtn" name="doValidationBtn" description="click Live Validation Button"/>
     	<locator id="fipf.unDoValidationBtn" type="WebButton" by="id" expression="formHeader:unDoValidationBtn" name="unDoValidationBtn" description="click Live Validation Button"/>
-    	<locator id="fipf.workflow_button" type="WebButton" by="id" expression="formHeader:workflow_button" name="adjust_button" description="workflow_button"/>
+    	<locator id="fipf.workflow_button" type="WebButton" by="xpath" expression=".//*[@id='formHeader:workflow_button']/span[1]" name="workflow_button" description="workflow_button"/>
     	<locator id="fipf.workflow_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a[span='?']/span" name="workflow_menu" description="workflow_menu"/>
     	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']" name="workflow_menu" description="workflow_menu"/>
     	

@@ -62,6 +62,13 @@ public class HomePage extends AbstractPage
 	public ListPage submitLogin() throws Exception
 	{
 		element("hm.login").click();
+
+		if(element("hm.message").isPresent())
+		{
+			logger.error(element("hm.message").getInnerText());
+			waitThat("hm.message").toBeInvisible();
+			return null;
+		}
 		loadingDlg();
 		waitForPageLoaded();
 		return new ListPage(getWebDriverWrapper());
@@ -114,13 +121,17 @@ public class HomePage extends AbstractPage
 		loadingDlg();
 		ListPage listPage = submitLogin();
 		//assertThat("pp.userLabel").innerText().containsIgnoringCase("hi "+userName);
+		if(listPage==null)
+		{
+			return listPage;
+		}
 		if(listPage.isThisPage())
 		{
 			
 		}else
 		{
 			listPage=null;
-			Assert.fail("cannot access to Dashboard.");
+			Assert.fail("error: cannot access to Dashboard.");
 		}
 		 
 		return listPage;

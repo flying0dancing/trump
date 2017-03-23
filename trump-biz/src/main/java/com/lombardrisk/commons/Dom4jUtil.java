@@ -238,4 +238,61 @@ public static void writeReportOutputToPOM(String reportOutputFolder)
 	    } 
 
 }
+
+/**
+ * purpose for parallel use.
+ * @param identifer
+ * @param forms
+ * @param xmlFileStr
+ * @param xslFile
+ */
+public static void writeFormToXml(String identifer,Form form,String xmlFileStr,String xslFile) 
+{ 
+	Document doc =null;
+    try
+    {
+    	SAXReader reader=new SAXReader();
+    	File xmlFile=new File(xmlFileStr);
+    	Element root=null;
+    	if(!xmlFile.exists())
+    	{
+    		doc= DocumentHelper.createDocument();  
+        	if(xslFile!=null)
+        	{doc.addProcessingInstruction("xml-stylesheet", "type='text/xsl' href='"+xslFile+"'");}
+        	root=doc.addElement("list");
+        	
+    	}else
+    	{
+    		doc=reader.read(xmlFile);
+    		root=doc.getRootElement();//list
+    	}
+    	@SuppressWarnings("unchecked")
+    	Iterator<Element> it = root.elementIterator("forms");
+    	boolean flag=false;
+        while (it.hasNext()) {  
+            Element elementForms = (Element) it.next(); 
+            if(identifer.equalsIgnoreCase(elementForms.attributeValue("id")))
+            {
+            	//root.remove(elementForms);
+            	Element formElement=elementForms.addElement("form");
+            	XmlUtil.fromBeanToElement(formElement,form);
+            	flag=true;
+            	break;
+            }
+            
+        }
+    	if(!flag)
+    	{
+    		Element identifierElement=root.addElement("forms");
+        	identifierElement.addAttribute("id", identifer);
+        	Element formElement=identifierElement.addElement("form");
+    		XmlUtil.fromBeanToElement(formElement,form);
+    	}
+    	writeDocumentToXml(doc,xmlFileStr);
+    	
+    }catch(Exception e)
+    {
+    	e.printStackTrace();
+    } 
+}
 }

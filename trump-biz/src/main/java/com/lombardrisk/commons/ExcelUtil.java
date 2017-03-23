@@ -1332,10 +1332,20 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String
 		Sheet sheet = null;
 		if(sheetName!=null && !sheetName.trim().equals(""))
 		{
-			try
+			int i=1;
+			String sheetNameVar=sheetName;
+			while(sheet==null)
 			{
-				sheet=xwb.createSheet(sheetName);
-			}catch(Exception e){sheet = xwb.createSheet();}
+				try
+				{
+					sheet=xwb.createSheet(sheetName);
+				}catch(Exception e)
+				{
+					sheetName = sheetNameVar+String.valueOf(i);
+					i++;
+					continue;
+				}
+			}
 		}
 		if(sheet==null)
 		{sheet = xwb.createSheet();}

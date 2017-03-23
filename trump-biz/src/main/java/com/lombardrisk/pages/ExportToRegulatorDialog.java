@@ -209,7 +209,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	private Boolean clickExport() throws Exception
 	{
 		Boolean flag=false;
-
+		Boolean messageFlag=false;
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
 			if(element("td.exportButton",title).isEnabled())
@@ -224,7 +224,13 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					//TestCaseManager.getTestCase().setDefaultDownloadFileCharset(StandardCharsets.UTF_8);
 					element("td.exportButton",title).click();
 					loadingDlg();
-					if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+					
+					if(element("abstract.message").isPresent())
+					{
+						logger.error(element("abstract.message").getInnerText());
+						waitThat("abstract.message").toBeInvisible();
+						messageFlag=true;
+					}
 					TestCaseManager.getTestCase().stopTransaction();
 					
 				}
@@ -232,7 +238,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				{
 					element("td.exportButton",title).click();
 					loadingDlg();
-					if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+					if(element("abstract.message").isPresent()){logger.error(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();messageFlag=true;}
 				}
 				//click log buttkon
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
@@ -240,23 +246,23 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					element("td.logButton").click();
 					loadingDlg();
 				}
-				
+				if(messageFlag){return flag;}
 				String a=getLatestFile(downloadFolder);
 				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
 				if(b.equalsIgnoreCase(LOCKNAME))
 				{
-					logger.error("not find download file");
+					logger.error("error: not find download file.");
 				}else
 				{
 					flag=true;
 				}	
 			}else
 			{
-				logger.error("export button is disable");
+				logger.error("error: export button is disable.");
 			}
 		}else
 		{
-			logger.error("no records found");
+			logger.error("error: no records found.");
 		}
 		return flag;
 	}
@@ -270,7 +276,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	private Boolean clickExportToDataSchedule() throws Exception
 	{
 		Boolean flag=false;
-
+		Boolean messageFlag=false;
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
 			if(element("td.exportButton",title).isEnabled())
@@ -279,7 +285,12 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				
 				element("td.exportButton",title).click();
 				loadingDlg();
-				if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+				if(element("abstract.message").isPresent())
+				{
+					logger.info(element("abstract.message").getInnerText());
+					waitThat("abstract.message").toBeInvisible(); 
+					messageFlag=true;
+				}
 				
 				//click log button
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
@@ -287,6 +298,8 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					element("td.logButton").click();
 					loadingDlg();
 				}
+				
+				if(messageFlag){return flag;}
 				
 				String jobRunType="ExportJob";
 				String prefixOfRegulator=DBInfo.getRegulatorPrefix(form.getRegulator());
@@ -313,18 +326,18 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
 				if(b.equalsIgnoreCase(LOCKNAME))
 				{
-					logger.error("not find download file");
+					logger.error("error: not find download file.");
 				}else
 				{
 					flag=true;
 				}	
 			}else
 			{
-				logger.error("export button is disable");
+				logger.error("error: export button is disable.");
 			}
 		}else
 		{
-			logger.error("no records found");
+			logger.error("error: no records found.");
 		}
 		return flag;
 	}
@@ -355,7 +368,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			logger.info("stop downloading export file from server to local.");
 		}else
 		{
-			logger.info("no downloading export file in server.");
+			logger.error("error: no downloading export file in server.");
 		}
 		
 	}
