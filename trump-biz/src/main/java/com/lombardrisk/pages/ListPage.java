@@ -2,10 +2,12 @@ package com.lombardrisk.pages;
 
 import java.util.List;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
-import com.lombardrisk.test.DBInfo;
+import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 import com.lombardrisk.test.pojo.Form;
 
 
@@ -15,7 +17,6 @@ import com.lombardrisk.test.pojo.Form;
  */
 public class ListPage extends AbstractPage implements IExportTo
 {
-	//TODO
 	public String getLoginUser() throws Exception
 	{
 		String loginUser=element("fipf.lblUserName").getInnerText();
@@ -28,10 +29,9 @@ public class ListPage extends AbstractPage implements IExportTo
 	 * 
 	 * @param webDriverWrapper
 	 */
-	public ListPage(IWebDriverWrapper webDriverWrapper)
+	public ListPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
-		super(webDriverWrapper);
-
+		super(webDriverWrapper,testDataManager);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class ListPage extends AbstractPage implements IExportTo
 					if(element.isDisplayed())
 					{
 						title=element.getInnerText();
-						td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
+						td=new ExportToRegulatorDialog(getWebDriverWrapper(),getTestDataManager(),form,title);
 						break;
 					}
 				}
@@ -138,7 +138,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			element("fipf.btnPreferences").click();
 			loadingDlg();
 		}
-		return new PreferencePage(getWebDriverWrapper());
+		return new PreferencePage(getWebDriverWrapper(),getTestDataManager());
 	}
 	
 	
@@ -203,7 +203,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			waitThat("filf.createNewEmptyLink").toBeVisible();
 			element("filf.createNewEmptyLink").click();
 			loadingDlg();
-			createNewReturn=new CreateNewReturnDialog(getWebDriverWrapper(),form);
+			createNewReturn=new CreateNewReturnDialog(getWebDriverWrapper(),getTestDataManager(),form);
 		}
 	
 		return createNewReturn;
@@ -228,7 +228,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			{
 				element("filf.retrieve").click();
 				loadingDlg();
-				dialog=new RetrieveDialog(getWebDriverWrapper(),form);
+				dialog=new RetrieveDialog(getWebDriverWrapper(),getTestDataManager(),form);
 			}
 		}
 	
@@ -254,7 +254,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			{
 				element("filf.compute").click();
 				loadingDlg();
-				dialog=new ComputeDialog(getWebDriverWrapper(),form);
+				dialog=new ComputeDialog(getWebDriverWrapper(),getTestDataManager(),form);
 			}
 		}
 	
@@ -282,7 +282,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			waitThat("filf.createNewFromExcelLink").toBeVisible();
 			element("filf.createNewFromExcelLink").click();
 			loadingDlg();
-			createNewReturn=new CreateNewReturnFromExcelDialog(getWebDriverWrapper(),form);
+			createNewReturn=new CreateNewReturnFromExcelDialog(getWebDriverWrapper(),getTestDataManager(),form);
 		}
 		
 		return createNewReturn;
@@ -367,7 +367,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			loadingDlg();
 			waitForPageLoaded();
 			waitThat("fipf.form").toBeVisible();
-			fip=new FormInstancePage(getWebDriverWrapper(),form,userName);
+			fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form,userName);
 			if(!fip.isThisPage())
 			{
 				fip=null;
@@ -407,8 +407,10 @@ public class ListPage extends AbstractPage implements IExportTo
 		{
 			if(element("hm.login").isPresent() && element("hm.login").isDisplayed())
 			{
-				HomePage hp=new HomePage(getWebDriverWrapper());
-				listPage=hp.loginAs(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
+				HomePage hp=new HomePage(getWebDriverWrapper(),getTestDataManager());//TODO
+				String loginUserName=((TestDataManager)getTestDataManager()).getDBInfo().getApplicationServer_UserName();
+				String loginUserPassword=((TestDataManager)getTestDataManager()).getDBInfo().getApplicationServer_UserPassword();
+				listPage=hp.loginAs(loginUserName, loginUserPassword);
 			}
 		}
 		if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
@@ -465,7 +467,7 @@ public class ListPage extends AbstractPage implements IExportTo
 		JobManagerPage jmp=null;
 		element("filf.jobManager").click();
 		loadingDlg();
-		jmp=new JobManagerPage(getWebDriverWrapper());
+		jmp=new JobManagerPage(getWebDriverWrapper(),getTestDataManager());
 		if(!jmp.isThisPage())
 		{
 			jmp=null;
@@ -565,7 +567,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			element("fipf.btnLogout").click();
 			loadingDlg();
 		}
-		return new HomePage(getWebDriverWrapper());
+		return new HomePage(getWebDriverWrapper(),getTestDataManager());
 	}
 	
 	

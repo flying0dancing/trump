@@ -19,39 +19,44 @@ import java.util.regex.Pattern;
 
 
 
+
+
+
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
-import com.lombardrisk.test.DBInfo;
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
+import com.lombardrisk.test.TestDataManager;
 import com.lombardrisk.test.pojo.*;
 
 public class FormInstancePage extends AbstractPage implements IComFolder,IExecFuncFolder,IExportTo
 {
 	private Form form;
 	private String loginUser;
-	
-	public FormInstancePage(IWebDriverWrapper webDriverWrapper)
+	private DBInfo dBInfo=((TestDataManager)getTestDataManager()).getDBInfo();
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 	}
 	
-	public FormInstancePage(IWebDriverWrapper webDriverWrapper, Form form)
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 	}
 	
-	public FormInstancePage(IWebDriverWrapper webDriverWrapper, Form form,String loginUser)
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form,String loginUser)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 		this.setLoginUser(loginUser);
 	}
+	
 	
 	public String getLoginUser() {
 		return loginUser;
@@ -92,7 +97,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					String instanceCode=instanceLabel;
 					if(!instanceLabel.equals("1"))
 					{
-						instanceCode=DBInfo.getInstance(regulator, formName, form.getVersion().substring(1),pageName,instanceLabel,DBInfo.InstanceType.LABEL);
+						instanceCode=DBInfo.getInstance(dBInfo.getConnectedDB(),regulator, formName, form.getVersion().substring(1),pageName,instanceLabel,DBInfo.InstanceType.LABEL);
 						if(instanceCode.equals("-1")){instanceCode=instanceLabel;}
 					}
 					
@@ -666,7 +671,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		if (regulator!=null && formName!=null && formVersion!=null && pageName != null)
 		{
 			if(instanceCode == null || instanceCode.equals("")){instanceCode="1";}
-			instanceLabel=DBInfo.getInstance(regulator, formName, formVersion,pageName,instanceCode,DBInfo.InstanceType.CODE);
+			instanceLabel=DBInfo.getInstance(dBInfo.getConnectedDB(),regulator, formName, formVersion,pageName,instanceCode,DBInfo.InstanceType.CODE);
 			if(instanceLabel==null)
 			{
 				logger.info("error: not find instance label in DB with code["+instanceCode+"]");
@@ -695,7 +700,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	{
 		String result=null;
 		if(rowId!=null && rowId.trim().equals("")){rowId=null;}
-		List<String> pageNames=DBInfo.getPageName(regulator, formName, formVersion, cellName, rowId);
+		List<String> pageNames=DBInfo.getPageName(dBInfo.getConnectedDB(),regulator, formName, formVersion, cellName, rowId);
 		for(String pageName: pageNames)
 		{
 			String pageNameT=selectPage(pageName);
@@ -808,7 +813,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				waitThat("fipf.importAdjustLog").toBeVisible();
 				element("fipf.importAdjustLog").click();
 				loadingDlg();
-				importFileDlg=new ImportFileFormDialog(getWebDriverWrapper(),form);
+				importFileDlg=new ImportFileFormDialog(getWebDriverWrapper(),getTestDataManager(),form);
 				if(!importFileDlg.isThisPage())
 				{
 					importFileDlg=null;
@@ -1068,7 +1073,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				if(element.isDisplayed())
 				{
 					title=element.getInnerText();
-					td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
+					td=new ExportToRegulatorDialog(getWebDriverWrapper(),getTestDataManager(),form,title);
 					break;
 				}
 			}
@@ -1098,7 +1103,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		loadingDlg();
 		if(element("fidf.bottomPage").isDisplayed())
 		{
-			fibp=new FormInstanceBottomPage(getWebDriverWrapper(),form);
+			fibp=new FormInstanceBottomPage(getWebDriverWrapper(),getTestDataManager(),form);
 		}
 		
 		return fibp;
@@ -1237,16 +1242,16 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			if(checkWorkflowInDB().equalsIgnoreCase("ATTESTED"))
 			{
 				//returnFlag=true;
-				if(!getLoginUser().equalsIgnoreCase(DBInfo.getApplicationServer_UserName()))
+				if(!getLoginUser().equalsIgnoreCase(dBInfo.getApplicationServer_UserName()))
 				{
 					this.closeThisPage();
-					lp=new ListPage(getWebDriverWrapper());
+					lp=new ListPage(getWebDriverWrapper(),getTestDataManager());
 					if(lp.isThisPage())
 					{
 						hp=lp.logout();
 						if(hp.isThisPage())
 						{
-							lp=hp.login(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
+							lp=hp.login(dBInfo.getApplicationServer_UserName(), dBInfo.getApplicationServer_UserPassword());
 							if(lp==null)
 							{
 								logger.error("error: cannot login home page.");
@@ -1283,7 +1288,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				if(getLoginUser().equalsIgnoreCase(createdUser))
 				{
 					this.closeThisPage();
-					lp=new ListPage(getWebDriverWrapper());
+					lp=new ListPage(getWebDriverWrapper(),getTestDataManager());
 					if(lp.isThisPage())
 					{
 						hp=lp.logout();

@@ -1,14 +1,15 @@
 package com.lombardrisk.pages;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
 import com.lombardrisk.test.pojo.Form;
 
 public class CreateNewReturnDialog extends AbstractPage implements IReturnDialog{
 	private Form form;
-	public CreateNewReturnDialog(IWebDriverWrapper webDriverWrapper, Form form)
+	public CreateNewReturnDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 	}
 	
@@ -120,7 +121,7 @@ public FormInstancePage create() throws Exception
 	if(flag)
 	{
 		
-		fip=new FormInstancePage(getWebDriverWrapper(),form);
+		fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form);
 		if(!fip.isThisPage())
 		{
 			fip=null;
@@ -162,7 +163,7 @@ public FormInstancePage clickOK() throws Exception
 	if(flag)
 	{
 		
-		fip=new FormInstancePage(getWebDriverWrapper(),form);
+		fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form);
 		if(!fip.isThisPage())
 		{
 			fip=null;

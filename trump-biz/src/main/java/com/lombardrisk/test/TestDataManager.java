@@ -6,20 +6,20 @@ import java.util.List;
 
 import org.yiwan.webcore.test.ITestDataManager;
 
+import com.lombardrisk.test.pojo.DBInfo;
 import com.lombardrisk.test.pojo.Form;
+import com.lombardrisk.test.pojo.ServerInfo;
 
 
 public class TestDataManager implements ITestDataManager{
 	//private final static Logger logger = LoggerFactory.getLogger(TestDataManager.class);
 	private HashMap<String,List<Form>> formsMap;
-
-	public TestDataManager() {
-		formsMap=new HashMap<String,List<Form>>();
-    }
-	
+    private DBInfo dBInfo;
+	private ServerInfo serverInfo;
 	public TestDataManager(int indexAppServer,  int indexDBServer,  int indexToolsetDBServer) {
 		formsMap=new HashMap<String,List<Form>>();
-		DBInfo.setDBInfo(indexAppServer, indexDBServer, indexToolsetDBServer);
+		setDBInfo(new DBInfo(indexAppServer, indexDBServer, indexToolsetDBServer));
+		setServerInfo(new ServerInfo(getDBInfo().getApplicationServer_Key()));
     }
 	public HashMap<String,List<Form>> getFormsMap() {
 		return formsMap;
@@ -39,6 +39,20 @@ public class TestDataManager implements ITestDataManager{
 		}
 		formsVal.add(form);
 		formsMap.put(key, formsVal);
+	}
+
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
+	}
+	public ServerInfo getServerInfo() {
+		return serverInfo;
+	}
+	public void setServerInfo(ServerInfo serverInfo) {
+		this.serverInfo = serverInfo;
 	}
 
 }

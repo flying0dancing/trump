@@ -2,6 +2,7 @@ package com.lombardrisk.pages;
 
 import java.util.Date;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
@@ -16,9 +17,9 @@ public class JobManagerPage extends AbstractPage
 	 * 
 	 * @param webDriverWrapper
 	 */
-	public JobManagerPage(IWebDriverWrapper webDriverWrapper)
+	public JobManagerPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 	}
 
 	

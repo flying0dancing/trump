@@ -2,10 +2,11 @@ package com.lombardrisk.pages;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
-import com.lombardrisk.test.DBInfo;
+import com.lombardrisk.test.pojo.DBInfo;
 
 /**
  * Created by Kevin Ling on 2/16/15. Refactored by Leo Tu on 1/29/16
@@ -18,9 +19,9 @@ public class HomePage extends AbstractPage
 	{
 		return loginUser;
 	}
-	public HomePage(IWebDriverWrapper webDriverWrapper)
+	public HomePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 	}
 	
 	public ListPage logon(String userName,String password) throws Exception
@@ -71,14 +72,14 @@ public class HomePage extends AbstractPage
 		}
 		loadingDlg();
 		waitForPageLoaded();
-		return new ListPage(getWebDriverWrapper());
+		return new ListPage(getWebDriverWrapper(),getTestDataManager());
 	}
 
 	public HomePage submitLoginExpectingFailure() throws Exception
 	{
 		element("hm.login").click();
 		loadingDlg();
-		return new HomePage(getWebDriverWrapper());
+		return new HomePage(getWebDriverWrapper(),getTestDataManager());
 	}
 
 	public ListPage loginAs(String userName, String password) throws Exception

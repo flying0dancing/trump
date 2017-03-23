@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.testng.Assert;
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -12,7 +13,8 @@ import org.yiwan.webcore.web.PageBase;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
-import com.lombardrisk.test.DBInfo;
+import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +38,7 @@ public abstract class AbstractPage extends PageBase
 	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());//old one
 	protected final static String LOCKNAME="TP.lock";
 	protected String downloadFolder;
+	private ITestDataManager testDataManager;
 	public enum Month
 	{
 		JANUARY("Jan",1),FEBRUARY("Feb",2),MARCH("Mar",3),APRIL("Apr",4),MAY("May",5),JUNE("Jun",6),JULY("Jul",7),AUGUST("Aug",8),SEPTEMBER("Sep",9),OCTOBER("Oct",10),NOVEMBER("Nov",11),DECEMBER("Dec",12);
@@ -69,9 +72,10 @@ public abstract class AbstractPage extends PageBase
 	 * 
 	 * @param webDriverWrapper
 	 */
-	public AbstractPage(IWebDriverWrapper webDriverWrapper)
+	public AbstractPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
 		super(webDriverWrapper);
+		this.setTestDataManager(testDataManager);
 		if(PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
 			/*downloadFolder=new File(PropHelper.DOWNLOAD_FOLDER).getAbsolutePath();
@@ -931,10 +935,7 @@ public abstract class AbstractPage extends PageBase
 	
 	protected static String getFormat()
 	{
-		String format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
-		if(format==null || format.trim().equals("")){
-			format=DBInfo.getLanguage();
-		}
+		String format=PropHelper.getProperty("Regional.language")==null?"en_US":PropHelper.getProperty("Regional.language").trim();
 		return format;
 	}
 	
@@ -950,5 +951,13 @@ public abstract class AbstractPage extends PageBase
 			logger.info("error: transform String to Date failed.["+e.getMessage()+"]");
 		}
 		return date;
+	}
+
+	public ITestDataManager getTestDataManager() {
+		return testDataManager;
+	}
+
+	public void setTestDataManager(ITestDataManager testDataManager) {
+		this.testDataManager = testDataManager;
 	}
 }

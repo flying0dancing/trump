@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.yiwan.webcore.test.FileFormat;
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -11,21 +12,24 @@ import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
 import com.lombardrisk.commons.JschUtil;
-import com.lombardrisk.test.DBInfo;
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
+import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 import com.lombardrisk.test.pojo.Form;
 import com.lombardrisk.test.pojo.ServerInfo;
 
 public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
 	private Form form;
 	private String title;
-	
-	public ExportToRegulatorDialog(IWebDriverWrapper webDriverWrapper, Form form,String title) {
-		super(webDriverWrapper);
+	private DBInfo dBInfo;
+	private ServerInfo serverInfo;
+	public ExportToRegulatorDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form,String title) {
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 		this.title=title;
-		
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
+		this.setServerInfo(((TestDataManager)getTestDataManager()).getServerInfo());
 	}
 	/**
 	 * if this page is this page, return true, others return false.
@@ -267,7 +271,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		return flag;
 	}
 	
-	//TODO debugging
+
 	/**
 	 * click export button, return true if export without errors, others return false.
 	 * @author kun shen
@@ -305,7 +309,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				String prefixOfRegulator=DBInfo.getRegulatorPrefix(form.getRegulator());
 				String jobName=prefixOfRegulator+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
 				
-				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper());
+				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());
 				lockDownloadDir(downloadFolder);//relock it after new jobResultDialog
 				String status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
 				jrd=null;
@@ -316,7 +320,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				{
 					_exportFileLoation.click();
 					loadingDlg();
-					ExportedFileLocationDialog efld=new ExportedFileLocationDialog(getWebDriverWrapper());
+					ExportedFileLocationDialog efld=new ExportedFileLocationDialog(getWebDriverWrapper(),getTestDataManager());
 					downloadFileName_Server=efld.exportedFileName();
 				}
 				
@@ -346,7 +350,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	{
 		logger.info("start downloading export file from server to local.");
 		String statusTypeL=statusType.toLowerCase();
-		ServerInfo serverInfo=new ServerInfo();
+		ServerInfo serverInfo=new ServerInfo(getDBInfo().getApplicationServer_Key());
 		String processDate=uniformDate(form.getProcessDate(),"YYYYMMDD");
 		String downloadFolder_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/";
 		if(statusTypeL.startsWith("fail"))
@@ -371,6 +375,18 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			logger.error("error: no downloading export file in server.");
 		}
 		
+	}
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
+	}
+	public ServerInfo getServerInfo() {
+		return serverInfo;
+	}
+	public void setServerInfo(ServerInfo serverInfo) {
+		this.serverInfo = serverInfo;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.lombardrisk.pages;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
 
@@ -9,9 +10,9 @@ import org.yiwan.webcore.web.IWebDriverWrapper;
 public class PreferencePage extends AbstractPage
 {
 	
-	public PreferencePage(IWebDriverWrapper webDriverWrapper)
+	public PreferencePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 	}
 	
 	protected void saveSetting() throws Exception

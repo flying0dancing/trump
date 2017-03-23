@@ -29,6 +29,7 @@ import com.lombardrisk.commons.ExcelUtil;
 import com.lombardrisk.commons.FileUtil;
 import com.lombardrisk.pages.HomePage;
 import com.lombardrisk.pages.ListPage;
+import com.lombardrisk.test.pojo.DBInfo;
 import com.lombardrisk.test.pojo.Form;
 
 
@@ -40,7 +41,7 @@ public class TestManager extends TestBase implements IComFolder {
 	private  int indexToolsetDBServer;
 	private static long startSuiteTime;
 	private String logName;
-
+	private DBInfo dBInfo;
 	public ListPage getListPage()
 	{
 		return listPage;
@@ -129,8 +130,8 @@ public class TestManager extends TestBase implements IComFolder {
 		  setUpTest();
 		  TestCaseManager.offerTestEnvironment(getTestEnvironment());// add this for release testenvironment
 		  super.setTestDataManager(new TestDataManager(indexAppServer, indexDBServer, indexToolsetDBServer));
-		  
-		  logger.info("Database Language:"+DBInfo.getLanguage());
+		  setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
+		  logger.info("Database Language:"+DBInfo.getLanguage(getDBInfo().getApplicationServer_UserName()));
 		  List<String> regulators=DBInfo.getRegulatorDescription();
 		  int copyCount=0;
 		  logger.info("copy folders(start)");
@@ -161,13 +162,13 @@ public class TestManager extends TestBase implements IComFolder {
 		  }
 		  logger.info("copy folders(done)");
 		  
-		  String server_Url=DBInfo.getApplicationServer_Url();
+		  String server_Url=getDBInfo().getApplicationServer_Url();
 		  getWebDriverWrapper().navigate().to(server_Url);
 		  report(Helper.getTestReportStyle(server_Url, "open test server url ["+server_Url+"]"));
-		   HomePage homePage=new HomePage(getWebDriverWrapper());
+		   HomePage homePage=new HomePage(getWebDriverWrapper(),getTestDataManager());
 			if(homePage.isThisPage())
 			{
-				listPage=homePage.loginAs(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
+				listPage=homePage.loginAs(getDBInfo().getApplicationServer_UserName(), getDBInfo().getApplicationServer_UserPassword());
 			}
 			else
 			{
@@ -224,7 +225,7 @@ public class TestManager extends TestBase implements IComFolder {
 	  String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
 	  if(scenarioSheet!=null && (resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls")) )
 	  {identifier.append("["+scenarioSheet+"]");}
-	  identifier.append("-"+DBInfo.getApplicationServer_Url().toLowerCase()+"-log:"+getLogName());
+	  identifier.append("-"+getDBInfo().getApplicationServer_Url().toLowerCase()+"-log:"+getLogName());
 	  //Dom4jUtil.writeFormsToXml(identifier.toString(),FormsDataProvider.getForms(),TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xml","formsTotal.xsl");
 	  
 	  Dom4jUtil.writeFormToXml(identifier.toString(),form,TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xml","formsTotal.xsl");
@@ -323,5 +324,13 @@ public class TestManager extends TestBase implements IComFolder {
     	 getWebDriverWrapper().alert().accept();
      }
  }
+
+public DBInfo getDBInfo() {
+	return dBInfo;
+}
+
+public void setDBInfo(DBInfo dBInfo) {
+	this.dBInfo = dBInfo;
+}
 
 }

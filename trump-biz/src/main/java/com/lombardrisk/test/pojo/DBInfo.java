@@ -1,4 +1,4 @@
-package com.lombardrisk.test;
+package com.lombardrisk.test.pojo;
 
 
 import java.util.List;
@@ -6,40 +6,47 @@ import java.util.List;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.test.pojo.TestEnvironment;
 
+import com.lombardrisk.test.DBQuery;
+
 public class DBInfo{
 	public enum InstanceType{CODE,LABEL;}
-	private static String applicationServer_Name;
-	private static String applicationServer_UserName;
-	private static String applicationServer_Password;
-	private static String applicationServer_Url;
-	private static String applicationServer_Key;
+	private String applicationServer_Name;
+	private String applicationServer_UserName;
+	private String applicationServer_UserPassword;
+	private String applicationServer_Url;
+	private String applicationServer_Key;
 	
-	private static String databaseServer_Name;
-	private static String databaseServer_Driver;
-	private static String databaseServer_host;
-	private static String databaseServer_Schema;
-	private static String databaseServer_UserName;
-	private static String databaseServer_Password;
+	private String databaseServer_Name;
+	private String databaseServer_Driver;
+	private String databaseServer_host;
+	private String databaseServer_Schema;
+	private String databaseServer_UserName;
+	private String databaseServer_UserPassword;
 	
-	private static String toolSetDatabaseServer_Name;
-	private static String toolSetDatabaseServer_Driver;
-	private static String toolSetDatabaseServer_host;
-	private static String toolSetDatabaseServer_Schema;
-	private static String toolSetDatabaseServer_UserName;
-	private static String toolSetDatabaseServer_Password;
+	private String toolSetDatabaseServer_Name;
+	private String toolSetDatabaseServer_Driver;
+	private String toolSetDatabaseServer_host;
+	private String toolSetDatabaseServer_Schema;
+	private String toolSetDatabaseServer_UserName;
+	private String toolSetDatabaseServer_UserPassword;
 	
-	private static String connectedDB;
-	private static String ip_ar;
-	private static String ip_toolset;
-	private static String sid_ar;
-	private static String sid_toolset;
-	private static TestEnvironment testEnv;
-	private static int indexAppServer;
-	private static int indexDBServer;
-	private static int indexToolsetDBServer;
-	protected DBInfo(){}
+	private String connectedDB;
+	private String ip_ar;
+	private String ip_toolset;
+	private String sid_ar;
+	private String sid_toolset;
+	private TestEnvironment testEnv;
+	private int indexAppServer;
+	private int indexDBServer;
+	private int indexToolsetDBServer;
+	private DBQuery dBQuery;
+
+	public DBInfo(int _indexAppServer, int _indexDBServer,int _indexToolsetDBServer)
+	{
+		setDBInfo(_indexAppServer, _indexDBServer,_indexToolsetDBServer);
+	}
 	
-	public static void setDBInfo(int _indexAppServer, int _indexDBServer,int _indexToolsetDBServer)
+	public void setDBInfo(int _indexAppServer, int _indexDBServer,int _indexToolsetDBServer)
 	{
 		try
 		{
@@ -60,7 +67,7 @@ public class DBInfo{
 			//indexAppServer=TestManager.getIndexAppServer();
 			applicationServer_Name=testEnv.getApplicationServer(indexAppServer).getName();
 			applicationServer_UserName=testEnv.getApplicationServer(indexAppServer).getUsername();
-			applicationServer_Password=testEnv.getApplicationServer(indexAppServer).getPassword();
+			applicationServer_UserPassword=testEnv.getApplicationServer(indexAppServer).getPassword();
 			applicationServer_Url=testEnv.getApplicationServer(indexAppServer).getUrl();
 			applicationServer_Key=testEnv.getApplicationServer(indexAppServer).getKey();
 			//indexDBServer=TestManager.getIndexDBServer();
@@ -69,7 +76,7 @@ public class DBInfo{
 			databaseServer_host=testEnv.getDatabaseServer(indexDBServer).getHost();
 			databaseServer_Schema=testEnv.getDatabaseServer(indexDBServer).getSchema();
 			databaseServer_UserName=testEnv.getDatabaseServer(indexDBServer).getUsername();
-			databaseServer_Password=testEnv.getDatabaseServer(indexDBServer).getPassword();
+			databaseServer_UserPassword=testEnv.getDatabaseServer(indexDBServer).getPassword();
 			//indexToolsetDBServer=TestManager.getIndexToolsetDBServer();
 			if(countOfDBServers>1 && indexToolsetDBServer>=0 && indexDBServer!=indexToolsetDBServer && indexToolsetDBServer<countOfDBServers && testEnv.getDatabaseServer(indexToolsetDBServer)!=null && testEnv.getDatabaseServer(indexToolsetDBServer).getName().toLowerCase().contains("toolset"))
 			{
@@ -78,7 +85,7 @@ public class DBInfo{
 				toolSetDatabaseServer_host=testEnv.getDatabaseServer(indexToolsetDBServer).getHost();
 				toolSetDatabaseServer_Schema=testEnv.getDatabaseServer(indexToolsetDBServer).getSchema();
 				toolSetDatabaseServer_UserName=testEnv.getDatabaseServer(indexToolsetDBServer).getUsername();
-				toolSetDatabaseServer_Password=testEnv.getDatabaseServer(indexToolsetDBServer).getPassword();
+				toolSetDatabaseServer_UserPassword=testEnv.getDatabaseServer(indexToolsetDBServer).getPassword();
 			}
 			if(testEnv!=null)
 			{
@@ -101,7 +108,7 @@ public class DBInfo{
 				ip_toolset=str[0];
 				sid_toolset=str[1];
 			}
-			DBQuery.setDBQuery();
+			setDBQuery(new DBQuery(this));
 			System.out.println("used applicationServer_Url: "+applicationServer_Url);
 			System.out.println("used indexAppServer(id): "+indexAppServer+" indexDBServer(id):"+indexDBServer+" indexToolsetDBServer(id):"+indexToolsetDBServer);
 			
@@ -115,66 +122,66 @@ public class DBInfo{
 	}
 	
 	
-	public static String getConnectedDB()
+	public String getConnectedDB()
 	{return connectedDB;}
-	public static String getIp_ar()
+	public String getIp_ar()
 	{return ip_ar;}
-	public static String getSid_ar()
+	public String getSid_ar()
 	{return sid_ar;}
-	public static String getIp_toolset()
+	public String getIp_toolset()
 	{return ip_toolset;}
-	public static String getSid_toolset()
+	public String getSid_toolset()
 	{return sid_toolset;}
-	public static String getApplicationServer_Name()
+	public String getApplicationServer_Name()
 	{return applicationServer_Name;}
 	
-	public static String getApplicationServer_UserName()
+	public String getApplicationServer_UserName()
 	{return applicationServer_UserName;}
 
-	public static String getApplicationServer_Password()
-	{return applicationServer_Password;}
+	public String getApplicationServer_UserPassword()
+	{return applicationServer_UserPassword;}
 	
-	public static String getApplicationServer_Url()
+	public String getApplicationServer_Url()
 	{return applicationServer_Url;}
 	
-	public static String getApplicationServer_Key() 
+	public String getApplicationServer_Key() 
 	{	return applicationServer_Key;}
 	
-	public static String getDatabaseServer_Name()
+	public String getDatabaseServer_Name()
 	{return databaseServer_Name;}
 	
-	public static String getDatabaseServer_Driver()
+	public String getDatabaseServer_Driver()
 	{return databaseServer_Driver;}
 	
-	public static String getDatabaseServer_host()
+	public String getDatabaseServer_host()
 	{return databaseServer_host;}
 	
-	public static String getDatabaseServer_Schema()
+	public String getDatabaseServer_Schema()
 	{return databaseServer_Schema;}
 	
-	public static String getDatabaseServer_UserName()
+	public String getDatabaseServer_UserName()
 	{return databaseServer_UserName;}
 	
-	public static String getDatabaseServer_Password()
-	{return databaseServer_Password;}
+	public String getDatabaseServer_UserPassword()
+	{return databaseServer_UserPassword;}
 	
-	public static String getToolSetDB_Name()
+	public String getToolSetDB_Name()
 	{return toolSetDatabaseServer_Name;}
 	
-	public static String getToolSetDB_Driver()
+	public String getToolSetDB_Driver()
 	{return toolSetDatabaseServer_Driver;}
 	
-	public static String getToolSetDB_host()
+	public String getToolSetDB_host()
 	{return toolSetDatabaseServer_host;}
 	
-	public static String getToolSetDB_Schema()
+	public String getToolSetDB_Schema()
 	{return toolSetDatabaseServer_Schema;}
 	
-	public static String getToolSetDB_UserName()
+	public String getToolSetDB_UserName()
 	{return toolSetDatabaseServer_UserName;}
 	
-	public static String getToolSetDB_Password()
-	{return toolSetDatabaseServer_Password;}
+	public String getToolSetDB_UserPassword()
+	{return toolSetDatabaseServer_UserPassword;}
 	
 	/**
 	 * get regulator prefix for toolset
@@ -250,7 +257,7 @@ public class DBInfo{
 	 * @param extendCell null means previous cellName is not extendCell, not null means previous cellName is extendCell
 	 * @return
 	 */
-	public static List<String> getPageName(String regulator, String form, String version, String cellName, String extendCell)
+	public static List<String> getPageName(String connectedDB,String regulator, String form, String version, String cellName, String extendCell)
 	{
 		String SQL = "";
 		String refTable = "";
@@ -334,7 +341,7 @@ public class DBInfo{
 	 * @param instanceType CODE or LABEL identify previous parameter is instanceCode or instanceLabel
 	 * @return InstCode, if return -1 means not exists InstCode
 	 */
-	public static String getInstance(String regulator, String form, String version,String pageName,String instanceCodeOrLabel,InstanceType instanceType)
+	public static String getInstance(String connectedDB,String regulator, String form, String version,String pageName,String instanceCodeOrLabel,InstanceType instanceType)
 	{
 		String SQL="";
 		if (connectedDB.equalsIgnoreCase("ar"))
@@ -386,10 +393,10 @@ public class DBInfo{
  * the default userName is application server's username.
  * @return language
  */
-	public static String getLanguage()
+	/*public static String getLanguage(DBInfo dBInfo)
 	{
 		String language="";
-		String userName=applicationServer_UserName;
+		String userName=dBInfo.getApplicationServer_UserName();
 		// update user language
 		String SQL = "SELECT MAX(\"ID\") FROM \"USR_PREFERENCE\" WHERE lower(\"USER_ID\")='" + userName.toLowerCase() + "' and upper(\"PREFERENCE_NAME\")='LANGUAGE'";
 		
@@ -397,7 +404,7 @@ public class DBInfo{
 		SQL = "SELECT \"PREFERENCE_CODE\" FROM \"USR_PREFERENCE\" WHERE lower(\"USER_ID\")='" + userName.toLowerCase() + "' and \"ID\"=" + id;
 		language = DBQuery.queryRecord(SQL);
 		return language;
-	}
+	}*/
 	/***
 	 * get language from database
 	 * @param userName
@@ -413,6 +420,14 @@ public class DBInfo{
 		SQL = "SELECT \"PREFERENCE_CODE\" FROM \"USR_PREFERENCE\" WHERE lower(\"USER_ID\")='" + userName.toLowerCase() + "' and \"ID\"=" + id;
 		language = DBQuery.queryRecord(SQL);
 		return language;
+	}
+
+	public DBQuery getDBQuery() {
+		return dBQuery;
+	}
+
+	public void setDBQuery(DBQuery dBQuery) {
+		this.dBQuery = dBQuery;
 	}
 
 	
