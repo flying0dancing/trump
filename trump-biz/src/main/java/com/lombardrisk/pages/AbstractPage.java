@@ -215,7 +215,7 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected void loadingDlg(long timeout) throws Exception
 	{
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
 		waitThat().timeout(timeout);
 	}
@@ -641,7 +641,7 @@ public abstract class AbstractPage extends PageBase
 	{
 		Boolean flag=false;
 		if(it==null || it.trim().equals("")){return false;}
-		if (!element.getSelectedText().equals(it))
+		if (!element.getSelectedText().equalsIgnoreCase(it))
 		{
 			try{
 				element.selectByVisibleText(it.trim());

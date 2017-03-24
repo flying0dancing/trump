@@ -120,7 +120,7 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	{
 		Boolean flag=true;
 		clickLinkText(text);
-		loadingDlg();
+		loadingDlg(3000);
 		if(element("fidf.noRecordsFound").isDisplayed())
 		{
 			logger.error("error: no records found to export.");

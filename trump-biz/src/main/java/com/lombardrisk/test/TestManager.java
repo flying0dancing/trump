@@ -109,12 +109,12 @@ public class TestManager extends TestBase implements IComFolder {
 	
 	 @BeforeTest
 	  public void beforeTest(ITestContext context) {
-		 logger.info(context.getName() + " start testing!<br>");
+		 logger.info(context.getName() + " start testing!");
 	  }
 	  
 	  @AfterTest
 	  public void afterTest(ITestContext context) throws Exception {
-		 logger.info(context.getName() + " finish testing!<br>");
+		 logger.info(context.getName() + " finish testing!");
 	  }
 	  
 	  @BeforeClass(dependsOnMethods="beforeClass")
@@ -155,7 +155,6 @@ public class TestManager extends TestBase implements IComFolder {
 			  }
 			  
 		  }
-		  logger.info("copyCount:"+copyCount);
 		  if(copyCount==0)
 		  {
 			  FileUtil.copyDirectory(new File(SOURCE_FOLDER).getAbsolutePath(), new File(TARGET_FOLDER).getAbsolutePath());

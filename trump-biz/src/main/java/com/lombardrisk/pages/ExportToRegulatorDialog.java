@@ -31,6 +31,20 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 		this.setServerInfo(((TestDataManager)getTestDataManager()).getServerInfo());
 	}
+	
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
+	}
+	public ServerInfo getServerInfo() {
+		return serverInfo;
+	}
+	public void setServerInfo(ServerInfo serverInfo) {
+		this.serverInfo = serverInfo;
+	}
+	
 	/**
 	 * if this page is this page, return true, others return false.
 	 * @return
@@ -314,17 +328,15 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				String status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
 				jrd=null;
 				
-				String downloadFileName_Server=null;
 				IWebElementWrapper _exportFileLoation=element("filf.exportFileLoation", form.getEntity(),form.getName(),form.getVersion().substring(1),form.getProcessDate());
 				if(_exportFileLoation.isPresent() && _exportFileLoation.isDisplayed())
 				{
 					_exportFileLoation.click();
 					loadingDlg();
 					ExportedFileLocationDialog efld=new ExportedFileLocationDialog(getWebDriverWrapper(),getTestDataManager());
-					downloadFileName_Server=efld.exportedFileName();
+					String downloadFileName_Server=efld.exportedFileName();
+					getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server);
 				}
-				
-				getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server);
 							
 				String a=getLatestFile(downloadFolder);
 				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
@@ -375,18 +387,6 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			logger.error("error: no downloading export file in server.");
 		}
 		
-	}
-	public DBInfo getDBInfo() {
-		return dBInfo;
-	}
-	public void setDBInfo(DBInfo dBInfo) {
-		this.dBInfo = dBInfo;
-	}
-	public ServerInfo getServerInfo() {
-		return serverInfo;
-	}
-	public void setServerInfo(ServerInfo serverInfo) {
-		this.serverInfo = serverInfo;
 	}
 	
 }
