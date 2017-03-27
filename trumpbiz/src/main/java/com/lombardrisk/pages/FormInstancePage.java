@@ -19,43 +19,62 @@ import java.util.regex.Pattern;
 
 
 
+
+
+
+
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
-import com.lombardrisk.test.DBInfo;
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
+import com.lombardrisk.test.TestDataManager;
 import com.lombardrisk.test.pojo.*;
 
 public class FormInstancePage extends AbstractPage implements IComFolder,IExecFuncFolder,IExportTo
 {
 	private Form form;
 	private String loginUser;
-	
-	public FormInstancePage(IWebDriverWrapper webDriverWrapper)
+	private DBInfo dBInfo;
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 	
-	public FormInstancePage(IWebDriverWrapper webDriverWrapper, Form form)
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 	
-	public FormInstancePage(IWebDriverWrapper webDriverWrapper, Form form,String loginUser)
+	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form,String loginUser)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
-		this.loginUser=loginUser;
+		this.setLoginUser(loginUser);
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 	
-	public String getLoginUser()
-	{
+	
+	public String getLoginUser() {
 		return loginUser;
+	}
+
+	public void setLoginUser(String loginUser) {
+		this.loginUser = loginUser;
+	}
+	
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
 	}
 	
 	/**
@@ -89,7 +108,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					String instanceCode=instanceLabel;
 					if(!instanceLabel.equals("1"))
 					{
-						instanceCode=DBInfo.getInstance(regulator, formName, form.getVersion().substring(1),pageName,instanceLabel,DBInfo.InstanceType.LABEL);
+						instanceCode=getDBInfo().getInstance(dBInfo.getConnectedDB(),regulator, formName, form.getVersion().substring(1),pageName,instanceLabel,DBInfo.InstanceType.LABEL);
 						if(instanceCode.equals("-1")){instanceCode=instanceLabel;}
 					}
 					
@@ -97,13 +116,16 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					
 					File fileToWrite=new File(fileFullName);
 					if(!fileToWrite.exists()){fileToWrite.createNewFile();}
+					long begin=System.currentTimeMillis();
 					//get all normal cells
 					StringBuffer strBuffer=getNormalCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
-		    		
+		    		logger.info("getNormalCells used time[seconds]:"+(System.currentTimeMillis()-begin)/1000.00F);
+		    		begin=System.currentTimeMillis();
 					//get all extend grid cells
 		    		strBuffer=getExtendGridCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
+		    		logger.info("getExtendGridCells used time[seconds]:"+(System.currentTimeMillis()-begin)/1000.00F);
 		    		logger.info("save displayed values into file " + fileFullName);
 				}
 			}
@@ -134,30 +156,59 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
 	//get all normal cells
 	if(element("fipf.getCells").isPresent())	
 	{
-		List<IWebElementWrapper> elements=element("fipf.getCells").getAllMatchedElements();
+		String cellValue,checked;
+		String blankStr="";
+		String OneStr="1";
+		String ZeroStr="0";
+		//String NullStr="null";
+		/*List<IWebElementWrapper> elements=element("fipf.getCells").getAllMatchedElements();
 		for (IWebElementWrapper element:elements)
 		{
-    		 String cellValue=null;
-    		 String cellType=element.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("checkbox"))
-    		 {
-    			 String checked=element.getAttribute("checked");
-    			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
-    			 {
-    				 cellValue="1";
-    			 }else
-    			 {
-    				 cellValue="0";
-    			 }
-    		 }else if(cellType.equalsIgnoreCase("text"))
+			cellValue=blankStr;
+    		 cellType=element.getAttribute("type").trim();
+    		 if(cellType.equalsIgnoreCase("text"))
     		 {
     			 cellValue=element.getAttribute("value").trim();
+    			 cellValue=cellValue.equalsIgnoreCase(NullStr)?blankStr:cellValue;
+    		 } else if(cellType.equalsIgnoreCase("checkbox"))
+    		 {
+    			 checked=element.getAttribute("checked");
+    			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
+    			 {
+    				 cellValue=OneStr;
+    			 }else
+    			 {
+    				 cellValue=ZeroStr;
+    			 }
     		 }
-    		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
-    
-    		 strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
-    		 
+    		 strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator); 
+		}*/
+		List<IWebElementWrapper> elements=element("fipf.getCells_textNULL").getAllMatchedElements();
+		for (IWebElementWrapper element:elements)
+		{
+			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+blankStr+"\""+lineSeparator); 
 		}
+		
+		elements=element("fipf.getCells_textNotNULL").getAllMatchedElements();
+		for (IWebElementWrapper element:elements)
+		{
+			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+element.getAttribute("value").trim()+"\""+lineSeparator); 
+		}
+		
+		elements=element("fipf.getCells_checkbox").getAllMatchedElements();
+		for (IWebElementWrapper element:elements)
+		{
+			checked=element.getAttribute("checked");
+			if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
+			 {
+				 cellValue=OneStr;
+			 }else
+			 {
+				 cellValue=ZeroStr;
+			 }
+			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+		}
+		
 	}
 	return strBuffer;
 }
@@ -181,7 +232,10 @@ private StringBuffer getNormalCells(String instanceCode,String cellName) throws 
 		{
     		 String cellValue=null;
     		 String cellType=element.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("checkbox"))
+    		 if(cellType.equalsIgnoreCase("text"))
+    		 {
+    			 cellValue=element.getAttribute("value").trim();
+    		 } else if(cellType.equalsIgnoreCase("checkbox"))
     		 {
     			 String checked=element.getAttribute("checked");
     			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
@@ -191,9 +245,6 @@ private StringBuffer getNormalCells(String instanceCode,String cellName) throws 
     			 {
     				 cellValue="0";
     			 }
-    		 }else if(cellType.equalsIgnoreCase("text"))
-    		 {
-    			 cellValue=element.getAttribute("value").trim();
     		 }
     		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
     
@@ -264,41 +315,78 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 {
 	StringBuffer strBuffer=new StringBuffer();
 	String lineSeparator=System.getProperty("line.separator");
+	//next used in for(int row=0;row<gridRowCount;row++)
+	String data_ri,data_rk;
+	//next used in for(IWebElementWrapper gridCellElement:gridCellElements)
+	String id,cellName,cellValue,checked;
+	String blankStr="";
+	String OneStr="1";
+	String ZeroStr="0";
 	//print this grid tables's rows
 	//get ./tr
     List<IWebElementWrapper> gridRowElements=element("fipf.getGridTr",tbodyId).getAllMatchedElements();
     int gridRowCount=gridRowElements.size();
     for(int row=0;row<gridRowCount;row++)
     {
-    	String data_ri=gridRowElements.get(row).getAttribute("data-ri");
-    	String data_rk=gridRowElements.get(row).getAttribute("data-rk");
+    	data_ri=gridRowElements.get(row).getAttribute("data-ri");
+    	data_rk=gridRowElements.get(row).getAttribute("data-rk");
     	//get ./td/input
-    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	/*List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
     	for(IWebElementWrapper gridCellElement:gridCellElements)
     	 {
-    		 String id=gridCellElement.getAttribute("id");
-    		 String cellName=id.replace(gridPrefix+data_rk, "");
-    		 String cellValue=null;
-    		 String cellType=gridCellElement.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("checkbox"))
-    		 {
-    			 String checked=gridCellElement.getAttribute("checked").trim();
-    			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
-    			 {
-    				 cellValue="1";
-    			 }else
-    			 {
-    				 cellValue="0";
-    			 }
-    		 }else if(cellType.equalsIgnoreCase("text"))
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 cellValue=blankStr;
+    		 cellType=gridCellElement.getAttribute("type").trim();
+    		 if(cellType.equalsIgnoreCase("text"))
     		 {
     			 cellValue=gridCellElement.getAttribute("value").trim();
+    			 cellValue=cellValue.equalsIgnoreCase(NullStr)?blankStr:cellValue;
+    		 }else if(cellType.equalsIgnoreCase("checkbox"))
+    		 {
+    			 checked=gridCellElement.getAttribute("checked").trim();
+    			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
+    			 {
+    				 cellValue=OneStr;
+    			 }else
+    			 {
+    				 cellValue=ZeroStr;
+    			 }
     		 }
-    		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
-    		 //String cellreadonly=gridCellElement.getAttribute("readonly")==null?"false":"true" ;
     		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
-
+    	 }*/
+    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells_textNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+blankStr+"\""+lineSeparator);
     	 }
+    	
+    	gridCellElements=element("fipf.getGridCells_textNotNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+gridCellElement.getAttribute("value").trim()+"\""+lineSeparator);
+    	 }
+    	
+    	gridCellElements=element("fipf.getGridCells_checkbox",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	for(IWebElementWrapper gridCellElement:gridCellElements)
+    	 {
+    		 id=gridCellElement.getAttribute("id");
+    		 cellName=id.replace(gridPrefix+data_rk, "");
+    		 checked=gridCellElement.getAttribute("checked").trim();
+			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
+			 {
+				 cellValue=OneStr;
+			 }else
+			 {
+				 cellValue=ZeroStr;
+			 }
+    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+    	 }
+    	
     }
     return strBuffer;
 }
@@ -378,7 +466,10 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     	 {
     		 String cellValue=null;
     		 String cellType=gridCellElement.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("checkbox"))
+    		 if(cellType.equalsIgnoreCase("text"))
+    		 {
+    			 cellValue=gridCellElement.getAttribute("value").trim();
+    		 }else if(cellType.equalsIgnoreCase("checkbox"))
     		 {
     			 String checked=gridCellElement.getAttribute("checked").trim();
     			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
@@ -388,9 +479,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     			 {
     				 cellValue="0";
     			 }
-    		 }else if(cellType.equalsIgnoreCase("text"))
-    		 {
-    			 cellValue=gridCellElement.getAttribute("value").trim();
     		 }
     		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
     		 //String cellreadonly=gridCellElement.getAttribute("readonly")==null?"false":"true" ;
@@ -535,9 +623,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	{
 		if (element("fipf.form").isDisplayed())
 		{
-			/*if (element("fipf.message").isDisplayed())
-				waitThat("fipf.message").toBeInvisible();*/
-
 			if (element("abstract.message").isDisplayed())
 				waitThat("abstract.message").toBeInvisible();
 			if (element("fipf.importDlgmodal").isDisplayed())
@@ -588,24 +673,30 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 * @param formVersion
 	 * @param pageName
 	 * @param instanceCode
+	 * @return
 	 * @throws Exception
 	 */
-	protected void selectInstance(String regulator,String formName, String formVersion,String pageName,String instanceCode) throws Exception
+	protected String selectInstance(String regulator,String formName, String formVersion,String pageName,String instanceCode) throws Exception
 	{
+		String instanceLabel=null;
 		if (regulator!=null && formName!=null && formVersion!=null && pageName != null)
 		{
 			if(instanceCode == null || instanceCode.equals("")){instanceCode="1";}
-			String instanceLabel=DBInfo.getInstance(regulator, formName, formVersion,pageName,instanceCode,DBInfo.InstanceType.CODE);
-			if(instanceLabel.equals("-1"))
+			instanceLabel=getDBInfo().getInstance(dBInfo.getConnectedDB(),regulator, formName, formVersion,pageName,instanceCode,DBInfo.InstanceType.CODE);
+			if(instanceLabel==null)
+			{
+				logger.info("error: not find instance label in DB with code["+instanceCode+"]");
+			}else if(instanceLabel.equals("-1"))
 			{
 				instanceLabel=instanceCode;
 			}
+			
 			this.selectInstance(instanceLabel);
 		}
-
+		return instanceLabel;
 	}
 	/**
-	 * get cell display value in UI<br> return cell display value if success, return "fail:..."if fail.<br>
+	 * get cell display value in UI<br> return cell display value if success, return "fail:..."if fail, return null if not find.<br>
 	 * @author kun shen
 	 * @param regulator
 	 * @param formName
@@ -620,14 +711,15 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	{
 		String result=null;
 		if(rowId!=null && rowId.trim().equals("")){rowId=null;}
-		List<String> pageNames=DBInfo.getPageName(regulator, formName, formVersion, cellName, rowId);
+		List<String> pageNames=getDBInfo().getPageName(dBInfo.getConnectedDB(),regulator, formName, formVersion, cellName, rowId);
 		for(String pageName: pageNames)
 		{
 			String pageNameT=selectPage(pageName);
 			if(pageNameT!=null)
 			{
 				logger.info("current page[" + pageNameT+"]");
-				selectInstance(regulator,formName, formVersion, pageNameT,instanceCode);
+				String instanceLabel=selectInstance(regulator,formName, formVersion, pageNameT,instanceCode);
+				if(instanceLabel==null){break;}
 				if(rowId==null || rowId.trim().equals("")){rowId="";}
 				String tmp=cellName+","+rowId+","+instanceCode+",";
 				String strCells=null;
@@ -732,7 +824,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				waitThat("fipf.importAdjustLog").toBeVisible();
 				element("fipf.importAdjustLog").click();
 				loadingDlg();
-				importFileDlg=new ImportFileFormDialog(getWebDriverWrapper(),form);
+				importFileDlg=new ImportFileFormDialog(getWebDriverWrapper(),getTestDataManager(),form);
 				if(!importFileDlg.isThisPage())
 				{
 					importFileDlg=null;
@@ -894,7 +986,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
-			//if(element("fipf.message").isPresent()){flag=false;waitThat("fipf.message").toBeInvisible();}
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 			TestCaseManager.getTestCase().stopTransaction();
 			
@@ -904,20 +995,19 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
-			//if(element("fipf.message").isPresent()){flag=false;waitThat("fipf.message").toBeInvisible();}
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 		}
-		if(flag)
+		/*if(flag)
 		{
 			String a=getLatestFile(downloadFolder);
 			String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
 			if(b.equalsIgnoreCase(LOCKNAME))
 			{
-				logger.error("not find download file");
+				logger.error("error: not find download file.");
 				flag=false;
 			}
 		
-		}
+		}*/
 		return flag;
 	}
 	
@@ -994,7 +1084,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				if(element.isDisplayed())
 				{
 					title=element.getInnerText();
-					td=new ExportToRegulatorDialog(getWebDriverWrapper(),form,title);
+					td=new ExportToRegulatorDialog(getWebDriverWrapper(),getTestDataManager(),form,title);
 					break;
 				}
 			}
@@ -1024,7 +1114,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		loadingDlg();
 		if(element("fidf.bottomPage").isDisplayed())
 		{
-			fibp=new FormInstanceBottomPage(getWebDriverWrapper(),form);
+			fibp=new FormInstanceBottomPage(getWebDriverWrapper(),getTestDataManager(),form);
 		}
 		
 		return fibp;
@@ -1127,6 +1217,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				flag=clickSomeWorkflow("Ready for approval");
 			}
 		}*/
+		
 		return clickSomeWorkflow("Ready for approval");
 	}
 	
@@ -1139,6 +1230,10 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	public Boolean clickApproval() throws Exception
 	{
 		String createdUser=getUserWhoCreatedIt();
+		HomePage hp=null;
+		ListPage lp=null;
+		FormInstancePage fip=null;
+		
 		Boolean returnFlag=false;
 		if(createdUser!=null)
 		{
@@ -1155,29 +1250,79 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 			}
 
-			if(checkSomeWorkflow().equalsIgnoreCase("ATTESTED"))
+			if(checkWorkflowInDB().equalsIgnoreCase("ATTESTED"))
 			{
 				//returnFlag=true;
-				if(!getLoginUser().equalsIgnoreCase(DBInfo.getApplicationServer_UserName()))
+				if(!getLoginUser().equalsIgnoreCase(dBInfo.getApplicationServer_UserName()))
 				{
 					this.closeThisPage();
-					ListPage lp=new ListPage(getWebDriverWrapper());
+					lp=new ListPage(getWebDriverWrapper(),getTestDataManager());
 					if(lp.isThisPage())
 					{
-						HomePage hp=lp.logout();
+						hp=lp.logout();
 						if(hp.isThisPage())
 						{
-							lp=hp.login(DBInfo.getApplicationServer_UserName(), DBInfo.getApplicationServer_Password());
-							if(lp.isThisPage())
+							lp=hp.login(dBInfo.getApplicationServer_UserName(), dBInfo.getApplicationServer_UserPassword());
+							if(lp==null)
 							{
-								if(lp.selectFormInfo(form))
+								logger.error("error: cannot login home page.");
+							}else{
+								if(lp.isThisPage())
 								{
-									FormInstancePage fip=lp.openFormInstance(form);
-									if(fip.isThisPage())
+									if(lp.selectFormInfo(form))
 									{
-										returnFlag=true;
+										fip=lp.openFormInstance(form);
+										this.setLoginUser(fip.getLoginUser());
+										if(isThisPage())
+										{
+											returnFlag=true;
+										}
 									}
-									fip=null;
+								}
+							}
+							
+						}else
+						{
+							logger.error("error: cannot access home page.");
+						}
+						
+					}else
+					{
+						logger.error("error: cannot access dashboard page.");
+					}
+				}else
+				{
+					returnFlag=true;
+				}
+			}else
+			{
+				if(getLoginUser().equalsIgnoreCase(createdUser))
+				{
+					this.closeThisPage();
+					lp=new ListPage(getWebDriverWrapper(),getTestDataManager());
+					if(lp.isThisPage())
+					{
+						hp=lp.logout();
+						if(hp.isThisPage())
+						{
+							lp=hp.login(PropHelper.getProperty("test.approver.user"), PropHelper.getProperty("test.approver.password"));
+							if(lp==null)
+							{
+								logger.error("error: cannot login home page.");
+							}else
+							{
+								if(lp.isThisPage())
+								{
+									if(lp.selectFormInfo(form))
+									{
+										fip=lp.openFormInstance(form);
+										this.setLoginUser(fip.getLoginUser());
+										if(isThisPage())
+										{
+											returnFlag=clickApproval();//invoke itself
+										}
+										
+									}
 								}
 							}
 							
@@ -1185,48 +1330,12 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 						{
 							logger.info("cannot access home page.");
 						}
-						hp=null;
 						
 					}else
 					{
 						logger.info("cannot access dashboard page.");
 					}
-					lp=null;
-				}
-			}else
-			{
-				if(getLoginUser().equalsIgnoreCase(createdUser))
-				{
-					this.closeThisPage();
-					ListPage lp=new ListPage(getWebDriverWrapper());
-					if(lp.isThisPage())
-					{
-						HomePage hp=lp.logout();
-						if(hp.isThisPage())
-						{
-							lp=hp.login(PropHelper.getProperty("approver.user"), PropHelper.getProperty("approver.password"));
-							if(lp.isThisPage())
-							{
-								if(lp.selectFormInfo(form))
-								{
-									FormInstancePage fip=lp.openFormInstance(form);
-									if(fip.isThisPage())
-									{
-										returnFlag=clickApproval();//invoke itself
-									}
-									fip=null;
-								}
-							}
-						}else
-						{
-							logger.info("cannot access home page.");
-						}
-						hp=null;
-					}else
-					{
-						logger.info("cannot access dashboard page.");
-					}
-					lp=null;
+					
 				}
 			}
 		}
@@ -1246,38 +1355,17 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		return clickSomeWorkflow("Reject");
 	}
 	
-	/*public String getUserWhoseIt() throws Exception
-	{
-		String userName=null;
-		if(clickSomeWorkflow("View workflow log"))
-		{
-			WorkflowLogDialog workflowLogDlg=new WorkflowLogDialog(getWebDriverWrapper());
-			if(workflowLogDlg.isThisPage())
-			{
-				userName=workflowLogDlg.getUserWhoCreatedIt();
-				workflowLogDlg.closeThisPage();
-			}else
-			{
-				logger.info("cannot open workflow log dialog.");
-			}
-		}else
-		{
-			logger.info("cannot click \"View workflow log\" in menu.");
-		}
-		return userName;
-	}*/
 	
-	//getFormInstanceCreatedBy
 	/**
 	 * invoke clickSomeWorkflow and click "View workflow log", get the user's name who create it. return null if no user log
 	 * @author kun shen
 	 * @return
 	 * @throws Exception
 	 */
-	public String getUserWhoCreatedIt() throws Exception
+	protected String getUserWhoCreatedIt() throws Exception
 	{
 		String processDate=uniformDate(form.getProcessDate(),"MM/DD/YYYY");
-		String userName=DBInfo.getFormInstanceCreatedBy(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
+		String userName=getDBInfo().getFormInstanceCreatedBy(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
 		return userName;
 	}
 	
@@ -1292,13 +1380,19 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	private Boolean clickSomeWorkflow(String type) throws Exception
 	{
 		Boolean flag=true;
+		logger.info("click \""+type+"\"");
 		element("fipf.workflow_button").click();
 		waitThat("fipf.workflow_menu").toBeVisible();
-		if(element("fipf.workflow_menuList",type).isPresent() && element("fipf.workflow_menuList",type).isDisplayed())
+		if(element("fipf.workflow_menuList",type).isPresent())
 		{
 			element("fipf.workflow_menuList",type).click();
 			loadingDlg();
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+		}else
+		{
+			loadingDlg();
+			element("fipf.workflow_button").click();
+			waitThat("fipf.workflow_menu").toBeInvisible();
 		}
 		return flag;
 	}
@@ -1310,6 +1404,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 * @return
 	 * @throws Exception
 	 */
+	@Deprecated
 	@SuppressWarnings("unused")
 	private Boolean checkSomeWorkflow(String type) throws Exception
 	{
@@ -1325,15 +1420,17 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	}
 	
 	/**
-	 * check some workflow in UI for attestation, return status.
+	 * check some workflow in UI for attestation, return status.(READY_FOR_ATTESTATION,ATTESTED)
 	 * @author kun shen
 	 * @return
 	 * @throws Exception
 	 */
-	private String checkSomeWorkflow() throws Exception
+	private String checkWorkflowInDB() throws Exception
 	{
 		String processDate=uniformDate(form.getProcessDate(),"MM/DD/YYYY");
-		String attestedStatus=DBInfo.getFormInstanceAttestedStatus(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
+		String attestedStatus=getDBInfo().getFormInstanceAttestedStatus(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
 		return attestedStatus;
 	}
+
+	
 }

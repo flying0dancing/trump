@@ -2,6 +2,7 @@ package com.lombardrisk.pages;
 
 import java.io.File;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
@@ -12,8 +13,8 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 	private Form form;
 	private String type="createFromExcelForm";
 	
-	public CreateNewReturnFromExcelDialog(IWebDriverWrapper webDriverWrapper, Form form) {
-		super(webDriverWrapper);
+	public CreateNewReturnFromExcelDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form) {
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 	}
 	/**
@@ -112,7 +113,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 					waitThat("fipf.adjustmentLogTable_data").toBePresent();
 					if(element("fipf.adjustmentLogTable_data").isPresent())
 					{
-						fip=new FormInstancePage(getWebDriverWrapper(),form);
+						fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form);
 						if(!fip.isThisPage())
 						{
 							logger.info("open a wrong form instance, please check your excel file.");

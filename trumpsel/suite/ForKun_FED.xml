@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="FED" parallel="false" >
- 
- 
- <test name="DataScheduleExport">
-  	<parameter name="indexAppServers" value="8"/>
-  	<parameter name="indexDBServers" value="8"/>
-  	<parameter name="scenarioName" value="ForKun_FEDDataSchedule.xlsx"/>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="FED" parallel="false">
+
+<parameter name="scenarioName" value="ForKun_FED.xlsx"/>
+<parameter name="indexAppServers" value="8"/>
+<parameter name="indexDBServers" value="8"/>
+<parameter name="browser" value="firefox"/>
+<parameter name="browser_version" value="49"/>
+ <test name="CheckValidation"  enabled="false">
+  	<parameter name="scenarioName" value="ForKun_FEDExportValidation.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+      <methods>
+      <include name="checkValidation"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+ <test name="DataScheduleExport" enabled="false">
+  	<parameter name="scenarioSheet" value="FEDDataSchedule"/>
     <classes>
       <class name="com.lombardrisk.testcase.ExportToRegulator">
       <methods>
@@ -16,10 +29,8 @@
 </test>
 
 
- <test name="Retrieve">
-  	<parameter name="indexAppServers" value="8"/>
-  	<parameter name="indexDBServers" value="8"/>
-  	<parameter name="scenarioName" value="ForKun_FEDRetrieve.xlsx"/>
+ <test name="Retrieve" enabled="false">
+  	<parameter name="scenarioSheet" value="FEDRetrieve"/>
     <classes>
       <class name="com.lombardrisk.testcase.RetrieveForm">
       <methods>
@@ -29,10 +40,8 @@
     </classes>
 </test>
 
-<test name="ExportToRegulator">
-  	<parameter name="indexAppServers" value="8"/>
-  	<parameter name="indexDBServers" value="8"/>
-  	<parameter name="scenarioName" value="ForKun_FEDExportToRegulator.xlsx"/>
+<test name="ExportToRegulator"  enabled="false">
+  	<parameter name="scenarioSheet" value="FEDExportToRegulator"/>
     <classes>
       <class name="com.lombardrisk.testcase.ExportToRegulator">
       <methods>
@@ -44,36 +53,20 @@
 </test>
 
 
-<test name="CheckValidation">
-  	<parameter name="indexAppServers" value="8"/>
-  	<parameter name="indexDBServers" value="8"/>
-  	<parameter name="scenarioName" value="ForKun_FEDExportValidation.xlsx"/>
+
+<test name="ExportToPDF" enabled="false">
+  	<parameter name="scenarioName" value="ForKun_FEDExportToPDF.xlsx"/>
     <classes>
       <class name="com.lombardrisk.testcase.CheckValue">
-      <methods>
-      <include name="checkValidation"/>
+	  <methods>
+      <include name="checkExportToPDF"/>
       </methods>
       </class>
     </classes>
 </test>
-<test name="ExportToPDF">
-  	<parameter name="indexAppServers" value="8"/>
-  	<parameter name="indexDBServers" value="8"/>
-  	
-  	<parameter name="scenarioName" value="ForKun_FEDExportToPDF.xlsx"/>
-    <classes>
-      <class name="com.lombardrisk.testcase.CheckValue"/>
-	  <methods>
-      <include name="checkExportToPDF"/>
-      </methods>
-    </classes>
-</test>
 
 
-<test name="ExportCSV">
-  	<parameter name="indexAppServers" value="8"/>
-  	<parameter name="indexDBServers" value="8"/>
-  
+<test name="ExportCSV" >
   	<parameter name="scenarioName" value="ForKun_FEDExportToCSV.xlsx"/>
     <classes>
       <class name="com.lombardrisk.testcase.CheckValue">
@@ -84,14 +77,11 @@
     </classes>
 </test>
 <test name="ExportExcel">
-  	<parameter name="indexAppServers" value="8"/>
-  	<parameter name="indexDBServers" value="8"/>
-  	
   	<parameter name="scenarioName" value="ForKun_FEDExportToExcel.xlsx"/>
     <classes>
       <class name="com.lombardrisk.testcase.CheckValue">
 	  <methods>
-      <include name="checkExportToExcelApplyScale"/>
+      <exclude name="checkExportToExcelApplyScale"/>
       <include name="checkExportToExcelNoScale"/>
       </methods>
       </class>

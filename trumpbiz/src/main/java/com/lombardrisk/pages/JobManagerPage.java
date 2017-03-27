@@ -1,5 +1,8 @@
 package com.lombardrisk.pages;
 
+import java.util.Date;
+
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
@@ -14,9 +17,9 @@ public class JobManagerPage extends AbstractPage
 	 * 
 	 * @param webDriverWrapper
 	 */
-	public JobManagerPage(IWebDriverWrapper webDriverWrapper)
+	public JobManagerPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
 	}
 
 	
@@ -77,11 +80,17 @@ public class JobManagerPage extends AbstractPage
 			}
 			IWebElementWrapper nextPageBar=element("ficmptd.nextPageSta");
 			while(nextPageBar.isDisplayed() && !nextPageBar.getAttribute("class").contains("ui-state-disabled"))
-			{
+			{	
 				status=getGridCells(name,referenceDate,runType,started);
 				if(status!=null && (status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
 				{
 					break;
+				}
+				if(status!=null && status.equalsIgnoreCase("IN PROGRESS"))
+				{
+					waitThat().timeout(10000);
+					refreshPage();
+					continue;
 				}
 				nextPageBar.click();
 				loadingDlg();
@@ -102,18 +111,39 @@ public class JobManagerPage extends AbstractPage
 	 * @param name
 	 * @param referenceDate
 	 * @param runType
-	 * @param started
+	 * @param jobStartedDate job start time
 	 * @return
 	 * @throws Exception
 	 */
-	private String getGridCells(String name,String referenceDate,String runType,String started) throws Exception
+	private String getGridCells(String name,String referenceDate,String runType,String jobStartedDate) throws Exception
 	{
-		String status=element("ficmptd.getStatus",name,referenceDate,runType,started).getInnerText();
-		if(status!=null && status.equalsIgnoreCase("FAILURE"))
+		String status=null;
+		//String started_StartsWith=started.substring(0, started.length()-2);
+		IWebElementWrapper _getstartDate=element("ficmptd.getstartDate",name,referenceDate,runType);
+		if(!_getstartDate.isPresent()){return null;}
+		String startDate=_getstartDate.getInnerText();
+		
+		Date __jobStarted=transformStringToDate(jobStartedDate);
+		Date __startDate=transformStringToDate(startDate);
+		if(__jobStarted!=null && __startDate!=null)
 		{
-			status="FAILURE:"+element("ficmptd.getStatusMessage",name,referenceDate,runType,started).getInnerText();
+			long startDateL=__startDate.getTime();
+			long jobStartedL=__jobStarted.getTime();
+			if(startDateL>=jobStartedL)
+			{
+				IWebElementWrapper _getStatus=element("ficmptd.getStatus",name,referenceDate,runType,startDate);
+				if(!_getStatus.isPresent()){return null;}
+				status=_getStatus.getInnerText();
+				logger.info("current job status:"+status);
+			}
 		}
-		if(status!=null && status.trim().equals(""))
+		if(status==null){return null;}
+		
+		if(status.equalsIgnoreCase("FAILURE"))
+		{
+			status="FAILURE:"+element("ficmptd.getStatusMessage",name,referenceDate,runType,startDate).getInnerText();
+		}
+		if(status.trim().equals(""))
 		{
 			status=null;
 		}

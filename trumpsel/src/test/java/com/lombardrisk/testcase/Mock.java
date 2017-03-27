@@ -8,7 +8,11 @@ import org.testng.annotations.Test;
 
 import com.lombardrisk.test.*;
 import com.lombardrisk.test.pojo.Form;
-
+/**
+ * mock, not real test cases.
+ * @author kun shen
+ *
+ */
 public class Mock extends TestManager {
 	//private static int formCount=0;
 	
@@ -18,8 +22,8 @@ public class Mock extends TestManager {
 		System.out.println(getClass().getName()+" a in testMock running~~~~!"); 
 		Reporter.log(" in testValue running~~~~<br>");
 		Reporter.log(form.toString());
-		form.setExecutionStatus("skipped");
-		
+		form.setExecutionStatus("skip");
+
 		//formCount++;
 		
 	}

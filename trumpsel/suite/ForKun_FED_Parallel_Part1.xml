@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="part1" parallel="tests" thread-count="2">
+
+<parameter name="scenarioName" value="ForKun_FED_ParallelTesting.xlsx"/>
+<parameter name="indexAppServers" value="9"/>
+<parameter name="indexDBServers" value="9"/>
+<parameter name="browser" value="chrome"/>
+<!--<parameter name="browser_version" value="35"/>-->
+
+<test name="CreateNewAndImport" enabled="true">
+  	<parameter name="scenarioSheet" value="CreateImpPrecision"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateNewForm">
+	  <methods>
+      <include name="createNew"/>
+      </methods>
+      </class>
+      <class name="com.lombardrisk.testcase.ImportForm">
+	  <methods>
+      <include name="importForm"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+
+</suite>

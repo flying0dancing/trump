@@ -15,11 +15,19 @@ import com.lombardrisk.test.pojo.Form;
 
 public class FormsDataProvider implements IComFolder{
 	private static List<Form> forms;
-	private FormsDataProvider(){}
+	protected FormsDataProvider(){}
 	@DataProvider(name="FormInstances")
 	public static Object[][] dataProviderForms(ITestContext context)
 	{
-		String formsFullPath=SOURCE_SCENARIOS_FOLDER+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
+		String formsFullPath=null;
+		String scenarioName=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME);
+		if(scenarioName==null || scenarioName.trim().equals(""))
+		{
+			Reporter.log("parameter scenarioName is null or empty.<br>");
+		}else
+		{
+			formsFullPath=SOURCE_SCENARIOS_FOLDER+scenarioName.trim();
+		}
 		if(formsFullPath==null || formsFullPath.equals("")){formsFullPath="suites/forms.xml";}
 		File formsFile=new File(formsFullPath);
 		if(formsFile.exists())
@@ -30,7 +38,7 @@ public class FormsDataProvider implements IComFolder{
 				forms=Dom4jUtil.getForms(tmp);
 			}else if(tmp.endsWith(".xlsx") || tmp.endsWith(".xls") )
 			{
-				forms=ExcelUtil.getForms(tmp);
+				forms=ExcelUtil.getForms(tmp,context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET));
 			}
 			else
 			{

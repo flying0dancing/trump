@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="FEDParallel" parallel="none" thread-count="2">
+
+<parameter name="scenarioName" value="ForKun_FED_ParallelTesting.xlsx"/>
+<parameter name="indexAppServers" value="8"/>
+<parameter name="indexDBServers" value="8"/>
+<parameter name="browser" value="firefox"/>
+
+<suite-files>
+<suite-file path="./ForKun_FED_Parallel_Part1.xml"/>
+<suite-file path="./ForKun_FED_Parallel_Part2.xml"/>
+</suite-files>
+</suite>

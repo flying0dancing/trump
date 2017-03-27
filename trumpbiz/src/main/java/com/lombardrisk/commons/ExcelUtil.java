@@ -35,6 +35,8 @@ public class ExcelUtil
 {
 	private final static Logger logger = LoggerFactory.getLogger(ExcelUtil.class);
 	private static int indexOfColumn=0;
+	private static CellStyle cellStyle2 = null;
+	private static short formatNo;
 	private ExcelUtil(){}
 	public static int getColumnNums(File file, String sheetName) throws Exception
 	{
@@ -92,7 +94,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -105,7 +107,7 @@ public class ExcelUtil
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 		// logger.info("There are " + amt + " records");
@@ -156,7 +158,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -169,7 +171,7 @@ public class ExcelUtil
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 		// logger.info("There are " + amt + " records");
@@ -274,7 +276,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -330,7 +332,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -377,7 +379,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return cellValue;
@@ -399,7 +401,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return cellValue;
@@ -473,7 +475,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -486,7 +488,7 @@ public class ExcelUtil
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 
@@ -519,7 +521,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -532,7 +534,7 @@ public class ExcelUtil
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 
@@ -579,7 +581,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -592,7 +594,7 @@ public class ExcelUtil
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 
@@ -617,7 +619,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -630,7 +632,7 @@ public class ExcelUtil
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 
@@ -667,7 +669,7 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -680,7 +682,7 @@ public class ExcelUtil
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 
@@ -719,12 +721,9 @@ public class ExcelUtil
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
-		finally
-		{
-			
-		}
+		
 	}
 
 	public static int convertCoumnID(String comlumnName)
@@ -840,6 +839,9 @@ public static Workbook openWorkbook(File filename) throws Exception
 	FileInputStream inp = new FileInputStream(filename);
 	 Workbook workBook = WorkbookFactory.create(inp);
 	 inp.close();
+	 cellStyle2 = workBook.createCellStyle();
+	 DataFormat format = workBook.createDataFormat();
+	 formatNo=format.getFormat("@");
 	 return workBook;
 }
 /**
@@ -878,7 +880,7 @@ public static int getRowNum(Workbook workBook, String sheetName) throws Exceptio
 	}
 	catch (Exception e)
 	{
-		e.printStackTrace();
+		logger.error(e.getMessage());
 	}
 	return amt;	
 }
@@ -921,7 +923,7 @@ public static ArrayList<String> getValueFromRow(Workbook workBook,String sheetNa
 		}
 		
 	}catch(Exception e){
-		e.printStackTrace();
+		logger.error(e.getMessage());
 	}
 	return rowVal;
 	
@@ -949,9 +951,9 @@ public static void editCell(Workbook workBook,String sheetName, int rowIndex, in
 		Cell cell = row.getCell(colIndex);
 		if (cell == null)
 			cell = row.createCell(colIndex);
-		CellStyle cellStyle2 = workBook.createCellStyle();
-		DataFormat format = workBook.createDataFormat();
-		cellStyle2.setDataFormat(format.getFormat("@"));
+		/*CellStyle cellStyle2 = workBook.createCellStyle();
+		DataFormat format = workBook.createDataFormat();*/
+		cellStyle2.setDataFormat(formatNo);
 		cell.setCellStyle(cellStyle2);
 		cell.setCellValue(value);
 		
@@ -1160,7 +1162,7 @@ private static void fromBeanToRow(Row rootRow, Object obj) throws Exception
 
 /**
  * get forms from excel<br>created by Kun.Shen
- * @param excelFileStr fullnamepath
+ * @param excelFileStr fullpath with file name
  * @return
  */
 public static List<Form> getForms(String excelFileStr)
@@ -1190,10 +1192,52 @@ public static List<Form> getForms(String excelFileStr)
 	}
 	return list;
 }
+
+
+/**
+ * get forms from excel
+ * @author kun shen
+ * @param excelFileStr fullpath with file name
+ * @param sheetName sheet's name, use null if use first sheet.
+ * @return an list of forms or an empty list.
+ * @since 2017.03.01
+ */
+public static List<Form> getForms(String excelFileStr,String sheetName)
+{
+	List<Form> list = new ArrayList<Form>(); 
+	Workbook xwb =null;
+	try
+	{
+		xwb =ExcelUtil.openWorkbook(new File(excelFileStr));
+		Sheet sheet = null;
+		if(sheetName!=null)
+		{sheet=xwb.getSheet(sheetName);}
+		if(sheet==null)
+		{sheet = xwb.getSheetAt(0);}
+		Row titleRow=sheet.getRow(0);
+		int rowNum=sheet.getLastRowNum();
+		for(int i=1;i<=rowNum;i++)
+		{
+			Row row=sheet.getRow(i);
+			if(row==null){continue;}
+			Form form=(Form)fromRowToBean(titleRow,row,Form.class);
+			if(!form.toString().equals(""))
+			{
+				list.add(form);
+			}
+		}
+		
+	}catch(Exception e)
+	{
+		System.out.println("data parsed error");  
+	}
+	return list;
+}
+
 /**
  * write forms to Excel <br>created by Kun.Shen
  * @param forms
- * @param excelFileStr fullnamepath support .xlsx and .xls
+ * @param excelFileStr fullpath with file name (support .xlsx and .xls formats)
  */
 public static void WriteFormsToExcel(List<Form> forms,String excelFileStr)
 {
@@ -1235,7 +1279,7 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr)
 	}
 	catch (Exception e)
 	{
-		e.printStackTrace();
+		logger.error(e.getMessage());
 	}
 	finally
 	{
@@ -1244,7 +1288,90 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr)
 			
 			try {  
 				fileInputStream.close();  
-				} catch (IOException e1) { e1.printStackTrace(); }  
+				} catch (IOException e) { logger.error(e.getMessage()); }  
+
+		}
+	}
+	
+}
+
+/**
+ * write forms to Excel 
+ * @author kun shen
+ * @param forms
+ * @param excelFileStr fullpath with file name (support .xlsx and .xls formats)
+ * @param sheetName
+ * @since 2017.03.01
+ */
+public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String sheetName)
+{
+	File excelFile=new File(excelFileStr);
+	Workbook xwb=null;
+	FileInputStream fileInputStream=null;
+	try
+	{
+		if(!excelFile.exists())
+		{
+			//excelFile.createNewFile();
+			if(excelFileStr.endsWith(".xls"))
+			{
+				xwb=new HSSFWorkbook();
+			}
+			if(excelFileStr.endsWith(".xlsx"))
+			{
+				xwb=new XSSFWorkbook();
+			}
+			
+		}
+		else
+		{
+			fileInputStream = new FileInputStream(excelFile);
+			xwb = WorkbookFactory.create(fileInputStream);
+			fileInputStream.close();
+		}
+		Sheet sheet = null;
+		if(sheetName!=null && !sheetName.trim().equals(""))
+		{
+			int i=1;
+			String sheetNameVar=sheetName;
+			while(sheet==null)
+			{
+				try
+				{
+					sheet=xwb.createSheet(sheetName);
+				}catch(Exception e)
+				{
+					sheetName = sheetNameVar+String.valueOf(i);
+					i++;
+					continue;
+				}
+			}
+		}
+		if(sheet==null)
+		{sheet = xwb.createSheet();}
+		for(int i=0;i<forms.size();i++)
+		{
+			Row row=sheet.createRow(i+1);
+			indexOfColumn=0;
+			fromBeanToRow(row,forms.get(i));
+		}
+		FileOutputStream out = new FileOutputStream(excelFileStr);
+		xwb.write(out);
+		out.flush();
+		out.close();
+	}
+	catch (Exception e)
+	{
+		logger.error(e.getMessage());
+	}
+	finally
+	{
+		if(fileInputStream!=null)
+		{
+			
+			try {  
+				fileInputStream.close();  
+				} catch (IOException e) {logger.error(e.getMessage());}  
 
 		}
 	}

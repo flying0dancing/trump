@@ -124,6 +124,13 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	
 	}
 	
+	/** check display value in UI(waste time method). <br>the cell which type is checkbox's value equals to 1 if checked, equals 0 if unchecked.<br>This method cannot checks hidden cells.<br> display UI values are stored at <i>result</i>\download\<i>regulator</i>(UIDisplay)<br>
+	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file may contains these columns: expiration<br>
+	 * @author kun shen
+	 * @param form
+	 * @throws Exception
+	 */
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkUIDisplayOneByOne( Form form) throws Exception
 	{
@@ -635,7 +642,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 								form.setExecutionStatus(status);
 							}else
 							{
-								form.setExecutionStatus("fail on open not existed file:"+exportedFileFullPath);
+								form.setExecutionStatus("fail on open not existed file, or no records found to export.");
 							}
 						}else
 						{

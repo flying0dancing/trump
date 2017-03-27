@@ -2,6 +2,7 @@ package com.lombardrisk.pages;
 
 import java.io.File;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
@@ -12,8 +13,8 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 	private Form form;
 	private String type="importFileForm";
 	
-	public ImportFileFormDialog(IWebDriverWrapper webDriverWrapper, Form form) {
-		super(webDriverWrapper);
+	public ImportFileFormDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form) {
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 	}
 	/**

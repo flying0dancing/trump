@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.testng.Assert;
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -12,13 +13,17 @@ import org.yiwan.webcore.web.PageBase;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
-import com.lombardrisk.test.DBInfo;
+import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,10 +33,12 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractPage extends PageBase
 {
-	protected static String format=DBInfo.getLanguage();
+	protected static String dateFormat=getFormat();
+	protected static String simpleDateFormat=getSimpleDateFormat();
 	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());//old one
 	protected final static String LOCKNAME="TP.lock";
 	protected String downloadFolder;
+	private ITestDataManager testDataManager;
 	public enum Month
 	{
 		JANUARY("Jan",1),FEBRUARY("Feb",2),MARCH("Mar",3),APRIL("Apr",4),MAY("May",5),JUNE("Jun",6),JULY("Jul",7),AUGUST("Aug",8),SEPTEMBER("Sep",9),OCTOBER("Oct",10),NOVEMBER("Nov",11),DECEMBER("Dec",12);
@@ -65,9 +72,10 @@ public abstract class AbstractPage extends PageBase
 	 * 
 	 * @param webDriverWrapper
 	 */
-	public AbstractPage(IWebDriverWrapper webDriverWrapper)
+	public AbstractPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
 		super(webDriverWrapper);
+		this.setTestDataManager(testDataManager);
 		if(PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
 			/*downloadFolder=new File(PropHelper.DOWNLOAD_FOLDER).getAbsolutePath();
@@ -196,9 +204,9 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected void loadingDlg() throws Exception
 	{
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 	}
 	/**
 	 * Wait for ajax dialog disappear
@@ -207,7 +215,7 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected void loadingDlg(long timeout) throws Exception
 	{
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
 		waitThat().timeout(timeout);
 	}
@@ -286,25 +294,22 @@ public abstract class AbstractPage extends PageBase
 		String year = null;
 		String month = null;
 		String day = null;
-		//String format=PropHelper.getProperty("Regional.language").trim();
-		if(format==null || format.trim().equals("")){
-			format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
-		}
-		if (format.equalsIgnoreCase("en_US") || format.equals(""))
-		{
-			month = date.substring(0, 2);
-			day = date.substring(3, 5);
-			year = date.substring(6);
-		}else if (format.equalsIgnoreCase("en_GB"))
+		
+		if (dateFormat.equalsIgnoreCase("en_GB"))
 		{
 			day = date.substring(0, 2);
 			month = date.substring(3, 5);
 			year = date.substring(6);
-		}else if (format.equalsIgnoreCase("zh_CN"))
+		}else if (dateFormat.equalsIgnoreCase("zh_CN"))
 		{
 			year = date.substring(0, 4);
 			month = date.substring(5, 7);
 			day = date.substring(8);
+		}else//dateFormat.equalsIgnoreCase("en_US") || dateFormat.equals("")
+		{
+			month = date.substring(0, 2);
+			day = date.substring(3, 5);
+			year = date.substring(6);
 		}
 		String returnDate=month+"/"+day+"/"+year;
 		if(dateFormat.equalsIgnoreCase("MM/DD/YYYY"))
@@ -334,25 +339,22 @@ public abstract class AbstractPage extends PageBase
 		String month = null;
 		String day = null;
 		int monthNumber=0;
-		//String format=PropHelper.getProperty("Regional.language").trim();
-		if(format==null || format.trim().equals("")){
-			format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
-		}
-		if (format.equalsIgnoreCase("en_US") || format.equals(""))
-		{
-			month = date.substring(0, 2);
-			day = date.substring(3, 5);
-			year = date.substring(6);
-		}else if (format.equalsIgnoreCase("en_GB"))
+		
+		if (dateFormat.equalsIgnoreCase("en_GB"))
 		{
 			day = date.substring(0, 2);
 			month = date.substring(3, 5);
 			year = date.substring(6);
-		}else if (format.equalsIgnoreCase("zh_CN"))
+		}else if (dateFormat.equalsIgnoreCase("zh_CN"))
 		{
 			year = date.substring(0, 4);
 			month = date.substring(5, 7);
 			day = date.substring(8);
+		}else//dateFormat.equalsIgnoreCase("en_US") || dateFormat.equals("")
+		{
+			month = date.substring(0, 2);
+			day = date.substring(3, 5);
+			year = date.substring(6);
 		}
 		if (day.startsWith("0"))
 		{
@@ -639,19 +641,33 @@ public abstract class AbstractPage extends PageBase
 	{
 		Boolean flag=false;
 		if(it==null || it.trim().equals("")){return false;}
-		if (!element.getSelectedText().equals(it))
+		if (!element.getSelectedText().equalsIgnoreCase(it))
 		{
-			List<String> list=element.getAllOptionTexts();
-			for(String item:list)
-			{
-				if(it.trim().equalsIgnoreCase(item.trim()))
+			try{
+				element.selectByVisibleText(it.trim());
+				loadingDlg();
+			}catch(Exception e){}
+			finally{
+				if(element.getSelectedText().equalsIgnoreCase(it.trim()))
 				{
-					element.selectByVisibleText(item);
-					loadingDlg();
 					flag=true;
-					break;
+				}else
+				{
+					List<String> list=element.getAllOptionTexts();
+					for(String item:list)
+					{
+						if(it.trim().equalsIgnoreCase(item.trim()))
+						{
+							element.selectByVisibleText(item);
+							loadingDlg();
+							flag=true;
+							break;
+						}
+					}
 				}
+				
 			}
+			
 		}else
 		{flag=true;}
 		
@@ -772,7 +788,7 @@ public abstract class AbstractPage extends PageBase
 					lock=false;
 					break;
 				}
-				Thread.sleep(500);
+				Thread.sleep(1500);
 			}
 			
 			if(!lock)
@@ -902,5 +918,46 @@ public abstract class AbstractPage extends PageBase
 			}
 		}
 		return messageText.toString();
+	}
+	
+	protected static String getSimpleDateFormat()
+	{
+		String simpleDateFormatStr="MM/dd/yyyy HH:mm:ss";
+		if (dateFormat.equalsIgnoreCase("en_GB"))
+		{
+			simpleDateFormatStr="dd/MM/yyyy HH:mm:ss";
+		}else if (dateFormat.equalsIgnoreCase("zh_CN"))
+		{
+			simpleDateFormatStr="yyyy-MM-dd HH:mm:ss";
+		}
+		return simpleDateFormatStr;
+	}
+	
+	protected static String getFormat()
+	{
+		String format=PropHelper.getProperty("Regional.language")==null?"en_US":PropHelper.getProperty("Regional.language").trim();
+		return format;
+	}
+	
+	protected Date transformStringToDate(String dateStr)
+	{
+		SimpleDateFormat sdf=new SimpleDateFormat(simpleDateFormat);
+		Date date=null;
+		try
+		{
+			date=sdf.parse(dateStr);
+		}catch (ParseException e)
+		{
+			logger.info("error: transform String to Date failed.["+e.getMessage()+"]");
+		}
+		return date;
+	}
+
+	public ITestDataManager getTestDataManager() {
+		return testDataManager;
+	}
+
+	public void setTestDataManager(ITestDataManager testDataManager) {
+		this.testDataManager = testDataManager;
 	}
 }

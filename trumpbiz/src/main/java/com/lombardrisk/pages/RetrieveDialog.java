@@ -1,18 +1,29 @@
 package com.lombardrisk.pages;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
-import com.lombardrisk.test.DBInfo;
+import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 import com.lombardrisk.test.pojo.Form;
 
 public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 	
 	private Form form;
-	public RetrieveDialog(IWebDriverWrapper webDriverWrapper,Form form) {
-		super(webDriverWrapper);
+	private DBInfo dBInfo;
+	public RetrieveDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager,Form form) {
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
+	}
+	
 	/**
 	 * if this page is this page, return true, others return false.
 	 * @return
@@ -95,7 +106,7 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 			
 			if(status.equalsIgnoreCase("pass"))
 			{
-				listPage=new ListPage(getWebDriverWrapper());
+				listPage=new ListPage(getWebDriverWrapper(),getTestDataManager());
 				listPage.selectFormInfo(form);
 				int id=listPage.search(form);
 				if(id>-1)
@@ -132,11 +143,11 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 			}else
 			{
 				loadingDlg();
-				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper());
+				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());
 				//String jobStartTimeLabel=jrd.jobStartTime();
 				
 				String jobRunType="RetrieveJob";
-				String jobName=DBInfo.getRegulatorPrefix(form.getRegulator())+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
+				String jobName=getDBInfo().getRegulatorPrefix(form.getRegulator())+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
 				
 				/*listPage=new ListPage(getWebDriverWrapper());
 				JobManagerPage jobManagerPage=listPage.clickJobManager();

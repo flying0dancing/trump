@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.yiwan.webcore.test.FileFormat;
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -11,22 +12,39 @@ import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
 import com.lombardrisk.commons.JschUtil;
-import com.lombardrisk.test.DBInfo;
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
+import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 import com.lombardrisk.test.pojo.Form;
 import com.lombardrisk.test.pojo.ServerInfo;
 
 public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
 	private Form form;
 	private String title;
-	
-	public ExportToRegulatorDialog(IWebDriverWrapper webDriverWrapper, Form form,String title) {
-		super(webDriverWrapper);
+	private DBInfo dBInfo;
+	private ServerInfo serverInfo;
+	public ExportToRegulatorDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form,String title) {
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 		this.title=title;
-		
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
+		this.setServerInfo(((TestDataManager)getTestDataManager()).getServerInfo());
 	}
+	
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
+	}
+	public ServerInfo getServerInfo() {
+		return serverInfo;
+	}
+	public void setServerInfo(ServerInfo serverInfo) {
+		this.serverInfo = serverInfo;
+	}
+	
 	/**
 	 * if this page is this page, return true, others return false.
 	 * @return
@@ -209,7 +227,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	private Boolean clickExport() throws Exception
 	{
 		Boolean flag=false;
-
+		Boolean messageFlag=false;
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
 			if(element("td.exportButton",title).isEnabled())
@@ -224,7 +242,13 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					//TestCaseManager.getTestCase().setDefaultDownloadFileCharset(StandardCharsets.UTF_8);
 					element("td.exportButton",title).click();
 					loadingDlg();
-					if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+					
+					if(element("abstract.message").isPresent())
+					{
+						logger.error(element("abstract.message").getInnerText());
+						waitThat("abstract.message").toBeInvisible();
+						messageFlag=true;
+					}
 					TestCaseManager.getTestCase().stopTransaction();
 					
 				}
@@ -232,7 +256,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				{
 					element("td.exportButton",title).click();
 					loadingDlg();
-					if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+					if(element("abstract.message").isPresent()){logger.error(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();messageFlag=true;}
 				}
 				//click log buttkon
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
@@ -240,28 +264,28 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					element("td.logButton").click();
 					loadingDlg();
 				}
-				
+				if(messageFlag){return flag;}
 				String a=getLatestFile(downloadFolder);
 				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
 				if(b.equalsIgnoreCase(LOCKNAME))
 				{
-					logger.error("not find download file");
+					logger.error("error: not find download file.");
 				}else
 				{
 					flag=true;
 				}	
 			}else
 			{
-				logger.error("export button is disable");
+				logger.error("error: export button is disable.");
 			}
 		}else
 		{
-			logger.error("no records found");
+			logger.error("error: no records found.");
 		}
 		return flag;
 	}
 	
-	//TODO debugging
+
 	/**
 	 * click export button, return true if export without errors, others return false.
 	 * @author kun shen
@@ -270,7 +294,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	private Boolean clickExportToDataSchedule() throws Exception
 	{
 		Boolean flag=false;
-
+		Boolean messageFlag=false;
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
 			if(element("td.exportButton",title).isEnabled())
@@ -279,7 +303,12 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				
 				element("td.exportButton",title).click();
 				loadingDlg();
-				if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+				if(element("abstract.message").isPresent())
+				{
+					logger.info(element("abstract.message").getInnerText());
+					waitThat("abstract.message").toBeInvisible(); 
+					messageFlag=true;
+				}
 				
 				//click log button
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
@@ -288,44 +317,55 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					loadingDlg();
 				}
 				
+				if(messageFlag){return flag;}
+				
 				String jobRunType="ExportJob";
-				String prefixOfRegulator=DBInfo.getRegulatorPrefix(form.getRegulator());
+				String prefixOfRegulator=getDBInfo().getRegulatorPrefix(form.getRegulator());
 				String jobName=prefixOfRegulator+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
 				
-				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper());
+				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());
 				lockDownloadDir(downloadFolder);//relock it after new jobResultDialog
 				String status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
 				jrd=null;
 				
-				getDownloadFromServerToLocalSSH(prefixOfRegulator,status);
+				IWebElementWrapper _exportFileLoation=element("filf.exportFileLoation", form.getEntity(),form.getName(),form.getVersion().substring(1),form.getProcessDate());
+				if(_exportFileLoation.isPresent() && _exportFileLoation.isDisplayed())
+				{
+					_exportFileLoation.click();
+					loadingDlg();
+					ExportedFileLocationDialog efld=new ExportedFileLocationDialog(getWebDriverWrapper(),getTestDataManager());
+					String downloadFileName_Server=efld.exportedFileName();
+					getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server);
+				}
 							
 				String a=getLatestFile(downloadFolder);
 				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
 				if(b.equalsIgnoreCase(LOCKNAME))
 				{
-					logger.error("not find download file");
+					logger.error("error: not find download file.");
 				}else
 				{
 					flag=true;
 				}	
 			}else
 			{
-				logger.error("export button is disable");
+				logger.error("error: export button is disable.");
 			}
 		}else
 		{
-			logger.error("no records found");
+			logger.error("error: no records found.");
 		}
 		return flag;
 	}
 	
-	private void getDownloadFromServerToLocalSSH(String prefixOfRegulator,String statusType) throws Exception
+	private void getDownloadFromServerToLocalSSH(String prefixOfRegulator,String statusType, String downloadFile_Server) throws Exception
 	{
 		logger.info("start downloading export file from server to local.");
-		ServerInfo serverInfo=new ServerInfo();
+		String statusTypeL=statusType.toLowerCase();
+		ServerInfo serverInfo=new ServerInfo(getDBInfo().getApplicationServer_Key());
 		String processDate=uniformDate(form.getProcessDate(),"YYYYMMDD");
 		String downloadFolder_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/";
-		if(statusType.equalsIgnoreCase("fail"))
+		if(statusTypeL.startsWith("fail"))
 		{
 			downloadFolder_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/ValidationErrors/";
 		}
@@ -333,13 +373,20 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		{
 			downloadFolder_Server=downloadFolder_Server.replace("/", "\\");
 		}
-		logger.info("download folder from server:"+downloadFolder_Server);
-		String downloadFile_Server=prefixOfRegulator+"_"+form.getEntity()+"_"+form.getTransmission().getModule()+"_"+processDate+"*";
-		logger.info("download file name from server:"+downloadFolder_Server);
-		JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
-		JschUtil.downloadFileToLocal(downloadFolder_Server+downloadFile_Server, downloadFolder);
-		JschUtil.close();
-		logger.info("stop downloading export file from server to local.");
+		if(statusTypeL.startsWith("fail") || statusTypeL.startsWith("pass"))
+		{
+			logger.info("download folder from server:"+downloadFolder_Server);
+			//String downloadFile_Server=prefixOfRegulator+"_"+form.getEntity()+"_"+form.getTransmission().getModule()+"_"+processDate+"*";
+			logger.info("download file name from server:"+downloadFolder_Server);
+			JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
+			JschUtil.downloadFileToLocal(downloadFolder_Server+downloadFile_Server, downloadFolder);
+			JschUtil.close();
+			logger.info("stop downloading export file from server to local.");
+		}else
+		{
+			logger.error("error: no downloading export file in server.");
+		}
+		
 	}
 	
 }

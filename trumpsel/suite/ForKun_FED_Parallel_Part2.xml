@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="part2" parallel="none" thread-count="2">
+
+<parameter name="scenarioName" value="ForKun_FED_ParallelTesting.xlsx"/>
+<parameter name="indexAppServers" value="9"/>
+<parameter name="indexDBServers" value="9"/>
+<parameter name="browser" value="chrome"/>
+<!--<parameter name="browser_version" value="35"/>-->
+
+<test name="CreateNew" enabled="false">
+  	<parameter name="scenarioSheet" value="CreateImpPrecision"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateNewForm">
+	  <methods>
+      <include name="createNew"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+
+<test name="CreateImpPrecision" enabled="false">
+  	<parameter name="scenarioSheet" value="CreateImpPrecision"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateImportPrecision">
+	  <methods>
+      <include name="createImportPrecision"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+<test name="Precision" enabled="true">
+  	<parameter name="scenarioSheet" value="CreateImpPrecision"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+	  <methods>
+      <include name="checkUIDisplay"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+<test name="ExportToPDF" enabled="false">
+  	<parameter name="scenarioSheet" value="ExportToCSV"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+	  <methods>
+      <include name="checkExportToPDF"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+
+
+<test name="ExportCSV"  enabled="true">
+  	<parameter name="scenarioSheet" value="ExportToCSV"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+	  <methods>
+      <include name="checkExportToCSV"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+<test name="ExportExcel" enabled="true">
+  	<parameter name="scenarioSheet" value="ExportToEXCEL"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+	  <methods>
+      <exclude name="checkExportToExcelApplyScale"/>
+      <include name="checkExportToExcelNoScale"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+<test name="CheckValidationRule" enabled="true">
+  	<parameter name="scenarioSheet" value="CheckRule"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CheckValue">
+      <methods>
+      <include name="checkValidation"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+ <test name="Retrieve" enabled="false">
+  	<parameter name="scenarioSheet" value="Retrieve"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.RetrieveForm">
+      <methods>
+      <include name="RetrieveForm"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+<test name="RetrievePrecision" enabled="false">
+  	<parameter name="scenarioSheet" value="Retrieve"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateImportPrecision"/>
+    </classes>
+</test>
+<test name="ExportToRegulator"  enabled="true">
+  	<parameter name="scenarioSheet" value="ExportToRegulator"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.ExportToRegulator">
+      <methods>
+      <include name="checkInDashBoard"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+ 
+ <test name="RetrieveExport" enabled="false">
+  	<parameter name="scenarioSheet" value="RetrieveExport"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.RetrieveForm">
+      <methods>
+      <include name="retrieveForm"/>
+      </methods>
+      </class>
+      <class name="com.lombardrisk.testcase.DataScheduleWorkflow">
+      <methods>
+      <include name="DataScheduleApproval"/>
+      </methods>
+      </class>
+	  <class name="com.lombardrisk.testcase.ExportToRegulator">
+      <methods>
+      <include name="checkInForm"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+<test name="CreateFromExcel"  enabled="true">
+  	<parameter name="scenarioSheet" value="CreateFromExcel"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateNewForm">
+      <methods>
+      <include name="createNewFromExcel"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+</suite>

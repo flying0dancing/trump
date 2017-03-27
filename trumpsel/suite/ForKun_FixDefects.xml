@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="ForKun_FixDefects" parallel="false">
+
+<test name="HKMACreateImportPrecision" enabled="false">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>
+  	<!--parameter name="indexToolsetDBServers" value="1"/-->
+  	<parameter name="scenarioName" value="ForKun_HKMACreateImportCheckCellValue.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateImportPrecision">
+
+      </class>
+    </classes>
+</test>
+
+<test name="FEDCreateImportPrecision" >
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>
+  	<!--parameter name="indexToolsetDBServers" value="1"/-->
+  	<parameter name="scenarioName" value="ForKun_FEDCreateImportCheckCellValue.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.CreateImportPrecision">
+
+      </class>
+    </classes>
+</test>
+
+<test name="FEDRetrieve" enabled="false">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>
+  	<!--parameter name="indexToolsetDBServers" value="1"/-->
+  	<parameter name="scenarioName" value="ForKun_FEDRetrieve.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.RetrieveForm">
+      <methods>
+      <include name="RetrieveForm"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+<test name="FEDDataScheduleExport"  enabled="false">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>
+  	<parameter name="scenarioName" value="ForKun_FEDDataSchedule.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.ExportToRegulator">
+      <methods>
+      <include name="checkInForm"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+</suite>

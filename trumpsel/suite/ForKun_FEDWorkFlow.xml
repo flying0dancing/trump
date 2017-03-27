@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="FED" parallel="false" >
+ 
+ 
+ <test name="DataScheduleExport">
+  	<parameter name="indexAppServers" value="8"/>
+  	<parameter name="indexDBServers" value="8"/>
+  	<parameter name="scenarioName" value="ForKun_FEDDataSchedule.xlsx"/>
+    <classes>
+      <class name="com.lombardrisk.testcase.RetrieveForm">
+      <methods>
+      <include name="retrieveForm"/>
+      </methods>
+      </class>
+      <class name="com.lombardrisk.testcase.DataScheduleWorkflow">
+      <methods>
+      <include name="DataScheduleApproval"/>
+      </methods>
+      </class>
+	  <class name="com.lombardrisk.testcase.ExportToRegulator">
+      <methods>
+      <include name="checkInForm"/>
+      </methods>
+      </class>
+    </classes>
+</test>
+
+</suite>
