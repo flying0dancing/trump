@@ -128,9 +128,10 @@ public class TestManager extends TestBase implements IComFolder {
 		  setScenarioId(getLogName());
 		  
 		  setUpTest();
-		  TestCaseManager.offerTestEnvironment(getTestEnvironment());// add this for release testenvironment
+		  TestCaseManager.offerTestEnvironment(getTestEnvironment());
 		  super.setTestDataManager(new TestDataManager(indexAppServer, indexDBServer, indexToolsetDBServer));
 		  setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
+		  logger.info(getDBInfo().toString());
 		  logger.info("Database Language:"+DBInfo.getLanguage(getDBInfo().getApplicationServer_UserName()));
 		  List<String> regulators=DBInfo.getRegulatorDescription();
 		  int copyCount=0;

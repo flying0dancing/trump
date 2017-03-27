@@ -6,7 +6,6 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.Reporter;
 import org.testng.annotations.*;
-import org.yiwan.webcore.test.ITestDataManager;
 
 import com.lombardrisk.commons.Dom4jUtil;
 import com.lombardrisk.commons.ExcelUtil;
@@ -14,7 +13,7 @@ import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.pojo.Form;
 
 
-public class FormsDataProvider implements ITestDataManager,IComFolder{
+public class FormsDataProvider implements IComFolder{
 	private static List<Form> forms;
 	protected FormsDataProvider(){}
 	@DataProvider(name="FormInstances")
