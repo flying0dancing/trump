@@ -3,15 +3,12 @@ package com.lombardrisk.test.pojo;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.test.pojo.TestEnvironment;
 
 import com.lombardrisk.test.DBQuery;
 
 public class DBInfo{
-	protected final static Logger logger = LoggerFactory.getLogger(DBInfo.class);
 	public enum InstanceType{CODE,LABEL;}
 	private String applicationServer_Name;
 	private String applicationServer_UserName;
@@ -112,8 +109,7 @@ public class DBInfo{
 				sid_toolset=str[1];
 			}
 			setDBQuery(new DBQuery(this));
-			logger.debug("used applicationServer_Url: "+applicationServer_Url);
-			logger.debug("used indexAppServer(id): "+indexAppServer+" indexDBServer(id):"+indexDBServer+" indexToolsetDBServer(id):"+indexToolsetDBServer);
+			
 			
 		}catch(InterruptedException interruptedException)
 		{
@@ -206,11 +202,10 @@ public class DBInfo{
 	 * get Regulator DESCRIPTION list
 	 * @return
 	 */
-	public static List<String> getRegulatorDescription()
+	public List<String> getRegulatorDescription()
 	{
 		String SQL="SELECT \"DESCRIPTION\" FROM \"CFG_INSTALLED_CONFIGURATIONS\" WHERE \"STATUS\"='A' ";
-		logger.info("getRegulatorDescription:"+SQL);
-		return DBQuery.queryRecords(SQL);
+		return getDBQuery().queryRecords(SQL);
 	}
 	
 	/**
@@ -219,11 +214,10 @@ public class DBInfo{
 	 * @param regulator
 	 * @return
 	 */
-	public static String getRegulatorPrefix(String regulator)
+	public String getRegulatorPrefix(String regulator)
 	{
 		String SQL = "SELECT \"PREFIX\" FROM \"CFG_INSTALLED_CONFIGURATIONS\" WHERE lower(\"DESCRIPTION\")='" + regulator.toLowerCase() + "'  AND \"STATUS\"='A' ";
-		logger.info("getRegulatorPrefix:"+SQL);
-		return DBQuery.queryRecord(SQL);
+		return getDBQuery().queryRecord(SQL);
 
 	}
 	
@@ -234,11 +228,10 @@ public class DBInfo{
 	 * @param regulator
 	 * @return IDRangeStart
 	 */
-	public static String getRegulatorIDRangeStart(String regulator)
+	public String getRegulatorIDRangeStart(String regulator)
 	{
 		String SQL = "SELECT \"ID_RANGE_START\" FROM \"CFG_INSTALLED_CONFIGURATIONS\" WHERE lower(\"DESCRIPTION\")='" + regulator.toLowerCase() + "'  AND \"STATUS\"='A' ";
-		logger.info("getRegulatorIDRangeStart:"+SQL);
-		return DBQuery.queryRecord(SQL);
+		return getDBQuery().queryRecord(SQL);
 
 	}
 	
@@ -248,11 +241,10 @@ public class DBInfo{
 	 * @param Regulator
 	 * @return IDRangeEnd
 	 */
-	public static String getRegulatorIDRangEnd(String regulator)
+	public String getRegulatorIDRangEnd(String regulator)
 	{
 		String SQL = "SELECT \"ID_RANGE_END\" FROM \"CFG_INSTALLED_CONFIGURATIONS\" WHERE lower(\"DESCRIPTION\")='" + regulator.toLowerCase() + "' AND \"STATUS\"='A'  ";
-		logger.info("getRegulatorIDRangEnd:"+SQL);
-		return DBQuery.queryRecord(SQL);
+		return getDBQuery().queryRecord(SQL);
 	}
 	
 	/**
@@ -264,7 +256,7 @@ public class DBInfo{
 	 * @param extendCell null means previous cellName is not extendCell, not null means previous cellName is extendCell
 	 * @return
 	 */
-	public static List<String> getPageName(String connectedDB,String regulator, String form, String version, String cellName, String extendCell)
+	public List<String> getPageName(String connectedDB,String regulator, String form, String version, String cellName, String extendCell)
 	{
 		String SQL = "";
 		String refTable = "";
@@ -294,8 +286,8 @@ public class DBInfo{
 					+ "' " + "and \"Version\"='" + version + "') and \"Item\"='" + cellName + "'))";
 
 		}
-		logger.info("getPageName:"+SQL);
-		return DBQuery.queryRecords(SQL);
+		
+		return getDBQuery().queryRecords(SQL);
 	}
 	
 	/**
@@ -307,14 +299,13 @@ public class DBInfo{
 	 * @param processDate
 	 * @return
 	 */
-	public static String getFormInstanceCreatedBy(String regulator,String form,String version,String processDate)
+	public String getFormInstanceCreatedBy(String regulator,String form,String version,String processDate)
 	{
 		String SQL="";
 		String config_Prefix = getRegulatorPrefix(regulator);
 		//processDate format mm/dd/yyyy
 		SQL="select \"CREATED_BY\" from \"FIN_FORM_INSTANCE\" where \"EDITION_STATUS\"='ACTIVE' and \"FORM_CODE\"='"+form+"' and \"FORM_VERSION\"='"+version+"' and \"REFERENCE_DATE\"= to_date('"+processDate+"', 'mm/dd/yyyy')  and \"CONFIG_PREFIX\"='"+config_Prefix+"'";
-		logger.info("getFormInstanceCreatedBy:"+SQL);
-		return DBQuery.queryRecord(SQL);
+		return getDBQuery().queryRecord(SQL);
 		
 	}
 	
@@ -327,14 +318,13 @@ public class DBInfo{
 	 * @param processDate
 	 * @return
 	 */
-	public static String getFormInstanceAttestedStatus(String regulator,String form,String version,String processDate)
+	public String getFormInstanceAttestedStatus(String regulator,String form,String version,String processDate)
 	{
 		String SQL="";
 		String config_Prefix = getRegulatorPrefix(regulator);
 		//processDate format mm/dd/yyyy
 		SQL="select \"ATTESTATION_STATUS\" from \"FIN_FORM_INSTANCE\" where \"EDITION_STATUS\"='ACTIVE' and \"FORM_CODE\"='"+form+"' and \"FORM_VERSION\"='"+version+"' and \"REFERENCE_DATE\"= to_date('"+processDate+"', 'mm/dd/yyyy')  and \"CONFIG_PREFIX\"='"+config_Prefix+"'";
-		logger.info("getFormInstanceAttestedStatus:"+SQL);
-		return DBQuery.queryRecord(SQL);
+		return getDBQuery().queryRecord(SQL);
 		
 	}
 	
@@ -349,7 +339,7 @@ public class DBInfo{
 	 * @param instanceType CODE or LABEL identify previous parameter is instanceCode or instanceLabel
 	 * @return InstCode, if return -1 means not exists InstCode
 	 */
-	public static String getInstance(String connectedDB,String regulator, String form, String version,String pageName,String instanceCodeOrLabel,InstanceType instanceType)
+	public String getInstance(String connectedDB,String regulator, String form, String version,String pageName,String instanceCodeOrLabel,InstanceType instanceType)
 	{
 		String SQL="";
 		if (connectedDB.equalsIgnoreCase("ar"))
@@ -357,8 +347,7 @@ public class DBInfo{
 			String ID_Start = getRegulatorIDRangeStart(regulator);
 			String ID_End = getRegulatorIDRangEnd(regulator);
 			SQL="select \"InstSetId\" from \"CFG_RPT_List\" where \"ID\" BETWEEN "+ID_Start+" and "+ID_End+" and \"PageName\"='"+pageName+"' and \"ReturnId\" in (select \"ReturnId\" from \"CFG_RPT_Rets\" where \"ID\" BETWEEN "+ID_Start+" and "+ID_End+" and \"Return\"='"+form+"' and \"Version\"="+version+")";
-			logger.info("getInstance-1/2:"+SQL);
-			String instSetId=DBQuery.queryRecord(SQL).trim();
+			String instSetId=getDBQuery().queryRecord(SQL).trim();
 			if(instSetId.equals("-1"))
 			{
 				return instSetId;
@@ -379,8 +368,7 @@ public class DBInfo{
 			String regPrefix = getToolsetRegPrefix(regulator);
 			SQL="select DISTINCT b.\"InstSetId\" from \""+regPrefix+"Rets\" a inner join \""+regPrefix+"List\" b on a.\"ReturnId\"=b.\"ReturnId\" "
 					+ "where a.\"Return\"='"+form+"' and a.\"Version\"='"+version+"'";
-			String instSetId=DBQuery.queryRecord(SQL).trim();
-			logger.info("getInstance-1/2:"+SQL);
+			String instSetId=getDBQuery().queryRecord(SQL).trim();
 			if(instSetId.equals("-1"))
 			{
 				return instSetId;
@@ -396,8 +384,7 @@ public class DBInfo{
 				}
 			}
 		}
-		logger.info("getInstance-2/2:"+SQL);
-		return DBQuery.queryRecord(SQL);
+		return getDBQuery().queryRecord(SQL);
 	}
 /**
  * get language from database
@@ -421,16 +408,14 @@ public class DBInfo{
 	 * @param userName
 	 * @return language
 	 */
-	public static String getLanguage(String userName)
+	public String getLanguage(String userName)
 	{
 		String language="";
 		// update user language
 		String SQL = "SELECT MAX(\"ID\") FROM \"USR_PREFERENCE\" WHERE lower(\"USER_ID\")='" + userName.toLowerCase() + "' and upper(\"PREFERENCE_NAME\")='LANGUAGE'";
-		logger.info("getLanguage-1/2:"+SQL);
-		String id = DBQuery.queryRecord(SQL);
+		String id = getDBQuery().queryRecord(SQL);
 		SQL = "SELECT \"PREFERENCE_CODE\" FROM \"USR_PREFERENCE\" WHERE lower(\"USER_ID\")='" + userName.toLowerCase() + "' and \"ID\"=" + id;
-		logger.info("getLanguage-2/2:"+SQL);
-		language = DBQuery.queryRecord(SQL);
+		language = getDBQuery().queryRecord(SQL);
 		return language;
 	}
 
@@ -441,14 +426,6 @@ public class DBInfo{
 	public void setDBQuery(DBQuery dBQuery) {
 		this.dBQuery = dBQuery;
 	}
-
-	@Override
-	public String toString()
-	{
-		String str=indexAppServer+":"+applicationServer_Url+";"+indexDBServer+":"+databaseServer_Schema+".";
-		return str;
-	}
-	
 
 	
 }

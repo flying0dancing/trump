@@ -113,7 +113,7 @@ public class DBHelper
 			logger.error("Database connection failed!");
 			logger.error(e.getMessage());
 		}
-		logger.info("database connect string:"+strConn+", db:"+db+", user:"+user);
+
 	}
 
 	protected void close()

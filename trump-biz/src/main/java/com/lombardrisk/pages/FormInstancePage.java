@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 
 
+
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
@@ -38,16 +39,18 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 {
 	private Form form;
 	private String loginUser;
-	private DBInfo dBInfo=((TestDataManager)getTestDataManager()).getDBInfo();
+	private DBInfo dBInfo;
 	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
 		super(webDriverWrapper,testDataManager);
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 	
 	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form)
 	{
 		super(webDriverWrapper,testDataManager);
 		this.form=form;
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 	
 	public FormInstancePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form,String loginUser)
@@ -55,6 +58,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 		super(webDriverWrapper,testDataManager);
 		this.form=form;
 		this.setLoginUser(loginUser);
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 	
 	
@@ -64,6 +68,13 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 
 	public void setLoginUser(String loginUser) {
 		this.loginUser = loginUser;
+	}
+	
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
 	}
 	
 	/**
@@ -97,7 +108,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					String instanceCode=instanceLabel;
 					if(!instanceLabel.equals("1"))
 					{
-						instanceCode=DBInfo.getInstance(dBInfo.getConnectedDB(),regulator, formName, form.getVersion().substring(1),pageName,instanceLabel,DBInfo.InstanceType.LABEL);
+						instanceCode=getDBInfo().getInstance(dBInfo.getConnectedDB(),regulator, formName, form.getVersion().substring(1),pageName,instanceLabel,DBInfo.InstanceType.LABEL);
 						if(instanceCode.equals("-1")){instanceCode=instanceLabel;}
 					}
 					
@@ -671,7 +682,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		if (regulator!=null && formName!=null && formVersion!=null && pageName != null)
 		{
 			if(instanceCode == null || instanceCode.equals("")){instanceCode="1";}
-			instanceLabel=DBInfo.getInstance(dBInfo.getConnectedDB(),regulator, formName, formVersion,pageName,instanceCode,DBInfo.InstanceType.CODE);
+			instanceLabel=getDBInfo().getInstance(dBInfo.getConnectedDB(),regulator, formName, formVersion,pageName,instanceCode,DBInfo.InstanceType.CODE);
 			if(instanceLabel==null)
 			{
 				logger.info("error: not find instance label in DB with code["+instanceCode+"]");
@@ -700,7 +711,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	{
 		String result=null;
 		if(rowId!=null && rowId.trim().equals("")){rowId=null;}
-		List<String> pageNames=DBInfo.getPageName(dBInfo.getConnectedDB(),regulator, formName, formVersion, cellName, rowId);
+		List<String> pageNames=getDBInfo().getPageName(dBInfo.getConnectedDB(),regulator, formName, formVersion, cellName, rowId);
 		for(String pageName: pageNames)
 		{
 			String pageNameT=selectPage(pageName);
@@ -1354,7 +1365,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	protected String getUserWhoCreatedIt() throws Exception
 	{
 		String processDate=uniformDate(form.getProcessDate(),"MM/DD/YYYY");
-		String userName=DBInfo.getFormInstanceCreatedBy(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
+		String userName=getDBInfo().getFormInstanceCreatedBy(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
 		return userName;
 	}
 	
@@ -1417,7 +1428,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	private String checkWorkflowInDB() throws Exception
 	{
 		String processDate=uniformDate(form.getProcessDate(),"MM/DD/YYYY");
-		String attestedStatus=DBInfo.getFormInstanceAttestedStatus(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
+		String attestedStatus=getDBInfo().getFormInstanceAttestedStatus(form.getRegulator(),form.getName(),form.getVersion().substring(1),processDate);
 		return attestedStatus;
 	}
 

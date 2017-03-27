@@ -9,7 +9,7 @@ import com.lombardrisk.test.pojo.DBInfo;
  */
 public class DBQuery
 {
-	private static DBHelper dh;
+	private DBHelper dh;
 	//private static DBInfo dBInfo;
 	public DBQuery(DBInfo dBInfo)
 	{
@@ -34,7 +34,7 @@ public class DBQuery
 		}
 	}
 	
-	public static String queryRecord(String sql)
+	public String queryRecord(String sql)
 	{
 		dh.connect();
 		String rst = dh.query(sql);
@@ -42,7 +42,7 @@ public class DBQuery
 		return rst;
 	}
 	
-	public static List<String> queryRecords(String sql)
+	public List<String> queryRecords(String sql)
 	{
 		dh.connect();
 		List<String> rst = dh.queryRecords(sql);
@@ -70,7 +70,7 @@ public class DBQuery
 	*/
 	
 
-	public static int update(String sql)
+	public int update(String sql)
 	{
 		dh.connect();
 		int rst = dh.update(sql);
@@ -78,7 +78,7 @@ public class DBQuery
 		return rst;
 	}
 
-	public static void updateSourceVew(String sql)
+	public void updateSourceVew(String sql)
 	{
 		dh = new DBHelper("oracle", "172.20.20.49", "ora12c", "SCHD1_DMP");
 		dh.connect();

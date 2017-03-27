@@ -320,7 +320,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				if(messageFlag){return flag;}
 				
 				String jobRunType="ExportJob";
-				String prefixOfRegulator=DBInfo.getRegulatorPrefix(form.getRegulator());
+				String prefixOfRegulator=getDBInfo().getRegulatorPrefix(form.getRegulator());
 				String jobName=prefixOfRegulator+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
 				
 				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());

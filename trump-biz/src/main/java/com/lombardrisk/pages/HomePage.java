@@ -6,6 +6,7 @@ import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
+import com.lombardrisk.test.TestDataManager;
 import com.lombardrisk.test.pojo.DBInfo;
 
 /**
@@ -14,14 +15,21 @@ import com.lombardrisk.test.pojo.DBInfo;
 public class HomePage extends AbstractPage 
 {
 	private String loginUser;
-	
+	private DBInfo dBInfo;
 	public String getLoginUser()
 	{
 		return loginUser;
 	}
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
+	}
 	public HomePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
 		super(webDriverWrapper,testDataManager);
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 	
 	public ListPage logon(String userName,String password) throws Exception
@@ -95,7 +103,7 @@ public class HomePage extends AbstractPage
 		if(listPage.isThisPage())
 		{
 			String expectedLanguage=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
-			String acctualLanguage=DBInfo.getLanguage(userName);
+			String acctualLanguage=getDBInfo().getLanguage(userName);
 			if(acctualLanguage==null && expectedLanguage.equals("")){Assert.fail("cannot set language, Regional.language is empty in test.properties.");}
 			  if ((acctualLanguage==null && !expectedLanguage.equals("")) || !acctualLanguage.trim().equalsIgnoreCase(expectedLanguage))
 				{

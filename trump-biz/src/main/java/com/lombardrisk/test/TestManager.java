@@ -8,7 +8,6 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
-import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
@@ -132,8 +131,8 @@ public class TestManager extends TestBase implements IComFolder {
 		  super.setTestDataManager(new TestDataManager(indexAppServer, indexDBServer, indexToolsetDBServer));
 		  setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 		  logger.info(getDBInfo().toString());
-		  logger.info("Database Language:"+DBInfo.getLanguage(getDBInfo().getApplicationServer_UserName()));
-		  List<String> regulators=DBInfo.getRegulatorDescription();
+		  logger.info("Database Language:"+getDBInfo().getLanguage(getDBInfo().getApplicationServer_UserName()));
+		  List<String> regulators=getDBInfo().getRegulatorDescription();
 		  int copyCount=0;
 		  logger.info("copy folders(start)");
 		  for(String regulator:regulators)
