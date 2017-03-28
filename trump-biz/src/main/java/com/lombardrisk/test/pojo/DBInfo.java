@@ -53,7 +53,6 @@ public class DBInfo{
 			indexAppServer=_indexAppServer;
 			indexDBServer=_indexDBServer;
 			indexToolsetDBServer=_indexToolsetDBServer;
-			//testEnv=TestManager.getTestEnv();
 			testEnv=TestCaseManager.pollTestEnvironment();
 			while(testEnv==null)
 			{
@@ -64,20 +63,19 @@ public class DBInfo{
 			
 			
 			int countOfDBServers=testEnv.getDatabaseServers().size();
-			//indexAppServer=TestManager.getIndexAppServer();
 			applicationServer_Name=testEnv.getApplicationServer(indexAppServer).getName();
 			applicationServer_UserName=testEnv.getApplicationServer(indexAppServer).getUsername();
 			applicationServer_UserPassword=testEnv.getApplicationServer(indexAppServer).getPassword();
 			applicationServer_Url=testEnv.getApplicationServer(indexAppServer).getUrl();
 			applicationServer_Key=testEnv.getApplicationServer(indexAppServer).getKey();
-			//indexDBServer=TestManager.getIndexDBServer();
+			//
 			databaseServer_Name=testEnv.getDatabaseServer(indexDBServer).getName();
 			databaseServer_Driver=testEnv.getDatabaseServer(indexDBServer).getDriver();
 			databaseServer_host=testEnv.getDatabaseServer(indexDBServer).getHost();
 			databaseServer_Schema=testEnv.getDatabaseServer(indexDBServer).getSchema();
 			databaseServer_UserName=testEnv.getDatabaseServer(indexDBServer).getUsername();
 			databaseServer_UserPassword=testEnv.getDatabaseServer(indexDBServer).getPassword();
-			//indexToolsetDBServer=TestManager.getIndexToolsetDBServer();
+			//
 			if(countOfDBServers>1 && indexToolsetDBServer>=0 && indexDBServer!=indexToolsetDBServer && indexToolsetDBServer<countOfDBServers && testEnv.getDatabaseServer(indexToolsetDBServer)!=null && testEnv.getDatabaseServer(indexToolsetDBServer).getName().toLowerCase().contains("toolset"))
 			{
 				toolSetDatabaseServer_Name=testEnv.getDatabaseServer(indexToolsetDBServer).getName();
@@ -386,23 +384,7 @@ public class DBInfo{
 		}
 		return getDBQuery().queryRecord(SQL);
 	}
-/**
- * get language from database
- * the default userName is application server's username.
- * @return language
- */
-	/*public static String getLanguage(DBInfo dBInfo)
-	{
-		String language="";
-		String userName=dBInfo.getApplicationServer_UserName();
-		// update user language
-		String SQL = "SELECT MAX(\"ID\") FROM \"USR_PREFERENCE\" WHERE lower(\"USER_ID\")='" + userName.toLowerCase() + "' and upper(\"PREFERENCE_NAME\")='LANGUAGE'";
-		
-		String id = DBQuery.queryRecord(SQL);
-		SQL = "SELECT \"PREFERENCE_CODE\" FROM \"USR_PREFERENCE\" WHERE lower(\"USER_ID\")='" + userName.toLowerCase() + "' and \"ID\"=" + id;
-		language = DBQuery.queryRecord(SQL);
-		return language;
-	}*/
+
 	/***
 	 * get language from database
 	 * @param userName

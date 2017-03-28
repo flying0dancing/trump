@@ -38,7 +38,7 @@ public class TestManager extends TestBase implements IComFolder {
 	private  int indexAppServer;
 	private  int indexDBServer;
 	private  int indexToolsetDBServer;
-	private static long startSuiteTime;
+	private static final long startSuiteTime=System.currentTimeMillis();
 	private String logName;
 	private DBInfo dBInfo;
 	public ListPage getListPage()
@@ -48,7 +48,7 @@ public class TestManager extends TestBase implements IComFolder {
 	
 	 @BeforeSuite
 	  public void beforeSuite() {
-		  startSuiteTime=System.currentTimeMillis();
+		 report("suite start.");
 		  //delete older test target folder, and create news.
 		  try
 		  {
@@ -104,6 +104,7 @@ public class TestManager extends TestBase implements IComFolder {
 	  }
 	 @AfterSuite
 	  public void afterSuite() { 
+		 report("suite end. Totally used[seconds]: "+(System.currentTimeMillis()-startSuiteTime)/1000.00F+"\n");
 	  }
 	
 	 @BeforeTest
@@ -130,7 +131,6 @@ public class TestManager extends TestBase implements IComFolder {
 		  TestCaseManager.offerTestEnvironment(getTestEnvironment());
 		  super.setTestDataManager(new TestDataManager(indexAppServer, indexDBServer, indexToolsetDBServer));
 		  setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
-		  logger.info(getDBInfo().toString());
 		  logger.info("Database Language:"+getDBInfo().getLanguage(getDBInfo().getApplicationServer_UserName()));
 		  List<String> regulators=getDBInfo().getRegulatorDescription();
 		  int copyCount=0;
@@ -299,10 +299,6 @@ public class TestManager extends TestBase implements IComFolder {
  @Override
  public void tearDownTest() throws Exception {
      logger.info("teardown test after finishing feature id {}, scenario id {}", getFeatureId(), getScenarioId());
-     /*if (recycleTestEnvironment) {
-         TestCaseManager.offerTestEnvironment(testEnvironment);
-         recycleTestEnvironment = false;
-     }*/
      if (getProxyWrapper() != null) {
     	 getProxyWrapper().stop();
      }
