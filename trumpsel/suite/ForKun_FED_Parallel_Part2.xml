@@ -29,7 +29,7 @@
       </class>
     </classes>
 </test>
-<test name="Precision" enabled="true">
+<test name="Precision" enabled="false">
   	<parameter name="scenarioSheet" value="CreateImpPrecision"/>
     <classes>
       <class name="com.lombardrisk.testcase.CheckValue">
@@ -51,7 +51,7 @@
 </test>
 
 
-<test name="ExportCSV"  enabled="true">
+<test name="ExportCSV"  enabled="false">
   	<parameter name="scenarioSheet" value="ExportToCSV"/>
     <classes>
       <class name="com.lombardrisk.testcase.CheckValue">
@@ -61,7 +61,7 @@
       </class>
     </classes>
 </test>
-<test name="ExportExcel" enabled="true">
+<test name="ExportExcel" enabled="false">
   	<parameter name="scenarioSheet" value="ExportToEXCEL"/>
     <classes>
       <class name="com.lombardrisk.testcase.CheckValue">
@@ -72,7 +72,7 @@
       </class>
     </classes>
 </test>
-<test name="CheckValidationRule" enabled="true">
+<test name="CheckValidationRule" enabled="false">
   	<parameter name="scenarioSheet" value="CheckRule"/>
     <classes>
       <class name="com.lombardrisk.testcase.CheckValue">
@@ -98,7 +98,7 @@
       <class name="com.lombardrisk.testcase.CreateImportPrecision"/>
     </classes>
 </test>
-<test name="ExportToRegulator"  enabled="true">
+<test name="ExportToRegulator"  enabled="false">
   	<parameter name="scenarioSheet" value="ExportToRegulator"/>
     <classes>
       <class name="com.lombardrisk.testcase.ExportToRegulator">
@@ -121,7 +121,7 @@
       <methods>
       <include name="DataScheduleApproval"/>
       </methods>
-      </class>
+      </class>b
 	  <class name="com.lombardrisk.testcase.ExportToRegulator">
       <methods>
       <include name="checkInForm"/>

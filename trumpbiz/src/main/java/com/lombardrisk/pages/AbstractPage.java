@@ -13,8 +13,6 @@ import org.yiwan.webcore.web.PageBase;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
-import com.lombardrisk.test.TestDataManager;
-import com.lombardrisk.test.pojo.DBInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Refactored by Leo Tu on 1/29/16
+ * Refactored by Kun Shen on 1/29/16
  */
 public abstract class AbstractPage extends PageBase
 {
