@@ -92,8 +92,8 @@ public class TestManager extends TestBase implements IComFolder {
 			  }
 			  
 			  logger.info(" copy *.xsl and *.css to directory:"+TARGET_SCENARIOS_FOLDER);
-			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".xsl", TARGET_SCENARIOS_FOLDER);
-			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".css", TARGET_SCENARIOS_FOLDER);
+			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,"xsl;css", TARGET_SCENARIOS_FOLDER);
+			  
 			  
 		  }catch(Exception e)
 		  {
