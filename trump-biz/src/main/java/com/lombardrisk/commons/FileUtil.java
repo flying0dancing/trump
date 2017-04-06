@@ -319,7 +319,7 @@ public class FileUtil extends FileUtils
 				
 				for(int i=0; i<fileTypes.length;i++)
 				{
-					String fileTypeStr=fileTypes[i];
+					final String fileTypeStr=fileTypes[i];
 					File sourceFolderHandle=new File(sourceFolder);
 					File[] files=sourceFolderHandle.listFiles(new FilenameFilter(){
 			             public boolean accept(File f , String name){ 
@@ -336,7 +336,10 @@ public class FileUtil extends FileUtils
 			}
 		
 		}catch(Exception e)
-		{logger.error(e.getMessage());}
+		{
+			System.out.println(e.getMessage());
+			logger.error(e.getMessage());
+		}
 		
 	}
 	/**
