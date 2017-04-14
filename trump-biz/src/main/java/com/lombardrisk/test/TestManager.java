@@ -23,6 +23,7 @@ import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.Helper;
 import org.yiwan.webcore.util.PropHelper;
 
+
 import com.lombardrisk.commons.Dom4jUtil;
 import com.lombardrisk.commons.ExcelUtil;
 import com.lombardrisk.commons.FileUtil;
@@ -198,36 +199,40 @@ public class TestManager extends TestBase implements IComFolder {
   
   @AfterMethod
   public void afterMethod(ITestResult result) throws Exception {
-	ITestContext context=result.getTestContext();
-	ITestNGMethod method=result.getMethod();
-	 
-	logger.info(" afterMethod("+method.getMethodName()+") running!"); 
-	String resultFile=context.getCurrentXmlTest().getSuite().getName()+"+"+context.getCurrentXmlTest().getName()+"+"+getClass().getSimpleName()+"["+method.getMethodName()+"]+"+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
-	//int count=context.getFailedTests().size()+context.getPassedTests().size()+context.getSkippedTests().size();
-    Form form=(Form)result.getParameters()[0];
-    ((TestDataManager) getTestDataManager()).setFormsMap(resultFile, form);
-	  if(method.getParameterInvocationCount()==method.getCurrentInvocationCount())
+	  synchronized(this)
 	  {
-		  List<Form> forms=((TestDataManager) getTestDataManager()).getFormsMap().get(resultFile);
-		  if(resultFile.endsWith(".xml"))
-		  {
-			  Dom4jUtil.writeFormsToMethodXml(forms, TARGET_SCENARIOS_FOLDER+resultFile, "formlist.xsl");
-		  }
-		  if(resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls"))
-		  {
+		  ITestContext context=result.getTestContext();
+			ITestNGMethod method=result.getMethod();
+			 
+			logger.info(" afterMethod("+method.getMethodName()+") running!"); 
+			String resultFile=context.getCurrentXmlTest().getSuite().getName()+"+"+context.getCurrentXmlTest().getName()+"+"+getClass().getSimpleName()+"["+method.getMethodName()+"]+"+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
+			//int count=context.getFailedTests().size()+context.getPassedTests().size()+context.getSkippedTests().size();
+		    Form form=(Form)result.getParameters()[0];
+
+		    ((TestDataManager) getTestDataManager()).setFormsMap(resultFile, form);
+			  if(method.getParameterInvocationCount()==method.getCurrentInvocationCount())
+			  {
+				  List<Form> forms=((TestDataManager) getTestDataManager()).getFormsMap().get(resultFile);
+				  if(resultFile.endsWith(".xml"))
+				  {
+					  Dom4jUtil.writeFormsToMethodXml(forms, TARGET_SCENARIOS_FOLDER+resultFile, "formlist.xsl");
+				  }
+				  if(resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls"))
+				  {
+					  String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
+					  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+resultFile,scenarioSheet);
+					  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xlsx",scenarioSheet);
+				  }
+			  }
+			  StringBuffer identifier=new StringBuffer(resultFile);
 			  String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
-			  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+resultFile,scenarioSheet);
-			  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xlsx",scenarioSheet);
-		  }
+			  if(scenarioSheet!=null && (resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls")) )
+			  {identifier.append("["+scenarioSheet+"]");}
+			  identifier.append("-"+getDBInfo().getApplicationServer_Url().toLowerCase()+"-log:"+getLogName());
+			  //Dom4jUtil.writeFormsToXml(identifier.toString(),FormsDataProvider.getForms(),TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xml","formsTotal.xsl");
+			  Dom4jUtil.writeFormToXml(identifier.toString(),form,TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xml","formsTotal.xsl");  
 	  }
-	  StringBuffer identifier=new StringBuffer(resultFile);
-	  String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
-	  if(scenarioSheet!=null && (resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls")) )
-	  {identifier.append("["+scenarioSheet+"]");}
-	  identifier.append("-"+getDBInfo().getApplicationServer_Url().toLowerCase()+"-log:"+getLogName());
-	  //Dom4jUtil.writeFormsToXml(identifier.toString(),FormsDataProvider.getForms(),TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xml","formsTotal.xsl");
-	  
-	  Dom4jUtil.writeFormToXml(identifier.toString(),form,TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xml","formsTotal.xsl");
+		  
   }
  
 

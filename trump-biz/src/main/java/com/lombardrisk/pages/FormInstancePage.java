@@ -997,17 +997,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			loadingDlg();
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 		}
-		/*if(flag)
-		{
-			String a=getLatestFile(downloadFolder);
-			String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
-			if(b.equalsIgnoreCase(LOCKNAME))
-			{
-				logger.error("error: not find download file.");
-				flag=false;
-			}
 		
-		}*/
 		return flag;
 	}
 	

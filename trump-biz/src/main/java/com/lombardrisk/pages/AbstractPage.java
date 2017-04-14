@@ -775,6 +775,9 @@ public abstract class AbstractPage extends PageBase
 	{
 		Boolean lockNow=false;
 		Boolean lock=true;
+		
+		if(PropHelper.ENABLE_FILE_DOWNLOAD){return true;}
+		
 		if(new File(downloadDirectory).isDirectory())
 		{
 			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
@@ -807,7 +810,9 @@ public abstract class AbstractPage extends PageBase
 	protected Boolean unlockDownloadDir(String downloadDirectory) throws InterruptedException, IOException
 	{
 		Boolean unlock=false;
-
+		
+		if(PropHelper.ENABLE_FILE_DOWNLOAD){return true;}
+		
 		if(new File(downloadDirectory).isDirectory())
 		{
 			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
@@ -848,11 +853,11 @@ public abstract class AbstractPage extends PageBase
 				String oldName = new File(exportedFile).getName();
 				String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
 				filePath=renameFile(downloadFolder, oldName, fileName);
-			}else
+			}
+			/*else
 			{
 				filePath=downloadFile(downloadFolder);
-			}
-			
+			}*/
 		}
 		else
 		{
