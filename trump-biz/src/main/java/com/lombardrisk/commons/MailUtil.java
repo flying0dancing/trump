@@ -191,10 +191,10 @@ public class MailUtil {
 				info.append(entry.getKey()+";");
 				if(StringUtils.isNotBlank(entry.getValue()))
 				{
-					htmlEmail.addTo(entry.getKey(), entry.getValue());
+					htmlEmail.addCc(entry.getKey(), entry.getValue());
 				}else
 				{
-					htmlEmail.addTo(entry.getKey());
+					htmlEmail.addCc(entry.getKey());
 				}
 			}
 			logger.info(info.toString());
@@ -211,10 +211,10 @@ public class MailUtil {
 				info.append(entry.getKey()+";");
 				if(StringUtils.isNotBlank(entry.getValue()))
 				{
-					htmlEmail.addTo(entry.getKey(), entry.getValue());
+					htmlEmail.addBcc(entry.getKey(), entry.getValue());
 				}else
 				{
-					htmlEmail.addTo(entry.getKey());
+					htmlEmail.addBcc(entry.getKey());
 				}
 			}
 			logger.info(info.toString());
