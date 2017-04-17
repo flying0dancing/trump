@@ -1,5 +1,6 @@
 package com.lombardrisk.pages;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -11,8 +12,8 @@ import com.lombardrisk.test.pojo.Form;
 public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,IExecFuncFolder{
 	private Form form;
 	
-	public FormInstanceBottomPage(IWebDriverWrapper webDriverWrapper, Form form) {
-		super(webDriverWrapper);
+	public FormInstanceBottomPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form) {
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 	}
 	
@@ -119,10 +120,10 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	{
 		Boolean flag=true;
 		clickLinkText(text);
-		loadingDlg();
+		loadingDlg(3000);
 		if(element("fidf.noRecordsFound").isDisplayed())
 		{
-			logger.error("no records found to export.");
+			logger.error("error: no records found to export.");
 			flag=false;
 		}else
 		{

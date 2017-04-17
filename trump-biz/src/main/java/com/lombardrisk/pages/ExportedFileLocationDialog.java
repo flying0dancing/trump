@@ -1,13 +1,14 @@
 package com.lombardrisk.pages;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 
 public class ExportedFileLocationDialog extends AbstractPage {
 
-	public ExportedFileLocationDialog(IWebDriverWrapper webDriverWrapper) {
-		super(webDriverWrapper);
+	public ExportedFileLocationDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager) {
+		super(webDriverWrapper,testDataManager);
 		
 	}
 	

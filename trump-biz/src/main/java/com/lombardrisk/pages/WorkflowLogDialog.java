@@ -1,6 +1,7 @@
 package com.lombardrisk.pages;
 
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
 import com.lombardrisk.test.IComFolder;
@@ -10,8 +11,8 @@ import com.lombardrisk.test.IExecFuncFolder;
 public class WorkflowLogDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
 		
 	
-	public WorkflowLogDialog(IWebDriverWrapper webDriverWrapper) {
-		super(webDriverWrapper);
+	public WorkflowLogDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager) {
+		super(webDriverWrapper,testDataManager);
 		
 		
 	}

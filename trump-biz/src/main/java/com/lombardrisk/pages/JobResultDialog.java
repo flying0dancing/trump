@@ -1,11 +1,12 @@
 package com.lombardrisk.pages;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
 public class JobResultDialog extends AbstractPage {
 
-	public JobResultDialog(IWebDriverWrapper webDriverWrapper) {
-		super(webDriverWrapper);
+	public JobResultDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager) {
+		super(webDriverWrapper,testDataManager);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -78,14 +79,14 @@ public class JobResultDialog extends AbstractPage {
 		String jobStartTimeLabel=jobStartTime();
 		if(element("fipf.formInstTitleLabels").isDisplayed())
 		{
-			fip=new FormInstancePage(getWebDriverWrapper());
+			fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager());
 			fip.closeThisPage();
 			fip=null;
 		}
 		if(element("filf.formInstanceListForm").isDisplayed())
 		{
 			waitThat().timeout(10000);
-			listPage=new ListPage(getWebDriverWrapper());
+			listPage=new ListPage(getWebDriverWrapper(),getTestDataManager());
 			JobManagerPage jobManagerPage=listPage.clickJobManager();
 			if(jobManagerPage!=null && jobStartTimeLabel!=null)
 			{

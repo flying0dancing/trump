@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.testng.Assert;
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
@@ -12,7 +13,6 @@ import org.yiwan.webcore.web.PageBase;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.commons.FileUtil;
-import com.lombardrisk.test.DBInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Refactored by Leo Tu on 1/29/16
+ * Refactored by Kun Shen on 1/29/16
  */
 public abstract class AbstractPage extends PageBase
 {
@@ -36,6 +36,7 @@ public abstract class AbstractPage extends PageBase
 	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());//old one
 	protected final static String LOCKNAME="TP.lock";
 	protected String downloadFolder;
+	private ITestDataManager testDataManager;
 	public enum Month
 	{
 		JANUARY("Jan",1),FEBRUARY("Feb",2),MARCH("Mar",3),APRIL("Apr",4),MAY("May",5),JUNE("Jun",6),JULY("Jul",7),AUGUST("Aug",8),SEPTEMBER("Sep",9),OCTOBER("Oct",10),NOVEMBER("Nov",11),DECEMBER("Dec",12);
@@ -69,9 +70,10 @@ public abstract class AbstractPage extends PageBase
 	 * 
 	 * @param webDriverWrapper
 	 */
-	public AbstractPage(IWebDriverWrapper webDriverWrapper)
+	public AbstractPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
 		super(webDriverWrapper);
+		this.setTestDataManager(testDataManager);
 		if(PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
 			/*downloadFolder=new File(PropHelper.DOWNLOAD_FOLDER).getAbsolutePath();
@@ -200,9 +202,9 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected void loadingDlg() throws Exception
 	{
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 	}
 	/**
 	 * Wait for ajax dialog disappear
@@ -211,7 +213,7 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected void loadingDlg(long timeout) throws Exception
 	{
-		waitThat().timeout(2000);
+		waitThat().timeout(1800);
 		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
 		waitThat().timeout(timeout);
 	}
@@ -637,14 +639,14 @@ public abstract class AbstractPage extends PageBase
 	{
 		Boolean flag=false;
 		if(it==null || it.trim().equals("")){return false;}
-		if (!element.getSelectedText().equals(it))
+		if (!element.getSelectedText().equalsIgnoreCase(it))
 		{
 			try{
 				element.selectByVisibleText(it.trim());
 				loadingDlg();
 			}catch(Exception e){}
 			finally{
-				if(element.getSelectedText().equals(it.trim()))
+				if(element.getSelectedText().equalsIgnoreCase(it.trim()))
 				{
 					flag=true;
 				}else
@@ -773,6 +775,9 @@ public abstract class AbstractPage extends PageBase
 	{
 		Boolean lockNow=false;
 		Boolean lock=true;
+		
+		if(PropHelper.ENABLE_FILE_DOWNLOAD){return true;}
+		
 		if(new File(downloadDirectory).isDirectory())
 		{
 			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
@@ -784,7 +789,7 @@ public abstract class AbstractPage extends PageBase
 					lock=false;
 					break;
 				}
-				Thread.sleep(500);
+				Thread.sleep(1500);
 			}
 			
 			if(!lock)
@@ -805,7 +810,9 @@ public abstract class AbstractPage extends PageBase
 	protected Boolean unlockDownloadDir(String downloadDirectory) throws InterruptedException, IOException
 	{
 		Boolean unlock=false;
-
+		
+		if(PropHelper.ENABLE_FILE_DOWNLOAD){return true;}
+		
 		if(new File(downloadDirectory).isDirectory())
 		{
 			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
@@ -846,11 +853,11 @@ public abstract class AbstractPage extends PageBase
 				String oldName = new File(exportedFile).getName();
 				String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
 				filePath=renameFile(downloadFolder, oldName, fileName);
-			}else
+			}
+			/*else
 			{
 				filePath=downloadFile(downloadFolder);
-			}
-			
+			}*/
 		}
 		else
 		{
@@ -931,10 +938,7 @@ public abstract class AbstractPage extends PageBase
 	
 	protected static String getFormat()
 	{
-		String format=DBInfo.getLanguage();
-		if(format==null || format.trim().equals("")){
-			format=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
-		}
+		String format=PropHelper.getProperty("Regional.language")==null?"en_US":PropHelper.getProperty("Regional.language").trim();
 		return format;
 	}
 	
@@ -950,5 +954,13 @@ public abstract class AbstractPage extends PageBase
 			logger.info("error: transform String to Date failed.["+e.getMessage()+"]");
 		}
 		return date;
+	}
+
+	public ITestDataManager getTestDataManager() {
+		return testDataManager;
+	}
+
+	public void setTestDataManager(ITestDataManager testDataManager) {
+		this.testDataManager = testDataManager;
 	}
 }

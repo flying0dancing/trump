@@ -308,31 +308,38 @@ public class FileUtil extends FileUtils
 		}
 	}
 
-	public static void copyFileToDirectory(String sourceFolder,final String fileType, String destFolder) throws Exception
+	public static void copyFileToDirectory(String sourceFolder,String fileType, String destFolder) throws Exception
 	{
 		try
 		{
 			if(sourceFolder!=null && fileType!=null && destFolder!=null)
 			{
-				/*String[] fileTypes=fileType.split(";");
-				for(String fileTypeTmp:fileTypes)
+				if(fileType.lastIndexOf(";")==fileType.length()-1){fileType=fileType.substring(0, fileType.length()-1);}
+				String[] fileTypes=fileType.split(";");
+				
+				for(int i=0; i<fileTypes.length;i++)
 				{
-					
-				}*/
-				File sourceFolderHandle=new File(sourceFolder);
-				File[] files=sourceFolderHandle.listFiles(new FilenameFilter(){
-		             public boolean accept(File f , String name){ 
-		                 return name.endsWith(fileType);}  
-		                });
-				File destFolderHandle=new File(destFolder);
-				for(File file:files)
-				{
-					copyFileToDirectory(file, destFolderHandle);
+					final String fileTypeStr=fileTypes[i];
+					File sourceFolderHandle=new File(sourceFolder);
+					File[] files=sourceFolderHandle.listFiles(new FilenameFilter(){
+			             public boolean accept(File f , String name){ 
+			                 return name.endsWith(fileTypeStr);}  
+			                });
+					File destFolderHandle=new File(destFolder);
+					for(File file:files)
+					{
+						copyFileToDirectory(file, destFolderHandle);
+					}
 				}
+
+				
 			}
 		
 		}catch(Exception e)
-		{logger.error(e.getMessage());}
+		{
+			System.out.println(e.getMessage());
+			logger.error(e.getMessage());
+		}
 		
 	}
 	/**

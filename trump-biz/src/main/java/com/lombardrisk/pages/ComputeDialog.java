@@ -1,5 +1,6 @@
 package com.lombardrisk.pages;
 
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
 import com.lombardrisk.test.pojo.Form;
@@ -7,8 +8,8 @@ import com.lombardrisk.test.pojo.Form;
 public class ComputeDialog extends AbstractPage implements IReturnDialog{
 	
 	private Form form;
-	public ComputeDialog(IWebDriverWrapper webDriverWrapper,Form form) {
-		super(webDriverWrapper);
+	public ComputeDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager,Form form) {
+		super(webDriverWrapper,testDataManager);
 		this.form=form;
 	}
 
@@ -110,7 +111,7 @@ public class ComputeDialog extends AbstractPage implements IReturnDialog{
 			}
 			if(flag)
 			{
-				fip=new FormInstancePage(getWebDriverWrapper(),form);
+				fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form);
 				if(!fip.isThisPage())
 				{
 					fip=null;

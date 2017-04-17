@@ -377,7 +377,8 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						{
 							returnStatus="fail";
 						}
-						
+						if(status.startsWith("error"))
+						{returnStatus="error";}
 						if(strBuffer.length()>5000)
 						{
 							FileUtil.writeContent(newFile,strBuffer.toString());

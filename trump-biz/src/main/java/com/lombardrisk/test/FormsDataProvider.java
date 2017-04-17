@@ -15,7 +15,7 @@ import com.lombardrisk.test.pojo.Form;
 
 public class FormsDataProvider implements IComFolder{
 	private static List<Form> forms;
-	private FormsDataProvider(){}
+	protected FormsDataProvider(){}
 	@DataProvider(name="FormInstances")
 	public static Object[][] dataProviderForms(ITestContext context)
 	{
@@ -81,6 +81,4 @@ public class FormsDataProvider implements IComFolder{
 		return forms.size();
 	}
 	
-	
-
 }

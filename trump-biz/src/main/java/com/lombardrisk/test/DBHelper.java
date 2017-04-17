@@ -99,7 +99,7 @@ public class DBHelper
 		{
 			strConn = String.format("jdbc:%s://%s:%s/%s", dbms, host, port, db);
 		}
-
+		
 		DbUtils.loadDriver(dbmsDriver);
 		try
 		{
@@ -113,6 +113,7 @@ public class DBHelper
 			logger.error("Database connection failed!");
 			logger.error(e.getMessage());
 		}
+
 	}
 
 	protected void close()

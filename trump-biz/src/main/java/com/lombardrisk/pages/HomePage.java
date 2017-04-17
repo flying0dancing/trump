@@ -2,10 +2,12 @@ package com.lombardrisk.pages;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
+import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
-import com.lombardrisk.test.DBInfo;
+import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 
 /**
  * Created by Kevin Ling on 2/16/15. Refactored by Leo Tu on 1/29/16
@@ -13,14 +15,21 @@ import com.lombardrisk.test.DBInfo;
 public class HomePage extends AbstractPage 
 {
 	private String loginUser;
-	
+	private DBInfo dBInfo;
 	public String getLoginUser()
 	{
 		return loginUser;
 	}
-	public HomePage(IWebDriverWrapper webDriverWrapper)
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
+	}
+	public HomePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
-		super(webDriverWrapper);
+		super(webDriverWrapper,testDataManager);
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 	}
 	
 	public ListPage logon(String userName,String password) throws Exception
@@ -62,16 +71,23 @@ public class HomePage extends AbstractPage
 	public ListPage submitLogin() throws Exception
 	{
 		element("hm.login").click();
+
+		if(element("hm.message").isPresent())
+		{
+			logger.error(element("hm.message").getInnerText());
+			waitThat("hm.message").toBeInvisible();
+			return null;
+		}
 		loadingDlg();
 		waitForPageLoaded();
-		return new ListPage(getWebDriverWrapper());
+		return new ListPage(getWebDriverWrapper(),getTestDataManager());
 	}
 
 	public HomePage submitLoginExpectingFailure() throws Exception
 	{
 		element("hm.login").click();
 		loadingDlg();
-		return new HomePage(getWebDriverWrapper());
+		return new HomePage(getWebDriverWrapper(),getTestDataManager());
 	}
 
 	public ListPage loginAs(String userName, String password) throws Exception
@@ -87,7 +103,7 @@ public class HomePage extends AbstractPage
 		if(listPage.isThisPage())
 		{
 			String expectedLanguage=PropHelper.getProperty("Regional.language")==null?"":PropHelper.getProperty("Regional.language").trim();
-			String acctualLanguage=DBInfo.getLanguage(userName);
+			String acctualLanguage=getDBInfo().getLanguage(userName);
 			if(acctualLanguage==null && expectedLanguage.equals("")){Assert.fail("cannot set language, Regional.language is empty in test.properties.");}
 			  if ((acctualLanguage==null && !expectedLanguage.equals("")) || !acctualLanguage.trim().equalsIgnoreCase(expectedLanguage))
 				{
@@ -114,13 +130,17 @@ public class HomePage extends AbstractPage
 		loadingDlg();
 		ListPage listPage = submitLogin();
 		//assertThat("pp.userLabel").innerText().containsIgnoringCase("hi "+userName);
+		if(listPage==null)
+		{
+			return listPage;
+		}
 		if(listPage.isThisPage())
 		{
 			
 		}else
 		{
 			listPage=null;
-			Assert.fail("cannot access to Dashboard.");
+			Assert.fail("error: cannot access to Dashboard.");
 		}
 		 
 		return listPage;

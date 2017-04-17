@@ -20,7 +20,7 @@ public class DataScheduleWorkflow extends TestManager{
 	 * @param form
 	 */
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
-	public void DataScheduleApproval(Form form)
+	public void dataScheduleApproval(Form form)
 	{
 		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
 		{

@@ -66,5 +66,6 @@ public class RetrieveForm extends TestManager{
 		}
 		
 		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		
 	}
 }
