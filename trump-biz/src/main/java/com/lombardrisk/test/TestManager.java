@@ -3,8 +3,10 @@ package com.lombardrisk.test;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import org.testng.Assert;
+import org.testng.ISuiteResult;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
@@ -18,15 +20,18 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.AfterSuite;
+import org.testng.xml.XmlClass;
+import org.testng.xml.XmlSuite;
+import org.testng.xml.XmlTest;
 import org.yiwan.webcore.test.TestBase;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.Helper;
 import org.yiwan.webcore.util.PropHelper;
 
-
 import com.lombardrisk.commons.Dom4jUtil;
 import com.lombardrisk.commons.ExcelUtil;
 import com.lombardrisk.commons.FileUtil;
+import com.lombardrisk.commons.MailUtil;
 import com.lombardrisk.pages.HomePage;
 import com.lombardrisk.pages.ListPage;
 import com.lombardrisk.test.pojo.DBInfo;
@@ -42,6 +47,11 @@ public class TestManager extends TestBase implements IComFolder {
 	private static final long startSuiteTime=System.currentTimeMillis();
 	private String logName;
 	private DBInfo dBInfo;
+	private static long totalRun=0;
+	private static long totalPass=0;
+	private static long totalSkip=0;
+	private static long totalFail=0;
+	private static long totalError=0;
 	public ListPage getListPage()
 	{
 		return listPage;
@@ -104,8 +114,17 @@ public class TestManager extends TestBase implements IComFolder {
 		 
 	  }
 	 @AfterSuite
-	  public void afterSuite() { 
+	  public void afterSuite(XmlTest xmlTest) { 
 		 report("suite end. Totally used[seconds]: "+(System.currentTimeMillis()-startSuiteTime)/1000.00F+"\n");
+		 /*Map<String, ISuiteResult> resultMap=result.getTestContext().getSuite().getResults();
+		 for(Map.Entry<String, ISuiteResult> a:resultMap.entrySet())
+		 {
+			 a.getValue().
+		 }*/
+
+		 System.out.println(xmlTest.getSuite().getFileName());
+		 String content="Tests run: "+totalRun+", Pass: "+totalPass+", Failures: "+totalFail+", Errors: "+totalError+", Skipped:"+totalSkip+", Time elapsed:"+(System.currentTimeMillis()-startSuiteTime)/60000.00F+"min";
+		 MailUtil.sendARResultMail(TARGET_FOLDER,xmlTest.getSuite().getFileName(),content);
 	  }
 	
 	 @BeforeTest
@@ -203,12 +222,27 @@ public class TestManager extends TestBase implements IComFolder {
 	  {
 		  ITestContext context=result.getTestContext();
 			ITestNGMethod method=result.getMethod();
-			 
+			logger.info("host name:"+result.getHost());
 			logger.info(" afterMethod("+method.getMethodName()+") running!"); 
 			String resultFile=context.getCurrentXmlTest().getSuite().getName()+"+"+context.getCurrentXmlTest().getName()+"+"+getClass().getSimpleName()+"["+method.getMethodName()+"]+"+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
 			//int count=context.getFailedTests().size()+context.getPassedTests().size()+context.getSkippedTests().size();
 		    Form form=(Form)result.getParameters()[0];
-
+		    totalRun++;
+		    String formStatus=form.getExecutionStatus().toLowerCase();
+		    if(formStatus.startsWith("pass"))
+		    {
+		    	totalPass++;
+		    }else if(formStatus.startsWith("skip"))
+		    {
+		    	totalSkip++;
+		    }else if(formStatus.startsWith("fail"))
+		    {
+		    	totalFail++;
+		    }else if(formStatus.startsWith("error"))
+		    {
+		    	totalError++;
+		    }
+		    
 		    ((TestDataManager) getTestDataManager()).setFormsMap(resultFile, form);
 			  if(method.getParameterInvocationCount()==method.getCurrentInvocationCount())
 			  {
@@ -332,5 +366,27 @@ public DBInfo getDBInfo() {
 public void setDBInfo(DBInfo dBInfo) {
 	this.dBInfo = dBInfo;
 }
+
+public static long getTotalRun() {
+return totalRun;
+}
+
+public static long getTotalPass() {
+return totalPass;
+}
+
+public static long getTotalSkip() {
+return totalSkip;
+}
+
+public static long getTotalFail() {
+return totalFail;
+}
+
+public static long getTotalError() {
+return totalError;
+}
+
+
 
 }

@@ -13,6 +13,7 @@ import com.lombardrisk.test.pojo.ServerInfo;
 
 public class TestDataManager implements ITestDataManager{
 	//private final static Logger logger = LoggerFactory.getLogger(TestDataManager.class);
+
 	private HashMap<String,List<Form>> formsMap;
     private DBInfo dBInfo;
 	private ServerInfo serverInfo;
@@ -54,5 +55,5 @@ public class TestDataManager implements ITestDataManager{
 	public void setServerInfo(ServerInfo serverInfo) {
 		this.serverInfo = serverInfo;
 	}
-
+	
 }
