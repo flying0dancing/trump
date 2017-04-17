@@ -79,6 +79,9 @@ public class MailUtil {
         			subject=PropHelper.getProperty("mail.subject.prefix")+": "+resultPath.substring(i+1);
         		}
         	}
+        }else
+        {
+        	subject="trump result";
         }
         mail.setSubject(subject);
        // String resultPath="H:\\ProductLine\\TrumpTest\\AR1.15.2+FED+Smoke+Parallel20170411\\scenarios-result";
