@@ -222,7 +222,6 @@ public class TestManager extends TestBase implements IComFolder {
 	  {
 		  ITestContext context=result.getTestContext();
 			ITestNGMethod method=result.getMethod();
-			logger.info("host name:"+result.getHost());
 			logger.info(" afterMethod("+method.getMethodName()+") running!"); 
 			String resultFile=context.getCurrentXmlTest().getSuite().getName()+"+"+context.getCurrentXmlTest().getName()+"+"+getClass().getSimpleName()+"["+method.getMethodName()+"]+"+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
 			//int count=context.getFailedTests().size()+context.getPassedTests().size()+context.getSkippedTests().size();
