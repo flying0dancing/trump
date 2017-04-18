@@ -3,10 +3,8 @@ package com.lombardrisk.test;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import org.testng.Assert;
-import org.testng.ISuiteResult;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
@@ -20,8 +18,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.AfterSuite;
-import org.testng.xml.XmlClass;
-import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import org.yiwan.webcore.test.TestBase;
 import org.yiwan.webcore.test.TestCaseManager;
@@ -116,13 +112,6 @@ public class TestManager extends TestBase implements IComFolder {
 	 @AfterSuite
 	  public void afterSuite(XmlTest xmlTest) { 
 		 report("suite end. Totally used[seconds]: "+(System.currentTimeMillis()-startSuiteTime)/1000.00F+"\n");
-		 /*Map<String, ISuiteResult> resultMap=result.getTestContext().getSuite().getResults();
-		 for(Map.Entry<String, ISuiteResult> a:resultMap.entrySet())
-		 {
-			 a.getValue().
-		 }*/
-
-		 System.out.println(xmlTest.getSuite().getFileName());
 		 String content="Tests run: "+totalRun+", Pass: "+totalPass+", Failures: "+totalFail+", Errors: "+totalError+", Skipped:"+totalSkip+", Time elapsed:"+(System.currentTimeMillis()-startSuiteTime)/60000.00F+"min";
 		 MailUtil.sendARResultMail(TARGET_FOLDER,xmlTest.getSuite().getFileName(),content);
 	  }
