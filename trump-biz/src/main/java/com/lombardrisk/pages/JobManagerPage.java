@@ -120,7 +120,11 @@ public class JobManagerPage extends AbstractPage
 		String status=null;
 		//String started_StartsWith=started.substring(0, started.length()-2);
 		IWebElementWrapper _getstartDate=element("ficmptd.getstartDate",name,referenceDate,runType);
-		if(!_getstartDate.isPresent()){return null;}
+		if(!_getstartDate.isPresent())
+		{
+			_getstartDate=element("ficmptd.getstartDateAR1153",name,referenceDate,runType);
+			if(!_getstartDate.isPresent()){return null;}
+		}
 		String startDate=_getstartDate.getInnerText();
 		
 		Date __jobStarted=transformStringToDate(jobStartedDate);
@@ -132,7 +136,11 @@ public class JobManagerPage extends AbstractPage
 			if(startDateL>=jobStartedL)
 			{
 				IWebElementWrapper _getStatus=element("ficmptd.getStatus",name,referenceDate,runType,startDate);
-				if(!_getStatus.isPresent()){return null;}
+				if(!_getStatus.isPresent())
+				{
+					_getStatus=element("ficmptd.getStatusAR1153",name,referenceDate,runType,startDate);
+					if(!_getStatus.isPresent()){return null;}
+				}
 				status=_getStatus.getInnerText();
 				logger.info("current job status:"+status);
 			}
@@ -141,7 +149,13 @@ public class JobManagerPage extends AbstractPage
 		
 		if(status.equalsIgnoreCase("FAILURE"))
 		{
-			status="FAILURE:"+element("ficmptd.getStatusMessage",name,referenceDate,runType,startDate).getInnerText();
+			IWebElementWrapper _getStatusMsg=element("ficmptd.getStatusMessage",name,referenceDate,runType,startDate);
+			if(!_getStatusMsg.isPresent())
+			{
+				_getStatusMsg=element("ficmptd.getStatusMessageAR1153",name,referenceDate,runType,startDate);
+				if(!_getStatusMsg.isPresent()){return null;}
+			}
+			status="FAILURE:"+_getStatusMsg.getInnerText();
 		}
 		if(status.trim().equals(""))
 		{
