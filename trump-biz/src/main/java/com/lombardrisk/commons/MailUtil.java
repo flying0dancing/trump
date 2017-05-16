@@ -76,7 +76,7 @@ public class MailUtil {
         		int i=StringUtils.lastIndexOfAny(resultPath, "/","\\");
         		if(i!=-1)
         		{
-        			subject=PropHelper.getProperty("mail.subject.prefix")+": "+resultPath.substring(i+1);
+        			subject=PropHelper.getProperty("mail.subject.prefix")+resultPath.substring(i+1);
         		}
         	}
         }else

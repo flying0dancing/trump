@@ -56,26 +56,8 @@ public class TestManager extends TestBase implements IComFolder {
 	 @BeforeSuite
 	  public void beforeSuite() {
 		 report("suite start.");
-		  //delete older test target folder, and create news.
 		  try
 		  {
-			  /*if(FileUtil.checkDirectory(TARGET_FOLDER))
-			  {
-				  logger.info(" delete directory:"+TARGET_FOLDER);
-				  FileUtil.deleteDirectory(TARGET_FOLDER);
-			  }
-			  logger.info(" create directory:"+TARGET_FOLDER);
-			  FileUtil.createDirectory(TARGET_FOLDER);
-			  logger.info(" create directory:"+TARGET_SCENARIOS_FOLDER);
-			  FileUtil.createDirectory(TARGET_SCENARIOS_FOLDER);
-			  logger.info(" create directory:"+TARGET_DOWNLOAD_FOLDER);
-			  FileUtil.createDirectory(TARGET_DOWNLOAD_FOLDER);
-			  logger.info(" create directory:"+TARGET_LOG_FOLDER);
-			  FileUtil.createDirectory(TARGET_LOG_FOLDER);//
-			  logger.info(" copy *.xsl and *.css to directory:"+TARGET_SCENARIOS_FOLDER);
-			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".xsl", TARGET_SCENARIOS_FOLDER);
-			  FileUtil.copyFileToDirectory(SOURCE_SCENARIOS_FOLDER,".css", TARGET_SCENARIOS_FOLDER);*/
-			  
 			  //create new result folder and subfolders if need.
 			  if(!FileUtil.checkDirectory(TARGET_FOLDER))
 			  {
@@ -149,16 +131,11 @@ public class TestManager extends TestBase implements IComFolder {
 			  logger.info("try to copying regulator folder \""+regulator+"\" to result folder");
 			  if(new File(SOURCE_EXPECTATION_FOLDER+regulator).exists() && new File(SOURCE_IMPORT_FOLDER+regulator).exists())
 			  {
-				  if(!new File(TARGET_EXPECTATION_FOLDER+regulator).exists())
-				  {
-					  logger.info("copying folder "+new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
-					  FileUtil.copyDirectory(new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath(), new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
-				  }
-				  if(!new File(TARGET_IMPORT_FOLDER+regulator).exists())
-				  {
-					  logger.info("copying folder "+new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
-					  FileUtil.copyDirectory(new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath(), new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
-				  }
+				  logger.info("copying folder "+new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
+				  FileUtil.copyDirectory(new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath(), new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
+				  logger.info("copying folder "+new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
+				  FileUtil.copyDirectory(new File(SOURCE_IMPORT_FOLDER+regulator).getAbsolutePath(), new File(TARGET_IMPORT_FOLDER+regulator).getAbsolutePath());
+				 
 				  if(new File(TARGET_EXPECTATION_FOLDER+regulator).exists() && new File(TARGET_IMPORT_FOLDER+regulator).exists())
 				  {copyCount++;}
 			  }

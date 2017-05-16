@@ -59,7 +59,7 @@
         "name": "ar_database",
         "driver": "oracle",
         "host": "172.20.20.49@ora11g",        
-        "schema": "AUTOPROD142_EBA$OWNER"
+        "schema": "AR4ECR_12613$OWNER"
       },
       {
       	"id": 5,
