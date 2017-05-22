@@ -669,7 +669,7 @@ public class FileUtil extends FileUtils
 			baselineStrArray=baselineStr.split("\",\"");
 			if(baselineStrArray.length==5)
 			{
-				String regex=baselineStrArray[0]+"\",\""+baselineStrArray[1]+"\",\""+"(.*)\",.*"+",\""+baselineStrArray[4];
+				String regex=baselineStrArray[0]+"\",.*\""+baselineStrArray[1]+"\",\""+"(.*)\",.*"+",\""+baselineStrArray[4];
 				
 				Pattern pattern=Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 				//long line=0;
