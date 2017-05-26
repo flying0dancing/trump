@@ -2,9 +2,9 @@ package com.lombardrisk.test;
 
 import org.yiwan.webcore.util.PropHelper;
 
-public interface IComFolder {
-	 //String TARGET_FOLDER_TMP =System.getProperty("resultFolder")==null?System.setProperty("resultFolder", PropHelper.getProperty("test.target").trim()):System.getProperty("resultFolder");
-	 String TARGET_FOLDER =System.getProperty("resultFolder")==null?PropHelper.getProperty("test.target").trim().replace("\\", "/"):System.getProperty("resultFolder").replace("\\", "/");
+public interface IComFolder extends IConfigCmd{
+	 //String TARGET_FOLDER =System.getProperty("resultFolder")==null?PropHelper.getProperty("test.target").trim().replace("\\", "/"):System.getProperty("resultFolder").replace("\\", "/");
+	 String TARGET_FOLDER =ICC_RESULTFOLDER==null?PropHelper.getProperty("test.target").trim().replace("\\", "/"):ICC_RESULTFOLDER.replace("\\", "/");
 	 String SOURCE_FOLDER=PropHelper.getProperty("test.source").trim().replace("\\", "/");
 	 String SOURCE_EXPECTATION_FOLDER=SOURCE_FOLDER+"/expectation/";
 	 String SOURCE_IMPORT_FOLDER = SOURCE_FOLDER+"/import/";
