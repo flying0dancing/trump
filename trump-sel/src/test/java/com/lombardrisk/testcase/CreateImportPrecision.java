@@ -49,7 +49,7 @@ public class CreateImportPrecision extends TestManager implements IExecFuncFolde
 							if(formInstancePage!=null)
 							{
 								ImportFileFormDialog importFileFormDlg=formInstancePage.importFileForm();
-								Boolean importFlag=true;
+								Boolean importFlag=false;
 								if(importFileFormDlg!=null)
 								{
 									String errorMessage=importFileFormDlg.uploadFile();

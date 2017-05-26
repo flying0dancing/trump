@@ -45,17 +45,17 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		int indexOfActualValue=5;
 		int indexOfTestResult=8;
 		String regulator=form.getRegulator();
-		String regulatorFolder=TARGET_DOWNLOAD_FOLDER+regulator+"("+UIDISPLAY+")/";
+		String downloadFolder=TARGET_DOWNLOAD_FOLDER+regulator+"("+UIDISPLAY+")/";
 		String expectationFolder=TARGET_EXPECTATION_FOLDER+regulator+"/";
-		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
-		if(!new File(regulatorFolder).exists())
+		//String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
+		if(!new File(downloadFolder).exists())
 		{
-			FileUtil.createDirectory(regulatorFolder);
+			FileUtil.createDirectory(downloadFolder);
 		}
-		formInstancePage.getAllCellsValue();
-		if(!new File(regulatorFolder).exists())
+		String fileFullPath=formInstancePage.getAllCellsValue(downloadFolder);
+		if(fileFullPath==null)
 		{
-			testRstFlag="error:cannot find UIDisplay folder."+regulatorFolder;
+			testRstFlag="error:cannot find file in UIDisplay folder[ "+downloadFolder+"].";
 			logger.error(testRstFlag);
 		}else
 		{
@@ -68,6 +68,9 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			Workbook xwb =ExcelUtil.openWorkbook(newFile);
 			int amt=ExcelUtil.getRowNum(xwb, null);
 			
+			//String searchedFilePrefix=downloadFolder+form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
+			String searchedFileName=fileFullPath;
+			logger.info("comparison used download file ["+searchedFileName+"]");
 			for (int i = 1; i <= amt; i++)
 			{
 				ArrayList<String> expectedValueValueList = ExcelUtil.getValueFromRow(xwb,null,i);
@@ -78,7 +81,8 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				String expectedValueRP = expectedValueValueList.get(indexOfExpectedValue).trim();
 				
 				String identifier=cellName+","+rowID+","+instanceCode+",";
-				String searchedFileName=regulatorFolder+form.getName()+"_"+form.getVersion()+"_"+instanceCode+"_"+form.getEntity()+"_"+processDateSimple+".csv";
+				
+				
 				String actualValue=FileUtil.serachIdentifierInRow(searchedFileName,identifier);
 				
 				if(actualValue==null)
@@ -106,6 +110,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				}
 				if(i%5000==0){ExcelUtil.saveWorkbook(newFile, xwb);}
 			}
+			
 			ExcelUtil.saveWorkbook(newFile, xwb);
 			logger.info("Expectation File:"+newFile+" size:"+newFile.length()/1024+"KB, row count:"+String.valueOf(amt));
 			

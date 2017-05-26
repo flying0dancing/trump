@@ -78,21 +78,33 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 	}
 	
 	/**
-	 * It will get all cells' vale in all form pages and instances, and saved in some regulator (UIDisplay) folder
+	 * It will get all cells' vale in all form pages and instances, and saved in designated regulator (UIDisplay) folder,<br> file name format is <i>name_version_entity_simpleprocessdate(suffix)</i>.csv
 	 * @author kun shen
 	 * @throws Exception
 	 */
-	public void getAllCellsValue() throws Exception
+	public String getAllCellsValue(String regulatorFolder) throws Exception
 	{
 		String regulator=form.getRegulator();
 		String formName=form.getName();
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
+		String fileFullName=null;
+		//List<String> fileFullNames=new ArrayList<String>();
 		try{
-			String regulatorFolder=TARGET_DOWNLOAD_FOLDER+regulator+"("+UIDISPLAY+")/";
+			//String regulatorFolder=TARGET_DOWNLOAD_FOLDER+regulator+"("+UIDISPLAY+")/";
 			if(!new File(regulatorFolder).exists())
 			{
 				FileUtil.createDirectory(regulatorFolder);
 			}
+			
+			fileFullName=regulatorFolder+formName+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple+".csv";
+			File fileToWrite=new File(fileFullName);
+			if(fileToWrite.exists())
+			{
+				//TODO rename fileFullName
+				fileFullName=regulatorFolder+FileUtil.addSuffixToFile(fileToWrite);
+				fileToWrite=new File(fileFullName);
+			}
+			if(!fileToWrite.exists()){fileToWrite.createNewFile();}
 			
 			int pageCount = (int) element("fipf.pageTab").getRowCount();
 			for (int pageIndex = 1; pageIndex <= pageCount; pageIndex++)
@@ -100,6 +112,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 				String pageName=element("fipf.pageName", String.valueOf(pageIndex)).getInnerText().trim();
 				if(!this.selectPage(String.valueOf(pageIndex),true)){break;}
 				logger.info("current page[" + pageName+"]");
+				
 				List<String> instanceLabels=this.getAllInstances();
 				for(String instanceLabel:instanceLabels)
 				{
@@ -112,21 +125,21 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 						if(instanceCode.equals("-1")){instanceCode=instanceLabel;}
 					}
 					
-					String fileFullName=regulatorFolder+formName+"_"+form.getVersion()+"_"+instanceCode+"_"+form.getEntity()+"_"+processDateSimple+".csv";
+					//String fileFullName=regulatorFolder+formName+"_"+form.getVersion()+"_"+instanceCode+"_"+form.getEntity()+"_"+processDateSimple+".csv";
 					
-					File fileToWrite=new File(fileFullName);
-					if(!fileToWrite.exists()){fileToWrite.createNewFile();}
 					long begin=System.currentTimeMillis();
 					//get all normal cells
 					StringBuffer strBuffer=getNormalCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
 		    		logger.info("getNormalCells used time[seconds]:"+(System.currentTimeMillis()-begin)/1000.00F);
+		    		strBuffer.setLength(0);//clear strBuffer
 		    		begin=System.currentTimeMillis();
 					//get all extend grid cells
 		    		strBuffer=getExtendGridCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
 		    		logger.info("getExtendGridCells used time[seconds]:"+(System.currentTimeMillis()-begin)/1000.00F);
-		    		logger.info("save displayed values into file " + fileFullName);
+		    		strBuffer.setLength(0);//clear strBuffer
+		    		logger.info("save UIDisplay values into file " + fileFullName);
 				}
 			}
 			
@@ -139,7 +152,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 		{
 			Runtime.getRuntime().gc();
 		}
-	
+	    return fileFullName;
 	}
 	
 /**
@@ -160,8 +173,9 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
 		String blankStr="";
 		String OneStr="1";
 		String ZeroStr="0";
-		//String NullStr="null";
-		/*List<IWebElementWrapper> elements=element("fipf.getCells").getAllMatchedElements();
+		String NullStr="null";
+		String cellType=null;
+		List<IWebElementWrapper> elements=element("fipf.getCells").getAllMatchedElements();
 		for (IWebElementWrapper element:elements)
 		{
 			cellValue=blankStr;
@@ -182,31 +196,6 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
     			 }
     		 }
     		 strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator); 
-		}*/
-		List<IWebElementWrapper> elements=element("fipf.getCells_textNULL").getAllMatchedElements();
-		for (IWebElementWrapper element:elements)
-		{
-			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+blankStr+"\""+lineSeparator); 
-		}
-		
-		elements=element("fipf.getCells_textNotNULL").getAllMatchedElements();
-		for (IWebElementWrapper element:elements)
-		{
-			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+element.getAttribute("value").trim()+"\""+lineSeparator); 
-		}
-		
-		elements=element("fipf.getCells_checkbox").getAllMatchedElements();
-		for (IWebElementWrapper element:elements)
-		{
-			checked=element.getAttribute("checked");
-			if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
-			 {
-				 cellValue=OneStr;
-			 }else
-			 {
-				 cellValue=ZeroStr;
-			 }
-			strBuffer.append(element.getAttribute("id")+","+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
 		}
 		
 	}
@@ -316,22 +305,26 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	StringBuffer strBuffer=new StringBuffer();
 	String lineSeparator=System.getProperty("line.separator");
 	//next used in for(int row=0;row<gridRowCount;row++)
-	String data_ri,data_rk;
+	//String data_ri;@deprecated, replace by rowId
+	String data_rk;
 	//next used in for(IWebElementWrapper gridCellElement:gridCellElements)
 	String id,cellName,cellValue,checked;
 	String blankStr="";
 	String OneStr="1";
 	String ZeroStr="0";
+	String NullStr="null";
+	String cellType=null;
+	String rowId=null;
 	//print this grid tables's rows
 	//get ./tr
     List<IWebElementWrapper> gridRowElements=element("fipf.getGridTr",tbodyId).getAllMatchedElements();
     int gridRowCount=gridRowElements.size();
     for(int row=0;row<gridRowCount;row++)
     {
-    	data_ri=gridRowElements.get(row).getAttribute("data-ri");
+    	//data_ri=gridRowElements.get(row).getAttribute("data-ri");
     	data_rk=gridRowElements.get(row).getAttribute("data-rk");
     	//get ./td/input
-    	/*List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
     	for(IWebElementWrapper gridCellElement:gridCellElements)
     	 {
     		 id=gridCellElement.getAttribute("id");
@@ -353,9 +346,11 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     				 cellValue=ZeroStr;
     			 }
     		 }
-    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
-    	 }*/
-    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells_textNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    		 rowId=element("fipf.getGridCells1st",tbodyId,String.valueOf(row+1)).getAttribute("value").trim();
+    		 strBuffer.append(cellName+","+rowId+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+    		 //strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+    	 }
+    	/*List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells_textNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
     	for(IWebElementWrapper gridCellElement:gridCellElements)
     	 {
     		 id=gridCellElement.getAttribute("id");
@@ -385,7 +380,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				 cellValue=ZeroStr;
 			 }
     		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
-    	 }
+    	 }*/
     	
     }
     return strBuffer;
@@ -452,13 +447,14 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 {
 	StringBuffer strBuffer=new StringBuffer();
 	String lineSeparator=System.getProperty("line.separator");
+	String rowId=null;
 	//print this grid tables's rows
 	//get ./tr
     List<IWebElementWrapper> gridRowElements=element("fipf.getGridTr",tbodyId).getAllMatchedElements();
     int gridRowCount=gridRowElements.size();
     for(int row=0;row<gridRowCount;row++)
     {
-    	String data_ri=gridRowElements.get(row).getAttribute("data-ri");
+    	//String data_ri=gridRowElements.get(row).getAttribute("data-ri");//deprecated, replace by rowId
     	String data_rk=gridRowElements.get(row).getAttribute("data-rk");
     	//get ./td/input
     	List<IWebElementWrapper> gridCellElements=element("fipf.getOneInGridCells",tbodyId,gridPrefix+data_rk+cellName).getAllMatchedElements();
@@ -482,7 +478,9 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     		 }
     		 cellValue=cellValue.equalsIgnoreCase("null")?"":cellValue;
     		 //String cellreadonly=gridCellElement.getAttribute("readonly")==null?"false":"true" ;
-    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+    		 rowId=element("fipf.getGridCells1st",tbodyId,String.valueOf(row+1)).getAttribute("value").trim();
+    		 strBuffer.append(cellName+","+rowId+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
+    		 //strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
 
     	 }
     }

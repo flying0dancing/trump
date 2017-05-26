@@ -719,7 +719,7 @@ public class FileUtil extends FileUtils
 	 */
 	public static void writeContent(File file, String content) throws IOException
 	{
-		if(file.exists())
+		if(file.exists() && StringUtils.isNotBlank(content))
 		{
 			FileWriter fileWriter=new FileWriter(file,true);
 			fileWriter.write(content);
@@ -778,6 +778,35 @@ public class FileUtil extends FileUtils
 		{
 			FileUtils.copyFile(new File(expectationPath+fileName), new File(resultPath+newFileName));
 		}
+		return newFileName;
+	}
+	
+	/**
+	 * rename existed file and adding suffix, return null if the file doesn't exist.
+	 * @param filePath
+	 * @return new file name
+	 * @throws Exception
+	 */
+	public static String addSuffixToFile(File filePath) throws Exception
+	{
+		String newFileName=null;
+		if(filePath.exists() && filePath.isFile())
+		{
+			newFileName=filePath.getName();
+			int count=1;
+			String namePrefix=newFileName.substring(0, newFileName.lastIndexOf("."));
+			String nameSuffix=newFileName.replace(namePrefix, "");
+			String path=filePath.getPath().replace(namePrefix+nameSuffix, "");
+			while(new File(path+newFileName).exists())
+			{
+				newFileName=namePrefix+"("+String.valueOf(count)+")"+nameSuffix;
+				count++;
+			}
+		}else
+		{
+			logger.info(filePath.getAbsolutePath()+" doesn't exist, no need to add suffix.");
+		}
+		
 		return newFileName;
 	}
 }
