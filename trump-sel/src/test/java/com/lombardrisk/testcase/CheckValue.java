@@ -636,14 +636,26 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 								formInstancePage.closeThisPage();
 							}
 							
-							if(exportedFileFullPath!=null && new File(exportedFileFullPath).exists())
+							if(exportedFileFullPath==null)
+							{
+								form.setExecutionStatus("fail on no records found to export.");
+							}else if(new File(exportedFileFullPath).exists())
+							{
+								String status=Comparison.compareWithExportedValidation(form, exportedFileFullPath);
+								form.setExecutionStatus(status);
+							}else
+							{
+								form.setExecutionStatus("fail on open not existed file."+exportedFileFullPath);
+							}
+							
+							/*if(exportedFileFullPath!=null && new File(exportedFileFullPath).exists())
 							{
 								String status=Comparison.compareWithExportedValidation(form, exportedFileFullPath);
 								form.setExecutionStatus(status);
 							}else
 							{
 								form.setExecutionStatus("fail on open not existed file, or no records found to export.");
-							}
+							}*/
 						}else
 						{
 							form.setExecutionStatus("fail on open form instance");
