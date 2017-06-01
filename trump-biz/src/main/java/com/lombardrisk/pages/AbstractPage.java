@@ -854,10 +854,10 @@ public abstract class AbstractPage extends PageBase
 				String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
 				filePath=renameFile(downloadFolder, oldName, fileName);
 			}
-			/*else
+			else//"export to data-schedule" use this part
 			{
 				filePath=downloadFile(downloadFolder);
-			}*/
+			}
 		}
 		else
 		{

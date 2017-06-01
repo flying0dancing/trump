@@ -106,6 +106,7 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	 */
 	private void clickLinkText(String text) throws Exception
 	{
+		loadingDlg(3000);
 		element("fidf.linkText",text).click();
 		loadingDlg();
 	}
