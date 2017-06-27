@@ -691,7 +691,32 @@ public class FileUtil extends FileUtils
 					}
 					
 				}
-			}else
+			}else if(baselineStrArray.length==6 && (baselineStrArray[1]==null || baselineStrArray[1].equals("") || baselineStrArray[1].contains("Derived")))//TODO
+			{
+				String regex=baselineStrArray[0]+"\",.*\""+baselineStrArray[2]+"\",\""+"(.*)\",.*"+",\""+baselineStrArray[5];
+				
+				Pattern pattern=Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+				//long line=0;
+				while((exportStr=exportReader.readLine())!=null)
+				{
+					//line++;
+					Matcher m=pattern.matcher(exportStr);
+					if(m.find())
+					{
+						//System.out.println(m.group(1));
+						if(baselineStrArray[3].equalsIgnoreCase(m.group(1)))
+						{
+							status=",\""+m.group(1)+"\",\"pass\"";
+						}else
+						{
+							status=",\""+m.group(1)+"\",\"fail\"";
+						}
+						break;
+					}
+					
+				}
+			}
+			else
 			{
 				status=",\"\",\"this line doesn't match format.\"";
 			}
