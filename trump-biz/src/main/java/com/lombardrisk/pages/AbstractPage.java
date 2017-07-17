@@ -15,6 +15,7 @@ import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 import com.lombardrisk.commons.FileUtil;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -123,6 +124,32 @@ public abstract class AbstractPage extends PageBase
 		}
 		return files;
 	}
+	//TODO
+	protected static List<File> getFiles(String path, String filterStr, List<File> files)
+	{
+		File realFile = new File(path);
+		if (realFile.isDirectory())
+		{
+			final String prefixFilter=filterStr.substring(0, filterStr.indexOf("*"));
+			final String suffixFilter=filterStr.substring(filterStr.indexOf("*")+1);
+			File[] subfiles = realFile.listFiles(new FilenameFilter(){
+	             public boolean accept(File f , String name){ 
+	                 return name.startsWith(prefixFilter) && name.endsWith(suffixFilter);}  
+	                });
+			for (File file : subfiles)
+			{
+				if (file.isDirectory())
+				{
+					getFiles(file.getAbsolutePath(),filterStr, files);
+				}
+				else
+				{
+					files.add(file);
+				}
+			}
+		}
+		return files;
+	}
 
 	/**
 	 * Sort files by modified time
@@ -160,6 +187,37 @@ public abstract class AbstractPage extends PageBase
 
 		return list;
 	}
+	
+	protected static List<File> sortFileByModifiedTime(String path, String filterStr)
+	{
+
+		List<File> list = getFiles(path,filterStr, new ArrayList<File>());
+
+		if (list != null && list.size() > 0)
+		{
+			Collections.sort(list, new Comparator<File>() {
+				public int compare(File file, File newFile)
+				{
+					if (file.lastModified() < newFile.lastModified())
+					{
+						return 1;
+					}
+					else if (file.lastModified() == newFile.lastModified())
+					{
+						return 0;
+					}
+					else
+					{
+						return -1;
+					}
+
+				}
+			});
+
+		}
+
+		return list;
+	}
 
 	/**
 	 * Get latest file in specific folder
@@ -170,6 +228,19 @@ public abstract class AbstractPage extends PageBase
 	protected static String getLatestFile(String path)
 	{
 		List<File> files = sortFileByModifiedTime(path);
+		try
+		{
+			return files.get(0).toString();
+		}
+		catch (Exception e)
+		{
+			return "";
+		}
+	}
+	
+	protected static String getLatestFile(String path, String filterStr)//filterStr only can contains one *
+	{
+		List<File> files = sortFileByModifiedTime(path,filterStr);
 		try
 		{
 			return files.get(0).toString();
@@ -949,12 +1020,14 @@ public abstract class AbstractPage extends PageBase
 		try
 		{
 			date=sdf.parse(dateStr);
+			
 		}catch (ParseException e)
 		{
 			logger.info("error: transform String to Date failed.["+e.getMessage()+"]");
 		}
 		return date;
 	}
+
 
 	public ITestDataManager getTestDataManager() {
 		return testDataManager;
