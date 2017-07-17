@@ -2,14 +2,18 @@ package com.lombardrisk.pages;
 
 import java.io.File;
 
+import org.apache.commons.io.FileUtils;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
+import com.lombardrisk.commons.ExcelUtil;
+import com.lombardrisk.commons.JxlUtil;
 import com.lombardrisk.test.IComFolder;
+import com.lombardrisk.test.IExecFuncFolder;
 import com.lombardrisk.test.pojo.Form;
 
-public class CreateNewReturnFromExcelDialog extends AbstractPage implements IComFolder{
+public class CreateNewReturnFromExcelDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
 	private Form form;
 	private String type="createFromExcelForm";
 	
@@ -34,6 +38,60 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		element("cfed.closeDialog").click();
 		loadingDlg();
 	}
+	
+	private String findNewFileForUpload(String importFileFullName)
+	{
+		String newFileFullPath=null;
+		if(new File(importFileFullName).exists())
+		{
+			newFileFullPath=importFileFullName;
+		}else
+		{
+			String newFile=null;
+			String prefixFilter=form.getImportFile().lastIndexOf("(")==-1?form.getImportFile().substring(0, form.getImportFile().lastIndexOf(".")):form.getImportFile().substring(0, form.getImportFile().lastIndexOf("("));
+			String filterStr=prefixFilter+"*"+form.getImportFile().substring(form.getImportFile().lastIndexOf("."));
+			boolean flag=false;//flag=0 initial, 1 means "file exists", 2 means "path exists, file does not exist."
+			if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")").exists())
+			{
+				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")"+"/", filterStr);
+				if(new File(newFile).exists())
+				{
+					flag=true;
+					newFileFullPath=newFile;
+				}
+			}else if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")").exists())
+			{
+				
+				if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/"+form.getImportFile()).exists())
+				{
+					flag=true;
+					newFileFullPath=TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/"+form.getImportFile();
+				}
+			}else if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")").exists())
+			{
+				
+				if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/"+form.getImportFile()).exists())
+				{
+					flag=true;
+					newFileFullPath=TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/"+form.getImportFile();
+				}
+			}
+			if(flag)
+			{
+				try {
+					logger.info("copy file from "+newFileFullPath+" to " + importFileFullName);
+					FileUtils.copyFile(new File(newFileFullPath), new File(importFileFullName));
+					
+					newFileFullPath=importFileFullName;
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+				}
+			}
+		}
+		
+		return newFileFullPath;
+	}
+	
 	/**
 	 * click update button and upload file. it will return null if no error occurs, return errorMessage if contains any error
 	 * @author kun shen
@@ -42,12 +100,19 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 	 */
 	public String uploadFile() throws Exception
 	{
+		String importFileFullName=TARGET_IMPORT_FOLDER+form.getRegulator()+"/"+form.getImportFile();//
+		//TODO: adding function for update date in importfile.
+		importFileFullName=findNewFileForUpload(importFileFullName);
+		if(importFileFullName!=null && new File(importFileFullName).exists())
+		{
+			ExcelUtil.UpdateCellsInExcel(importFileFullName, new String[][]{{"CoverPage","5","4", form.getProcessDate(),"date:"+dateFormat},{"CoverPage","4","4", form.getEntity(),null}});//update process date and entity by form's getProcessDate
+		}
 		String errorTxt=null;
 		logger.info("Execute js script");
 		String js = "document.getElementById('" + type + ":importFileUpload').getElementsByTagName('div')[0].getElementsByTagName('span')[0].className='';";
 		executeScript(js);
-		String importFileFullName=TARGET_IMPORT_FOLDER+form.getRegulator()+"/"+form.getImportFile();
-		if(new File(importFileFullName).exists())
+
+		if(importFileFullName!=null && new File(importFileFullName).exists())
 		{
 			element("abstract.importFileUpload_input",type).type(importFileFullName);
 			errorTxt=uploadFileError(type);

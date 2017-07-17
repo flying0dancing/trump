@@ -99,9 +99,9 @@
       {
       	"id": 10,
         "name": "ar_database",
-         "driver": "oracle",
-        "host": "172.20.20.49@ora12c",        
-        "schema": "AR4NEWRH"
+        "driver": "sqlserver",
+        "host": "172.20.20.57\\sql2012",        
+        "schema": "ARSQL_AUTO"
       }      
     ]
   }

@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,9 @@ import com.lombardrisk.test.pojo.Transmission;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1295,6 +1298,7 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr)
 	
 }
 
+
 /**
  * write forms to Excel 
  * @author kun shen
@@ -1376,6 +1380,89 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String
 		}
 	}
 	
+}
+
+
+/**
+ * use in "create new return from excel" function, update some values for QA.
+ * @param importExcelPath
+ * @param cells( sheetName, rowIndex, colIndex, value)
+ * @since 2017/7/13
+ */
+public static void UpdateCellsInExcel(String importExcelPath,String[][] cells)
+{
+	File importExcel=new File(importExcelPath);
+	if(importExcel.exists())
+	{
+		UpdateCellsInExcel(importExcel,cells);
+	}else
+	{
+		logger.error("File Not Found: "+importExcelPath);
+	}
+}	
+
+/**
+ * use in "create new return from excel" function, update some values for QA.
+ * @param importExcelPath
+ * @param cells( sheetName, rowIndex, colIndex, value)
+ * @since 2017/7/13
+ */
+public static void UpdateCellsInExcel(File importExcel,String[][] cells)
+{
+	Workbook xwb=null;
+	FileInputStream fileInputStream=null;
+	try {
+		fileInputStream=new FileInputStream(importExcel);
+		xwb=WorkbookFactory.create(fileInputStream);
+		fileInputStream.close();
+		Sheet sheet=null;
+		String sheetName=null,value=null,valueType=null;
+		int rowIndex,colIndex;
+		for(int i=0;i<cells.length;i++)
+		{
+			sheetName=cells[i][0];
+			rowIndex=Integer.parseInt(cells[i][1])-1;//0-base
+			colIndex=Integer.parseInt(cells[i][2])-1;//0-base
+			value=cells[i][3];
+			valueType=cells[i][4];
+			if(sheetName!=null)
+			{sheet=xwb.getSheet(sheetName);}
+			if(sheet==null)
+			{sheet = xwb.getSheetAt(0);}
+			Row row = sheet.getRow(rowIndex);
+			if (row == null)
+				row = sheet.createRow(rowIndex);
+			Cell cell = row.getCell(colIndex);
+			if (cell == null)
+				cell = row.createCell(colIndex);
+			
+			CellStyle cellStyle=cell.getCellStyle();
+			if(valueType!=null && valueType.startsWith("date:"))
+			{
+				String simpleDateFormatStr="MM/dd/yyyy";
+				String dateFormat=valueType.replace("date:", "");
+				if (dateFormat.equalsIgnoreCase("en_GB"))
+				{
+					simpleDateFormatStr="dd/MM/yyyy";
+				}else if (dateFormat.equalsIgnoreCase("zh_CN"))
+				{
+					simpleDateFormatStr="yyyy-MM-dd";
+				}
+				SimpleDateFormat sdf=new SimpleDateFormat(simpleDateFormatStr);
+				Date date=sdf.parse(value);
+				cell.setCellValue(date);
+			}else
+			{
+				cell.setCellValue(value);
+			}
+			cell.setCellStyle(cellStyle);
+			
+		}
+		
+		ExcelUtil.saveWorkbook(importExcel, xwb);
+	} catch (Exception e) {
+		logger.error(e.getMessage());
+	}
 }
 
 }
