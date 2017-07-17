@@ -39,6 +39,11 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		loadingDlg();
 	}
 	
+	/**
+	 * upload new file, file name according to args1(importFileFullName), and copy new file to import folder with args1(importFileFullName)'s file name.
+	 * @param importFileFullName
+	 * @return
+	 */
 	private String findNewFileForUpload(String importFileFullName)
 	{
 		String newFileFullPath=null;
@@ -50,7 +55,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 			String newFile=null;
 			String prefixFilter=form.getImportFile().lastIndexOf("(")==-1?form.getImportFile().substring(0, form.getImportFile().lastIndexOf(".")):form.getImportFile().substring(0, form.getImportFile().lastIndexOf("("));
 			String filterStr=prefixFilter+"*"+form.getImportFile().substring(form.getImportFile().lastIndexOf("."));
-			boolean flag=false;//flag=0 initial, 1 means "file exists", 2 means "path exists, file does not exist."
+			boolean flag=false;
 			if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")").exists())
 			{
 				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")"+"/", filterStr);
@@ -61,19 +66,19 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 				}
 			}else if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")").exists())
 			{
-				
+				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/", filterStr);
 				if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/"+form.getImportFile()).exists())
 				{
 					flag=true;
-					newFileFullPath=TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/"+form.getImportFile();
+					newFileFullPath=newFile;
 				}
 			}else if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")").exists())
 			{
-				
+				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/", filterStr);
 				if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/"+form.getImportFile()).exists())
 				{
 					flag=true;
-					newFileFullPath=TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/"+form.getImportFile();
+					newFileFullPath=newFile;
 				}
 			}
 			if(flag)
