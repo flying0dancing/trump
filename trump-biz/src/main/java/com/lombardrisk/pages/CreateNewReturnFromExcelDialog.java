@@ -67,7 +67,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 			}else if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")").exists())
 			{
 				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/", filterStr);
-				if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/"+form.getImportFile()).exists())
+				if(new File(newFile).exists())
 				{
 					flag=true;
 					newFileFullPath=newFile;
@@ -75,7 +75,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 			}else if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")").exists())
 			{
 				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/", filterStr);
-				if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/"+form.getImportFile()).exists())
+				if(new File(newFile).exists())
 				{
 					flag=true;
 					newFileFullPath=newFile;
