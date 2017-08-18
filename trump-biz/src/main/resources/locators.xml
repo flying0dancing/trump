@@ -1895,8 +1895,8 @@
     	<locator id="fipf.exportToFileOption" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile4Fed_menu']//a[span='?']/span" name="exportToFileOption" description="exportToFileOption"/>
     	<locator id="fipf.exportToFile_li" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li" name="exportToFile_li" description="exportToFile_li"/>
     	<locator id="fipf.exportToFile_li_Txt" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li[?]/a/span" name="exportToFile_li_Txt" description="exportToFile_li_Txt"/>
-    	<locator id="fipf.lockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:lockBtn'][@title='Unlock']/span[2]" name="lockBtn" description="click it to lock form which status is unlock"/>
-    	<locator id="fipf.unlockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:unlockBtn'][@title='Lock']/span[2] " name="unlockBtn" description="click it to unlock form which status is lock"/>
+    	<locator id="fipf.lockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:lockBtn']" name="lockBtn" description="click it to lock form which status is unlock"/>
+    	<locator id="fipf.unlockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:unlockBtn']" name="unlockBtn" description="click it to unlock form which status is lock"/>
     	<locator id="fipf.validateNowBtn" type="WebButton" by="id" expression="formHeader:validateNowBtn" name="validateNow" description="click validate Now Button"/>
     	<locator id="fipf.doValidationBtn" type="WebButton" by="id" expression="formHeader:doValidationBtn" name="doValidationBtn" description="click Live Validation Button"/>
     	<locator id="fipf.unDoValidationBtn" type="WebButton" by="id" expression="formHeader:unDoValidationBtn" name="unDoValidationBtn" description="click Live Validation Button"/>
