@@ -2,6 +2,8 @@ package com.lombardrisk.pages;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
@@ -16,10 +18,12 @@ import com.lombardrisk.test.pojo.Form;
  */
 public class ListPage extends AbstractPage implements IExportTo
 {
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public String getLoginUser() throws Exception
 	{
 		String loginUser=element("fipf.lblUserName").getInnerText();
 		loginUser=loginUser.replace("hi ", "");
+		logger.info("loginUser is "+loginUser);
 		return loginUser;
 	}
 	
@@ -46,6 +50,7 @@ public class ListPage extends AbstractPage implements IExportTo
 		Boolean flag=selectIt(element("filf.regulator"),form.getRegulator());
 		if(flag)
 		{
+			logger.info("click \"Export to Regulator Format\" button");
 			element("filf.exportToFile_button").click();
 			loadingDlg();
 			String title=null;
@@ -113,6 +118,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				}*/
 				
 			}else{
+				logger.info("click \"Export to Regulator Format\" button");
 				element("filf.exportToFile_button").click();
 				loadingDlg();
 			}
@@ -130,10 +136,12 @@ public class ListPage extends AbstractPage implements IExportTo
 	 */
 	public PreferencePage enterPreferencePage() throws Exception
 	{
+		logger.info("click \"hi $user\" button");
 		element("fipf.lblUser_button").click();
 		waitThat().timeout(1000);
 		if(element("fipf.btnPreferences").isDisplayed())
 		{
+			logger.info("click \"Preferences\" button");
 			element("fipf.btnPreferences").click();
 			loadingDlg();
 		}
@@ -169,6 +177,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				flag=selectIt(element("filf.selectForm"),formAndVersion);
 				String tmp=getRealText(element("filf.selectForm"),formAndVersion).trim();
 				form.setName(tmp.substring(0, tmp.lastIndexOf(" ")));
+				refreshPage();
 				if (flag)
 				{
 					logger.info("select process date:" + processDate);
@@ -363,8 +372,22 @@ public class ListPage extends AbstractPage implements IExportTo
 		{
 			logger.info("open form instance");
 			element.click();
-			loadingDlg();
-			waitForPageLoaded();
+			//
+			//waitForPageLoaded();
+			//loadingDlg();
+			/*String[] bigReturns={"MAS610_D2","MAS610_F","MAS610_D4","FRY14ASUMM"};
+			for(String bigRtn: bigReturns)
+			{
+				if(form.getName().equalsIgnoreCase(bigRtn))
+				{
+					while(element("abstract.ajaxstatusDlg").isDisplayed())
+					{
+						waitThat().timeout(10000);
+					}
+					break;
+				}
+			}*/
+			loadingDlg(element("fipf.form"),200);
 			waitThat("fipf.form").toBeVisible();
 			fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form,userName);
 			if(!fip.isThisPage())
@@ -402,6 +425,11 @@ public class ListPage extends AbstractPage implements IExportTo
 	public void loginAfterTimeout(ListPage listPage) throws Exception
 	{
 		refreshPage();
+		//TODO
+		if(element("fipf.form").isPresent())
+		{
+			super.getWebDriverWrapper().navigate().backward();
+		}
 		if(!listPage.isThisPage())
 		{
 			if(element("hm.login").isPresent() && element("hm.login").isDisplayed())

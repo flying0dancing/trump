@@ -1,5 +1,7 @@
 package com.lombardrisk.pages;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
@@ -10,8 +12,9 @@ import com.lombardrisk.test.IExecFuncFolder;
 import com.lombardrisk.test.pojo.Form;
 
 public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,IExecFuncFolder{
-	private Form form;
 	
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private Form form;
 	public FormInstanceBottomPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form) {
 		super(webDriverWrapper,testDataManager);
 		this.form=form;

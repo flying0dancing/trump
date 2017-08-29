@@ -1,6 +1,8 @@
 package com.lombardrisk.pages;
 
 import org.openqa.selenium.NoSuchElementException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.util.PropHelper;
@@ -14,6 +16,7 @@ import com.lombardrisk.test.pojo.DBInfo;
  */
 public class HomePage extends AbstractPage 
 {
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private String loginUser;
 	private DBInfo dBInfo;
 	public String getLoginUser()

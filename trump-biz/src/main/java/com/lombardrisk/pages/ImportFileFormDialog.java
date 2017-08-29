@@ -2,6 +2,8 @@ package com.lombardrisk.pages;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
@@ -10,6 +12,8 @@ import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.pojo.Form;
 
 public class ImportFileFormDialog extends AbstractPage implements IComFolder{
+	
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Form form;
 	private String type="importFileForm";
 	
@@ -97,7 +101,13 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 				logger.info("click import button");
 				listimportBtn.click();
 				loadingDlg();
-				
+				//add a judge for import successfully
+				if(!element("fipf.pageTab").isPresent())
+				{
+					flag=false;
+					logger.info("can't open form instance");
+					super.getWebDriverWrapper().navigate().backward();
+				}
 			}else
 			{
 				logger.info("can't click import button");

@@ -2,6 +2,7 @@ package com.lombardrisk.pages;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +24,12 @@ import java.util.regex.Pattern;
 
 
 
+
+
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
@@ -37,6 +44,7 @@ import com.lombardrisk.test.pojo.*;
 
 public class FormInstancePage extends AbstractPage implements IComFolder,IExecFuncFolder,IExportTo
 {
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Form form;
 	private String loginUser;
 	private DBInfo dBInfo;
@@ -89,6 +97,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
 		String fileFullName=null;
 		//List<String> fileFullNames=new ArrayList<String>();
+		List<String> pageInstanceCodes= new ArrayList<String>(Arrays.asList("CSL","SGD","USD","1","2","3","4","5","6","7","8","9","10"));
 		try{
 			//String regulatorFolder=TARGET_DOWNLOAD_FOLDER+regulator+"("+UIDISPLAY+")/";
 			if(!new File(regulatorFolder).exists())
@@ -119,7 +128,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					logger.info("current instance[" + instanceLabel+"]");
 					this.selectInstance(instanceLabel);
 					String instanceCode=instanceLabel;
-					if(!instanceLabel.equals("1"))
+					if(!pageInstanceCodes.contains(instanceLabel))//instanceLabel.equals("1")
 					{
 						instanceCode=getDBInfo().getInstance(dBInfo.getConnectedDB(),regulator, formName, form.getVersion().substring(1),pageName,instanceLabel,DBInfo.InstanceType.LABEL);
 						if(instanceCode.equals("-1")){instanceCode=instanceLabel;}
@@ -598,12 +607,27 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				flag=true;
 			}
 		}*/
+		
 		flag=element("fipf.formInstTitle",form.getName()+" "+form.getVersion(),form.getRegulator()+" / "+form.getEntity(),form.getProcessDate()).isPresent();
 		if(flag)
 		{
+			
+			if(!element("fipf.pageTab").isPresent())
+			{
+				logger.info("can't open form instance");
+				super.getWebDriverWrapper().navigate().backward();
+				return false;
+			}
+			loadingDlg(element("fipf.pageTab"),10);
+			
+			if(element("abstract.ajaxstatusDlg").isDisplayed())
+			{
+				logger.info("still loading");
+				super.getWebDriverWrapper().navigate().backward();
+				return false;
+			}
 			loadingDlg();
 			waitForPageLoaded();
-			loadingDlg();
 			if (element("fipf.warnConfirmBtn").isDisplayed())
 			{
 				element("fipf.warnConfirmBtn").click();
@@ -634,6 +658,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				waitThat("fipf.close").toBeInvisible();
 				loadingDlg();
 			}
+			
 		}
 	}
 
@@ -793,6 +818,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		{
 			element1.click();
 			waitThat().timeout(1000);
+			loadingDlg();
 			//waitThat("fipf.message").toBeInvisible();
 			waitThat("abstract.message").toBeInvisible();
 		}
@@ -976,6 +1002,12 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		Boolean flag=true;
 		
 		element("fipf.exportToFile_button").click();
+		//fipf.exportToFile_menuList
+		List<String> menuTxtList=element("fipf.exportToFile_menuList").getAllInnerTexts();
+		for(String txt : menuTxtList)
+		{
+			if(txt.equalsIgnoreCase(type)){type=txt;break;}
+		}
 		waitThat("fipf.exportToFile_menu",type).toBeVisible();
 		if (PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
@@ -993,6 +1025,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
+			//loadingDlg(element("abstract.ajaxstatusDlg"));
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 		}
 		
@@ -1099,7 +1132,8 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		element("fipf.adjust_button").click();
 		waitThat("fipf.checkAdjustLog").toBeVisible();
 		element("fipf.checkAdjustLog").click();
-		loadingDlg();
+		loadingDlg(3000);
+		//loadingDlg(element("fidf.bottomPage"));
 		if(element("fidf.bottomPage").isDisplayed())
 		{
 			fibp=new FormInstanceBottomPage(getWebDriverWrapper(),getTestDataManager(),form);
@@ -1184,6 +1218,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		{
 			element("fipf.validateNowBtn").click();
 			loadingDlg();
+			loadingDlg(element("fipf.validateNowBtn"),30);
 			flag=true;
 		}
 		return flag;
@@ -1205,7 +1240,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				flag=clickSomeWorkflow("Ready for approval");
 			}
 		}*/
-		
 		return clickSomeWorkflow("Ready for approval");
 	}
 	
@@ -1371,13 +1405,40 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		logger.info("click \""+type+"\"");
 		element("fipf.workflow_button").click();
 		waitThat("fipf.workflow_menu").toBeVisible();
+		List<String> menuTxtList=element("fipf.workflow_menu").getAllInnerTexts();
+		for(String txt : menuTxtList)
+		{
+			if(txt.equalsIgnoreCase(type)){type=txt;break;}
+		}
 		if(element("fipf.workflow_menuList",type).isPresent())
 		{
 			element("fipf.workflow_menuList",type).click();
 			loadingDlg();
+			List<IWebElementWrapper> elements=element("fipf.workflow_CommentDialogComments").getAllMatchedElements();
+			for(IWebElementWrapper element:elements)
+			{
+				if(element.isDisplayed())
+				{
+					element.type("click \""+type+"\" by automation");
+					loadingDlg();
+					break;
+				}
+			}
+			elements=element("fipf.workflow_CommentDialogOKs").getAllMatchedElements();
+			for(IWebElementWrapper element:elements)
+			{
+				if(element.isDisplayed())
+				{
+					element.click();
+					loadingDlg();
+					break;
+				}
+			}
+			loadingDlg();
 			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
 		}else
 		{
+			logger.info("fipf.workflow_menuList doesn't contains \""+type+"\"");
 			loadingDlg();
 			element("fipf.workflow_button").click();
 			waitThat("fipf.workflow_menu").toBeInvisible();

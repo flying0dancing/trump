@@ -953,12 +953,23 @@ public static void editCell(Workbook workBook,String sheetName, int rowIndex, in
 			row = sheet.createRow(rowIndex);
 		Cell cell = row.getCell(colIndex);
 		if (cell == null)
-			cell = row.createCell(colIndex);
+			{
+				cell = row.createCell(colIndex);
+				CellStyle cellStyle2 = workBook.createCellStyle();
+				//DataFormat format = workBook.createDataFormat();
+				cell.setCellStyle(cellStyle2);
+				cell.setCellValue(value);
+			}else
+			{
+				cellStyle2.setDataFormat(formatNo);
+				cell.setCellStyle(cellStyle2);
+				cell.setCellValue(value);
+			}
+			
 		/*CellStyle cellStyle2 = workBook.createCellStyle();
 		DataFormat format = workBook.createDataFormat();*/
-		cellStyle2.setDataFormat(formatNo);
-		cell.setCellStyle(cellStyle2);
-		cell.setCellValue(value);
+		
+		
 		
 	}
 }

@@ -39,6 +39,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 						formInstancePage=listPage.openFormInstance(form);
 						if(formInstancePage!=null)
 						{
+							formInstancePage.validationNow();
+							formInstancePage.lockForm();
 							List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
 							if(status.size()==1)
 							{
@@ -60,12 +62,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 									form.setExecutionStatus("fail:"+s);
 								}
 							}
-							
-							if(formInstancePage.isThisPage())
-							{
-								formInstancePage.closeThisPage();
-							}
-							
+							formInstancePage.refreshPage();//for corpsed status
+							formInstancePage.unlockForm();
 							
 						}else
 						{

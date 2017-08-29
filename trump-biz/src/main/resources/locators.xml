@@ -1891,6 +1891,7 @@
     	<locator id="fipf.checkAdjustLog" type="WebElement" by="xpath" expression="//a[@id='formHeader:checkAdjustLog']/span" name="checkAdjustLog" description="View adjustment log"/>
     	<locator id="fipf.exportToFile_button" type="WebButton" by="id" expression="formHeader:exportToFile_button" name="exportToFile_button" description="exportToFile_button"/>
     	<locator id="fipf.exportToFile_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a[span='?']/span" name="exportToFile_menu" description="exportToFile_menu"/>
+    	<locator id="fipf.exportToFile_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a/span" name="exportToFile_menuList" description="exportToFile_menuList"/>
     	<locator id="fipf.exportToFile4Fed_button" type="WebButton" by="id" expression="formHeader:exportToFile4Fed_button" name="exportToFile4Fed_button" description="exportToFile4Fed_button"/>
     	<locator id="fipf.exportToFileOption" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile4Fed_menu']//a[span='?']/span" name="exportToFileOption" description="exportToFileOption"/>
     	<locator id="fipf.exportToFile_li" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li" name="exportToFile_li" description="exportToFile_li"/>
@@ -1902,7 +1903,9 @@
     	<locator id="fipf.unDoValidationBtn" type="WebButton" by="id" expression="formHeader:unDoValidationBtn" name="unDoValidationBtn" description="click Live Validation Button"/>
     	<locator id="fipf.workflow_button" type="WebButton" by="xpath" expression=".//*[@id='formHeader:workflow_button']/span[1]" name="workflow_button" description="workflow_button"/>
     	<locator id="fipf.workflow_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a[span='?']/span" name="workflow_menu" description="workflow_menu"/>
-    	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']" name="workflow_menu" description="workflow_menu"/>
+    	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a/span" name="workflow_menu" description="workflow_menu"/>
+    	<locator id="fipf.workflow_CommentDialogComments" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/textarea" name="workflow_CommentDialogComment" description="workflow's CommentDialog Comment textarea"/>
+    	<locator id="fipf.workflow_CommentDialogOKs" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/button[span='OK']" name="workflow_CommentDialogOKButton" description="workflow's CommentDialog OK button"/>
     	
     </page>
     

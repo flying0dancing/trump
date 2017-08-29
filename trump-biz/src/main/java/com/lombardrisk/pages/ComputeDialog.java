@@ -1,5 +1,7 @@
 package com.lombardrisk.pages;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
@@ -7,6 +9,7 @@ import com.lombardrisk.test.pojo.Form;
 
 public class ComputeDialog extends AbstractPage implements IReturnDialog{
 	
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Form form;
 	public ComputeDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager,Form form) {
 		super(webDriverWrapper,testDataManager);
