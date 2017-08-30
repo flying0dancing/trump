@@ -1896,8 +1896,8 @@
     	<locator id="fipf.exportToFileOption" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile4Fed_menu']//a[span='?']/span" name="exportToFileOption" description="exportToFileOption"/>
     	<locator id="fipf.exportToFile_li" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li" name="exportToFile_li" description="exportToFile_li"/>
     	<locator id="fipf.exportToFile_li_Txt" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li[?]/a/span" name="exportToFile_li_Txt" description="exportToFile_li_Txt"/>
-    	<locator id="fipf.lockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:lockBtn']" name="lockBtn" description="click it to lock form which status is unlock"/>
-    	<locator id="fipf.unlockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:unlockBtn']" name="unlockBtn" description="click it to unlock form which status is lock"/>
+    	<locator id="fipf.lockBtn" type="WebButton" by="id" expression="formHeader:lockBtn" name="lockBtn" description="click it to lock form which status is unlock"/>
+    	<locator id="fipf.unlockBtn" type="WebButton" by="id" expression="formHeader:unlockBtn" name="unlockBtn" description="click it to unlock form which status is lock"/>
     	<locator id="fipf.validateNowBtn" type="WebButton" by="id" expression="formHeader:validateNowBtn" name="validateNow" description="click validate Now Button"/>
     	<locator id="fipf.doValidationBtn" type="WebButton" by="id" expression="formHeader:doValidationBtn" name="doValidationBtn" description="click Live Validation Button"/>
     	<locator id="fipf.unDoValidationBtn" type="WebButton" by="id" expression="formHeader:unDoValidationBtn" name="unDoValidationBtn" description="click Live Validation Button"/>
@@ -1906,6 +1906,7 @@
     	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a/span" name="workflow_menu" description="workflow_menu"/>
     	<locator id="fipf.workflow_CommentDialogComments" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/textarea" name="workflow_CommentDialogComment" description="workflow's CommentDialog Comment textarea"/>
     	<locator id="fipf.workflow_CommentDialogOKs" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/button[span='OK']" name="workflow_CommentDialogOKButton" description="workflow's CommentDialog OK button"/>
+    	<locator id="fipf.validateFails" type="WebElement" by="xpath" expression="//div[span='VALIDATION FAILURE']/span[1]" name="validateFails" description="validation Failure in Pages"/>
     	
     </page>
     
@@ -1932,6 +1933,7 @@
     <locator id="filf.clickFormLink" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[2]/a" name="clickFormLink" description="clickFormLink"/>
     <locator id="filf.deleteForm" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[last()]/a" name="deleteForm" description="deleteForm"/>
     <locator id="filf.exportFileLoation" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[last()-3]/a/img" name="exportFileLoation" description="exportFileLoation"/>    
+    <locator id="filf.selectApproval" type="WebElement" by="id" expression="formInstanceListForm:formInstanceListTable:0:selectApproval" name="selectApproval" description="selectApproval in first row"/>    
     <locator id="filf.deleteReturnConfirm" type="WebElement" by="id" expression="deleteReturnMessageForm:deleteReturnConfirm" name="deleteReturnConfirm" description="deleteReturnConfirm"/>
     <locator id="filf.createNew" type="WebButton" by="id" expression="FormInstImpExpMenu:createNew" name="createNew" description="createNew"/>
     <locator id="filf.createNewEmptyLink" type="WebElement" by="xpath" expression="//*[@id='FormInstImpExpMenu:createFormInstEmpty'][span='Create New']/span" name="createNewEmptyLink" description="createNewEmptyLink"/>

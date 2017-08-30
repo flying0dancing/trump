@@ -597,5 +597,14 @@ public class ListPage extends AbstractPage implements IExportTo
 		return new HomePage(getWebDriverWrapper(),getTestDataManager());
 	}
 	
-	
+	public String approval1st() throws Exception
+	{
+		String status="No Approval Required";
+		IWebElementWrapper element=element("filf.selectApproval");
+		if(element!=null)
+		{
+			status=element.getInnerText();
+		}
+		return status;
+	}
 }

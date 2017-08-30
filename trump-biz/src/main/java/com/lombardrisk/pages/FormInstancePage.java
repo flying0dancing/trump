@@ -658,7 +658,12 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				waitThat("fipf.close").toBeInvisible();
 				loadingDlg();
 			}
-			
+			if (element("fipf.close").isDisplayed())
+			{
+				logger.info("can't close form, navigate to backward.");
+				super.getWebDriverWrapper().navigate().backward();
+				loadingDlg();
+			}
 		}
 	}
 
@@ -800,7 +805,15 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 */
 	public Boolean unlockForm() throws Exception
 	{
-		return changeFormStatus(element("fipf.unlockBtn"),element("fipf.lockBtn"));
+		Boolean flag=changeFormStatus(element("fipf.unlockBtn"),element("fipf.lockBtn"));
+		int times=2;
+		while(!flag && times>0)
+		{
+			super.refreshPage();
+			flag=changeFormStatus(element("fipf.unlockBtn"),element("fipf.lockBtn"));
+			times--;
+		}
+		return flag;
 	}
 	
 	/**
@@ -1211,17 +1224,28 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 * @author kun shen
 	 * @throws Exception
 	 */
-	public Boolean validationNow() throws Exception
+	public int validationNow() throws Exception
 	{
-		Boolean flag=false;
+		int failNum=0;
 		if(element("fipf.validateNowBtn").isEnabled())
 		{
 			element("fipf.validateNowBtn").click();
 			loadingDlg();
-			loadingDlg(element("fipf.validateNowBtn"),30);
-			flag=true;
+			loadingDlg(element("fipf.validateNowBtn"),10);
+			String failCount=element("fipf.validateFails").getInnerText();
+			
+			if(failCount!=null)
+			{
+				failCount=failCount.trim();
+				if(!failCount.trim().equals("")&& !failCount.trim().equals("0") && failCount.trim().matches("^\\d+$"))
+				{
+					failNum=Integer.parseInt(failCount.trim());
+				}
+				
+			}
+			
 		}
-		return flag;
+		return failNum;
 	}
 	
 	/**
