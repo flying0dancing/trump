@@ -177,18 +177,30 @@ public class ListPage extends AbstractPage implements IExportTo
 				flag=selectIt(element("filf.selectForm"),formAndVersion);
 				String tmp=getRealText(element("filf.selectForm"),formAndVersion).trim();
 				form.setName(tmp.substring(0, tmp.lastIndexOf(" ")));
-				refreshPage();
+				
 				if (flag)
 				{
 					logger.info("select process date:" + processDate);
 					flag=selectIt(element("filf.selectProcessDate"),processDate);
+					if(!flag){return flag;}
 				}
 			}
 		}
-		loadingDlg();
-		
-		if(flag && element("filf.noRecordsFound").isPresent() && element("filf.noRecordsFound").isDisplayed())
-		{flag=false;}
+		//loadingDlg();
+		if(element("filf.noRecordsFound").isPresent() && element("filf.noRecordsFound").isDisplayed())
+		{
+			flag=false;
+			return flag;
+		}
+		IWebElementWrapper element=element("filf.clickFormLink", form.getEntity(),form.getName(),form.getVersion().substring(1),form.getProcessDate());
+		if(element!=null &&  element.isDisplayed())
+		{
+			flag=true;
+		}else
+		{
+			refreshPage();
+			selectFormInfo(form);
+		}
 		
 		return flag;
 	}

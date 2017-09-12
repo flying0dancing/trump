@@ -1230,8 +1230,8 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		if(element("fipf.validateNowBtn").isEnabled())
 		{
 			element("fipf.validateNowBtn").click();
-			loadingDlg();
-			loadingDlg(element("fipf.validateNowBtn"),10);
+			//loadingDlg();
+			loadingDlg(element("fipf.validateNowBtn"),30);
 			String failCount=element("fipf.validateFails").getInnerText();
 			
 			if(failCount!=null)
