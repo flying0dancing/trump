@@ -187,9 +187,13 @@ private StringBuffer getNormalCells(String instanceCode) throws Exception
 		List<IWebElementWrapper> elements=element("fipf.getCells").getAllMatchedElements();
 		for (IWebElementWrapper element:elements)
 		{
-			cellValue=blankStr;
+			 cellValue=blankStr;
     		 cellType=element.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("text"))
+    		 if(cellType.equalsIgnoreCase("textarea"))
+    		 {
+    			 cellValue=element.getInnerText();
+    			 cellValue=cellValue.substring(0, cellValue.lastIndexOf("\n"));
+    		 }else if(cellType.equalsIgnoreCase("text"))
     		 {
     			 cellValue=element.getAttribute("value").trim();
     			 cellValue=cellValue.equalsIgnoreCase(NullStr)?blankStr:cellValue;
@@ -223,14 +227,18 @@ private StringBuffer getNormalCells(String instanceCode,String cellName) throws 
 	StringBuffer strBuffer=new StringBuffer();
 	String lineSeparator=System.getProperty("line.separator");
 	//get all normal cells
-	if(element("fipf.getOneCell",cellName).isPresent())	
+	if(element("fipf.getOneCell",cellName,cellName).isPresent())	
 	{
-		List<IWebElementWrapper> elements=element("fipf.getOneCell",cellName).getAllMatchedElements();
+		List<IWebElementWrapper> elements=element("fipf.getOneCell",cellName,cellName).getAllMatchedElements();
 		for (IWebElementWrapper element:elements)
 		{
     		 String cellValue=null;
     		 String cellType=element.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("text"))
+    		 if(cellType.equalsIgnoreCase("textarea"))
+    		 {
+    			 cellValue=element.getInnerText();
+    			 cellValue=cellValue.substring(0, cellValue.lastIndexOf("\n"));
+    		 }else if(cellType.equalsIgnoreCase("text"))
     		 {
     			 cellValue=element.getAttribute("value").trim();
     		 } else if(cellType.equalsIgnoreCase("checkbox"))
@@ -333,14 +341,18 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     	//data_ri=gridRowElements.get(row).getAttribute("data-ri");
     	data_rk=gridRowElements.get(row).getAttribute("data-rk");
     	//get ./td/input
-    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
+    	List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells",tbodyId,String.valueOf(row+1),tbodyId,String.valueOf(row+1)).getAllMatchedElements();
     	for(IWebElementWrapper gridCellElement:gridCellElements)
     	 {
     		 id=gridCellElement.getAttribute("id");
     		 cellName=id.replace(gridPrefix+data_rk, "");
     		 cellValue=blankStr;
     		 cellType=gridCellElement.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("text"))
+    		 if(cellType.equalsIgnoreCase("textarea"))
+    		 {
+    			 cellValue=gridCellElement.getInnerText();
+    			 cellValue=cellValue.substring(0, cellValue.lastIndexOf("\n"));
+    		 }else if(cellType.equalsIgnoreCase("text"))
     		 {
     			 cellValue=gridCellElement.getAttribute("value").trim();
     			 cellValue=cellValue.equalsIgnoreCase(NullStr)?blankStr:cellValue;
@@ -359,37 +371,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     		 strBuffer.append(cellName+","+rowId+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
     		 //strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
     	 }
-    	/*List<IWebElementWrapper> gridCellElements=element("fipf.getGridCells_textNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
-    	for(IWebElementWrapper gridCellElement:gridCellElements)
-    	 {
-    		 id=gridCellElement.getAttribute("id");
-    		 cellName=id.replace(gridPrefix+data_rk, "");
-    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+blankStr+"\""+lineSeparator);
-    	 }
     	
-    	gridCellElements=element("fipf.getGridCells_textNotNULL",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
-    	for(IWebElementWrapper gridCellElement:gridCellElements)
-    	 {
-    		 id=gridCellElement.getAttribute("id");
-    		 cellName=id.replace(gridPrefix+data_rk, "");
-    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+gridCellElement.getAttribute("value").trim()+"\""+lineSeparator);
-    	 }
-    	
-    	gridCellElements=element("fipf.getGridCells_checkbox",tbodyId,String.valueOf(row+1)).getAllMatchedElements();
-    	for(IWebElementWrapper gridCellElement:gridCellElements)
-    	 {
-    		 id=gridCellElement.getAttribute("id");
-    		 cellName=id.replace(gridPrefix+data_rk, "");
-    		 checked=gridCellElement.getAttribute("checked").trim();
-			 if(checked!=null && (checked.equalsIgnoreCase("true")||checked.equalsIgnoreCase("checked")))
-			 {
-				 cellValue=OneStr;
-			 }else
-			 {
-				 cellValue=ZeroStr;
-			 }
-    		 strBuffer.append(cellName+","+(Integer.parseInt(data_ri)+1)+","+instanceCode+",\""+cellValue+"\""+lineSeparator);
-    	 }*/
     	
     }
     return strBuffer;
@@ -466,12 +448,16 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
     	//String data_ri=gridRowElements.get(row).getAttribute("data-ri");//deprecated, replace by rowId
     	String data_rk=gridRowElements.get(row).getAttribute("data-rk");
     	//get ./td/input
-    	List<IWebElementWrapper> gridCellElements=element("fipf.getOneInGridCells",tbodyId,gridPrefix+data_rk+cellName).getAllMatchedElements();
+    	List<IWebElementWrapper> gridCellElements=element("fipf.getOneInGridCells",tbodyId,gridPrefix+data_rk+cellName,tbodyId,gridPrefix+data_rk+cellName).getAllMatchedElements();
     	for(IWebElementWrapper gridCellElement:gridCellElements)
     	 {
     		 String cellValue=null;
     		 String cellType=gridCellElement.getAttribute("type").trim();
-    		 if(cellType.equalsIgnoreCase("text"))
+    		 if(cellType.equalsIgnoreCase("textarea"))
+    		 {
+    			 cellValue=gridCellElement.getInnerText();
+    			 cellValue=cellValue.substring(0, cellValue.lastIndexOf("\n"));
+    		 }else if(cellType.equalsIgnoreCase("text"))
     		 {
     			 cellValue=gridCellElement.getAttribute("value").trim();
     		 }else if(cellType.equalsIgnoreCase("checkbox"))
@@ -737,6 +723,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 */
 	public String getCellValueInUI(String regulator,String formName, String formVersion,String cellName, String rowId,String instanceCode)throws Exception
 	{
+		String lineSeparator=System.getProperty("line.separator");
 		String result=null;
 		if(rowId!=null && rowId.trim().equals("")){rowId=null;}
 		List<String> pageNames=getDBInfo().getPageName(dBInfo.getConnectedDB(),regulator, formName, formVersion, cellName, rowId);
@@ -758,7 +745,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				{
 					strCells=getExtendGridCells(instanceCode,cellName).toString();
 				}
-				Pattern p = Pattern.compile("^"+tmp+"\""+"(.*)"+"\"$", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+				Pattern p = Pattern.compile("^"+tmp+"\""+"(.*)"+"\"$", Pattern.CASE_INSENSITIVE|Pattern.MULTILINE);
 				Matcher m = p.matcher(strCells);
 				if(m.find())
 				{

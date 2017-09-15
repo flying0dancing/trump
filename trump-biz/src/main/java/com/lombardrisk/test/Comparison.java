@@ -92,7 +92,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				}else
 				{
 					ExcelUtil.editCell(xwb, null, i, indexOfActualValue, actualValue);
-					if(expectedValueRP.equals(actualValue))
+					if(expectedValueRP.equals(actualValue.trim()))
 					{
 						ExcelUtil.editCell(xwb, null, i, indexOfTestResult, "pass");
 						if(testRstFlag==null)
@@ -212,7 +212,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				{
 					logger.info("actual value="+ actualValue);
 					ExcelUtil.editCell(xwb, null, i, indexOfActualValue, actualValue);
-					if(expectedValue.equals(actualValue))
+					if(expectedValue.equals(actualValue.trim()))
 					{
 						ExcelUtil.editCell(xwb, null, i, indexOfTestResult, "pass");
 						if(testRstFlag==null)
