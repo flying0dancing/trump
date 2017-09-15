@@ -39,33 +39,37 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 						formInstancePage=listPage.openFormInstance(form);
 						if(formInstancePage!=null)
 						{
-							List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
-							if(status.size()==1)
+							int failCount=formInstancePage.validationNow();
+							if(failCount>0)
 							{
-								form.setExecutionStatus(status.get(0));
+								form.setExecutionStatus("fail on having "+failCount+" validation failures");
 							}else
 							{
-								String s="";
-								Boolean totalStatus=true;
-								for(String t:status)
+								formInstancePage.lockForm();
+								List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
+								if(status.size()==1)
 								{
-									if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
-									s=s+t+System.getProperty("line.separator");
-								}
-								if(totalStatus)
-								{
-									form.setExecutionStatus(s);
+									form.setExecutionStatus(status.get(0));
 								}else
 								{
-									form.setExecutionStatus("fail:"+s);
+									String s="";
+									Boolean totalStatus=true;
+									for(String t:status)
+									{
+										if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
+										s=s+t+System.getProperty("line.separator");
+									}
+									if(totalStatus)
+									{
+										form.setExecutionStatus(s);
+									}else
+									{
+										form.setExecutionStatus("fail:"+s);
+									}
 								}
+								
+								formInstancePage.unlockForm();
 							}
-							
-							if(formInstancePage.isThisPage())
-							{
-								formInstancePage.closeThisPage();
-							}
-							
 							
 						}else
 						{

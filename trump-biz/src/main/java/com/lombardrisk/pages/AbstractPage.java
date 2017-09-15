@@ -4,6 +4,8 @@ package com.lombardrisk.pages;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
@@ -32,6 +34,7 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractPage extends PageBase
 {
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	protected static String dateFormat=getFormat();
 	protected static String simpleDateFormat=getSimpleDateFormat();
 	protected static boolean httpDownload = Boolean.parseBoolean(PropHelper.getProperty("download.enable").trim());//old one
@@ -273,9 +276,10 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected void loadingDlg() throws Exception
 	{
+		logger.info("wait loading disappear");
 		waitThat().timeout(1800);
 		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
-		waitThat().timeout(1800);
+		waitThat().timeout(1900);
 	}
 	/**
 	 * Wait for ajax dialog disappear
@@ -284,9 +288,26 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected void loadingDlg(long timeout) throws Exception
 	{
-		waitThat().timeout(1800);
-		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
+		logger.info("wait loading disappear");
 		waitThat().timeout(timeout);
+		waitThat("abstract.ajaxstatusDlg").toBeInvisible();
+		waitThat().timeout(2000);
+	}
+	/**
+	 * Wait for ajax dialog disappear
+	 * 
+	 * @throws Exception
+	 */
+	protected void loadingDlg(IWebElementWrapper element,int setT) throws Exception
+	{
+		logger.info("wait loading disappear, some element appear");
+		waitThat().timeout(2100);
+		if(setT<=0){setT=10;}
+		while((element("abstract.ajaxstatusDlg").isDisplayed()||(element!=null && !element.isDisplayed())) && setT>0)
+		{
+			waitThat().timeout(8000);
+			setT--;
+		}
 	}
 	/**
 	 * Wait for elements loaded
@@ -723,16 +744,25 @@ public abstract class AbstractPage extends PageBase
 				}else
 				{
 					List<String> list=element.getAllOptionTexts();
-					for(String item:list)
+					if(list.contains(it.trim()))
 					{
-						if(it.trim().equalsIgnoreCase(item.trim()))
+						element.selectByVisibleText(it.trim());
+						loadingDlg();
+						flag=true;
+					}else
+					{
+						for(String item:list)
 						{
-							element.selectByVisibleText(item);
-							loadingDlg();
-							flag=true;
-							break;
+							if(it.trim().equalsIgnoreCase(item.trim()))
+							{
+								element.selectByVisibleText(item);
+								loadingDlg();
+								flag=true;
+								break;
+							}
 						}
 					}
+					
 				}
 				
 			}
@@ -938,10 +968,14 @@ public abstract class AbstractPage extends PageBase
 		return filePath;
 	}
 	
-	protected void refreshPage() throws Exception
+	public void refreshPage() throws Exception
 	{
 		getWebDriverWrapper().navigate().refresh();
 		waitForPageLoaded();
+	}
+	public void backwardPage() throws Exception
+	{
+		getWebDriverWrapper().navigate().backward();
 	}
 	
 	/**

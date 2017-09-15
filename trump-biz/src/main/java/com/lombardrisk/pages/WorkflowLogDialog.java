@@ -1,6 +1,8 @@
 package com.lombardrisk.pages;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
@@ -10,7 +12,7 @@ import com.lombardrisk.test.IExecFuncFolder;
 
 public class WorkflowLogDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
 		
-	
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public WorkflowLogDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager) {
 		super(webDriverWrapper,testDataManager);
 		

@@ -3,6 +3,8 @@ package com.lombardrisk.pages;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.FileFormat;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
@@ -20,6 +22,7 @@ import com.lombardrisk.test.pojo.Form;
 import com.lombardrisk.test.pojo.ServerInfo;
 
 public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Form form;
 	private String title;
 	private DBInfo dBInfo;

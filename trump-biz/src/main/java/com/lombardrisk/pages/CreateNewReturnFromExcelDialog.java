@@ -3,6 +3,8 @@ package com.lombardrisk.pages;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
@@ -14,6 +16,7 @@ import com.lombardrisk.test.IExecFuncFolder;
 import com.lombardrisk.test.pojo.Form;
 
 public class CreateNewReturnFromExcelDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Form form;
 	private String type="createFromExcelForm";
 	
@@ -180,18 +183,28 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 				{
 					confirmBtn.click();
 					loadingDlg();
-					waitThat("fipf.adjustmentLogTable_data").toBePresent();
-					if(element("fipf.adjustmentLogTable_data").isPresent())
+					//add a judge for import successfully
+					if(!element("fipf.pageTab").isPresent())
 					{
-						fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form);
-						if(!fip.isThisPage())
+						flag=false;
+						logger.info("can't open form instance");
+						super.getWebDriverWrapper().navigate().backward();
+					}else
+					{
+						waitThat("fipf.adjustmentLogTable_data").toBePresent();
+						if(element("fipf.adjustmentLogTable_data").isPresent())
 						{
-							logger.info("open a wrong form instance, please check your excel file.");
-							fip.closeThisPage();//for these tester open a wrong form instance.
-							waitThat().timeout(3000);
-							fip=null;
+							fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form);
+							if(!fip.isThisPage())
+							{
+								logger.info("open a wrong form instance, please check your excel file.");
+								fip.closeThisPage();//for these tester open a wrong form instance.
+								waitThat().timeout(3000);
+								fip=null;
+							}
 						}
 					}
+					
 				}
 			}else
 			{

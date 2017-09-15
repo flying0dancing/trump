@@ -2,6 +2,8 @@ package com.lombardrisk.pages;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
@@ -13,6 +15,7 @@ import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
  */
 public class JobManagerPage extends AbstractPage
 {
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	/**
 	 * 
 	 * @param webDriverWrapper

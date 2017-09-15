@@ -1,10 +1,13 @@
 package com.lombardrisk.pages;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
 public class JobResultDialog extends AbstractPage {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public JobResultDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager) {
 		super(webDriverWrapper,testDataManager);
 		// TODO Auto-generated constructor stub

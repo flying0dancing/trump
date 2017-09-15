@@ -1,5 +1,7 @@
 package com.lombardrisk.pages;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 
@@ -9,7 +11,7 @@ import org.yiwan.webcore.web.IWebDriverWrapper;
  */
 public class PreferencePage extends AbstractPage
 {
-	
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public PreferencePage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
 		super(webDriverWrapper,testDataManager);

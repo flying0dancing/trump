@@ -1,5 +1,7 @@
 package com.lombardrisk.pages;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
@@ -7,6 +9,7 @@ import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 public class ExportedFileLocationDialog extends AbstractPage {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public ExportedFileLocationDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager) {
 		super(webDriverWrapper,testDataManager);
 		

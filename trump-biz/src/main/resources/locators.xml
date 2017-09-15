@@ -1858,16 +1858,13 @@
         <locator id="fipf.btnLogout" type="WebElement" by="id" expression="formHeader:btnLogout" name="btnLogout" description="btnLogout"/>
         <locator id="fipf.pageTab" type="WebElement" by="id" expression="formInstPageForm:pagesDataTable_data" name="pageTab" description="page table"/>
         <locator id="fipf.pageName" type="WebElement" by="xpath" expression="//*[@id='formInstPageForm:pagesDataTable_data']/tr[?]/td/span[@class='pageContent']" name="pageName" description="page name"/>
-    	<locator id="fipf.getCells" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//td[not(@role)]/div/input[@type!='hidden']" name="getCells" description="get Cells"/> 
-    	<locator id="fipf.getOneCell" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']/table//td[not(@role)]/div/input[@type!='hidden'][@id='?']" name="getOneCell" description="get one cell"/> 
+    	<locator id="fipf.getCells" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//td[not(@role)]/div/input[@type!='hidden']|//*[@id='formInstContentForm']/table//td[not(@role)]/div/textarea" name="getCells" description="get Cells"/> 
+    	<locator id="fipf.getOneCell" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']/table//td[not(@role)]/div/input[@type!='hidden'][@id='?']|//*[@id='formInstContentForm']/table//td[not(@role)]/div/textarea[@id='?']" name="getOneCell" description="get one cell"/> 
    		<locator id="fipf.getGridTbody" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[contains(@id,'formInstContentForm:')]" name="getGridTbody" description="get Grid Tbody"/>   
         <locator id="fipf.getGridTr" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr" name="getGridTr"  description="get Grid row"/>
-        <locator id="fipf.getGridCells" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td//input" name="getGridCells"  description="get Grid Cells"/>  
+        <locator id="fipf.getGridCells" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td//input|.//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td//textarea" name="getGridCells"  description="get Grid Cells"/>  
     	<locator id="fipf.getGridCells1st" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td[1]//input" name="getGridCells1st"  description="get first Grid Cells as rowId"/>  
-    	<locator id="fipf.getOneInGridCells" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//input[@id='?']" name="getOneInGridCells"  description="get one cell in Grid Cells"/>
-    	<locator id="fipf.getGridCells_textNULL" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']/table/tbody/tr/td//table[@role='grid']/tbody[@id='?']/tr[?]/td//input[@type='text' and @value='NULL']" name="getGridCells_textNULL"  description="get Grid Cells_textNULL"/>  
-    	<locator id="fipf.getGridCells_textNotNULL" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']/table/tbody/tr/td//table[@role='grid']/tbody[@id='?']/tr[?]/td//input[@type='text' and @value!='NULL']" name="getGridCells_textNotNULL"  description="get Grid Cells"/>  
-    	<locator id="fipf.getGridCells_checkbox" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']/table/tbody/tr/td//table[@role='grid']/tbody[@id='?']/tr[?]/td//input[@type='checkbox']" name="getGridCells_checkbox"  description="get Grid Cells"/>  
+    	<locator id="fipf.getOneInGridCells" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//input[@id='?']|.//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//textarea[@id='?']" name="getOneInGridCells"  description="get one cell in Grid Cells"/>
     	
     	<locator id="fipf.firstPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/span[1]" name="firstPageSta2" description="first page status"/>
     	<locator id="fipf.nextPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>
@@ -1891,18 +1888,22 @@
     	<locator id="fipf.checkAdjustLog" type="WebElement" by="xpath" expression="//a[@id='formHeader:checkAdjustLog']/span" name="checkAdjustLog" description="View adjustment log"/>
     	<locator id="fipf.exportToFile_button" type="WebButton" by="id" expression="formHeader:exportToFile_button" name="exportToFile_button" description="exportToFile_button"/>
     	<locator id="fipf.exportToFile_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a[span='?']/span" name="exportToFile_menu" description="exportToFile_menu"/>
+    	<locator id="fipf.exportToFile_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a/span" name="exportToFile_menuList" description="exportToFile_menuList"/>
     	<locator id="fipf.exportToFile4Fed_button" type="WebButton" by="id" expression="formHeader:exportToFile4Fed_button" name="exportToFile4Fed_button" description="exportToFile4Fed_button"/>
     	<locator id="fipf.exportToFileOption" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile4Fed_menu']//a[span='?']/span" name="exportToFileOption" description="exportToFileOption"/>
     	<locator id="fipf.exportToFile_li" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li" name="exportToFile_li" description="exportToFile_li"/>
     	<locator id="fipf.exportToFile_li_Txt" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li[?]/a/span" name="exportToFile_li_Txt" description="exportToFile_li_Txt"/>
-    	<locator id="fipf.lockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:lockBtn']" name="lockBtn" description="click it to lock form which status is unlock"/>
-    	<locator id="fipf.unlockBtn" type="WebElement" by="xpath" expression="//button[@id='formHeader:unlockBtn']" name="unlockBtn" description="click it to unlock form which status is lock"/>
+    	<locator id="fipf.lockBtn" type="WebButton" by="id" expression="formHeader:lockBtn" name="lockBtn" description="click it to lock form which status is unlock"/>
+    	<locator id="fipf.unlockBtn" type="WebButton" by="id" expression="formHeader:unlockBtn" name="unlockBtn" description="click it to unlock form which status is lock"/>
     	<locator id="fipf.validateNowBtn" type="WebButton" by="id" expression="formHeader:validateNowBtn" name="validateNow" description="click validate Now Button"/>
     	<locator id="fipf.doValidationBtn" type="WebButton" by="id" expression="formHeader:doValidationBtn" name="doValidationBtn" description="click Live Validation Button"/>
     	<locator id="fipf.unDoValidationBtn" type="WebButton" by="id" expression="formHeader:unDoValidationBtn" name="unDoValidationBtn" description="click Live Validation Button"/>
     	<locator id="fipf.workflow_button" type="WebButton" by="xpath" expression=".//*[@id='formHeader:workflow_button']/span[1]" name="workflow_button" description="workflow_button"/>
     	<locator id="fipf.workflow_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a[span='?']/span" name="workflow_menu" description="workflow_menu"/>
-    	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']" name="workflow_menu" description="workflow_menu"/>
+    	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a/span" name="workflow_menu" description="workflow_menu"/>
+    	<locator id="fipf.workflow_CommentDialogComments" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/textarea" name="workflow_CommentDialogComment" description="workflow's CommentDialog Comment textarea"/>
+    	<locator id="fipf.workflow_CommentDialogOKs" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/button[span='OK']" name="workflow_CommentDialogOKButton" description="workflow's CommentDialog OK button"/>
+    	<locator id="fipf.validateFails" type="WebElement" by="xpath" expression="//div[span='VALIDATION FAILURE']/span[1]" name="validateFails" description="validation Failure in Pages"/>
     	
     </page>
     
@@ -1929,6 +1930,7 @@
     <locator id="filf.clickFormLink" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[2]/a" name="clickFormLink" description="clickFormLink"/>
     <locator id="filf.deleteForm" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[last()]/a" name="deleteForm" description="deleteForm"/>
     <locator id="filf.exportFileLoation" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[last()-3]/a/img" name="exportFileLoation" description="exportFileLoation"/>    
+    <locator id="filf.selectApproval" type="WebElement" by="id" expression="formInstanceListForm:formInstanceListTable:0:selectApproval" name="selectApproval" description="selectApproval in first row"/>    
     <locator id="filf.deleteReturnConfirm" type="WebElement" by="id" expression="deleteReturnMessageForm:deleteReturnConfirm" name="deleteReturnConfirm" description="deleteReturnConfirm"/>
     <locator id="filf.createNew" type="WebButton" by="id" expression="FormInstImpExpMenu:createNew" name="createNew" description="createNew"/>
     <locator id="filf.createNewEmptyLink" type="WebElement" by="xpath" expression="//*[@id='FormInstImpExpMenu:createFormInstEmpty'][span='Create New']/span" name="createNewEmptyLink" description="createNewEmptyLink"/>
