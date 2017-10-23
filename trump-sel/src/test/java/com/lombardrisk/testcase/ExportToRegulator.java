@@ -15,7 +15,7 @@ import com.lombardrisk.test.pojo.Form;
 
 public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	/**
-	 * click export to regulator button in opened form instance, and then export download file, and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
+	 * click export to regulator button in opened form instance, and then export download file(lock form before, and then unlock form), and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
 	 * scenario file may contains these columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
 	 * special instruction: when Transmission.module are contains many modules, Transmission.fileType is essential.
@@ -45,8 +45,10 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 								form.setExecutionStatus("fail on having "+failCount+" validation failures");
 							}else
 							{
-								formInstancePage.lockForm();
+								formInstancePage.lockForm();//lockform
 								List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
+								formInstancePage=listPage.openFormInstance(form);
+								formInstancePage.unlockForm();
 								if(status.size()==1)
 								{
 									form.setExecutionStatus(status.get(0));
@@ -68,7 +70,6 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 									}
 								}
 								
-								formInstancePage.unlockForm();
 							}
 							
 						}else

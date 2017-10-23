@@ -1221,7 +1221,7 @@ public static List<Form> getForms(String excelFileStr,String sheetName)
 			Row row=sheet.getRow(i);
 			if(row==null){continue;}
 			Form form=(Form)fromRowToBean(titleRow,row,Form.class);
-			if(!form.toString().equals(""))
+			if(!form.toString().equals("") && form.getRun().equalsIgnoreCase("Y") && !form.getExpiration().equalsIgnoreCase("Y"))
 			{
 				list.add(form);
 			}

@@ -66,7 +66,7 @@ public static List<Form> getForms(String xmlFileStr)
             Element elementGroupService = (Element) it.next(); 
             Form baseBean = (Form) XmlUtil.fromXmlToBean(  
                     elementGroupService, Form.class);  
-            if(!baseBean.toString().equals(""))
+            if(!baseBean.toString().equals("") && baseBean.getRun().equalsIgnoreCase("Y") && !baseBean.getExpiration().equalsIgnoreCase("Y"))
 			{
                 list.add(baseBean);  
 			}

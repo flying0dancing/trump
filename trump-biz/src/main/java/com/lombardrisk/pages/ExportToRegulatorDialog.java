@@ -233,10 +233,20 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
+			selectFormInfo();
 			if(element("td.exportButton",title).isEnabled())
 			{
-				logger.info("click export button");
-				
+				logger.info("click export/force button");
+				/*element("td.exportButton",title).click();
+				loadingDlg();
+				if(element("abstract.message").isPresent())
+				{
+					logger.error(element("abstract.message").getInnerText());
+					waitThat("abstract.message").toBeInvisible();
+					flag=false;
+				}
+				ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
+				forceSubmit.typeSubmitComment();*/
 				if (PropHelper.ENABLE_FILE_DOWNLOAD)
 				{
 					TestCaseManager.getTestCase().startTransaction("");
@@ -245,13 +255,16 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					
 					element("td.exportButton",title).click();
 					loadingDlg();
-					
 					if(element("abstract.message").isPresent())
 					{
 						logger.error(element("abstract.message").getInnerText());
 						waitThat("abstract.message").toBeInvisible();
 						flag=false;
 					}
+					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
+					forceSubmit.typeSubmitComment();
+					forceSubmit.clickSubmit();
+					
 					TestCaseManager.getTestCase().stopTransaction();
 					
 				}
@@ -259,13 +272,37 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				{
 					element("td.exportButton",title).click();
 					loadingDlg();
-					if(element("abstract.message").isPresent()){logger.error(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();flag=false;}
+					if(element("abstract.message").isPresent())
+					{
+						logger.error(element("abstract.message").getInnerText());
+						waitThat("abstract.message").toBeInvisible();
+						flag=false;
+					}
+					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
+					if(forceSubmit.isThisPage())
+					{
+						forceSubmit.typeSubmitComment();
+						forceSubmit.clickSubmit();
+						if(forceSubmit.isThisPage())
+						{
+							forceSubmit.closeThisPage();
+						}
+					}
 				}
+				/*if(forceSubmit.isThisPage())
+				{
+					forceSubmit.closeThisPage();
+				}*/
+				
 				//click log buttkon
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 				{
 					element("td.logButton").click();
 					loadingDlg();
+				}
+				if(isThisPage())
+				{
+					closeThisPage();
 				}
 				/*if(messageFlag){return flag;}
 				String a=getLatestFile(downloadFolder);
@@ -280,10 +317,12 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			}else
 			{
 				logger.error("error: export button is disable.");
+				flag=false;
 			}
 		}else
 		{
 			logger.error("error: no records found.");
+			flag=false;
 		}
 		return flag;
 	}
@@ -300,9 +339,10 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
+			selectFormInfo();
 			if(element("td.exportButton",title).isEnabled())
 			{
-				logger.info("click export button");
+				logger.info("click export/force button");
 				
 				element("td.exportButton",title).click();
 				loadingDlg();
@@ -312,7 +352,14 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					waitThat("abstract.message").toBeInvisible(); 
 					flag=false;
 				}
-				
+				ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
+				if(forceSubmit.isThisPage())
+				{
+					forceSubmit.typeSubmitComment();
+					forceSubmit.clickSubmit();
+					if(forceSubmit.isThisPage())
+					{forceSubmit.closeThisPage();}
+				}
 				//click log button
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 				{
@@ -330,7 +377,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				lockDownloadDir(downloadFolder);//relock it after new jobResultDialog
 				String status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
 				
-				IWebElementWrapper _exportFileLoation=element("filf.exportFileLoation", form.getEntity(),form.getName(),form.getVersion().substring(1),form.getProcessDate());
+				IWebElementWrapper _exportFileLoation=element("filf.exportFileLoation",form.getName(),form.getVersion().substring(1),form.getProcessDate());
 				if(_exportFileLoation.isPresent() && _exportFileLoation.isDisplayed())
 				{
 					_exportFileLoation.click();
@@ -340,14 +387,19 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server);
 				}
 							
-				
+				if(isThisPage())
+				{
+					closeThisPage();
+				}
 			}else
 			{
 				logger.error("error: export button is disable.");
+				flag=false;
 			}
 		}else
 		{
 			logger.error("error: no records found.");
+			flag=false;
 		}
 		return flag;
 	}
@@ -381,6 +433,25 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			logger.error("error: no export file exists in server.");
 		}
 		
+	}
+	
+	private Boolean selectFormInfo() throws Exception
+	{
+		Boolean flag=false;
+		IWebElementWrapper element=element("td.selectCheckBox");
+		String attribute=element.getAttribute("class");
+		if(!attribute.contains("ui-state-active"))//span:ui-icon-check,div:ui-state-active
+		{
+			//element.checkByJavaScript(true);
+			element.click();
+			loadingDlg();
+			flag=true;
+		}else
+		{
+			flag=true;
+		}
+		
+		return flag;
 	}
 	
 }

@@ -698,9 +698,11 @@ public abstract class AbstractPage extends PageBase
 		{
 			String fileName=oldFile.getName();
 			String fileName_Prefix=fileName.substring(0, fileName.lastIndexOf("."));
-			String fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix;
 			String fileName_Suffix=fileName.replace(fileName_Prefix, "");
 			String filePath=oldFileFullPath.replace(fileName, "");
+			fileName_Prefix=fileName_Prefix.substring(0, fileName_Prefix.lastIndexOf("(")).trim();
+			String fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix;
+			
 			newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
 			int i=1;
 			while(new File(newFileFullPath).exists())
