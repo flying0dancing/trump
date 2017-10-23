@@ -274,6 +274,21 @@ public static void writeFormToXml(String identifer,Form form,String xmlFileStr,S
             if(identifer.equalsIgnoreCase(elementForms.attributeValue("id")))
             {
             	//root.remove(elementForms);
+            	//new add (start)
+            	@SuppressWarnings("unchecked")
+            	Iterator<Element> formit = elementForms.elementIterator("form");
+            	while(formit.hasNext())
+            	{
+            		Element elementForm=formit.next();
+            		if(form.getName().equalsIgnoreCase(elementForm.attributeValue("name")) && form.getVersion().equalsIgnoreCase(elementForm.attributeValue("version")) && form.getRegulator().equalsIgnoreCase(elementForm.attributeValue("regulator")) )
+            		{
+            			if(form.getEntity().equalsIgnoreCase(elementForm.elementText("entity")) &&form.getProcessDate().equalsIgnoreCase(elementForm.elementText("processDate")))
+            			{
+            				elementForm.element("executionStatus").setText(form.getExecutionStatus());
+            			}
+            		}
+            	}
+            	//new add (end)
             	Element formElement=elementForms.addElement("form");
             	XmlUtil.fromBeanToElement(formElement,form);
             	flag=true;

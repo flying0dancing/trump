@@ -106,69 +106,63 @@ public class CreateNewForm extends TestManager{
 	public void createNewFromExcel(Form form)
 	{
 		Boolean flag=true;
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		try
 		{
-			try
+			ListPage listPage=super.getListPage();
+			if(listPage!=null)
 			{
-				ListPage listPage=super.getListPage();
-				if(listPage!=null)
+				listPage.loginAfterTimeout(listPage);
+				if(form.getDeleteExistent()!=null && form.getDeleteExistent().equalsIgnoreCase("Y"))
 				{
-					listPage.loginAfterTimeout(listPage);
-					if(form.getDeleteExistent()!=null && form.getDeleteExistent().equalsIgnoreCase("Y"))
+					flag=listPage.deleteExistedFormInstance(form);
+				}
+				if(flag)
+				{
+					CreateNewReturnFromExcelDialog createNewFromExcel=listPage.createNewReturnFromExcel(form);
+					if(createNewFromExcel!=null && createNewFromExcel.isThisPage())
 					{
-						flag=listPage.deleteExistedFormInstance(form);
-					}
-					if(flag)
-					{
-						CreateNewReturnFromExcelDialog createNewFromExcel=listPage.createNewReturnFromExcel(form);
-						if(createNewFromExcel!=null && createNewFromExcel.isThisPage())
+						String errorTxt=createNewFromExcel.uploadFile();
+						if(errorTxt==null)
 						{
-							String errorTxt=createNewFromExcel.uploadFile();
-							if(errorTxt==null)
+							FormInstancePage formInstancePage=createNewFromExcel.importFile();
+							if(formInstancePage!=null)
 							{
-								FormInstancePage formInstancePage=createNewFromExcel.importFile();
-								if(formInstancePage!=null)
+								if(formInstancePage.isThisPage())
 								{
-									if(formInstancePage.isThisPage())
-									{
-										form.setExecutionStatus("pass");
-									}else
-									{
-										form.setExecutionStatus("fail on imported on wrong excel(wrong entity or wrong date)");
-									}
-									formInstancePage.closeThisPage();
-									
+									form.setExecutionStatus("pass");
 								}else
 								{
-									form.setExecutionStatus("fail on create new from excel");
-									
+									form.setExecutionStatus("fail on imported on wrong excel(wrong entity or wrong date)");
 								}
+								formInstancePage.closeThisPage();
 								
 							}else
 							{
-								form.setExecutionStatus("error:"+errorTxt);
+								form.setExecutionStatus("fail on create new from excel");
+								
 							}
+							
 						}else
 						{
-							form.setExecutionStatus("fail on create new return from excel dialog.");
+							form.setExecutionStatus("error:"+errorTxt);
 						}
 					}else
 					{
-						form.setExecutionStatus("fail on delete existed form");
+						form.setExecutionStatus("fail on create new return from excel dialog.");
 					}
+				}else
+				{
+					form.setExecutionStatus("fail on delete existed form");
 				}
-				
-			}catch(Exception e)
-			{
-				logger.error(e.getMessage());
-				form.setExecutionStatus("error:"+e.getMessage());
 			}
-		}else
+			
+		}catch(Exception e)
 		{
-			form.setExecutionStatus("skip");
+			logger.error(e.getMessage());
+			form.setExecutionStatus("error:"+e.getMessage());
 		}
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
+		//Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
 	}
 	
 	
