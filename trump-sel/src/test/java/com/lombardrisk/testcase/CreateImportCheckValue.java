@@ -27,6 +27,7 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			Boolean flag=true;
 			FormInstancePage formInstancePage=null;
 			try
@@ -139,6 +140,7 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			Boolean flag=true;
 			FormInstancePage formInstancePage=null;
 			try

@@ -27,6 +27,7 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -127,6 +128,7 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			try
 			{
 				ListPage listPage=super.getListPage();

@@ -28,6 +28,7 @@ public class CreateImportPrecision extends TestManager implements IExecFuncFolde
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			Boolean flag=true;
 			FormInstancePage formInstancePage=null;
 			try

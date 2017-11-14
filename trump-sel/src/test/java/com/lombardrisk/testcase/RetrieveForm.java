@@ -24,6 +24,7 @@ public class RetrieveForm extends TestManager{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			Boolean flag=true;
 			try
 			{

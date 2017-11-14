@@ -24,6 +24,7 @@ public class DataScheduleWorkflow extends TestManager{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{

@@ -27,6 +27,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			try
 			{
 				ListPage listPage=super.getListPage();
@@ -65,6 +66,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -134,6 +136,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -204,6 +207,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 		
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -277,6 +281,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -355,6 +360,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -429,6 +435,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -503,6 +510,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -578,6 +586,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{

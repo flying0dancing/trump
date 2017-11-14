@@ -23,6 +23,7 @@ public class ImportForm extends TestManager{
 	{
 		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			Boolean flag=true;
 			FormInstancePage formInstancePage=null;
 			try
