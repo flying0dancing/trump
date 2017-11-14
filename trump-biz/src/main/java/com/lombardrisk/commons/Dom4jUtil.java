@@ -284,15 +284,23 @@ public static void writeFormToXml(String identifer,Form form,String xmlFileStr,S
             		{
             			if(form.getEntity().equalsIgnoreCase(elementForm.elementText("entity")) &&form.getProcessDate().equalsIgnoreCase(elementForm.elementText("processDate")))
             			{
-            				elementForm.element("executionStatus").setText(form.getExecutionStatus());
+            				//elementForm.element("importFile").setText(form.getImportFile());
+            				//elementForm.element("executionStatus").setText(form.getExecutionStatus());
+            				//flag=true;
+            				elementForm.detach();
+            				break;
             			}
             		}
             	}
-            	//new add (end)
-            	Element formElement=elementForms.addElement("form");
-            	XmlUtil.fromBeanToElement(formElement,form);
-            	flag=true;
-            	break;
+            	if(!flag)
+            	{
+            		//new add (end)
+                	Element formElement=elementForms.addElement("form");
+                	XmlUtil.fromBeanToElement(formElement,form);
+                	flag=true;
+                	break;
+            	}
+            	
             }
             
         }

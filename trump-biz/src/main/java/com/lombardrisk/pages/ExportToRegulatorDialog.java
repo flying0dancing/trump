@@ -239,12 +239,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				logger.info("click export/force button");
 				/*element("td.exportButton",title).click();
 				loadingDlg();
-				if(element("abstract.message").isPresent())
-				{
-					logger.error(element("abstract.message").getInnerText());
-					waitThat("abstract.message").toBeInvisible();
-					flag=false;
-				}
+				flag=getTipMessageStatus();
 				ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 				forceSubmit.typeSubmitComment();*/
 				if (PropHelper.ENABLE_FILE_DOWNLOAD)
@@ -255,12 +250,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					
 					element("td.exportButton",title).click();
 					loadingDlg();
-					if(element("abstract.message").isPresent())
-					{
-						logger.error(element("abstract.message").getInnerText());
-						waitThat("abstract.message").toBeInvisible();
-						flag=false;
-					}
+					flag=getTipMessageStatus();
 					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 					forceSubmit.typeSubmitComment();
 					forceSubmit.clickSubmit();
@@ -272,12 +262,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				{
 					element("td.exportButton",title).click();
 					loadingDlg();
-					if(element("abstract.message").isPresent())
-					{
-						logger.error(element("abstract.message").getInnerText());
-						waitThat("abstract.message").toBeInvisible();
-						flag=false;
-					}
+					flag=getTipMessageStatus();
 					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 					if(forceSubmit.isThisPage())
 					{
@@ -289,11 +274,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 						}
 					}
 				}
-				/*if(forceSubmit.isThisPage())
-				{
-					forceSubmit.closeThisPage();
-				}*/
-				
+								
 				//click log buttkon
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 				{
@@ -304,6 +285,15 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				{
 					closeThisPage();
 				}
+				
+				if(element("fipf.formInstTitleLabels").isDisplayed())
+				{
+					FormInstancePage fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager());//todo add unlock
+					fip.unlockForm();
+					fip.closeThisPage();
+					fip=null;
+				}
+				
 				/*if(messageFlag){return flag;}
 				String a=getLatestFile(downloadFolder);
 				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
@@ -346,19 +336,12 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				
 				element("td.exportButton",title).click();
 				loadingDlg();
-				if(element("abstract.message").isPresent())
-				{
-					logger.info(element("abstract.message").getInnerText());
-					waitThat("abstract.message").toBeInvisible(); 
-					flag=false;
-				}
+				flag=getTipMessageStatus();
 				ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 				if(forceSubmit.isThisPage())
 				{
 					forceSubmit.typeSubmitComment();
-					forceSubmit.clickSubmit();
-					if(forceSubmit.isThisPage())
-					{forceSubmit.closeThisPage();}
+					forceSubmit.clickDataScheduleSubmit();
 				}
 				//click log button
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
@@ -387,10 +370,8 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server);
 				}
 							
-				if(isThisPage())
-				{
-					closeThisPage();
-				}
+				if(forceSubmit.isThisPage())
+				{forceSubmit.closeThisPage();}
 			}else
 			{
 				logger.error("error: export button is disable.");

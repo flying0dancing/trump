@@ -67,5 +67,10 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 		waitThat("fscd.title").toBeInvisible();
 	}
 	
-	
+	public void clickDataScheduleSubmit() throws Exception
+	{
+		logger.info("clicking submit button on \"Force Submit Dialog\"");
+		element("fscd.DataSchedulesubmit").click();
+		loadingDlg();
+	}
 }

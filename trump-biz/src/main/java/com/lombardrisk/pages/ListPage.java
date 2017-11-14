@@ -404,9 +404,8 @@ public class ListPage extends AbstractPage implements IExportTo
 					loadingDlg();
 					element("drcfd.deleteReturn").click();
 					loadingDlg();
-					//waitThat("fipf.message").toBeInvisible();
-					waitThat("abstract.message").toBeInvisible();
-					flag=true;
+					flag=getTipMessageStatus();
+					//flag=true;
 				}
 			}
 			
@@ -508,7 +507,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				listPage=hp.loginAs(loginUserName, loginUserPassword);
 			}
 		}
-		if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+		getTipMessageStatus();
 	}
 	
 	/**

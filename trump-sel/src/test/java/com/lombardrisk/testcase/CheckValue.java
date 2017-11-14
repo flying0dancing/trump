@@ -25,29 +25,32 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	private void checkFormExist( Form form) throws Exception
 	{
-		try
+		if(runIt(form.getExecutionStatus()))
 		{
-			ListPage listPage=super.getListPage();
-			if(listPage!=null)
+			try
 			{
-				listPage.loginAfterTimeout(listPage);
-				if(listPage.selectFormInfo(form))
+				ListPage listPage=super.getListPage();
+				if(listPage!=null)
 				{
-					form.setExecutionStatus("pass");
-				}else
-				{
-					form.setExecutionStatus("fail on select form");
+					listPage.loginAfterTimeout(listPage);
+					if(listPage.selectFormInfo(form))
+					{
+						form.setExecutionStatus("pass");
+					}else
+					{
+						form.setExecutionStatus("fail on select form");
+					}
+					
 				}
 				
+			}catch(Exception e)
+			{
+				logger.error(e.getMessage());
+				form.setExecutionStatus("error:"+e.getMessage());
 			}
-			
-		}catch(Exception e)
-		{
-			logger.error(e.getMessage());
-			form.setExecutionStatus("error:"+e.getMessage());
 		}
 		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
 	/** check display value in UI. <br>the cell which type is checkbox's value equals to 1 if checked, equals 0 if unchecked.<br>This method cannot checks hidden cells.<br> display UI values are stored at <i>result</i>\download\<i>regulator</i>(UIDisplay)<br>
@@ -60,9 +63,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkUIDisplay( Form form) throws Exception
 	{
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
-			
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -113,14 +115,10 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
 	
@@ -134,7 +132,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkUIDisplayOneByOne( Form form) throws Exception
 	{
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
 			FormInstancePage formInstancePage=null;
 			try
@@ -186,14 +184,10 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
 	
@@ -208,7 +202,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	public void checkExportToExcel(Form form)
 	{
 		
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
 			FormInstancePage formInstancePage=null;
 			try
@@ -267,13 +261,9 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		addReportLink(EXPORTTOEXCEL,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		
-		Assert.assertTrue(form.getExecutionStatus().startsWith("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 	/**check download csv file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToCSV)<br>
@@ -285,10 +275,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkExportToCSV(Form form)
 	{
-		
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
-			
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -346,15 +334,11 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 	
 		addReportLink(EXPORTTOCSV,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
 		
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 		
 	}
 	
@@ -369,8 +353,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkExportToExcelApplyScale(Form form)
 	{
-		
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
 			FormInstancePage formInstancePage=null;
 			try
@@ -429,13 +412,9 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		addReportLink(EXPORTTOEXCELAPPLYSCALE,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		
-		Assert.assertTrue(form.getExecutionStatus().startsWith("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 	/**check download excel file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToExcelNoScale)<br><br>
@@ -448,8 +427,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkExportToExcelNoScale(Form form)
 	{
-		
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
 			FormInstancePage formInstancePage=null;
 			try
@@ -508,13 +486,9 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		addReportLink(EXPORTTOEXCELNOSCALE,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		
-		Assert.assertTrue(form.getExecutionStatus().startsWith("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 
 	/**check download PDF file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToPDF)<br><br>
@@ -527,8 +501,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkExportToPDF(Form form)
 	{
-		
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
 			FormInstancePage formInstancePage=null;
 			try
@@ -587,13 +560,10 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		addReportLink(EXPORTTOPDF,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 		
-		Assert.assertTrue(form.getExecutionStatus().startsWith("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
 	}
 
 	/**check download validation rules' file. <br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(ExportValidation)<br><br>
@@ -606,8 +576,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkValidation(Form form)
 	{
-		
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
 			FormInstancePage formInstancePage=null;
 			try
@@ -648,14 +617,6 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 								form.setExecutionStatus("fail on open not existed file."+exportedFileFullPath);
 							}
 							
-							/*if(exportedFileFullPath!=null && new File(exportedFileFullPath).exists())
-							{
-								String status=Comparison.compareWithExportedValidation(form, exportedFileFullPath);
-								form.setExecutionStatus(status);
-							}else
-							{
-								form.setExecutionStatus("fail on open not existed file, or no records found to export.");
-							}*/
 						}else
 						{
 							form.setExecutionStatus("fail on open form instance");
@@ -687,13 +648,9 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		addReportLink(EXPORTVALIDATION,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		
-		Assert.assertTrue(form.getExecutionStatus().startsWith("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 
 }

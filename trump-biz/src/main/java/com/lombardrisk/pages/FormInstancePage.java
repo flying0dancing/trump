@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -819,8 +820,21 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element1.click();
 			waitThat().timeout(1000);
 			loadingDlg();
-			//waitThat("fipf.message").toBeInvisible();
-			waitThat("abstract.message").toBeInvisible();
+			//TODO
+			List<IWebElementWrapper> elements=element("uolwd.ok").getAllMatchedElements();
+			for(IWebElementWrapper element:elements)
+			{
+				if(element.isDisplayed())
+				{
+					/*String id=element.getAttribute("id");
+					id=id.substring(id.lastIndexOf(":")).replace("Confirm", "");//result:":unlock" or ":lock"
+*/					element.click();
+					logger.info(element("uolwd.Comment").getInnerText());
+					break;
+				}
+			}
+			loadingDlg();
+			getTipMessageStatus();
 		}
 		if(element2.isPresent())
 		{
@@ -1016,7 +1030,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
-			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+			flag=getTipMessageStatus();
 			TestCaseManager.getTestCase().stopTransaction();
 			
 		}
@@ -1025,8 +1039,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.exportToFile_menu",type).click();
 			loadingDlg();
 			loadingDlg();
-			//loadingDlg(element("abstract.ajaxstatusDlg"));
-			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+			flag=getTipMessageStatus();
 		}
 		
 		return flag;
@@ -1280,7 +1293,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				loadingDlg();
 				element("wkacf.ok").click();
 				loadingDlg();
-				if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+				getTipMessageStatus();
 			}
 
 			if(checkWorkflowInDB().equalsIgnoreCase("ATTESTED"))
@@ -1446,7 +1459,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				}
 			}
 			loadingDlg();
-			if(element("abstract.message").isPresent()){flag=false;logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+			flag=getTipMessageStatus();
 		}else
 		{
 			logger.info("fipf.workflow_menuList doesn't contains \""+type+"\"");

@@ -14,6 +14,7 @@ import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.PageBase;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
+import com.google.common.base.Strings;
 import com.lombardrisk.commons.FileUtil;
 
 import java.io.File;
@@ -700,7 +701,8 @@ public abstract class AbstractPage extends PageBase
 			String fileName_Prefix=fileName.substring(0, fileName.lastIndexOf("."));
 			String fileName_Suffix=fileName.replace(fileName_Prefix, "");
 			String filePath=oldFileFullPath.replace(fileName, "");
-			fileName_Prefix=fileName_Prefix.substring(0, fileName_Prefix.lastIndexOf("(")).trim();
+			if(fileName_Prefix.lastIndexOf("(")!=-1)
+			{fileName_Prefix=fileName_Prefix.substring(0, fileName_Prefix.lastIndexOf("(")).trim();}
 			String fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix;
 			
 			newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
@@ -1063,7 +1065,34 @@ public abstract class AbstractPage extends PageBase
 		}
 		return date;
 	}
-
+	
+	protected Boolean getTipMessageStatus()
+	{
+		Boolean flag=true;
+		try
+		{
+			IWebElementWrapper element=element("abstract.message");
+			if(element.isPresent())
+			{
+				String msgType=element("abstract.messageType").getInnerText();
+				String tip=element.getInnerText();
+				if(Strings.isNullOrEmpty(msgType) || msgType.equalsIgnoreCase("info"))
+				{
+					logger.info(tip);
+				}else
+				{
+					logger.error(tip);
+					flag=false;
+				}
+				waitThat("abstract.message").toBeInvisible();
+			}
+		}catch(Exception e)
+		{
+			logger.info("message disappears too fast.");
+		}
+		
+		return flag;
+	}
 
 	public ITestDataManager getTestDataManager() {
 		return testDataManager;

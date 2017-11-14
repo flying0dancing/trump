@@ -22,9 +22,9 @@ public class RetrieveForm extends TestManager{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void retrieveForm(Form form)
 	{
-		Boolean flag=true;
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			Boolean flag=true;
 			try
 			{
 				ListPage listPage=super.getListPage();
@@ -60,12 +60,7 @@ public class RetrieveForm extends TestManager{
 				form.setExecutionStatus("error:"+e.getMessage());
 			}
 			
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
-		
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 }

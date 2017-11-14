@@ -1,33 +1,26 @@
 package com.lombardrisk.test;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.testng.Assert;
-import org.testng.ITestContext;
-import org.testng.ITestNGMethod;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Optional;
+import org.testng.*;
+import org.testng.annotations.*;
 import org.testng.annotations.Parameters;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.AfterSuite;
-import org.testng.xml.XmlTest;
+import org.testng.xml.*;
 import org.yiwan.webcore.test.TestBase;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.Helper;
 import org.yiwan.webcore.util.PropHelper;
 
-import com.lombardrisk.commons.Dom4jUtil;
-import com.lombardrisk.commons.ExcelUtil;
-import com.lombardrisk.commons.FileUtil;
-import com.lombardrisk.commons.MailUtil;
+import com.google.common.base.Strings;
+import com.lombardrisk.commons.*;
 import com.lombardrisk.pages.HomePage;
 import com.lombardrisk.pages.ListPage;
 import com.lombardrisk.test.pojo.DBInfo;
@@ -43,11 +36,11 @@ public class TestManager extends TestBase implements IComFolder {
 	private static final long startSuiteTime=System.currentTimeMillis();
 	private String logName;
 	private DBInfo dBInfo;
-	private static long totalRun=0;
 	private static long totalPass=0;
 	private static long totalSkip=0;
 	private static long totalFail=0;
-	private static long totalError=0;
+	private static Map<String,String> rerunTestMap=new LinkedHashMap<String,String>();
+	
 	public ListPage getListPage()
 	{
 		return listPage;
@@ -92,10 +85,72 @@ public class TestManager extends TestBase implements IComFolder {
 		 
 	  }
 	 @AfterSuite
-	  public void afterSuite(XmlTest xmlTest) { 
-		 report("suite end. Totally used[seconds]: "+(System.currentTimeMillis()-startSuiteTime)/1000.00F+"\n");
-		 String content="Tests run: "+totalRun+", Pass: "+totalPass+", Failures: "+totalFail+", Errors: "+totalError+", Skipped:"+totalSkip+", Time elapsed:"+(System.currentTimeMillis()-startSuiteTime)/60000.00F+"min";
-		 MailUtil.sendARResultMail(TARGET_FOLDER,xmlTest.getSuite().getFileName(),content);
+	  public void afterSuite(XmlTest xmlTest,ITestContext context) throws IOException { 
+		 ///Set<ITestResult> failTests=context.getFailedTests().getAllResults();
+		 //Set<ITestResult> passTests=context.getPassedTests().getAllResults();
+		 //Set<ITestResult> skipTests=context.getSkippedTests().getAllResults();
+		 float totalTime=(System.currentTimeMillis()-startSuiteTime)/60000.00F;
+		 report("suite end. Totally used[minutes]: "+totalTime+"\n");
+		 //String content="Tests run: "+(totalPass+totalFail+totalSkip)+", Pass: "+totalPass+", Failures: "+totalFail+", Skipped:"+totalSkip+", Time elapsed:"+(System.currentTimeMillis()-startSuiteTime)/60000.00F+"min";
+		/* if(!ICCB_RERUN ||(ICCB_RERUN && totalFail==0 && totalSkip==0 && totalPass!=0))
+		 {}*/
+		 MailUtil.sendARResultMail(TARGET_FOLDER,xmlTest.getSuite().getFileName(),totalPass,totalFail,totalSkip,totalTime,ICCB_RERUN);
+		 String failXml=TARGET_SCENARIOS_FOLDER+xmlTest.getSuite().getName()+"_fail.xml";
+
+		 if(totalFail>0 || totalSkip>0)
+		 {
+			 XmlSuite rerunSuite=new XmlSuite();
+			 rerunSuite.setFileName(failXml);
+			 XmlSuite currentSuite=context.getCurrentXmlTest().getSuite();
+			 String suiteName=currentSuite.getName();
+			 rerunSuite.setName(suiteName);
+			 rerunSuite.setVerbose(currentSuite.getVerbose());
+			 rerunSuite.setThreadCount(currentSuite.getThreadCount());
+			 rerunSuite.setParallel(currentSuite.getParallel());
+			 rerunSuite.setParameters(currentSuite.getAllParameters());
+			 int rerunTestAcc=1;
+			 
+			 Iterator<Entry<String, String>> iterM=rerunTestMap.entrySet().iterator();
+			 while(iterM.hasNext())
+			 {
+				 Map.Entry<String, String> entryM=(Map.Entry<String, String>)iterM.next();
+				 String iterMKey=entryM.getKey();
+				 String iterMValue=entryM.getValue();
+				 String[] iterMKeyArr=iterMKey.split("\\+");
+				 String[] iterMValueArr=iterMValue.split("\\+");
+				 String iterMClass=iterMValueArr[0];
+				 String iterMMethod=iterMValueArr[1];
+				 String iterMParameterSCENARIOS_SHEET=iterMValueArr[2];
+				 String iterMTestName=iterMKeyArr[1];
+				 
+				 XmlTest rerunTest=new XmlTest();
+				 List<XmlClass> rerunClasses=new ArrayList<XmlClass>();
+				 XmlClass rerunClass=new XmlClass(iterMClass);
+				 List<XmlInclude> rerunXmlIncludes=new ArrayList<XmlInclude>();
+				 rerunXmlIncludes.add(new XmlInclude(iterMMethod));
+				 rerunClass.setIncludedMethods(rerunXmlIncludes);
+				 rerunClasses.add(rerunClass);
+				 rerunTest.setClasses(rerunClasses);
+				 rerunTest.addParameter(PARAMETER_SCENARIOS_NAME, iterMKey);
+				 rerunTest.addParameter(PARAMETER_SCENARIOS_SHEET, iterMParameterSCENARIOS_SHEET);
+				 rerunTest.setName(iterMTestName);
+				 for(XmlTest testTmp:rerunSuite.getTests())
+				 {
+					 if(iterMTestName.equalsIgnoreCase(testTmp.getName()) && iterMKey.equalsIgnoreCase(testTmp.getParameter(PARAMETER_SCENARIOS_NAME)))
+					 {
+						 rerunTest.setName(testTmp.getName()+rerunTestAcc);
+						 rerunTestAcc++;
+					 }
+				 }
+				 rerunSuite.addTest(rerunTest);
+			 }
+			 FileUtil.writeContentToEmptyFile(new File(failXml),  rerunSuite.toXml());
+		 }
+		 //reset it for next suite
+		 totalPass=0;
+		 totalSkip=0;
+		 totalFail=0;
+		 rerunTestMap=new LinkedHashMap<String,String>();
 	  }
 	
 	 @BeforeTest
@@ -106,6 +161,27 @@ public class TestManager extends TestBase implements IComFolder {
 	  @AfterTest
 	  public void afterTest(ITestContext context) throws Exception {
 		 logger.info(context.getName() + " finish testing!");
+		 /*if(passTests==null)
+		 {
+			 passTests=context.getPassedTests().getAllResults();
+		 }else
+		 {
+			 passTests.addAll(context.getPassedTests().getAllResults());
+		 }
+		 if(failTests==null)
+		 {
+			 failTests=context.getFailedTests().getAllResults();
+		 }else
+		 {
+			 failTests.addAll(context.getFailedTests().getAllResults());
+		 }
+		 if(skipTests==null)
+		 {
+			 skipTests=context.getSkippedTests().getAllResults();
+		 }else
+		 {
+			 skipTests.addAll(context.getSkippedTests().getAllResults());
+		 }*/
 	  }
 	  
 	  @BeforeClass(dependsOnMethods="beforeClass")
@@ -123,7 +199,8 @@ public class TestManager extends TestBase implements IComFolder {
 		  super.setTestDataManager(new TestDataManager(indexAppServer, indexDBServer, indexToolsetDBServer));
 		  setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 		  logger.info("Database Language:"+getDBInfo().getLanguage(getDBInfo().getApplicationServer_UserName()));
-		  
+		  getDBInfo().resetDeActivateDate();
+		  logger.info("reset DeActivateDate to null in database's CFG_RPT_Rets table.");
 		  List<String> regulators=getDBInfo().getRegulatorDescription();
 		  try
 		  {
@@ -227,14 +304,46 @@ public class TestManager extends TestBase implements IComFolder {
   public void afterMethod(ITestResult result) throws Exception {
 	  synchronized(this)
 	  {
-		  ITestContext context=result.getTestContext();
+		    ITestContext context=result.getTestContext();
 			ITestNGMethod method=result.getMethod();
 			logger.info(" afterMethod("+method.getMethodName()+") running!"); 
+			String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
 			String resultFile=context.getCurrentXmlTest().getSuite().getName()+"+"+context.getCurrentXmlTest().getName()+"+"+getClass().getSimpleName()+"["+method.getMethodName()+"]+"+context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
+			if(ICCB_RERUN)
+			{
+				resultFile=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_NAME).trim();
+			}
+			
 			//int count=context.getFailedTests().size()+context.getPassedTests().size()+context.getSkippedTests().size();
 		    Form form=(Form)result.getParameters()[0];
-		    totalRun++;
-		    String formStatus=form.getExecutionStatus().toLowerCase();
+		    /*totalRun++;*/
+		    int resultStatus=result.getStatus();
+		    logger.info("resultStatus:"+resultStatus);
+		    if(resultStatus!=ITestResult.SUCCESS)
+		    {
+		    	if(rerunTestMap.size()==0 || !rerunTestMap.containsKey(resultFile))
+		    	{
+		    		if(resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls"))
+		    		{
+		    			rerunTestMap.put(resultFile, getClass().getName()+"+"+method.getMethodName()+"+"+scenarioSheet);
+		    		}else
+		    		{
+		    			rerunTestMap.put(resultFile, getClass().getName()+"+"+method.getMethodName()+"+");
+		    		}
+		    		
+		    	}
+		    	if(resultStatus==ITestResult.FAILURE)
+		    	{totalFail++;}
+		    	else if(resultStatus==ITestResult.SKIP)
+		    	{
+		    		totalSkip++;
+		    		form.setExecutionStatus("skip");
+		    	}
+		    }else
+		    {
+		    	totalPass++;
+		    }
+		    /*String formStatus=form.getExecutionStatus().toLowerCase();
 		    if(formStatus.startsWith("pass"))
 		    {
 		    	totalPass++;
@@ -247,7 +356,7 @@ public class TestManager extends TestBase implements IComFolder {
 		    }else if(formStatus.startsWith("error"))
 		    {
 		    	totalError++;
-		    }
+		    }*/
 		    
 		    ((TestDataManager) getTestDataManager()).setFormsMap(resultFile, form);
 			  if(method.getParameterInvocationCount()==method.getCurrentInvocationCount())
@@ -259,16 +368,15 @@ public class TestManager extends TestBase implements IComFolder {
 				  }
 				  if(resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls"))
 				  {
-					  String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
-					  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+resultFile,scenarioSheet);
-					  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xlsx",scenarioSheet);
+					  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+resultFile,scenarioSheet,ICCB_RERUN);
+					  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xlsx",scenarioSheet,ICCB_RERUN);
 				  }
 			  }
 			  StringBuffer identifier=new StringBuffer(resultFile);
-			  String scenarioSheet=context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET);
 			  if(scenarioSheet!=null && (resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls")) )
 			  {identifier.append("["+scenarioSheet+"]");}
-			  identifier.append("-"+getDBInfo().getApplicationServer_Url().toLowerCase()+"-log:"+getLogName());
+			  identifier.append("-"+getDBInfo().getApplicationServer_Url().toLowerCase()+"-log:");
+			  //identifier.append("-"+getDBInfo().getApplicationServer_Url().toLowerCase()+"-log:"+getLogName());
 			  //Dom4jUtil.writeFormsToXml(identifier.toString(),FormsDataProvider.getForms(),TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xml","formsTotal.xsl");
 			  Dom4jUtil.writeFormToXml(identifier.toString(),form,TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xml","formsTotal.xsl");  
 	  }
@@ -373,7 +481,7 @@ public void setDBInfo(DBInfo dBInfo) {
 	this.dBInfo = dBInfo;
 }
 
-public static long getTotalRun() {
+/*public static long getTotalRun() {
 return totalRun;
 }
 
@@ -391,8 +499,37 @@ return totalFail;
 
 public static long getTotalError() {
 return totalError;
+}*/
+/**
+ * run test case or not
+ * @param status
+ * @return
+ */
+public Boolean runIt(String status)
+{
+  Boolean flag=false;//don't run it 
+  if(Strings.isNullOrEmpty(status))
+  {
+	  return true;
+  }
+  if(ICCB_RERUN)
+  {
+	if(ICC_RERUNCONTENT.equals("all")) 
+	{
+		if(!status.startsWith("pass"))
+		{
+			flag=true;
+		}
+	}else
+	{
+		if(status.startsWith(ICC_RERUNCONTENT))
+		{flag=true;}
+	}
+  }else
+  {
+	  flag=true;
+  }
+  return flag;
 }
-
-
 
 }

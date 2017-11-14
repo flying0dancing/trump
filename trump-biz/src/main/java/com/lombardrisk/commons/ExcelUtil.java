@@ -28,6 +28,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 
@@ -1167,30 +1169,7 @@ private static void fromBeanToRow(Row rootRow, Object obj) throws Exception
  */
 public static List<Form> getForms(String excelFileStr)
 {
-	List<Form> list = new ArrayList<Form>(); 
-	Workbook xwb =null;
-	try
-	{
-		xwb =ExcelUtil.openWorkbook(new File(excelFileStr));
-		Sheet sheet = xwb.getSheetAt(0);
-		Row titleRow=sheet.getRow(0);
-		int rowNum=sheet.getLastRowNum();
-		for(int i=1;i<=rowNum;i++)
-		{
-			Row row=sheet.getRow(i);
-			if(row==null){continue;}
-			Form form=(Form)fromRowToBean(titleRow,row,Form.class);
-			if(!form.toString().equals(""))
-			{
-				list.add(form);
-			}
-		}
-		
-	}catch(Exception e)
-	{
-		System.out.println("data parsed error");  
-	}
-	return list;
+	return getForms(excelFileStr,null);
 }
 
 
@@ -1204,7 +1183,7 @@ public static List<Form> getForms(String excelFileStr)
  */
 public static List<Form> getForms(String excelFileStr,String sheetName)
 {
-	List<Form> list = new ArrayList<Form>(); 
+	/*List<Form> list = new ArrayList<Form>(); 
 	Workbook xwb =null;
 	try
 	{
@@ -1212,6 +1191,66 @@ public static List<Form> getForms(String excelFileStr,String sheetName)
 		Sheet sheet = null;
 		if(sheetName!=null)
 		{sheet=xwb.getSheet(sheetName);}
+		if(sheet==null)
+		{sheet = xwb.getSheetAt(0);}
+		Row titleRow=sheet.getRow(0);
+		int rowNum=sheet.getLastRowNum();
+		for(int i=1;i<=rowNum;i++)
+		{
+			Row row=sheet.getRow(i);
+			if(row==null){continue;}
+			Form form=(Form)fromRowToBean(titleRow,row,Form.class);
+			if(!form.toString().equals("") && form.getRun().equalsIgnoreCase("Y") && !form.getExpiration().equalsIgnoreCase("Y"))
+			{
+				list.add(form);
+			}
+		}
+		
+	}catch(Exception e)
+	{
+		System.out.println("data parsed error");  
+	}
+	return list;*/
+	return getForms(excelFileStr,sheetName, false);
+}
+
+public static List<Form> getForms(String excelFileStr,String sheetName,Boolean getLastOne)
+{
+	List<Form> list = new ArrayList<Form>(); 
+	Workbook xwb =null;
+	try
+	{
+		xwb =ExcelUtil.openWorkbook(new File(excelFileStr));
+		Sheet sheet = null;
+		if(sheetName!=null)
+		{
+			sheet=xwb.getSheet(sheetName);
+			if(getLastOne)
+			{
+				int lastIndex=xwb.getNumberOfSheets()-1;
+				for(int index=lastIndex;index>=0;index--)
+				{
+					String sheetNameTmp=xwb.getSheetName(index);
+					if(sheetNameTmp.startsWith(sheetName))
+					{
+						if(sheetNameTmp.length()==sheetName.length())
+						{
+							break;
+						}else
+						{
+							String a=sheetNameTmp.substring(sheetName.length());
+							Pattern patern=Pattern.compile("\\d+");
+							Matcher isNum=patern.matcher(a);
+							if(isNum.matches())
+							{
+								sheet=xwb.getSheet(sheetNameTmp);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
 		if(sheet==null)
 		{sheet = xwb.getSheetAt(0);}
 		Row titleRow=sheet.getRow(0);
@@ -1306,6 +1345,19 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr)
  */
 public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String sheetName)
 {
+	WriteFormsToExcel(forms, excelFileStr, sheetName, false);
+}
+
+/**
+ * write forms to Excel 
+ * @author kun shen
+ * @param forms
+ * @param excelFileStr fullpath with file name (support .xlsx and .xls formats)
+ * @param sheetName
+ * @since 2017.10.25
+ */
+public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String sheetName,Boolean rewrite)
+{
 	File excelFile=new File(excelFileStr);
 	Workbook xwb=null;
 	FileInputStream fileInputStream=null;
@@ -1329,6 +1381,33 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String
 			fileInputStream = new FileInputStream(excelFile);
 			xwb = WorkbookFactory.create(fileInputStream);
 			fileInputStream.close();
+			if(rewrite)
+			{
+				int lastIndex=xwb.getNumberOfSheets()-1;
+				String sheetNameTmp=null;
+				for(int index=lastIndex;index>=0;index--)
+				{
+					sheetNameTmp=xwb.getSheetName(index);
+					if(sheetNameTmp.startsWith(sheetName))
+					{
+						if(sheetNameTmp.length()==sheetName.length())
+						{
+							break;
+						}else
+						{
+							String a=sheetNameTmp.substring(sheetName.length());
+							Pattern patern=Pattern.compile("\\d+");
+							Matcher isNum=patern.matcher(a);
+							if(isNum.matches())
+							{
+								sheetName=sheetNameTmp;
+								break;
+							}
+						}
+					}
+				}
+				xwb.removeSheetAt(xwb.getSheetIndex(sheetName));
+			}
 		}
 		Sheet sheet = null;
 		if(sheetName!=null && !sheetName.trim().equals(""))
@@ -1378,7 +1457,6 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String
 	}
 	
 }
-
 
 /**
  * use in "create new return from excel" function, update some values for QA.

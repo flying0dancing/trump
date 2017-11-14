@@ -25,7 +25,7 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkInForm(Form form)
 	{
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
 			FormInstancePage formInstancePage=null;
 			try
@@ -39,37 +39,41 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 						formInstancePage=listPage.openFormInstance(form);
 						if(formInstancePage!=null)
 						{
-							int failCount=formInstancePage.validationNow();
+							/*int failCount=formInstancePage.validationNow();
 							if(failCount>0)
 							{
 								form.setExecutionStatus("fail on having "+failCount+" validation failures");
 							}else
+							{	
+							}*/
+							List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
+							/*if(formInstancePage.isThisPage())
 							{
-								formInstancePage.lockForm();//lockform
-								List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
+								formInstancePage.unlockForm();
+							}else
+							{
 								formInstancePage=listPage.openFormInstance(form);
 								formInstancePage.unlockForm();
-								if(status.size()==1)
+							}*/
+							if(status.size()==1)
+							{
+								form.setExecutionStatus(status.get(0));
+							}else
+							{
+								String s="";
+								Boolean totalStatus=true;
+								for(String t:status)
 								{
-									form.setExecutionStatus(status.get(0));
+									if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
+									s=s+t+System.getProperty("line.separator");
+								}
+								if(totalStatus)
+								{
+									form.setExecutionStatus(s);
 								}else
 								{
-									String s="";
-									Boolean totalStatus=true;
-									for(String t:status)
-									{
-										if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
-										s=s+t+System.getProperty("line.separator");
-									}
-									if(totalStatus)
-									{
-										form.setExecutionStatus(s);
-									}else
-									{
-										form.setExecutionStatus("fail:"+s);
-									}
+									form.setExecutionStatus("fail:"+s);
 								}
-								
 							}
 							
 						}else
@@ -106,12 +110,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-		
-		Assert.assertTrue((form.getExecutionStatus().startsWith("pass") && !form.getExecutionStatus().toLowerCase().contains("fail")) || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 	/**
@@ -125,7 +125,7 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkInDashBoard(Form form)
 	{
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
 			try
 			{
@@ -171,12 +171,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 				form.setExecutionStatus("error:"+e.getMessage());
 			}
 			
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-
-		Assert.assertTrue((form.getExecutionStatus().startsWith("pass") && !form.getExecutionStatus().toLowerCase().contains("fail")) || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 }

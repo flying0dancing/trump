@@ -21,9 +21,9 @@ public class ImportForm extends TestManager{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void importForm(Form form)
 	{
-		Boolean flag=true;
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			Boolean flag=true;
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -95,13 +95,8 @@ public class ImportForm extends TestManager{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
-	
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 }

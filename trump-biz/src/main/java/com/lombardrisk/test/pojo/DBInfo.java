@@ -409,5 +409,12 @@ public class DBInfo{
 		this.dBQuery = dBQuery;
 	}
 
-	
+	public void resetDeActivateDate()
+	{
+		//String ID_Start = getRegulatorIDRangeStart(regulator);
+		//String ID_End = getRegulatorIDRangEnd(regulator);
+		//String SQL="update \"CFG_RPT_Rets\" set \"DeActivateDate\" =null where ID BETWEEN "+ID_Start+" and "+ID_End+" and \"DeActivateDate\" is not null ";
+		String SQL="update \"CFG_RPT_Rets\" set \"DeActivateDate\" =null where \"DeActivateDate\" is not null ";
+		int result=getDBQuery().update(SQL);
+	}
 }
