@@ -619,7 +619,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			{
 				element("fipf.warnConfirmBtn").click();
 				loadingDlg();
-				loadingDlg(5000);
+				loadingDlg(10000);
 			}
 			waitForPageLoaded();
 		}

@@ -233,34 +233,48 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
-			selectFormInfo();
-			if(element("td.exportButton",title).isEnabled())
+			selectFormInfoInDialogue();
+			IWebElementWrapper exportEle=element("td.exportButton",title);
+			if(exportEle.isEnabled())
 			{
 				logger.info("click export/force button");
-				/*element("td.exportButton",title).click();
+				/*exportEle.click();
 				loadingDlg();
 				flag=getTipMessageStatus();
 				ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 				forceSubmit.typeSubmitComment();*/
 				if (PropHelper.ENABLE_FILE_DOWNLOAD)
 				{
-					TestCaseManager.getTestCase().startTransaction("");
-					TestCaseManager.getTestCase().setPrepareToDownload(true);
-					TestCaseManager.getTestCase().setDownloadFileFormat(FileFormat.BINARY);
-					
-					element("td.exportButton",title).click();
-					loadingDlg();
-					flag=getTipMessageStatus();
-					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
-					forceSubmit.typeSubmitComment();
-					forceSubmit.clickSubmit();
-					
-					TestCaseManager.getTestCase().stopTransaction();
+					String exportBtnId=exportEle.getAttribute("id");
+					if(exportBtnId.contains("force"))
+					{
+						exportEle.click();
+						loadingDlg();
+						flag=getTipMessageStatus();
+						ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
+						forceSubmit.typeSubmitComment();
+						TestCaseManager.getTestCase().startTransaction("");
+						TestCaseManager.getTestCase().setPrepareToDownload(true);
+						TestCaseManager.getTestCase().setDownloadFileFormat(FileFormat.BINARY);
+						
+						forceSubmit.clickSubmit();
+						TestCaseManager.getTestCase().stopTransaction();
+					}else
+					{
+						TestCaseManager.getTestCase().startTransaction("");
+						TestCaseManager.getTestCase().setPrepareToDownload(true);
+						TestCaseManager.getTestCase().setDownloadFileFormat(FileFormat.BINARY);
+						
+						exportEle.click();
+						loadingDlg();
+						flag=getTipMessageStatus();
+						TestCaseManager.getTestCase().stopTransaction();
+					}
 					
 				}
 				else
 				{
-					element("td.exportButton",title).click();
+					exportEle.click();
 					loadingDlg();
 					flag=getTipMessageStatus();
 					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
@@ -288,22 +302,12 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				
 				if(element("fipf.formInstTitleLabels").isDisplayed())
 				{
-					FormInstancePage fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager());//todo add unlock
+					FormInstancePage fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager());// unlock return
 					fip.unlockForm();
 					fip.closeThisPage();
 					fip=null;
 				}
 				
-				/*if(messageFlag){return flag;}
-				String a=getLatestFile(downloadFolder);
-				String b=a.substring(a.lastIndexOf(System.getProperty("file.separator"))+1);
-				if(b.equalsIgnoreCase(LOCKNAME))
-				{
-					logger.error("error: not find download file.");
-				}else
-				{
-					flag=true;
-				}	*/
 			}else
 			{
 				logger.error("error: export button is disable.");
@@ -329,12 +333,13 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
-			selectFormInfo();
-			if(element("td.exportButton",title).isEnabled())
+			selectFormInfoInDialogue();
+			IWebElementWrapper exportEle=element("td.exportButton",title);
+			if(exportEle.isEnabled())
 			{
 				logger.info("click export/force button");
 				
-				element("td.exportButton",title).click();
+				exportEle.click();
 				loadingDlg();
 				flag=getTipMessageStatus();
 				ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
@@ -416,7 +421,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		
 	}
 	
-	private Boolean selectFormInfo() throws Exception
+	private Boolean selectFormInfoInDialogue() throws Exception
 	{
 		Boolean flag=false;
 		IWebElementWrapper element=element("td.selectCheckBox");

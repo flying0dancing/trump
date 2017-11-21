@@ -96,8 +96,9 @@ public class TestManager extends TestBase implements IComFolder {
 		 {}*/
 		 MailUtil.sendARResultMail(TARGET_FOLDER,xmlTest.getSuite().getFileName(),totalPass,totalFail,totalSkip,totalTime,ICCB_RERUN);
 		 String failXml=TARGET_SCENARIOS_FOLDER+xmlTest.getSuite().getName()+"_fail.xml";
-
-		 if(totalFail>0 || totalSkip>0)
+		 
+		 File failedtestsXml=new File(failXml);
+		 if(!failedtestsXml.exists() && (totalFail>0 || totalSkip>0))
 		 {
 			 XmlSuite rerunSuite=new XmlSuite();
 			 rerunSuite.setFileName(failXml);
@@ -108,6 +109,13 @@ public class TestManager extends TestBase implements IComFolder {
 			 rerunSuite.setThreadCount(currentSuite.getThreadCount());
 			 rerunSuite.setParallel(currentSuite.getParallel());
 			 rerunSuite.setParameters(currentSuite.getAllParameters());
+			 
+			 /*if(failedtestsXml.exists())
+			 {
+				 FileInputStream fin=new FileInputStream(failedtestsXml);
+				 rerunSuite=new SuiteXmlParser().parse(failXml, fin, true);
+			 }*/
+			 
 			 int rerunTestAcc=1;
 			 
 			 Iterator<Entry<String, String>> iterM=rerunTestMap.entrySet().iterator();
