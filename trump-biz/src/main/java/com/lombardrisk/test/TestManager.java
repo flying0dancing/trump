@@ -478,8 +478,8 @@ public void setDBInfo(DBInfo dBInfo) {
 	this.dBInfo = dBInfo;
 }
 
-/*public static long getTotalRun() {
-return totalRun;
+public static long getTotalRun() {
+return totalPass+totalSkip+totalFail;
 }
 
 public static long getTotalPass() {
@@ -494,9 +494,6 @@ public static long getTotalFail() {
 return totalFail;
 }
 
-public static long getTotalError() {
-return totalError;
-}*/
 /**
  * run test case or not
  * @param status
