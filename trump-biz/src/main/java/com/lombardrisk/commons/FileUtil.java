@@ -776,13 +776,13 @@ public class FileUtil extends FileUtils
 	/**
 	 * copy file from expectationPath to resultPath, if resultPath already exists fileName, add suffix like (1),(2) in fileName, and return new file name
 	 * @author kun shen
-	 * @param expectationPath
+	 * @param sourcePath
 	 * @param resultPath
 	 * @param fileName
 	 * @return
 	 * @throws Exception
 	 */
-	public static String copyToNewFile(String expectationPath,String resultPath,String fileName) throws Exception
+	public static String copyToNewFile(String sourcePath,String resultPath,String fileName) throws Exception
 	{
 		String newFileName=fileName;
 		if(new File(resultPath).isDirectory())
@@ -799,9 +799,9 @@ public class FileUtil extends FileUtils
 		{
 			createDirectory(resultPath);
 		}
-		if(new File(expectationPath+fileName).exists())
+		if(new File(sourcePath+fileName).exists())
 		{
-			FileUtils.copyFile(new File(expectationPath+fileName), new File(resultPath+newFileName));
+			FileUtils.copyFile(new File(sourcePath+fileName), new File(resultPath+newFileName));
 		}
 		return newFileName;
 	}
@@ -812,6 +812,7 @@ public class FileUtil extends FileUtils
 	 * @return new file name
 	 * @throws Exception
 	 */
+	@Deprecated
 	public static String addSuffixToFile(File filePath) throws Exception
 	{
 		String newFileName=null;
@@ -831,7 +832,54 @@ public class FileUtil extends FileUtils
 		{
 			logger.info(filePath.getAbsolutePath()+" doesn't exist, no need to add suffix.");
 		}
+
+		return newFileName;
+	}
+	
+	/**
+	 * rename fileFullName with suffix, if newFilePath is a real path, the new fileFullName get it as path.  
+	 * @param fileFullName
+	 * @param suffix
+	 * @param newFilePath if newFilePath is empty, get fileFullName's path
+	 * @return return null if fileFullName doesn't exist, otherwise return new fileFullName.
+	 */
+	public static String createNewFileWithSuffix(String fileFullName,String suffix,String newFilePath)
+	{
+		String newFileName=null;
+		File file=new File(fileFullName);
+		if(file.exists() && file.isFile())
+		{
+			String fileName=file.getName();
+			int count=1;
+			String namePrefix=fileName.substring(0, fileName.lastIndexOf("."));
+			String nameSuffix=fileName.replace(namePrefix, "");
+			if(StringUtils.isBlank(newFilePath))
+			{newFilePath=file.getPath().replace(namePrefix+nameSuffix, "");}
+			if(StringUtils.isBlank(suffix))
+			{
+				newFileName=namePrefix+"("+String.valueOf(count)+")"+nameSuffix;
+				while(new File(newFilePath+newFileName).exists())
+				{
+					count++;
+					newFileName=namePrefix+"("+String.valueOf(count)+")"+nameSuffix;
+				}
+			}else
+			{
+				newFileName=namePrefix+suffix+nameSuffix;
+				while(new File(newFilePath+newFileName).exists())
+				{
+					newFileName=namePrefix+suffix+"("+String.valueOf(count)+")"+nameSuffix;
+					count++;
+				}
+			}
+			newFileName=newFilePath+newFileName;
+			logger.info("new file name is {}.",newFileName);
+		}else
+		{
+			logger.error("argument:fileFullName[{}] doesn't exist.",fileFullName);
+		}
 		
 		return newFileName;
 	}
+	
 }

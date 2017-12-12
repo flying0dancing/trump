@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -110,8 +111,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 			File fileToWrite=new File(fileFullName);
 			if(fileToWrite.exists())
 			{
-				//TODO rename fileFullName
-				fileFullName=regulatorFolder+FileUtil.addSuffixToFile(fileToWrite);
+				fileFullName=FileUtil.createNewFileWithSuffix(fileFullName,null,null);
 				fileToWrite=new File(fileFullName);
 			}
 			if(!fileToWrite.exists()){fileToWrite.createNewFile();}
