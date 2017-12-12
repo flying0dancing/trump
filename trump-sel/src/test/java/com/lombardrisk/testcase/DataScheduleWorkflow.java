@@ -22,8 +22,9 @@ public class DataScheduleWorkflow extends TestManager{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void dataScheduleApproval(Form form)
 	{
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -86,11 +87,7 @@ public class DataScheduleWorkflow extends TestManager{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 }

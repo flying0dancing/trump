@@ -15,7 +15,7 @@ import com.lombardrisk.test.pojo.Form;
 
 public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	/**
-	 * click export to regulator button in opened form instance, and then export download file, and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
+	 * click export to regulator button in opened form instance, and then export download file(lock form before, and then unlock form), and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
 	 * scenario file may contains these columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
 	 * special instruction: when Transmission.module are contains many modules, Transmission.fileType is essential.
@@ -25,8 +25,9 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkInForm(Form form)
 	{
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -39,36 +40,41 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 						formInstancePage=listPage.openFormInstance(form);
 						if(formInstancePage!=null)
 						{
-							int failCount=formInstancePage.validationNow();
+							/*int failCount=formInstancePage.validationNow();
 							if(failCount>0)
 							{
 								form.setExecutionStatus("fail on having "+failCount+" validation failures");
 							}else
+							{	
+							}*/
+							List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
+							/*if(formInstancePage.isThisPage())
 							{
-								formInstancePage.lockForm();
-								List<String> status=ExportToFiles.exportToRegulator(formInstancePage, form);
-								if(status.size()==1)
+								formInstancePage.unlockForm();
+							}else
+							{
+								formInstancePage=listPage.openFormInstance(form);
+								formInstancePage.unlockForm();
+							}*/
+							if(status.size()==1)
+							{
+								form.setExecutionStatus(status.get(0));
+							}else
+							{
+								String s="";
+								Boolean totalStatus=true;
+								for(String t:status)
 								{
-									form.setExecutionStatus(status.get(0));
+									if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
+									s=s+t+System.getProperty("line.separator");
+								}
+								if(totalStatus)
+								{
+									form.setExecutionStatus(s);
 								}else
 								{
-									String s="";
-									Boolean totalStatus=true;
-									for(String t:status)
-									{
-										if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
-										s=s+t+System.getProperty("line.separator");
-									}
-									if(totalStatus)
-									{
-										form.setExecutionStatus(s);
-									}else
-									{
-										form.setExecutionStatus("fail:"+s);
-									}
+									form.setExecutionStatus("fail:"+s);
 								}
-								
-								formInstancePage.unlockForm();
 							}
 							
 						}else
@@ -105,12 +111,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-		
-		Assert.assertTrue((form.getExecutionStatus().startsWith("pass") && !form.getExecutionStatus().toLowerCase().contains("fail")) || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 	/**
@@ -124,8 +126,9 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void checkInDashBoard(Form form)
 	{
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
 			try
 			{
 				ListPage listPage=super.getListPage();
@@ -170,12 +173,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 				form.setExecutionStatus("error:"+e.getMessage());
 			}
 			
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-
-		Assert.assertTrue((form.getExecutionStatus().startsWith("pass") && !form.getExecutionStatus().toLowerCase().contains("fail")) || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 }

@@ -9,6 +9,7 @@ import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
+import com.google.common.base.Strings;
 import com.lombardrisk.commons.ExcelUtil;
 import com.lombardrisk.commons.JxlUtil;
 import com.lombardrisk.test.IComFolder;
@@ -67,7 +68,8 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 					flag=true;
 					newFileFullPath=newFile;
 				}
-			}else if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")").exists())
+			}
+			if(!flag && new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")").exists())
 			{
 				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/", filterStr);
 				if(new File(newFile).exists())
@@ -75,7 +77,8 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 					flag=true;
 					newFileFullPath=newFile;
 				}
-			}else if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")").exists())
+			}
+			if(!flag && new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")").exists())
 			{
 				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/", filterStr);
 				if(new File(newFile).exists())
@@ -108,6 +111,11 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 	 */
 	public String uploadFile() throws Exception
 	{
+		String errorTxt=null;
+		if(Strings.isNullOrEmpty(form.getImportFile()) )
+		{
+			return "no exist import file";
+		}
 		String importFileFullName=TARGET_IMPORT_FOLDER+form.getRegulator()+"/"+form.getImportFile();//
 		//TODO: adding function for update date in importfile.
 		importFileFullName=findNewFileForUpload(importFileFullName);
@@ -115,7 +123,6 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		{
 			ExcelUtil.UpdateCellsInExcel(importFileFullName, new String[][]{{"CoverPage","5","4", form.getProcessDate(),"date:"+dateFormat},{"CoverPage","4","4", form.getEntity(),null}});//update process date and entity by form's getProcessDate
 		}
-		String errorTxt=null;
 		logger.info("Execute js script");
 		String js = "document.getElementById('" + type + ":importFileUpload').getElementsByTagName('div')[0].getElementsByTagName('span')[0].className='';";
 		executeScript(js);

@@ -20,6 +20,7 @@ private String importFile;
 private String expectationFile;
 private String executionStatus;
 private String exec_ExpectationFile;
+private int frequency;
 
 public String getName()
 {return name;}
@@ -152,6 +153,17 @@ public String toString()
 		}
 	}
 	return stringBuffer.toString();
+}
+
+public int getRunFrequency()
+{return frequency;}
+
+public void setRunFrequency(int frequency)
+{this.frequency=frequency;}
+
+public void accumulateRunFrequency()
+{
+	setRunFrequency(getRunFrequency()+1);
 }
 
 }

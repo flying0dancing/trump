@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 import com.lombardrisk.pages.CreateNewReturnDialog;
 import com.lombardrisk.pages.CreateNewReturnFromExcelDialog;
 import com.lombardrisk.pages.FormInstancePage;
-
 import com.lombardrisk.pages.ListPage;
 import com.lombardrisk.test.*;
 import com.lombardrisk.test.pojo.Form;
@@ -22,9 +21,10 @@ public class CreateNewForm extends TestManager{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void createNew(Form form)
 	{
-		Boolean flag=true;
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
+			Boolean flag=true;
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -85,12 +85,8 @@ public class CreateNewForm extends TestManager{
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
 	
@@ -105,9 +101,10 @@ public class CreateNewForm extends TestManager{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void createNewFromExcel(Form form)
 	{
-		Boolean flag=true;
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
+			Boolean flag=true;
 			try
 			{
 				ListPage listPage=super.getListPage();
@@ -163,12 +160,8 @@ public class CreateNewForm extends TestManager{
 				logger.error(e.getMessage());
 				form.setExecutionStatus("error:"+e.getMessage());
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 	

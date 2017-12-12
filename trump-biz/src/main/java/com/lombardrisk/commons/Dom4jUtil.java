@@ -3,20 +3,26 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter; 
 import java.util.ArrayList;  
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;  
 import java.util.List;  
 
+import org.dom4j.Attribute;
 import org.dom4j.Document;  
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;  
 import org.dom4j.Element;  
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;  
 import org.dom4j.io.XMLWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.lombardrisk.test.pojo.Form;
 
 public class Dom4jUtil {
-	  
+	final static Logger logger=LoggerFactory.getLogger(Dom4jUtil.class);
     /** 
      * @param args 
      * @throws DocumentException 
@@ -66,7 +72,7 @@ public static List<Form> getForms(String xmlFileStr)
             Element elementGroupService = (Element) it.next(); 
             Form baseBean = (Form) XmlUtil.fromXmlToBean(  
                     elementGroupService, Form.class);  
-            if(!baseBean.toString().equals(""))
+            if(!baseBean.toString().equals("") && baseBean.getRun().equalsIgnoreCase("Y") && !baseBean.getExpiration().equalsIgnoreCase("Y"))
 			{
                 list.add(baseBean);  
 			}
@@ -274,10 +280,33 @@ public static void writeFormToXml(String identifer,Form form,String xmlFileStr,S
             if(identifer.equalsIgnoreCase(elementForms.attributeValue("id")))
             {
             	//root.remove(elementForms);
-            	Element formElement=elementForms.addElement("form");
-            	XmlUtil.fromBeanToElement(formElement,form);
-            	flag=true;
-            	break;
+            	//new add (start)
+            	@SuppressWarnings("unchecked")
+            	Iterator<Element> formit = elementForms.elementIterator("form");
+            	while(formit.hasNext())
+            	{
+            		Element elementForm=formit.next();
+            		if(form.getName().equalsIgnoreCase(elementForm.attributeValue("name")) && form.getVersion().equalsIgnoreCase(elementForm.attributeValue("version")) && form.getRegulator().equalsIgnoreCase(elementForm.attributeValue("regulator")) )
+            		{
+            			if(form.getEntity().equalsIgnoreCase(elementForm.elementText("entity")) &&form.getProcessDate().equalsIgnoreCase(elementForm.elementText("processDate")))
+            			{
+            				//elementForm.element("importFile").setText(form.getImportFile());
+            				//elementForm.element("executionStatus").setText(form.getExecutionStatus());
+            				//flag=true;
+            				elementForm.detach();
+            				break;
+            			}
+            		}
+            	}
+            	if(!flag)
+            	{
+            		//new add (end)
+                	Element formElement=elementForms.addElement("form");
+                	XmlUtil.fromBeanToElement(formElement,form);
+                	flag=true;
+                	break;
+            	}
+            	
             }
             
         }
@@ -294,4 +323,86 @@ public static void writeFormToXml(String identifer,Form form,String xmlFileStr,S
     	e.printStackTrace();
     } 
 }
+
+/**
+ * 
+ * @param fileFullName
+ * @param ignoreAttributes
+ * @param ignoreElements
+ * @return sorted file's full name
+ */
+public static String sortXmlContentToNewFileByName(String fileFullName,List<String> ignoreAttributes,List<String> ignoreElements,String newFilePath)
+{
+	logger.info("sorte xml by element.");
+	String newFileFullName=null;
+	Document doc =null;
+	SAXReader reader=new SAXReader();
+	File file=new File(fileFullName);
+	Element root=null;
+	try {
+		doc=reader.read(file);
+		root=doc.getRootElement();
+		Document docNew=DocumentHelper.createDocument();
+		//add new element as root
+		Element rootNew=docNew.addElement(root.getName());
+		@SuppressWarnings("unchecked")
+		List<Attribute> attributes=root.attributes();
+		for(Attribute attr:attributes)
+		{
+			if(!ignoreAttributes.contains(attr.getName()))
+			{
+				rootNew.addAttribute(attr.getName(), attr.getValue());
+			}
+		}
+		sortXmlElementByName(root,rootNew,ignoreAttributes,ignoreElements);
+		newFileFullName=FileUtil.createNewFileWithSuffix(fileFullName,"_sort",newFilePath);
+		writeDocumentToXml(docNew,newFileFullName);
+	} catch (DocumentException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	return newFileFullName;
+}
+
+/**
+ * sort element,and adding sorted elements to elementNew
+ * @param element
+ * @param elementNew
+ */
+public static void sortXmlElementByName(Element element,Element elementNew,List<String> ignoreAttributes,List<String> ignoreElements)
+{
+	@SuppressWarnings("unchecked")
+	List<Element> list=element.elements();
+	if(list!=null && list.size()!=0)
+	{
+		Collections.sort(list, new Comparator<Element>(){
+			public int compare(Element o1, Element o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
+	}
+	for(Element ele:list)
+	{
+		if(ignoreElements.contains(ele.getName()))
+		{continue;}
+		//add new element and attributes
+		Element eleNew=elementNew.addElement(ele.getName());
+		@SuppressWarnings("unchecked")
+		List<Attribute> attributes=ele.attributes();
+		for(Attribute attr:attributes)
+		{
+			if(!ignoreAttributes.contains(attr.getName()))
+			{
+				eleNew.addAttribute(attr.getName(), attr.getValue());
+			}
+		}
+		eleNew.addText(ele.getText());
+		
+		sortXmlElementByName(ele,eleNew,ignoreAttributes,ignoreElements);
+	}
+	
+	return ;
+}
+
 }

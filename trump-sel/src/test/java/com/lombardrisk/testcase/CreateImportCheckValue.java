@@ -2,7 +2,6 @@ package com.lombardrisk.testcase;
 
 
 import org.testng.Assert;
-
 import org.testng.annotations.Test;
 
 import com.lombardrisk.pages.CreateNewReturnDialog;
@@ -26,9 +25,10 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void createNewImportCheckValue(Form form)
 	{
-		Boolean flag=true;
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
+			Boolean flag=true;
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -122,15 +122,10 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
 	/**
@@ -143,9 +138,10 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void createNewFromExcelCheckValue(Form form)
 	{
-		Boolean flag=true;
-		if((form.getExpiration()==null ||!form.getExpiration().equalsIgnoreCase("Y")) && form.getRun()!=null && form.getRun().equalsIgnoreCase("Y"))
+		if(runIt(form.getExecutionStatus()))
 		{
+			form.accumulateRunFrequency();
+			Boolean flag=true;
 			FormInstancePage formInstancePage=null;
 			try
 			{
@@ -215,14 +211,10 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 				}
 				
 			}
-		}else
-		{
-			form.setExecutionStatus("skip");
 		}
 		
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		
-		Assert.assertTrue(form.getExecutionStatus().equalsIgnoreCase("pass") || form.getExecutionStatus().equalsIgnoreCase("skip"));
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
 	

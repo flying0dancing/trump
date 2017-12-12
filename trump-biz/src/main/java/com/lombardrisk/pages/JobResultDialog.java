@@ -82,7 +82,14 @@ public class JobResultDialog extends AbstractPage {
 		String jobStartTimeLabel=jobStartTime();
 		if(element("fipf.formInstTitleLabels").isDisplayed())
 		{
+			ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());//new add on 2017.10.31 for ar1.15.6-b1293 
+			if(forceSubmit.isThisPage())
+			{
+				forceSubmit.closeThisPage();
+			}
+			loadingDlg();
 			fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager());
+			fip.unlockForm();//new add on 2017.10.31 for ar1.15.6-b1293 
 			fip.closeThisPage();
 			fip=null;
 		}

@@ -3,6 +3,7 @@ package com.lombardrisk.test;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.yiwan.webcore.util.PropHelper;
 
 import com.lombardrisk.commons.ExcelUtil;
 import com.lombardrisk.commons.FileUtil;
+import com.lombardrisk.commons.SortUtil;
 import com.lombardrisk.pages.FormInstancePage;
 import com.lombardrisk.test.pojo.Form;
 import com.lombardrisk.commons.TxtUtil;
@@ -485,21 +487,32 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				
 				cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + exportedFileFullPath.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" "+"\"" + expectationFolder+expectationFileName + "\" "+ "\""+newReportPath+"\"";
 				
-				logger.info(cmdLine);
-				Process process = Runtime.getRuntime().exec(cmdLine);
-				
-				BufferedReader input=new BufferedReader(new InputStreamReader(process.getInputStream()));
-				StringBuffer lines=new StringBuffer();
-				String line=null;
-				while((line=input.readLine())!=null)
+				returnStatus=getReturnStatus(cmdLine);
+				String fileType="txt";
+				int lastComma=exportedFile.getName().lastIndexOf(".");
+	    		if(lastComma!=-1)
+	    		{
+	    			fileType=exportedFile.getName().substring(lastComma+1);
+	    		}
+				//sort files
+				if(returnStatus.startsWith("fail") && !fileType.equalsIgnoreCase("xlsx"))
 				{
-					lines.append(line.trim());
+					String transPropFullPath=SOURCE_SCENARIOS_FOLDER+regulator+SOURCE_TRANSMISSION_PROPERTY;
+					if(new File(transPropFullPath).isFile())
+					{
+						String sorted_exportedFileFullName=SortUtil.allocateSortType(transPropFullPath,form.getName(),exportedFileFullPath,null);
+						String sorted_expectedFileFullName=SortUtil.allocateSortType(transPropFullPath,form.getName(),expectationFolder+expectationFileName,reslutFolder);
+						newReportName=FileUtil.copyToNewFile(reslutFolder,reslutFolder,reportName);
+						form.setExec_ExpectationFile(newReportName);
+						newReportPath=reslutFolder+newReportName;
+						cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + sorted_exportedFileFullName.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" "+"\"" + sorted_expectedFileFullName + "\" "+ "\""+newReportPath+"\"";
+						returnStatus=getReturnStatus(cmdLine);
+					}else
+					{
+						logger.error("File Not Find: product transmission property[{}]",transPropFullPath);
+					}
+					
 				}
-				input.close();
-				logger.info("subprocess result[code]:"+String.valueOf(process.waitFor()));
-				
-				process.destroy();
-				returnStatus=lines.toString();
 			}else
 			{
 				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
@@ -517,6 +530,40 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		long end = System.currentTimeMillis();
 		logger.info("used time[seconds]:"+(end-begin)/1000.00F +" result:"+returnStatus);
 		Runtime.getRuntime().gc();
+		return returnStatus;
+	}
+	
+	private static String getReturnStatus(String cmdLine)
+	{
+		String returnStatus=null;
+		BufferedReader input=null;
+		logger.info(cmdLine);
+		Process process;
+		try {
+			process = Runtime.getRuntime().exec(cmdLine);
+			input=new BufferedReader(new InputStreamReader(process.getInputStream()));
+			StringBuffer lines=new StringBuffer();
+			String line=null;
+			while((line=input.readLine())!=null)
+			{
+				lines.append(line.trim());
+			}
+			input.close();
+			logger.info("subprocess result[code]:"+String.valueOf(process.waitFor()));
+			
+			process.destroy();
+			returnStatus=lines.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("get ReturnStatus fail.");
+		}finally
+		{
+			try {
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		return returnStatus;
 	}
 	

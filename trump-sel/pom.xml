@@ -13,7 +13,7 @@
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <argLine>-Dfile.encoding=UTF-8</argLine>  
+    <argLine>-Dfile.encoding=UTF-8</argLine> 
     <reportng.version>1.1.4</reportng.version>  
     <guice.version>3.0</guice.version>  
     <xmlFileName>suites/TestTP.xml</xmlFileName> 

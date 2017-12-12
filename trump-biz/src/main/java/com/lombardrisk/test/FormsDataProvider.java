@@ -26,7 +26,13 @@ public class FormsDataProvider implements IComFolder{
 			Reporter.log("parameter scenarioName is null or empty.<br>");
 		}else
 		{
-			formsFullPath=SOURCE_SCENARIOS_FOLDER+scenarioName.trim();
+			if(ICCB_RERUN)
+			{
+				formsFullPath=TARGET_SCENARIOS_FOLDER+scenarioName.trim();
+			}else
+			{
+				formsFullPath=SOURCE_SCENARIOS_FOLDER+scenarioName.trim();
+			}
 		}
 		if(formsFullPath==null || formsFullPath.equals("")){formsFullPath="suites/forms.xml";}
 		File formsFile=new File(formsFullPath);
@@ -38,7 +44,7 @@ public class FormsDataProvider implements IComFolder{
 				forms=Dom4jUtil.getForms(tmp);
 			}else if(tmp.endsWith(".xlsx") || tmp.endsWith(".xls") )
 			{
-				forms=ExcelUtil.getForms(tmp,context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET));
+				forms=ExcelUtil.getForms(tmp,context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET),ICCB_RERUN);
 			}
 			else
 			{
@@ -63,8 +69,8 @@ public class FormsDataProvider implements IComFolder{
 			{
 				if(forms.get(i).getVersion()!=null){forms.get(i).setVersion(forms.get(i).getVersion().toLowerCase());}
 				if(forms.get(i).getProcessDate().length()==9){forms.get(i).setProcessDate("0"+forms.get(i).getProcessDate());}
-				forms.get(i).setExec_ExpectationFile(null);
-				forms.get(i).setExecutionStatus(null);
+				//forms.get(i).setExec_ExpectationFile(null);
+				//forms.get(i).setExecutionStatus(null);
 				data[i]=new Object[]{forms.get(i)};
 			}
 		}

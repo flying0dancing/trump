@@ -21,4 +21,6 @@ public interface IComFolder extends IConfigCmd{
 	 
 	 String PARAMETER_SCENARIOS_NAME="scenarioName";
 	 String PARAMETER_SCENARIOS_SHEET="scenarioSheet";
+	 
+	 String SOURCE_TRANSMISSION_PROPERTY=".transmissionProperties.csv";
 }

@@ -1830,6 +1830,7 @@
     	<locator id="abstract.uploadFileInitToZero" type="WebElement" by="xpath" expression="//*[starts-with(@id,'?:')]/div[ contains(@class,'ui-chkbox-box')][../../span='Initialise to zeros']" name="uploadFileInitToZero" description="uploadFileInitToZero"/>
         <locator id="abstract.uploadFileInitToZeroChecked" type="WebElement" by="xpath" expression="//*[starts-with(@id,'?:')]/div[ contains(@class,'ui-chkbox-box')][../../span='Initialise to zeros']/span[contains(@class,'ui-icon-check')]" name="uploadFileInitToZeroChecked" description="uploadFileInitToZeroChecked"/>
        	<locator id="abstract.message" type="WebElement" by="xpath" expression="//*[@id='growl_container']/div/div/div[2]/p" name="message" description="message"/>
+    	<locator id="abstract.messageType" type="WebElement" by="xpath" expression=".//*[@id='growl_container']/div//div/span[contains(@class,'ui-growl-title')]" name="messageType" description="message type"/>
     
     </page>
     
@@ -1925,11 +1926,11 @@
     <locator id="filf.selectGroup" type="WebElement" by="id" expression="formFilter:selectGroup" name="selectGroup" description="selectGroup"/>
     <locator id="filf.selectForm" type="WebElement" by="id" expression="formFilter:selectForm" name="selectForm" description="selectForm"/>
     <locator id="filf.selectProcessDate" type="WebElement" by="id" expression="formFilter:selectProcessDate" name="selectProcessDate" description="selectProcessDate"/>
-    <locator id="filf.clickFormLinkEntity" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr/td[1]" name="clickFormLinkEntity" description="clickFormLink Entity or Group"/>
-    <locator id="filf.clickFormLinkName" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr/td[2]/a" name="clickFormLinkName" description="clickFormLink formName"/>
-    <locator id="filf.clickFormLink" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[2]/a" name="clickFormLink" description="clickFormLink"/>
-    <locator id="filf.deleteForm" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[last()]/a" name="deleteForm" description="deleteForm"/>
-    <locator id="filf.exportFileLoation" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?']/td[last()-3]/a/img" name="exportFileLoation" description="exportFileLoation"/>    
+    <locator id="filf.clickFormLinkEntity" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr/td[1]" name="clickFormLinkEntity" description="clickFormLink Entity or Group(deprecated)"/>
+    <locator id="filf.clickFormLinkName" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr/td[2]/a" name="clickFormLinkName" description="clickFormLink formName(deprecated)"/>
+    <locator id="filf.clickFormLink" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[1]/a" name="clickFormLink" description="clickFormLink"/>
+    <locator id="filf.deleteForm" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[last()]/a" name="deleteForm" description="deleteForm"/>
+    <locator id="filf.exportFileLoation" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[last()-4]/a/img" name="exportFileLoation" description="exportFileLoation"/>    
     <locator id="filf.selectApproval" type="WebElement" by="id" expression="formInstanceListForm:formInstanceListTable:0:selectApproval" name="selectApproval" description="selectApproval in first row"/>    
     <locator id="filf.deleteReturnConfirm" type="WebElement" by="id" expression="deleteReturnMessageForm:deleteReturnConfirm" name="deleteReturnConfirm" description="deleteReturnConfirm"/>
     <locator id="filf.createNew" type="WebButton" by="id" expression="FormInstImpExpMenu:createNew" name="createNew" description="createNew"/>
@@ -1941,7 +1942,7 @@
     <locator id="filf.jobManager" type="WebButton" by="id" expression="formHeader:jobManager" name="jobManager" description="jobManager"/>
     <locator id="filf.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/span[1]" name="firstPageSta" description="first page status"/>
     <locator id="filf.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>	
-    <locator id="filf.FormRow" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]='?' and td[2]/a='?' and td[3]='?' and td[4]='?' and @data-ri]" name="FormRow" description="FormRow"/>
+    <locator id="filf.FormRow" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?' and @data-ri]" name="FormRow" description="FormRow"/>
     	
     </page>
     
@@ -1957,11 +1958,11 @@
     <locator id="td.selectTaxonomy" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectTaxonomy')]" name="selectTaxonomy" description="selectTaxonomy"/>
     <locator id="td.selectModule" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectModule')]" name="selectModule" description="selectModule"/>
     <locator id="td.compressTypeSelector" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'compressTypeSelector')]" name="compressTypeSelector" description="compressTypeSelector"/>
-    <locator id="td.exportButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[span='Export']/span" name="exportButton" description="exportButton"/>
+    <locator id="td.exportButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit']" name="exportButton" description="exportButton"/>
     <locator id="td.noRecordsFound" type="WebElement" by="xpath" expression="//tbody[starts-with(@id,'transmitForm')][contains(@id,'formInstanceListTable_data')]/tr[contains(td,'No records found')]/td" name="noRecordsFound" description="noRecordsFound"/>
     
     <locator id="td.logButton" type="WebElement" by="xpath" expression="//div[@id='transmitLogDialog']//button[span='OK']" name="logButton" description="logButton"/>
-    	
+    <locator id="td.selectCheckBox" type="WebElement" by="xpath" expression=".//*[@id='transmitForm4Fed:formInstanceListTable:0:selectAllCheckbox']/div[2]" name="selectCheckBox" description="selectCheckBox"/>
     </page>
     
     <page id="drcfd" name="deleteReturnCommentForm" description="deleteReturnCommentForm Dialog created by Kun Shen">
@@ -2079,13 +2080,34 @@
     <page id="wkacf" name="workflowApproveCommentForm" description="workflowApproveCommentForm Dialog created by Kun Shen">
 	<locator id="wkacf.Comment" type="WebElement" by="id" expression="approveCommentForm:approveCommentTextarea" name="Comnent" description="comment"/>
     <locator id="wkacf.ok" type="WebButton" by="id" expression="approveCommentForm:addApproveComment" name="ok" description="ok"/>
-    
     </page>
     
     <page id="efld" name="exportedFileLocationDialog" description="exportedFileLocationDialog created by Kun Shen">
 	<locator id="efld.title" type="WebElement" by="id" expression="exportedFileLocationDlg_title" name="exportedFileLocationDlg_title" description="exportedFileLocationDlg_title"/>
     <locator id="efld.exportedFilePath" type="WebElement" by="xpath" expression=".//*[@id='exportedFileLocationDlg']//form//label[@id='exportedFileLocationForm:exportedFilePath']" name="exportedFilePath" description="exportedFilePath"/>
     <locator id="efld.ok" type="WebButton" by="id" expression="exportedFileLocationForm:exportedFileOk" name="okButton" description="okButton"/>
+    </page>
+    
+    <page id="fscd" name="forceSubmitCommonDialog" description="forceSubmitCommonDialog created by Kun Shen on AR1.15.7">
+	<locator id="fscd.title" type="WebElement" by="id" expression="forceSubmitCommonDialog_title" name="forceSubmitCommonDialog_title" description="forceSubmitCommonDialog_title"/>
+    <locator id="fscd.commentTextarea" type="WebElement" by="id" expression="forceSubmitCommonForm:commentTextarea" name="commentTextarea" description="commentTextarea"/>
+    <locator id="fscd.submit" type="WebButton" by="id" expression="forceSubmitCommonForm:exportStreamBtn" name="submitButton" description="submitButton"/>
+    <locator id="fscd.DataSchedulesubmit" type="WebButton" by="id" expression="forceSubmitCommonForm:exportJobBtn" name="submitButton" description="submitButton"/>
+    <locator id="fscd.cancel" type="WebButton" by="id" expression="forceSubmitCommonForm:cancelBtn" name="cancelButton" description="cancelButton"/>
+    </page>
+    
+    <page id="uolwd" name="lockWarningDialog" description="unlockorlockWarningDialog created by Kun Shen">
+	<locator id="uolwd.title" type="WebElement" by="xpath" expression=".//*[contains(@id,'lockWarningDialog_title')]" name="lockWarningDialog_title" description="lockWarningDialog_title"/>
+    <locator id="uolwd.Comment" type="WebElement" by="xpath" expression=".//*[contains(@id,'lockWarningDialog')]//textarea[string-length(@class)=0]" name="Comnent" description="comment"/>
+    <locator id="uolwd.ok" type="WebElement" by="xpath" expression=".//*[contains(@id,'lockWarningDialog')]//button[@type='submit']" name="ok" description="ok"/>
+    <locator id="uolwd.cancel" type="WebElement" by="xpath" expression=".//*[contains(@id,'lockWarningDialog')]//button[@type='button' and span='Cancel']" name="ok" description="ok"/>
+    </page>
+    
+    <page id="ulwd" name="unlockWarningDialog" description="unlockWarningDialog created by Kun Shen">
+	<locator id="ulwd.title" type="WebElement" by="id" expression="unlockWarningDialog_title" name="unlockWarningDialog_title" description="unlockWarningDialog_title"/>
+    <locator id="ulwd.Comment" type="WebElement" by="xpath" expression=".//*[@id='unlockWarningDialog']//textarea[contains(@id,'unlockMsgText')]" name="Comnent" description="comment"/>
+    <locator id="ulwd.ok" type="WebElement" by="xpath" expression=".//*[@id='unlockWarningDialog']//button[@type='submit']" name="ok" description="ok"/>
+    <locator id="ulwd.cancel" type="WebElement" by="xpath" expression=".//*[@id='unlockWarningDialog']//button[@type='button' and span='Cancel']" name="ok" description="ok"/>
     </page>
     
 </locatorBean>

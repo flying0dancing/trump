@@ -192,19 +192,75 @@ public class ListPage extends AbstractPage implements IExportTo
 			flag=false;
 			return flag;
 		}
-		IWebElementWrapper element=element("filf.clickFormLink", form.getEntity(),form.getName(),form.getVersion().substring(1),form.getProcessDate());
+		IWebElementWrapper element=element("filf.clickFormLink", form.getName(),form.getVersion().substring(1),form.getProcessDate());
 		if(element!=null &&  element.isDisplayed())
 		{
 			flag=true;
 		}else
 		{
 			refreshPage();
-			selectFormInfo(form);
+			flag=selectFormInfo(form,5);
 		}
 		
 		return flag;
 	}
-	
+	/**
+	 * refresh page and select form in list page, return true if it exists.
+	 * @param form
+	 * @return
+	 * @throws Exception
+	 */
+	public Boolean selectFormInfo(Form form,int times) throws Exception
+	{
+		Boolean flag=false;
+		if(times<=0){return flag;}
+		String regulator=form.getRegulator();
+		String group=form.getEntity();
+		String formAndVersion=form.getName()+" "+form.getVersion();
+		String processDate=form.getProcessDate();
+						
+		logger.info("select regulator:" + regulator);
+		flag=selectIt(element("filf.regulator"),regulator);
+		if(flag)
+		{
+			form.setRegulator(getRealText(element("filf.regulator"),regulator));
+			logger.info("select entity:" + group);
+			flag=selectIt(element("filf.selectGroup"),group);
+			form.setEntity(getRealText(element("filf.selectGroup"),group));
+			if(flag)
+			{
+				logger.info("select form:" + formAndVersion);
+				flag=selectIt(element("filf.selectForm"),formAndVersion);
+				String tmp=getRealText(element("filf.selectForm"),formAndVersion).trim();
+				form.setName(tmp.substring(0, tmp.lastIndexOf(" ")));
+				
+				if (flag)
+				{
+					logger.info("select process date:" + processDate);
+					flag=selectIt(element("filf.selectProcessDate"),processDate);
+					if(!flag){return flag;}
+				}
+			}
+		}
+		//loadingDlg();
+		if(element("filf.noRecordsFound").isPresent() && element("filf.noRecordsFound").isDisplayed())
+		{
+			flag=false;
+			return flag;
+		}
+		IWebElementWrapper element=element("filf.clickFormLink", form.getName(),form.getVersion().substring(1),form.getProcessDate());
+		if(element!=null &&  element.isDisplayed())
+		{
+			flag=true;
+		}else
+		{
+			refreshPage();
+			times--;
+			selectFormInfo(form,times);
+		}
+		
+		return flag;
+	}
 	/**
 	 * create new return(form) in selected regulator, and return new return page.
 	 * @author kun shen
@@ -328,7 +384,7 @@ public class ListPage extends AbstractPage implements IExportTo
 		/*form.setEntity(getRealText(element("filf.clickFormLinkEntity"),form.getEntity()));		
 		form.setName(getRealText(element("filf.clickFormLinkName"),form.getName()));*/
 		
-		IWebElementWrapper element=element("filf.deleteForm", form.getEntity(),form.getName(),form.getVersion().substring(1),form.getProcessDate());
+		IWebElementWrapper element=element("filf.deleteForm",form.getName(),form.getVersion().substring(1),form.getProcessDate());
 		if(element!=null && element.isPresent())
 		{
 			logger.info("delete existed form instance");
@@ -348,9 +404,8 @@ public class ListPage extends AbstractPage implements IExportTo
 					loadingDlg();
 					element("drcfd.deleteReturn").click();
 					loadingDlg();
-					//waitThat("fipf.message").toBeInvisible();
-					waitThat("abstract.message").toBeInvisible();
-					flag=true;
+					flag=getTipMessageStatus();
+					//flag=true;
 				}
 			}
 			
@@ -376,10 +431,10 @@ public class ListPage extends AbstractPage implements IExportTo
 	{
 		FormInstancePage fip=null;
 		String userName=getLoginUser();
-		form.setEntity(getRealText(element("filf.clickFormLinkEntity"),form.getEntity()));		
-		form.setName(getRealText(element("filf.clickFormLinkName"),form.getName()));
+		//form.setEntity(getRealText(element("filf.clickFormLinkEntity"),form.getEntity()));		
+		//form.setName(getRealText(element("filf.clickFormLinkName"),form.getName()));
 		
-		IWebElementWrapper element=element("filf.clickFormLink", form.getEntity(),form.getName(),form.getVersion().substring(1),form.getProcessDate());
+		IWebElementWrapper element=element("filf.clickFormLink",form.getName(),form.getVersion().substring(1),form.getProcessDate());
 		if(element!=null &&  element.isDisplayed())
 		{
 			logger.info("open form instance");
@@ -452,7 +507,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				listPage=hp.loginAs(loginUserName, loginUserPassword);
 			}
 		}
-		if(element("abstract.message").isPresent()){logger.info(element("abstract.message").getInnerText());waitThat("abstract.message").toBeInvisible();}
+		getTipMessageStatus();
 	}
 	
 	/**
@@ -529,8 +584,8 @@ public class ListPage extends AbstractPage implements IExportTo
 		String version=form.getVersion().substring(1);
 		int rowId=-1;
 		form.setRegulator(getRealText(element("filf.regulator"),form.getRegulator()));
-		form.setEntity(getRealText(element("filf.clickFormLinkEntity"),form.getEntity()));		
-		form.setName(getRealText(element("filf.clickFormLinkName"),form.getName()));
+		//form.setEntity(getRealText(element("filf.clickFormLinkEntity"),form.getEntity()));		
+		//form.setName(getRealText(element("filf.clickFormLinkName"),form.getName()));
 		
 		if(selectIt(element("filf.regulator"),form.getRegulator()))
 		{
@@ -571,7 +626,7 @@ public class ListPage extends AbstractPage implements IExportTo
 	 * @param name
 	 * @param version
 	 * @param referenceDate
-	 * @param entity
+	 * @param entity :deprecated from 2017.10.17 ARversion:1.15.6
 	 * @return
 	 * @throws Exception
 	 */
@@ -579,7 +634,7 @@ public class ListPage extends AbstractPage implements IExportTo
 	{
 		int ri=-1;
 		String data_ri=null;
-		IWebElementWrapper element=element("filf.FormRow",entity,name,version,referenceDate);
+		IWebElementWrapper element=element("filf.FormRow",name,version,referenceDate);
 		if(element!=null && element.isPresent())
 		{
 			data_ri=element.getAttribute("data-ri");
