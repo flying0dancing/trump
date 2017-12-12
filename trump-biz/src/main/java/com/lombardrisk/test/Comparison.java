@@ -498,13 +498,20 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				if(returnStatus.startsWith("fail") && !fileType.equalsIgnoreCase("xlsx"))
 				{
 					String transPropFullPath=SOURCE_SCENARIOS_FOLDER+regulator+SOURCE_TRANSMISSION_PROPERTY;
-					String sorted_exportedFileFullName=SortUtil.allocateSortType(transPropFullPath,form.getName(),exportedFileFullPath,null);
-					String sorted_expectedFileFullName=SortUtil.allocateSortType(transPropFullPath,form.getName(),expectationFolder+expectationFileName,reslutFolder);
-					newReportName=FileUtil.copyToNewFile(reslutFolder,reslutFolder,reportName);
-					form.setExec_ExpectationFile(newReportName);
-					newReportPath=reslutFolder+newReportName;
-					cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + sorted_exportedFileFullName.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" "+"\"" + sorted_expectedFileFullName + "\" "+ "\""+newReportPath+"\"";
-					returnStatus=getReturnStatus(cmdLine);
+					if(new File(transPropFullPath).isFile())
+					{
+						String sorted_exportedFileFullName=SortUtil.allocateSortType(transPropFullPath,form.getName(),exportedFileFullPath,null);
+						String sorted_expectedFileFullName=SortUtil.allocateSortType(transPropFullPath,form.getName(),expectationFolder+expectationFileName,reslutFolder);
+						newReportName=FileUtil.copyToNewFile(reslutFolder,reslutFolder,reportName);
+						form.setExec_ExpectationFile(newReportName);
+						newReportPath=reslutFolder+newReportName;
+						cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + sorted_exportedFileFullName.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" "+"\"" + sorted_expectedFileFullName + "\" "+ "\""+newReportPath+"\"";
+						returnStatus=getReturnStatus(cmdLine);
+					}else
+					{
+						logger.error("File Not Find: product transmission property[{}]",transPropFullPath);
+					}
+					
 				}
 			}else
 			{
