@@ -1,6 +1,7 @@
 package com.lombardrisk.commons;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -1260,7 +1261,7 @@ public static List<Form> getForms(String excelFileStr,String sheetName,Boolean g
 			Row row=sheet.getRow(i);
 			if(row==null){continue;}
 			Form form=(Form)fromRowToBean(titleRow,row,Form.class);
-			if(!form.toString().equals("") && form.getRun().equalsIgnoreCase("Y") && !form.getExpiration().equalsIgnoreCase("Y"))
+			if(StringUtils.isNoneBlank(form.toString()) && StringUtils.isNoneBlank(form.getRun()) && form.getRun().equalsIgnoreCase("Y") && (StringUtils.isBlank(form.getExpiration()) ||!form.getExpiration().equalsIgnoreCase("Y")))
 			{
 				list.add(form);
 			}

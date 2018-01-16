@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Iterator;  
 import java.util.List;  
 
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;  
 import org.dom4j.DocumentException;
@@ -72,7 +73,7 @@ public static List<Form> getForms(String xmlFileStr)
             Element elementGroupService = (Element) it.next(); 
             Form baseBean = (Form) XmlUtil.fromXmlToBean(  
                     elementGroupService, Form.class);  
-            if(!baseBean.toString().equals("") && baseBean.getRun().equalsIgnoreCase("Y") && !baseBean.getExpiration().equalsIgnoreCase("Y"))
+            if(StringUtils.isNoneBlank(baseBean.toString()) && StringUtils.isNoneBlank(baseBean.getRun()) && baseBean.getRun().equalsIgnoreCase("Y") && (StringUtils.isBlank(baseBean.getExpiration()) ||!baseBean.getExpiration().equalsIgnoreCase("Y")))
 			{
                 list.add(baseBean);  
 			}
