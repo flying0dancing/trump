@@ -21,16 +21,16 @@ public class DBQuery
 		if (dBInfo.getDatabaseServer_Driver().equalsIgnoreCase("oracle"))
 		{
 			if (dBInfo.getConnectedDB().equalsIgnoreCase("ar"))
-				dh = new DBHelper("oracle", dBInfo.getIp_ar(), dBInfo.getSid_ar(), dBInfo.getDatabaseServer_Schema());
+				dh = new DBHelper("oracle", dBInfo.getIp_ar(), dBInfo.getSid_ar(), dBInfo.getDatabaseServer_Schema(),dBInfo.getDatabaseServer_UserName(),dBInfo.getDatabaseServer_UserPassword());
 			else
-				dh = new DBHelper("oracle", dBInfo.getIp_ar(), dBInfo.getSid_ar(), dBInfo.getToolSetDB_Schema());
+				dh = new DBHelper("oracle", dBInfo.getIp_ar(), dBInfo.getSid_ar(), dBInfo.getToolSetDB_Schema(),dBInfo.getToolSetDB_UserName(),dBInfo.getToolSetDB_UserPassword());
 		}
 		else
 		{
 			if (dBInfo.getConnectedDB().equalsIgnoreCase("ar"))
-				dh = new DBHelper("sqlserver", dBInfo.getDatabaseServer_host(), dBInfo.getDatabaseServer_Schema());
+				dh = new DBHelper("sqlserver", dBInfo.getDatabaseServer_host(), dBInfo.getDatabaseServer_Schema(),dBInfo.getDatabaseServer_UserName(),dBInfo.getDatabaseServer_UserPassword());
 			else
-				dh = new DBHelper("sqlserver", dBInfo.getToolSetDB_host(), dBInfo.getToolSetDB_Schema());
+				dh = new DBHelper("sqlserver", dBInfo.getToolSetDB_host(), dBInfo.getToolSetDB_Schema(),dBInfo.getToolSetDB_UserName(),dBInfo.getToolSetDB_UserPassword());
 		}
 	}
 	

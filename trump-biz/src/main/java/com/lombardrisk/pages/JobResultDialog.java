@@ -89,7 +89,7 @@ public class JobResultDialog extends AbstractPage {
 			}
 			loadingDlg();
 			fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager());
-			fip.unlockForm();//new add on 2017.10.31 for ar1.15.6-b1293 
+			fip.unlockForm();//new add on 2017.10.31 for ar1.15.6-b1293 //TODO
 			fip.closeThisPage();
 			fip=null;
 		}
