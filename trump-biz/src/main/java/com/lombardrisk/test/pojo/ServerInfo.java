@@ -1,5 +1,7 @@
 package com.lombardrisk.test.pojo;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.lombardrisk.commons.EssentialOperation;
 
 
@@ -62,14 +64,18 @@ public class ServerInfo{
 		if(serverInfoStr!=null)
 		{
 			String[] serverInfoArr=serverInfoStr.split(":");
-			if(serverInfoArr.length>=5)
+			if(serverInfoArr.length>=3)
 			{
 				setHost(serverInfoArr[0]);
-				setPort(Integer.parseInt(serverInfoArr[1]));
+				setPort(StringUtils.isBlank(serverInfoArr[1])?-1:Integer.parseInt(serverInfoArr[1]));
 				String downloadPath=EssentialOperation.removeFileSeparator(serverInfoArr[2]);
 				setDownloadPath(downloadPath);
-				setUser(serverInfoArr[3]);
-				setPassword(serverInfoArr[4]);
+				if(serverInfoArr.length>=5)
+				{
+					setUser(StringUtils.isBlank(serverInfoArr[3])?"":serverInfoArr[3]);
+					setPassword(StringUtils.isBlank(serverInfoArr[4])?"":serverInfoArr[4]);
+				}
+				
 			}
 		}
 		

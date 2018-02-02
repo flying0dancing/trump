@@ -1054,7 +1054,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	{
 		ExportToRegulatorDialog td=null;
 		Boolean flag=true;
-		
+		loadingDlg(15000);
 		element("fipf.exportToFile4Fed_button").click();
 		loadingDlg();
 		String title=null;

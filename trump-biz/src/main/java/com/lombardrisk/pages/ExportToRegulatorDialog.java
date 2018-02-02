@@ -172,11 +172,13 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		Boolean flag=false;
 		if(lockDownloadDir(downloadFolder))
 		{
-			if(title.equalsIgnoreCase("Export to DataSchedule"))
+			if(title.equalsIgnoreCase("Export to DataSchedule") || title.toLowerCase().contains("dataschedule"))
 			{
+				logger.info("export to DataSchedule");
 				flag=clickExportToDataSchedule();
 			}else
 			{
+				logger.info("export to regulator");
 				flag=clickExport();
 			}
 			
@@ -288,7 +290,11 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 						}
 					}
 				}
-								
+				
+				if(isThisPage())
+				{
+					closeThisPage();
+				}				
 				//click log buttkon
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 				{
@@ -357,13 +363,14 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				
 				if(!flag){return flag;}
 				
-				String jobRunType="ExportJob";
+				String jobRunType="Export";//job start with Export
 				String prefixOfRegulator=getDBInfo().getRegulatorPrefix(form.getRegulator());
 				String jobName=prefixOfRegulator+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
 				
 				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());
 				lockDownloadDir(downloadFolder);//relock it after new jobResultDialog
 				String status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
+				
 				
 				IWebElementWrapper _exportFileLoation=element("filf.exportFileLoation",form.getName(),form.getVersion().substring(1),form.getProcessDate());
 				if(_exportFileLoation.isPresent() && _exportFileLoation.isDisplayed())
@@ -406,17 +413,30 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		if(serverInfo.getDownloadPath().contains("\\"))
 		{
 			downloadPath_Server=downloadPath_Server.replace("/", "\\");
-		}
-		if(statusTypeL.startsWith("fail") || statusTypeL.startsWith("pass"))
-		{
-			logger.info("start downloading file from server: name["+downloadPath_Server+"]");
-			JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
-			JschUtil.downloadFileToLocal(downloadPath_Server+downloadFileName_Server, downloadFolder);
-			JschUtil.close();
-			logger.info("stop downloading export file from server to local.");
+			//download from Windows
+			if(statusTypeL.startsWith("fail") || statusTypeL.startsWith("pass"))
+			{
+				logger.info("start downloading file from windows server: name["+downloadPath_Server+"]");
+				FileUtil.copyToNewFile(downloadPath_Server,downloadFolder,downloadFileName_Server);
+				logger.info("stop downloading export file from server to local.");
+			}else
+			{
+				logger.error("error: no export file exists in windows server["+downloadPath_Server+"].");
+			}
 		}else
 		{
-			logger.error("error: no export file exists in server.");
+			//download from Linux
+			if(statusTypeL.startsWith("fail") || statusTypeL.startsWith("pass"))
+			{
+				logger.info("start downloading file from Linux server: name["+downloadPath_Server+"]");
+				JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
+				JschUtil.downloadFileToLocal(downloadPath_Server+downloadFileName_Server, downloadFolder);
+				JschUtil.close();
+				logger.info("stop downloading export file from server to local.");
+			}else
+			{
+				logger.error("error: no export file exists in Linux server ["+downloadPath_Server+"].");
+			}
 		}
 		
 	}

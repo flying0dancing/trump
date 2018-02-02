@@ -51,6 +51,14 @@
          "url": "http://sha-com-qa-7:8083",
         "username": "admin",
         "password": "password"
+      },
+      {
+      	"id": 11,
+        "name": "TrumpTest",
+        "url": "http://172.20.30.246:8082",
+        "username": "admin",
+        "password": "password",
+        "key": ": :\\\\172.20.30.246\\DSExport::"
       }
     ],
     "databaseServers": [
@@ -102,7 +110,14 @@
         "driver": "sqlserver",
         "host": "172.20.20.57\\sql2012",        
         "schema": "ARSQL_AUTO"
-      }      
+      }  ,
+      {
+      	"id": 11,
+        "name": "ar_database",
+        "driver": "oracle",
+        "host": "172.20.31.239@ora12c",
+        "schema": "AR_AUTO_OWNER_1156"
+      }    
     ]
   }
 ]

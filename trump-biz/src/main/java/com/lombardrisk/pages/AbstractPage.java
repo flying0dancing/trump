@@ -380,7 +380,7 @@ public abstract class AbstractPage extends PageBase
 	 * @return
 	 * @throws Exception
 	 */
-	protected String uniformDate(String date, String dateFormat) throws Exception
+	protected String uniformDate(String date, String format) throws Exception
 	{
 		String year = null;
 		String month = null;
@@ -403,15 +403,15 @@ public abstract class AbstractPage extends PageBase
 			year = date.substring(6);
 		}
 		String returnDate=month+"/"+day+"/"+year;
-		if(dateFormat.equalsIgnoreCase("MM/DD/YYYY"))
+		if(format.equalsIgnoreCase("MM/DD/YYYY"))
 		{
 			returnDate=month+"/"+day+"/"+year;
 		}
-		if(dateFormat.equalsIgnoreCase("YYYYMMDD"))
+		if(format.equalsIgnoreCase("YYYYMMDD"))
 		{
 			returnDate=year+month+day;
 		}
-		if(dateFormat.equalsIgnoreCase("DD/MM/YYYY"))
+		if(format.equalsIgnoreCase("DD/MM/YYYY"))
 		{
 			returnDate=day+"/"+month+"/"+year;
 		}

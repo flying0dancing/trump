@@ -2,6 +2,7 @@ package com.lombardrisk.test;
 
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,21 @@ public class DBHelper
 		fillDbmsPort(dbms);
 		this.db = db;
 	}
+	protected DBHelper(String dbms, String host, String db, String user, String password)
+	{
+		this.dbms = dbms;
+		fillDbmsDriver(dbms);
+		this.host = host;
+		fillDbmsPort(dbms);
+		this.db = db;
+		if(!StringUtils.isBlank(user)){
+			this.user = user;
+		}
+		if(!StringUtils.isBlank(password)){
+			this.password = password;
+		}
+		
+	}
 
 	protected DBHelper(String dbms, String ip, String sid, String db)
 	{
@@ -41,16 +57,21 @@ public class DBHelper
 		fillDbmsPort(dbms);
 		this.db = db;
 	}
-
-	protected DBHelper(String dbms, String host, String port, String db, String user, String password)
+	
+	protected DBHelper(String dbms, String ip, String sid, String db, String user, String password)
 	{
 		this.dbms = dbms;
 		fillDbmsDriver(dbms);
-		this.host = host;
-		this.port = port;
+		this.ip = ip;
+		this.sid = sid;
+		fillDbmsPort(dbms);
 		this.db = db;
-		this.user = user;
-		this.password = password;
+		if(!StringUtils.isBlank(user)){
+			this.user = user;
+		}
+		if(!StringUtils.isBlank(password)){
+			this.password = password;
+		}
 	}
 
 	private void fillDbmsDriver(String dbms)
