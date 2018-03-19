@@ -58,7 +58,7 @@
         "url": "http://172.20.30.246:8082",
         "username": "admin",
         "password": "password",
-        "key": ": :\\\\172.20.30.246\\DSExport::"
+        "key": "::\\\\172.20.30.246\\DSExport:admin:password"
       }
     ],
     "databaseServers": [
