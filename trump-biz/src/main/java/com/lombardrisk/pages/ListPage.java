@@ -186,7 +186,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				}
 			}
 		}
-		//loadingDlg();
+		loadingDlg();
 		if(element("filf.noRecordsFound").isPresent() && element("filf.noRecordsFound").isDisplayed())
 		{
 			flag=false;

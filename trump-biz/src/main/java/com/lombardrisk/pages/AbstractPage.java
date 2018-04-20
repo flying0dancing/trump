@@ -585,15 +585,19 @@ public abstract class AbstractPage extends PageBase
 		String fileName = null;
 		long latestFileLockedTime=new File(dir+System.getProperty("file.separator")+LOCKNAME).lastModified();
 		boolean flag = true;
-		
+		int backcount=60;
 		while(flag)
 		{
 			fileName = getLatestFile(dir);
 			long latestFileTime=new File(fileName).lastModified();
+			if(backcount<=0){
+				flag=false;
+			}
 			if(latestFileLockedTime==latestFileTime)
 			{
 				logger.info("Downloading");
 				Thread.sleep(1000);
+				backcount--;
 				continue;
 			}else
 			{
