@@ -911,7 +911,7 @@ public class FileUtil extends FileUtils
 				Matcher m=pattern.matcher(exportStr);
 				if(m.find())
 				{
-					strBuffer.append(exportStr.replace(m.group(1), "ExportTime")+System.getProperty("line.separator"));
+					//strBuffer.append(exportStr.replace(m.group(1), "ExportTime")+System.getProperty("line.separator"));
 					foundStrs+=m.group(1)+" ";
 					//System.out.println("~"+foundStrs+"~");
 					foundTime--;
@@ -929,7 +929,7 @@ public class FileUtil extends FileUtils
 			{
 				if(exportStr.contains(foundStrs))
 				{
-					strBuffer.append(exportStr.replace(foundStrs, "ExportTime")+System.getProperty("line.separator"));
+					//strBuffer.append(exportStr.replace(foundStrs, "ExportTime")+System.getProperty("line.separator"));
 				}else
 				{
 					strBuffer.append(exportStr+System.getProperty("line.separator"));
