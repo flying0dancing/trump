@@ -881,5 +881,81 @@ public class FileUtil extends FileUtils
 		
 		return newFileName;
 	}
+	/**
+	 * removed content by removedByStr
+	 * @param fileFullName
+	 * @param newFileFullName
+	 * @param removedByStr (set value to 'Export Time', this function will delete value of 'Export Time' and 'Export Time Time Zone' and all time content)
+	 * @return
+	 * @throws IOException
+	 */
+	public static void removeStrInTxt(String fileFullName,String newFileFullName,String removedByStr) throws IOException
+	{
+		BufferedReader exportReader=null;
+		StringBuffer strBuffer=null;
+		String foundStrs=null;
+		try
+		{
+			logger.info("remove values of '"+removedByStr+"' in text");
+			logger.info("from: "+fileFullName);
+			logger.info("to: "+newFileFullName);
+			exportReader=new BufferedReader(new FileReader(fileFullName));
+			String exportStr=null;
+			foundStrs="";
+			int foundTime=2;
+			String regex=removedByStr+"(?:\\sTime\\sZone)?\\s+(.*)";
+			Pattern pattern=Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+			strBuffer=new StringBuffer();
+			while((exportStr=exportReader.readLine())!=null)
+			{
+				Matcher m=pattern.matcher(exportStr);
+				if(m.find())
+				{
+					strBuffer.append(exportStr.replace(m.group(1), "ExportTime")+System.getProperty("line.separator"));
+					foundStrs+=m.group(1)+" ";
+					//System.out.println("~"+foundStrs+"~");
+					foundTime--;
+					if(foundTime==0) break;
+				}else
+				{
+					strBuffer.append(exportStr+System.getProperty("line.separator"));
+				}
+			}
+			File newFile=new File(newFileFullName);
+			writeContentToEmptyFile(newFile,strBuffer.toString());
+			strBuffer.setLength(0);//clear strBuffer
+			foundStrs=foundStrs.trim();
+			while((exportStr=exportReader.readLine())!=null)
+			{
+				if(exportStr.contains(foundStrs))
+				{
+					strBuffer.append(exportStr.replace(foundStrs, "ExportTime")+System.getProperty("line.separator"));
+				}else
+				{
+					strBuffer.append(exportStr+System.getProperty("line.separator"));
+				}
+				if(strBuffer.length()>5000)
+				{
+					FileUtil.writeContent(newFile,strBuffer.toString());
+					strBuffer.setLength(0);//clear strBuffer
+				}
+			}
+			FileUtil.writeContent(newFile, strBuffer.toString());	
+			strBuffer.setLength(0);//clear strBuffer
+			exportReader.close();
+		} catch (Exception e) {
+			String status="error:"+e.getMessage();
+			logger.error(status);
+		}finally
+		{
+			if(exportReader!=null)
+			{
+				exportReader.close();
+			}
+		}
+		
+	}
+	
+	
 	
 }
