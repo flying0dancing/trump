@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.util.PropHelper;
 
+import com.google.common.base.Strings;
 import com.lombardrisk.commons.ExcelUtil;
 import com.lombardrisk.commons.FileUtil;
 import com.lombardrisk.commons.SortUtil;
@@ -398,6 +400,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 					}
 					
 					FileUtil.writeContent(newFile, strBuffer.toString());	
+					strBuffer.setLength(0);//clear strBuffer
 					baselineReader.close();
 					
 					logger.info("Expectation File(new):"+newFile+" size:"+newFile.length()/1024+"KB");
@@ -618,38 +621,59 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		File expectationFile = new File(expectationFolder+expectationFileName);
 		if(expectationFile.exists())
 		{
+			String expectedFileNameWithoutSuffix=expectationFileName.substring(0,expectationFileName.lastIndexOf("."));
 			String reslutFolder=expectationFolder+EXPORTTOPDF+System.getProperty("file.separator");
-			String reportName=expectationFileName.substring(0,expectationFileName.lastIndexOf("."))+".html";
+			String reportName=expectedFileNameWithoutSuffix+".html";
 			String newReportName=FileUtil.copyToNewFile(reslutFolder,reslutFolder,reportName);
 			
 			form.setExec_ExpectationFile(newReportName);
 			
 			String newReportPath=reslutFolder+newReportName;
 			
+			//adding function: pdf to text--named expected text name
+			String otxtName_expected=expectedFileNameWithoutSuffix+".txt";
+			otxtName_expected=FileUtil.copyToNewFile(reslutFolder,reslutFolder,otxtName_expected);
+			String deltxtName_expected=expectedFileNameWithoutSuffix+"_del.txt";
+			deltxtName_expected=FileUtil.copyToNewFile(reslutFolder,reslutFolder,deltxtName_expected);
+			String otxtFullName_expected=reslutFolder+otxtName_expected;
+			String deltxtFullName_expected=reslutFolder+deltxtName_expected;
+			
 			File exportedFile = new File(exportedFileFullPath);
 			if(exportedFile.exists())
 			{
+				
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newReportPath);
 				String path_BComp=new File(System.getProperty("user.dir")).getParent().replace("\\", "/").replace("/", System.getProperty("file.separator"))+PropHelper.getProperty("path.BComp").replace("..", "").replace("\\", "/").replace("/", System.getProperty("file.separator"));
+				//adding function: pdf to text--named exported text name
+				String exportedFilePath=exportedFile.getPath().replace(exportedFile.getName(), "");
+				String exportedFileNameWithoutSuffix=exportedFileFullPath.substring(0,exportedFileFullPath.lastIndexOf("."));
+				String otxtFullName_exported=exportedFileNameWithoutSuffix+".txt";
+				otxtFullName_exported=exportedFilePath+FileUtil.copyToNewFile(exportedFilePath,exportedFilePath,new File(otxtFullName_exported).getName());
+				String deltxtFullName_exported=exportedFileNameWithoutSuffix+"_del.txt";
+				deltxtFullName_exported=exportedFilePath+FileUtil.copyToNewFile(exportedFilePath,exportedFilePath,new File(deltxtFullName_exported).getName());
 				
-				cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + exportedFileFullPath.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" "+"\"" + expectationFolder+expectationFileName + "\" "+ "\""+newReportPath+"\"";
+				String cmdLine_PdfToText="\""+path_BComp+"Helpers"+System.getProperty("file.separator")+"PdfToText.exe\" -layout -nopgbrk \""+exportedFileFullPath.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" \""+otxtFullName_exported+"\"";
+				String returnStatus1=getReturnStatus(cmdLine_PdfToText);
 				
-				logger.info(cmdLine);
-				Process process = Runtime.getRuntime().exec(cmdLine);
+				cmdLine_PdfToText="\""+path_BComp+"Helpers"+System.getProperty("file.separator")+"PdfToText.exe\" -layout -nopgbrk \""+expectationFolder+expectationFileName + "\" \""+otxtFullName_expected+"\"";
+				String returnStatus2=getReturnStatus(cmdLine_PdfToText);
 				
-				BufferedReader input=new BufferedReader(new InputStreamReader(process.getInputStream()));
-				StringBuffer lines=new StringBuffer();
-				String line=null;
-				while((line=input.readLine())!=null)
+				if(Strings.isNullOrEmpty(returnStatus1) && Strings.isNullOrEmpty(returnStatus2))
 				{
-					lines.append(line.trim());
+					FileUtil.removeStrInTxt(otxtFullName_exported, deltxtFullName_exported, "Export Time");
+					FileUtil.removeStrInTxt(otxtFullName_expected, deltxtFullName_expected, "Export Time");
+					
+					cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + deltxtFullName_exported + "\" "+"\"" + deltxtFullName_expected + "\" "+ "\""+newReportPath+"\"";
+					returnStatus=getReturnStatus(cmdLine);
+					logger.info(returnStatus);
+				}else
+				{
+					returnStatus= StringUtils.isBlank(returnStatus1)?"fail:"+returnStatus2:"fail:"+returnStatus1;
+					logger.error(returnStatus);
 				}
-				input.close();
-				logger.info("subprocess result[code]:"+String.valueOf(process.waitFor()));
 				
-				process.destroy();
-				returnStatus=lines.toString();
+
 			}else
 			{
 				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
@@ -801,5 +825,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		Runtime.getRuntime().gc();
 		return returnStatus;
 	}
+	
+	
 	
 }
