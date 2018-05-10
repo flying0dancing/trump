@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
+import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.test.pojo.Form;
 
@@ -104,17 +105,20 @@ public FormInstancePage create() throws Exception
 	FormInstancePage fip=null;
 	logger.info("click create button");
 	element("ficd.create").click();
-	loadingDlg();
+	//loadingDlg();
+	loadingDlg(null,30);
 	if(element("ficd.messages").isDisplayed())
 	{
 		element("ficd.cancel").click();
-		loadingDlg();
+		//loadingDlg();
+		loadingDlg(null,30);
 	}else
 	{
 		if(element("ficd.createconfirm").isDisplayed())
 		{
 			element("ficd.createconfirm").click();
-			loadingDlg();
+			//loadingDlg();
+			loadingDlg(null,30);
 		}
 		waitThat("ficd.createNewReturnTitle").toBeInvisible();
 		waitThat("fipf.form").toBeVisible();
