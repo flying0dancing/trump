@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class SortUtil {
 	final static Logger logger=LoggerFactory.getLogger(SortUtil.class);
+	
 	public static String allocateSortType(String transPropFullPath,String formName,String fileFullName,String newFilePath)
     {
     	String newFileFullName=null;
@@ -27,18 +28,24 @@ public class SortUtil {
     		{
     			String fileType=fileName.substring(lastComma+1);
     			List<List<String>> transProps=searchTransmissionProperties(transPropFullPath, formName, fileType);
-    			if(fileType.equalsIgnoreCase("txt"))
+    			if(transProps.size()==0)
+    			{logger.info("form not found in "+transPropFullPath);}
+    			else
     			{
-    				newFileFullName=TxtUtil.sortTxtContentToNewFileByName(fileFullName, transProps.get(0).get(0),transProps.get(1).get(0),newFilePath);
+    				if(fileType.equalsIgnoreCase("txt"))
+        			{
+        				newFileFullName=TxtUtil.sortTxtContentToNewFileByName(fileFullName, transProps.get(0).get(0),transProps.get(1).get(0),newFilePath);
+        			}
+        			if(fileType.equalsIgnoreCase("xml"))
+    				{
+        				newFileFullName=Dom4jUtil.sortXmlContentToNewFileByName(fileFullName,transProps.get(0),transProps.get(1),newFilePath);
+    				}
+        			if(fileType.equalsIgnoreCase("xls"))
+    				{
+    					
+    				}
     			}
-    			if(fileType.equalsIgnoreCase("xml"))
-				{
-    				newFileFullName=Dom4jUtil.sortXmlContentToNewFileByName(fileFullName,transProps.get(0),transProps.get(1),newFilePath);
-				}
-    			if(fileType.equalsIgnoreCase("xls"))
-				{
-					
-				}
+    			
     		}
     	}else
     	{
