@@ -857,6 +857,8 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			String importFileFullName=TARGET_IMPORT_FOLDER+form.getRegulator()+"/"+form.getImportFile();
 			if(new File(importFileFullName).exists())
 			{
+				//adding in ARv1.15.9
+				loadingDlg(null,50);
 				element("fipf.adjust_button").click();
 				waitThat("fipf.importAdjustLog").toBeVisible();
 				element("fipf.importAdjustLog").click();
@@ -1141,6 +1143,8 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	public FormInstanceBottomPage viewAdjustmentLog() throws Exception
 	{
 		FormInstanceBottomPage fibp=null;
+		//adding in ARv1.15.9
+		loadingDlg(null,50);
 		element("fipf.adjust_button").click();
 		waitThat("fipf.checkAdjustLog").toBeVisible();
 		element("fipf.checkAdjustLog").click();

@@ -67,7 +67,7 @@ public class SortUtil {
     			
     			reader=new BufferedReader(new FileReader(transProp));
     			
-    			String regex="\"?"+formName+"\"?,\"?"+fileType+"\"?,\"?([^\"]*)\"?,\"?([^\"]*)\"?";//ReturnName,FileType,limit,IgnoreCount from one to it.
+    			String regex="\"?"+formName+"\"?,\"?"+fileType+"\"?,\"?([^\"]*)\"?,\"?([^\"]*)\"?";//ReturnName,FileType,limit(split by space),IgnoreCount from one to it.
 				Pattern pattern=Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 				
 				String line=null;
