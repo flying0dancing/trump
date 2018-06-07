@@ -21,6 +21,7 @@ private String expectationFile;
 private String executionStatus;
 private String exec_ExpectationFile;
 private int frequency;
+private String translate;
 
 public String getName()
 {return name;}
@@ -121,6 +122,12 @@ public String getExec_ExpectationFile()
 
 public void setExec_ExpectationFile(String exec_ExpectationFile)
 {this.exec_ExpectationFile=exec_ExpectationFile;}
+
+public String getTranslate() 
+{return translate;}
+
+public void setTranslate(String translate)
+{this.translate = translate;}
 
 public ArrayList<String> getAttributeList()
 {

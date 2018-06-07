@@ -306,6 +306,16 @@ public class ListPage extends AbstractPage implements IExportTo
 				loadingDlg();
 				dialog=new RetrieveDialog(getWebDriverWrapper(),getTestDataManager(),form);
 			}
+			//added by AR1.15.7-b68 for Asia
+			if(element("filf.retrieveMenu").isPresent() && element("filf.retrieveMenu").isDisplayed())
+			{
+				element("filf.retrieveMenu").click();
+				waitThat("filf.retrieveSingle").toBeVisible();
+				element("filf.retrieveSingle").click();
+				loadingDlg();
+				dialog=new RetrieveDialog(getWebDriverWrapper(),getTestDataManager(),form);
+			}
+			
 		}
 	
 		return dialog;

@@ -100,13 +100,13 @@ public class JobResultDialog extends AbstractPage {
 			JobManagerPage jobManagerPage=listPage.clickJobManager();
 			if(jobManagerPage!=null && jobStartTimeLabel!=null)
 			{
-				status=jobManagerPage.search(jobName,jobReferenceDate,jobRunType,jobStartTimeLabel);
+				status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel);
 				long jobStartTime=System.currentTimeMillis();
 				while(status==null || !(status.startsWith("FAILURE") || status.equalsIgnoreCase("SUCCESS")))
 				{
 					refreshPage();
 					loadingDlg();
-					status=jobManagerPage.search(jobName,jobReferenceDate,jobRunType,jobStartTimeLabel);
+					status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel);
 					long jobEndTime=System.currentTimeMillis();
 					if(jobEndTime-jobStartTime>600000)//wait 10min
 					{
