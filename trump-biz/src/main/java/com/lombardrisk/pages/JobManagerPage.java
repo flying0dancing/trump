@@ -55,9 +55,9 @@ public class JobManagerPage extends AbstractPage
 	 * @return
 	 * @throws Exception
 	 */
-	public String search(String name,String referenceDate,String runType,String started) throws Exception
+	public String search(String name,String referenceDate,String started) throws Exception
 	{
-		return getExtendGridCells(name,referenceDate,runType, started);
+		return getExtendGridCells(name,referenceDate, started);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class JobManagerPage extends AbstractPage
 	 * @return
 	 * @throws Exception
 	 */
-	private String getExtendGridCells(String name,String referenceDate,String runType,String started) throws Exception
+	private String getExtendGridCells(String name,String referenceDate,String started) throws Exception
 	{
 		String status=null;
 		IWebElementWrapper gridBarFirstPointer=element("ficmptd.firstPageSta");
@@ -84,7 +84,7 @@ public class JobManagerPage extends AbstractPage
 			IWebElementWrapper nextPageBar=element("ficmptd.nextPageSta");
 			while(nextPageBar.isDisplayed() && !nextPageBar.getAttribute("class").contains("ui-state-disabled"))
 			{	
-				status=getGridCells(name,referenceDate,runType,started);
+				status=getGridCells(name,referenceDate,started);
 				if(status!=null && (status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
 				{
 					break;
@@ -102,7 +102,7 @@ public class JobManagerPage extends AbstractPage
 		}
 		if(status==null)
 		{
-			status=getGridCells(name,referenceDate,runType,started);
+			status=getGridCells(name,referenceDate,started);
 		}
 		
 		return status;
@@ -118,14 +118,14 @@ public class JobManagerPage extends AbstractPage
 	 * @return
 	 * @throws Exception
 	 */
-	private String getGridCells(String name,String referenceDate,String runType,String jobStartedDate) throws Exception
+	private String getGridCells(String name,String referenceDate,String jobStartedDate) throws Exception
 	{
 		String status=null;
 		//String started_StartsWith=started.substring(0, started.length()-2);
-		IWebElementWrapper _getstartDate=element("ficmptd.getstartDate",name,referenceDate,runType);
+		IWebElementWrapper _getstartDate=element("ficmptd.getstartDate",name,referenceDate);
 		if(!_getstartDate.isPresent())
 		{
-			_getstartDate=element("ficmptd.getstartDateAR1153",name,referenceDate,runType);
+			_getstartDate=element("ficmptd.getstartDateAR1153",name,referenceDate);
 			if(!_getstartDate.isPresent()){return null;}
 		}
 		String startDate=_getstartDate.getInnerText();
@@ -138,10 +138,10 @@ public class JobManagerPage extends AbstractPage
 			long jobStartedL=__jobStarted.getTime();
 			if(startDateL>=jobStartedL)
 			{
-				IWebElementWrapper _getStatus=element("ficmptd.getStatus",name,referenceDate,runType,startDate);
+				IWebElementWrapper _getStatus=element("ficmptd.getStatus",name,referenceDate,startDate);
 				if(!_getStatus.isPresent())
 				{
-					_getStatus=element("ficmptd.getStatusAR1153",name,referenceDate,runType,startDate);
+					_getStatus=element("ficmptd.getStatusAR1153",name,referenceDate,startDate);
 					if(!_getStatus.isPresent()){return null;}
 				}
 				status=_getStatus.getInnerText();
@@ -152,10 +152,10 @@ public class JobManagerPage extends AbstractPage
 		
 		if(status.equalsIgnoreCase("FAILURE"))
 		{
-			IWebElementWrapper _getStatusMsg=element("ficmptd.getStatusMessage",name,referenceDate,runType,startDate);
+			IWebElementWrapper _getStatusMsg=element("ficmptd.getStatusMessage",name,referenceDate,startDate);
 			if(!_getStatusMsg.isPresent())
 			{
-				_getStatusMsg=element("ficmptd.getStatusMessageAR1153",name,referenceDate,runType,startDate);
+				_getStatusMsg=element("ficmptd.getStatusMessageAR1153",name,referenceDate,startDate);
 				if(!_getStatusMsg.isPresent()){return null;}
 			}
 			status="FAILURE:"+_getStatusMsg.getInnerText();

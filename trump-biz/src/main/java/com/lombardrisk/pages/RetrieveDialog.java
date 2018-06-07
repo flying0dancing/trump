@@ -1,5 +1,6 @@
 package com.lombardrisk.pages;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -82,6 +83,12 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 							flag=false;
 						}
 					}
+				}
+				
+				//added by AR1.15.7-b68 for Asia
+				if(StringUtils.isNotBlank(form.getTranslate()) && form.getTranslate().equalsIgnoreCase("Y"))
+				{
+					element("fird.translate").click();
 				}
 				
 			}

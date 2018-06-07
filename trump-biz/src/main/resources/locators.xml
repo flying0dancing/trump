@@ -1917,6 +1917,10 @@
     <locator id="filf.exportToFile_button" type="WebButton" by="id" expression="FormInstImpExpMenu:exportToFile_button" name="exportToFile_button" description="exportToFile_button checked by Kun Shen"/>
     <locator id="filf.exportToFileOption" type="WebElement" by="xpath" expression="//div[@id='FormInstImpExpMenu:exportToFile_menu']//a[span=?]/span" name="exportToFileOption" description="exportToFileOption"/>      
     <locator id="filf.retrieve" type="WebButton" by="id" expression="FormInstImpExpMenu:retrieve" name="retrieve" description="retrieve button for open retrieve dialog"/>
+    <locator id="filf.retrieveMenu" type="WebButton" by="id" expression="FormInstImpExpMenu:retrieveMenu_button" name="retrieveMenu" description="retrieve menu button for select retrieve functions"/>
+    <locator id="filf.retrieveSingle" type="WebElement" by="xpath" expression="//div[@id='FormInstImpExpMenu:retrieveMenu_menu']/ul/li[1]" name="retrieveSingle" description="retrieve single return"/>
+    <locator id="filf.retrieveMultiple" type="WebElement" by="xpath" expression="//div[@id='FormInstImpExpMenu:retrieveMenu_menu']/ul/li[2]" name="retrieveMultiple" description="retrieve multiple returns"/>
+    
     <locator id="filf.compute" type="WebButton" by="id" expression="FormInstImpExpMenu:compute" name="compute" description="compute button for open compute dialog"/>
     <locator id="filf.notification" type="WebElement" by="xpath" expression="//*[@id='formHeader:message-center:message-notification']/span" name="notification" description="notification"/>
     <locator id="filf.notification_title" type="WebElement" by="xpath" expression="//*[@id='formHeader:message-center:message-data-table']/div[1]" name="notification_title" description="notification"/>
@@ -1930,7 +1934,9 @@
     <locator id="filf.clickFormLinkName" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr/td[2]/a" name="clickFormLinkName" description="clickFormLink formName(deprecated)"/>
     <locator id="filf.clickFormLink" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[1]/a" name="clickFormLink" description="clickFormLink"/>
     <locator id="filf.deleteForm" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[last()]/a" name="deleteForm" description="deleteForm"/>
-    <locator id="filf.exportFileLoation" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[last()-4]/a/img" name="exportFileLoation" description="exportFileLoation"/>    
+    <locator id="filf.exportFileLoation" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']//td/a[contains(@id,':exportFileLoation')]/img" name="exportFileLoation" description="exportFileLoation"/>    
+    <locator id="filf.exportFileLoac_OLD" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[last()-4]/a/img" name="exportFileLoation" description="exportFileLoation OLD"/>    
+    
     <locator id="filf.selectApproval" type="WebElement" by="id" expression="formInstanceListForm:formInstanceListTable:0:selectApproval" name="selectApproval" description="selectApproval in first row"/>    
     <locator id="filf.deleteReturnConfirm" type="WebElement" by="id" expression="deleteReturnMessageForm:deleteReturnConfirm" name="deleteReturnConfirm" description="deleteReturnConfirm"/>
     <locator id="filf.createNew" type="WebButton" by="id" expression="FormInstImpExpMenu:createNew" name="createNew" description="createNew"/>
@@ -2012,11 +2018,12 @@
     <locator id="fird.selectGroup" type="WebElement" by="id" expression="retrieveForm:selectGroup" name="selectGroup" description="selectGroup"/>
     <locator id="fird.selectProcessDate" type="WebElement" by="id" expression="retrieveForm:referenceDate_input" name="selectProcessDate" description="selectProcessDate"/>
     <locator id="fird.selectLogLevel" type="WebElement" by="id" expression="retrieveForm:selectLogLevel" name="selectLogLevel" description="selectLogLevel"/>
-    <locator id="fird.ok" type="WebButton" by="id" expression="retrieveForm:doRetrieve" name="okButton" description="okButton"/>
+    <locator id="fird.ok" type="WebElement" by="xpath" expression=".//form[@id='retrieveForm']//button[span='OK']" name="okButton" description="okButton"/>
     <locator id="fird.cancel" type="WebButton" by="id" expression="retrieveForm:cancel" name="cancelButton" description="cancelButton"/>
     <locator id="fird.messages" type="WebElement" by="xpath" expression="//div[@id='retrieveForm:retrievemessages']/div/a" name="messages" description="form messages"/>	
     <locator id="fird.messagesDetail" type="WebElement" by="xpath" expression="//div[@id='retrieveForm:retrievemessages']/div//li/span" name="messages_details" description="form messages"/>	
-    
+    <locator id="fird.translate" type="WebElement" by="xpath" expression="//tr[td/label='Translate']/td[1]" name="translateCheckbox" description="click Translate checkbox"/>	
+    <locator id="fird.preserveAdjustments" type="WebElement" by="xpath" expression="//tr[td/label='Preserve adjustments']/td[1]" name="PreserveAdjustmentsCheckbox" description="click Preserve adjustments checkbox"/>
     </page>
     
     <page id="jrd" name="jobResultDialog" description="jobResultDialog created by Kun Shen">
@@ -2045,13 +2052,13 @@
     <locator id="ficmptd.computeConfirm" type="WebElement" by="xpath" expression="//div[@id='computeConfirmDialog']/div/button[@id='computeConfirm'][span='OK'][not(@aria-disabled)]/span" name="computeConfirm" description="computeConfirm"/>
     <locator id="ficmptd.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/span[1]" name="firstPageSta" description="first page status"/>
     <locator id="ficmptd.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>	
-    <locator id="ficmptd.getStatus" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[3]/span,'?') and starts-with(td[4],'?')]/td[6]/span" name="getStatus" description="getStatus"/>
-    <locator id="ficmptd.getStatusAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[3],'?') and starts-with(td[4],'?')]/td[6]/span" name="getStatusAR1153" description="getStatus"/>
-    <locator id="ficmptd.getstartDate" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[3]/span,'?')]/td[4]" name="getstartDate" description="getstartDate"/>
-    <locator id="ficmptd.getstartDateAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[3],'?')]/td[4]" name="getstartDateAR1153" description="getstartDate"/>
-    
-    <locator id="ficmptd.getStatusMessage" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[3]/span,'?') and starts-with(td[4],'?')]/td[8]" name="getStatusMessage" description="getStatusMessage"/>
-    <locator id="ficmptd.getStatusMessageAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[3],'?') and starts-with(td[4],'?')]/td[8]" name="getStatusMessageAR1153" description="getStatusMessage"/>
+   
+    <locator id="ficmptd.getStatus" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatus" description="getStatus"/>
+    <locator id="ficmptd.getStatusAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatusAR1153" description="getStatus"/>
+    <locator id="ficmptd.getstartDate" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDate" description="getstartDate"/>
+    <locator id="ficmptd.getstartDateAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDateAR1153" description="getstartDate"/>
+    <locator id="ficmptd.getStatusMessage" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[8]" name="getStatusMessage" description="getStatusMessage"/>
+    <locator id="ficmptd.getStatusMessageAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[8]" name="getStatusMessageAR1153" description="getStatusMessage"/>
     
     
     </page>
@@ -2109,5 +2116,5 @@
     <locator id="ulwd.ok" type="WebElement" by="xpath" expression=".//*[@id='unlockWarningDialog']//button[@type='submit']" name="ok" description="ok"/>
     <locator id="ulwd.cancel" type="WebElement" by="xpath" expression=".//*[@id='unlockWarningDialog']//button[@type='button' and span='Cancel']" name="ok" description="ok"/>
     </page>
-    
+	
 </locatorBean>

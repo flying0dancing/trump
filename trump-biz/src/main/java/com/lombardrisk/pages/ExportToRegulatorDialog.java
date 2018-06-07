@@ -363,7 +363,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				
 				if(!flag){return flag;}
 				
-				String jobRunType="Export";//job start with Export
+				String jobRunType="Export";//job start with Export, just used for logging
 				String prefixOfRegulator=getDBInfo().getRegulatorPrefix(form.getRegulator());
 				String jobName=prefixOfRegulator+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
 				

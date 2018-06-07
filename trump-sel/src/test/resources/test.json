@@ -4,7 +4,7 @@
     {
       	"id": 0,
         "name": "european",
-        "url": "http://172.20.31.38:8082",
+        "url": "http://172.20.31.38:8085",
         "username": "admin",
         "password": "password"
       },
@@ -66,8 +66,8 @@
       	"id": 0,
         "name": "ar_database",
         "driver": "oracle",
-        "host": "172.20.20.49@ora11g",        
-        "schema": "AR4ECR_12613$OWNER"
+        "host": "172.20.20.49@ora12c",        
+        "schema": "AR4PRA$OWNER"
       },
       {
       	"id": 5,
