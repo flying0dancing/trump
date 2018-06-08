@@ -329,6 +329,36 @@ public class ListPage extends AbstractPage implements IExportTo
 	 * @return
 	 * @throws Exception 
 	 */
+	public ExecutionGroupsFormPage retrieveMultiReturns(Form form) throws Exception
+	{
+		ExecutionGroupsFormPage page=null;
+
+		Boolean flag=selectIt(element("filf.regulator"),form.getRegulator());
+		if(flag)
+		{
+			//added by AR1.15.7-b68 for Asia
+			if(element("filf.retrieveMenu").isPresent() && element("filf.retrieveMenu").isDisplayed())
+			{
+				element("filf.retrieveMenu").click();
+				waitThat("filf.retrieveMultiple").toBeVisible();
+				element("filf.retrieveMultiple").click();
+				loadingDlg();
+				page=new ExecutionGroupsFormPage(getWebDriverWrapper(),getTestDataManager(),form);
+			}
+			
+		}
+	
+		return page;
+		
+	}
+	
+	/**
+	 * retrieve return(form) in selected regulator, and return retrieve return dialog page.
+	 * @author kun shen
+	 * @param form
+	 * @return
+	 * @throws Exception 
+	 */
 	public ComputeDialog computeReturn(Form form) throws Exception
 	{
 		ComputeDialog dialog=null;

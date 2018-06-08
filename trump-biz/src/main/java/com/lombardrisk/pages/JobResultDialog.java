@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.web.IWebDriverWrapper;
+import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 public class JobResultDialog extends AbstractPage {
 
@@ -76,7 +77,8 @@ public class JobResultDialog extends AbstractPage {
 	{
 		String status=null;
 		FormInstancePage fip=null;
-		ListPage listPage=null;
+		long timeout=600000;//10 min
+		long refreshWaittime=30000; //0.5 min
 		loadingDlg();
 		logger.info("job name["+jobName+"], type["+jobRunType+"]");
 		String jobStartTimeLabel=jobStartTime();
@@ -92,23 +94,30 @@ public class JobResultDialog extends AbstractPage {
 			fip.unlockForm();//new add on 2017.10.31 for ar1.15.6-b1293 //TODO
 			fip.closeThisPage();
 			fip=null;
+			loadingDlg(element("filf.jobManager"),20);
 		}
-		if(element("filf.formInstanceListForm").isDisplayed())
+		if(element("egfp.title").isPresent() && element("egfp.title").isDisplayed())
 		{
-			waitThat().timeout(10000);
-			listPage=new ListPage(getWebDriverWrapper(),getTestDataManager());
-			JobManagerPage jobManagerPage=listPage.clickJobManager();
+			timeout=1200000;//20 min
+			refreshWaittime=60000; //1 min
+		}
+		IWebElementWrapper element=element("filf.jobManager");  
+		if(element.isPresent() && element.isDisplayed())
+		{
+			element.click();
+			loadingDlg(element("fjmlf.backToDashBoard"),20);
+			JobManagerPage jobManagerPage=new JobManagerPage(getWebDriverWrapper(),getTestDataManager());
 			if(jobManagerPage!=null && jobStartTimeLabel!=null)
 			{
-				status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel);
+				status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel,refreshWaittime*2);
 				long jobStartTime=System.currentTimeMillis();
-				while(status==null || !(status.startsWith("FAILURE") || status.equalsIgnoreCase("SUCCESS")))
+				while(status==null || !(status.toUpperCase().startsWith("FAILURE") || status.equalsIgnoreCase("SUCCESS")))
 				{
 					refreshPage();
 					loadingDlg();
-					status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel);
+					status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel,refreshWaittime);
 					long jobEndTime=System.currentTimeMillis();
-					if(jobEndTime-jobStartTime>600000)//wait 10min
+					if(jobEndTime-jobStartTime>timeout)
 					{
 						status="error:job timeout";
 						break;
@@ -117,7 +126,6 @@ public class JobResultDialog extends AbstractPage {
 				logger.info("job status:"+status);
 				jobManagerPage.closeThisPage();
 			}
-			listPage=null;
 		}
 		
 		if(status==null)

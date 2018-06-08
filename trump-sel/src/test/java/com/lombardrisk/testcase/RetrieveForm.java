@@ -3,6 +3,7 @@ package com.lombardrisk.testcase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.lombardrisk.pages.ExecutionGroupsFormPage;
 import com.lombardrisk.pages.ListPage;
 import com.lombardrisk.pages.RetrieveDialog;
 import com.lombardrisk.test.FormsDataProvider;
@@ -13,9 +14,9 @@ public class RetrieveForm extends TestManager{
 
 	/**
 	 * retrieve form<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, deleteExistent<br>
+	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, deleteExistent, translate<br>
 	 * scenario file may contains these columns: expiration<br>
-	 * special instruction: when the retrieved form exists, and this form will not be retrieved.
+	 * special instruction: when the retrieved form exists and deleteExistent not set to Y, and this form will not be retrieved.
 	 * @author kun shen
 	 * @param form
 	 */
@@ -53,6 +54,47 @@ public class RetrieveForm extends TestManager{
 					{
 						form.setExecutionStatus("fail on delete existed form");
 					}
+				}
+				
+			}catch(Exception e)
+			{
+				logger.error(e.getMessage());
+				form.setExecutionStatus("error:"+e.getMessage());
+			}
+			
+		}
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
+	}
+	
+	/**
+	 * retrieve Multiple forms<br>
+	 * scenario file must contains these columns: retrieveGroup, abortOnFailure, regulator, processDate, run<br>
+	 * scenario file may contains these columns: expiration<br>
+	 * special instruction: when abortOnFailure is null, trump will not click this check box, using its default settings.
+	 * @author kun shen
+	 * @param form
+	 */
+	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
+	public void retrieveMultipleForms(Form form)
+	{
+		if(runIt(form.getExecutionStatus()))
+		{
+			form.accumulateRunFrequency();
+			try
+			{
+				ListPage listPage=super.getListPage();
+				if(listPage!=null)
+				{
+					listPage.loginAfterTimeout(listPage);
+					ExecutionGroupsFormPage retrieveGroupPage=listPage.retrieveMultiReturns(form);
+					if(retrieveGroupPage!=null && retrieveGroupPage.selectInfo())
+					{
+						String status=retrieveGroupPage.doRetrieve();
+						form.setExecutionStatus(status);
+					}else
+					{
+						form.setExecutionStatus("fail on select information on retrieve group page");
+					}					
 				}
 				
 			}catch(Exception e)
