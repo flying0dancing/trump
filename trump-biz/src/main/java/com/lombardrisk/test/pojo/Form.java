@@ -22,6 +22,8 @@ private String executionStatus;
 private String exec_ExpectationFile;
 private int frequency;
 private String translate;
+private String retrieveGroup;
+private String abortOnFailure;
 
 public String getName()
 {return name;}
@@ -128,6 +130,18 @@ public String getTranslate()
 
 public void setTranslate(String translate)
 {this.translate = translate;}
+
+public String getRetrieveGroup() 
+{ return retrieveGroup;}
+
+public void setRetrieveGroup(String retrieveGroup) 
+{this.retrieveGroup = retrieveGroup;}
+
+public String getAbortOnFailure() 
+{return abortOnFailure;}
+
+public void setAbortOnFailure(String abortOnFailure) 
+{this.abortOnFailure = abortOnFailure;}
 
 public ArrayList<String> getAttributeList()
 {

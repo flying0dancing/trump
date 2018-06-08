@@ -55,9 +55,9 @@ public class JobManagerPage extends AbstractPage
 	 * @return
 	 * @throws Exception
 	 */
-	public String search(String name,String referenceDate,String started) throws Exception
+	public String search(String name,String referenceDate,String started,long refreshTimeoutMilliseconds) throws Exception
 	{
-		return getExtendGridCells(name,referenceDate, started);
+		return getExtendGridCells(name,referenceDate, started,refreshTimeoutMilliseconds);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class JobManagerPage extends AbstractPage
 	 * @return
 	 * @throws Exception
 	 */
-	private String getExtendGridCells(String name,String referenceDate,String started) throws Exception
+	private String getExtendGridCells(String name,String referenceDate,String started,long refreshTimeoutMilliseconds) throws Exception
 	{
 		String status=null;
 		IWebElementWrapper gridBarFirstPointer=element("ficmptd.firstPageSta");
@@ -91,7 +91,7 @@ public class JobManagerPage extends AbstractPage
 				}
 				if(status!=null && status.equalsIgnoreCase("IN PROGRESS"))
 				{
-					waitThat().timeout(10000);
+					waitThat().timeout(refreshTimeoutMilliseconds);
 					refreshPage();
 					continue;
 				}

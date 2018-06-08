@@ -157,7 +157,7 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 				//String jobStartTimeLabel=jrd.jobStartTime();
 				
 				String jobRunType="RetrieveJob";
-				String jobName=getDBInfo().getRegulatorPrefix(form.getRegulator())+"|"+form.getEntity()+"|"+form.getName()+"|"+form.getVersion().substring(1);
+				String jobName=getDBInfo().getRegulatorPrefix(form.getRegulator())+"|"+getDBInfo().getEntityCode(form.getRegulator(), form.getEntity())+"|"+form.getName()+"|"+form.getVersion().substring(1);
 				
 				/*listPage=new ListPage(getWebDriverWrapper());
 				JobManagerPage jobManagerPage=listPage.clickJobManager();

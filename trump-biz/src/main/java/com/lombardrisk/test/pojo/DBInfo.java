@@ -246,6 +246,21 @@ public class DBInfo{
 	}
 	
 	/**
+	 * get entity code by regulator description and entity's name
+	 * @param regulator
+	 * @param entityName
+	 * @return
+	 */
+	public String getEntityCode(String regulator,String entityName)
+	{
+		String SQL="";
+		String ID_Start = getRegulatorIDRangeStart(regulator);
+		String ID_End = getRegulatorIDRangEnd(regulator);
+		SQL="select \"ENTITY_CODE\" from \"USR_NATIVE_ENTITY\" where \"ENTITY_NAME\"='"+entityName+"' and \"ID\" between "+ID_Start+" and "+ID_End;
+		return getDBQuery().queryRecord(SQL);
+	}
+	
+	/**
 	 * get page name from database server
 	 * @param regulator
 	 * @param form
