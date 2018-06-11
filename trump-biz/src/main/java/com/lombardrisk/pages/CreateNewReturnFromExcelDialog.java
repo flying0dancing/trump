@@ -14,16 +14,25 @@ import com.lombardrisk.commons.ExcelUtil;
 import com.lombardrisk.commons.JxlUtil;
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
+import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 import com.lombardrisk.test.pojo.Form;
 
 public class CreateNewReturnFromExcelDialog extends AbstractPage implements IComFolder,IExecFuncFolder{
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Form form;
 	private String type="createFromExcelForm";
-	
+	private DBInfo dBInfo;
 	public CreateNewReturnFromExcelDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form) {
 		super(webDriverWrapper,testDataManager);
 		this.form=form;
+		this.setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
+	}
+	public DBInfo getDBInfo() {
+		return dBInfo;
+	}
+	public void setDBInfo(DBInfo dBInfo) {
+		this.dBInfo = dBInfo;
 	}
 	/**
 	 * if this page is this page, return true, others return false.
@@ -117,12 +126,19 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 			return "no exist import file";
 		}
 		String importFileFullName=TARGET_IMPORT_FOLDER+form.getRegulator()+"/"+form.getImportFile();//
-		//TODO: adding function for update date in importfile.
-		importFileFullName=findNewFileForUpload(importFileFullName);
-		if(importFileFullName!=null && new File(importFileFullName).exists())
+		if(!new File(importFileFullName).exists())
 		{
-			ExcelUtil.UpdateCellsInExcel(importFileFullName, new String[][]{{"CoverPage","5","4", form.getProcessDate(),"date:"+dateFormat},{"CoverPage","4","4", form.getEntity(),null}});//update process date and entity by form's getProcessDate
+			//TODO: adding function for update date in importfile.
+			importFileFullName=findNewFileForUpload(importFileFullName);
+			if(importFileFullName!=null && new File(importFileFullName).exists())
+			{
+				ExcelUtil.UpdateCellsInExcel(importFileFullName, new String[][]{{"CoverPage","5","4", form.getProcessDate(),"date:"+dateFormat},{"CoverPage","4","4", getDBInfo().getEntityCode(form.getRegulator(), form.getEntity()),null}});//update process date and entity by form's getProcessDate
+			}else
+			{
+				return "no exist import file";
+			}
 		}
+		
 		logger.info("Execute js script");
 		String js = "document.getElementById('" + type + ":importFileUpload').getElementsByTagName('div')[0].getElementsByTagName('span')[0].className='';";
 		executeScript(js);
