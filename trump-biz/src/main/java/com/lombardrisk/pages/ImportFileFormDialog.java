@@ -2,6 +2,7 @@ package com.lombardrisk.pages;
 
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -15,7 +16,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 	
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Form form;
-	private String type="importFileForm";
+	private String type="importFileForm"; // "importFileForm" is dialog selected in return, "listImportFileForm" is dialog selected in dash board
 	
 	public ImportFileFormDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager, Form form) {
 		super(webDriverWrapper,testDataManager);
@@ -94,7 +95,9 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 				if(!element("abstract.uploadFileInitToZeroChecked",type).isPresent())
 				{uploadFileInitToZero.click();}
 			}
+			
 			//difference
+			selectImportMode();//select importMode(override, additive)
 			IWebElementWrapper listimportBtn=element("aifd.importBtn",type);
 			if(listimportBtn.isEnabled())
 			{
@@ -116,6 +119,22 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 			}
 		}
 		return flag;
+	}
+	
+	public void selectImportMode() throws Exception
+	{
+		if(StringUtils.isNotBlank(form.getImportMode()))
+		{
+			String mode=form.getImportMode().toLowerCase();
+			if(mode.equals("override") || mode.equals("over") || mode.equals("y"))
+			{
+				element("aifd.importMode",type,"Override").click();
+			}else if(mode.equals("additive") || mode.equals("add") || mode.equals("append")|| mode.equals("n"))
+			{
+				element("aifd.importMode",type,"Additive").click();
+			}
+			loadingDlg();
+		}
 	}
 	
 	

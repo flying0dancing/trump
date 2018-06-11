@@ -14,7 +14,8 @@ public class ImportForm extends TestManager{
 	/**
 	 * only import into existed form <br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file may contains these columns: importMode, expiration<br>
+	 * special instruction: importMode's value(override, additive, over(=override), y(=override), add(=additive), append(=additive), n(=additive))
 	 * @author kun shen
 	 * @param form
 	 */

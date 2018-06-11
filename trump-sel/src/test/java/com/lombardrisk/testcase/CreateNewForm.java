@@ -93,8 +93,8 @@ public class CreateNewForm extends TestManager{
 	/**
 	 * create new from excel with deleted existent or not<br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile<br>
-	 * scenario file may contains these columns: deleteExistent, expiration<br>
-	 * if importFile does not exist in import folder, it will copy from download/<i>regulator<i>(EXPORTTOEXCELNOSCALE) folder to import folder automatically.
+	 * scenario file may contains these columns: applyScale, deleteExistent, expiration<br>
+	 * if importFile does not exist in import folder, it will copy from download/<i>regulator<i>(EXPORTTOEXCEL***) folder to import folder automatically.
 	 * @author kun shen
 	 * @param form
 	 */
