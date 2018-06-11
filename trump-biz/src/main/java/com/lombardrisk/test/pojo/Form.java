@@ -24,6 +24,7 @@ private int frequency;
 private String translate;
 private String retrieveGroup;
 private String abortOnFailure;
+private String importMode;
 
 public String getName()
 {return name;}
@@ -142,6 +143,12 @@ public String getAbortOnFailure()
 
 public void setAbortOnFailure(String abortOnFailure) 
 {this.abortOnFailure = abortOnFailure;}
+
+public String getImportMode() 
+{return importMode;}
+
+public void setImportMode(String importMode) 
+{this.importMode = importMode;}
 
 public ArrayList<String> getAttributeList()
 {
