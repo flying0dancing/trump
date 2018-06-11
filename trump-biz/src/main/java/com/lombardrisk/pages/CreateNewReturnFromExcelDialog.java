@@ -3,6 +3,7 @@ package com.lombardrisk.pages;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -239,5 +240,20 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		return fip;
 	}
 	
+	public void applyScaleRadio() throws Exception
+	{
+		if(StringUtils.isNotBlank(form.getApplyScale()))
+		{
+			String mode=form.getApplyScale().toLowerCase();
+			if(mode.equalsIgnoreCase("y"))
+			{
+				element("cfed.applayScale",type,"true").click();
+			}else if(mode.equalsIgnoreCase("n"))
+			{
+				element("cfed.applayScale",type,"false").click();
+			}
+			loadingDlg();
+		}
+	}
 	
 }

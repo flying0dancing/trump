@@ -191,7 +191,7 @@
     <locator id="cfed.confirmBtn" type="WebButton" by="id" expression="createInformForm:confirmBtn" name="confirmBtn" description="confirmBtn"/>
     <locator id="cfed.replaceconfirm" type="WebElement" by="xpath" expression="//div[@id='?ConfirmDialog'][div[@style]]//button[@id='replaceconfirm']" name="replaceconfirm" description="replaceconfirm"/>
     <locator id="cfed.uploadFileName" type="WebButton" by="id" expression="?:listuploadedFileName" name="uploadFileName" description="uploadFileName"/>
-       	
+    <locator id="cfed.applayScale" type="WebElement" by="xpath" expression=".//*[@id='?:applyScaleRadio']//div[div/input[@value='?']]" name="applayScale" description="applayScale"/>  	
     </page>
     
     <page id="aifd" name="adjustmentsImportFilesDialog" description="adjustmentsImportFilesDialog created by Kun Shen">
@@ -199,6 +199,7 @@
     <locator id="aifd.closeDialog" type="WebElement" by="xpath" expression="//div[@id='importFilesDialog']/div[1]/a/span" name="closeDialog" description="closeDialog"/>
     <locator id="aifd.importBtn" type="WebButton" by="id" expression="?:importBtn" name="importBtn" description="importBtn"/>
     <locator id="aifd.uploadFileName" type="WebButton" by="id" expression="?:uploadedFileName" name="uploadFileName" description="uploadFileName"/>
+    <locator id="aifd.importMode" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//div[div/input[@value='?']]" name="importMode" description="importMode(Override, Additive)"/>
         
     </page>
     

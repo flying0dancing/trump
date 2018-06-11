@@ -25,6 +25,7 @@ private String translate;
 private String retrieveGroup;
 private String abortOnFailure;
 private String importMode;
+private String applyScale;
 
 public String getName()
 {return name;}
@@ -149,6 +150,13 @@ public String getImportMode()
 
 public void setImportMode(String importMode) 
 {this.importMode = importMode;}
+
+
+public String getApplyScale() 
+{return applyScale;}
+
+public void setApplyScale(String applyScale) 
+{this.applyScale = applyScale;}
 
 public ArrayList<String> getAttributeList()
 {
