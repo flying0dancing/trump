@@ -290,8 +290,8 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			if(exportedFile.exists())
 			{
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
-				String[] commons={ PropHelper.getProperty("path.GetCellValueFromExcel"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", TARGET_LOG_FOLDER };
-				cmdLine=PropHelper.getProperty("path.GetCellValueFromExcel")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" "+TARGET_LOG_FOLDER;
+				String[] commons={ PropHelper.getProperty("path.GetCellValueFromExcel"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", "\""+TARGET_LOG_FOLDER+"\"" };
+				cmdLine=PropHelper.getProperty("path.GetCellValueFromExcel")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" \""+TARGET_LOG_FOLDER+"\"";
 				logger.info(cmdLine);
 				Process process = Runtime.getRuntime().exec(commons);
 				process.waitFor();
@@ -719,8 +719,8 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			{
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newFilePath);
-				String[] commons={ PropHelper.getProperty("path.GetValidationResult"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", TARGET_LOG_FOLDER, "Y" };
-				cmdLine=PropHelper.getProperty("path.GetValidationResult")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" "+TARGET_LOG_FOLDER+" \"Y\"";
+				String[] commons={ PropHelper.getProperty("path.GetValidationResult"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", "\""+TARGET_LOG_FOLDER+"\"", "Y" };
+				cmdLine=PropHelper.getProperty("path.GetValidationResult")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" \""+TARGET_LOG_FOLDER+"\" \"Y\"";
 				logger.info(cmdLine);
 				Process process = Runtime.getRuntime().exec(commons);
 				process.waitFor();
@@ -788,8 +788,8 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			{
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newFilePath);
-				String[] commons={ PropHelper.getProperty("path.GetProblemResult"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", TARGET_LOG_FOLDER };
-				cmdLine=PropHelper.getProperty("path.GetProblemResult")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" "+TARGET_LOG_FOLDER;
+				String[] commons={ PropHelper.getProperty("path.GetProblemResult"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", "\""+TARGET_LOG_FOLDER+"\"" };
+				cmdLine=PropHelper.getProperty("path.GetProblemResult")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" \""+TARGET_LOG_FOLDER+"\"";
 				logger.info(cmdLine);
 				Process process = Runtime.getRuntime().exec(commons);
 				process.waitFor();
