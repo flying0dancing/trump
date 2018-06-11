@@ -81,24 +81,44 @@ public class JobManagerPage extends AbstractPage
 				gridBarFirstPointer.click();
 				loadingDlg();	
 			}
-			IWebElementWrapper nextPageBar=element("ficmptd.nextPageSta");
-			while(nextPageBar.isDisplayed() && !nextPageBar.getAttribute("class").contains("ui-state-disabled"))
-			{	
-				status=getGridCells(name,referenceDate,started);
-				if(status!=null && (status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
+			
+			status=getGridCells(name,referenceDate,started);
+			while(status!=null)
+			{
+				if((status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
 				{
 					break;
 				}
-				if(status!=null && status.equalsIgnoreCase("IN PROGRESS"))
+				if(status.equalsIgnoreCase("IN PROGRESS"))
 				{
 					waitThat().timeout(refreshTimeoutMilliseconds);
 					refreshPage();
+					status=getGridCells(name,referenceDate,started);
 					continue;
 				}
-				nextPageBar.click();
-				loadingDlg();
-				nextPageBar=element("ficmptd.nextPageSta");
 			}
+			if(status==null)
+			{
+				IWebElementWrapper nextPageBar=element("ficmptd.nextPageSta");
+				while(nextPageBar.isDisplayed() && !nextPageBar.getAttribute("class").contains("ui-state-disabled"))
+				{	
+					status=getGridCells(name,referenceDate,started);
+					if(status!=null && (status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
+					{
+						break;
+					}
+					if(status!=null && status.equalsIgnoreCase("IN PROGRESS"))
+					{
+						waitThat().timeout(refreshTimeoutMilliseconds);
+						refreshPage();
+						continue;
+					}
+					nextPageBar.click();
+					loadingDlg();
+					nextPageBar=element("ficmptd.nextPageSta");
+				}
+			}
+			
 		}
 		if(status==null)
 		{

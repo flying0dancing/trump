@@ -154,32 +154,10 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 			{
 				loadingDlg();
 				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());
-				//String jobStartTimeLabel=jrd.jobStartTime();
 				
 				String jobRunType="RetrieveJob";
 				String jobName=getDBInfo().getRegulatorPrefix(form.getRegulator())+"|"+getDBInfo().getEntityCode(form.getRegulator(), form.getEntity())+"|"+form.getName()+"|"+form.getVersion().substring(1);
-				
-				/*listPage=new ListPage(getWebDriverWrapper());
-				JobManagerPage jobManagerPage=listPage.clickJobManager();
-				if(jobManagerPage!=null)
-				{
-					status=jobManagerPage.search(name,form.getProcessDate(),runType,jobStartTimeLabel);
-					long jobStartTime=System.currentTimeMillis();
-					while(status==null || !(status.startsWith("FAILURE") || status.equalsIgnoreCase("SUCCESS")))
-					{
-						refreshPage();
-						loadingDlg();
-						status=jobManagerPage.search(name,form.getProcessDate(),runType,jobStartTimeLabel);
-						long jobEndTime=System.currentTimeMillis();
-						if(jobEndTime-jobStartTime>600000)//wait 10min
-						{
-							status="error:job timeout";
-							break;
-						}
-					}
-					logger.info("job status:"+status);
-					jobManagerPage.closeThisPage();
-				}*/
+			
 				
 				status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
 				jrd=null;
