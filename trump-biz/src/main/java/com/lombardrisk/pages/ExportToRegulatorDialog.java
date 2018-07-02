@@ -1,5 +1,6 @@
 package com.lombardrisk.pages;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,10 +173,14 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		Boolean flag=false;
 		if(lockDownloadDir(downloadFolder))
 		{
-			if(title.equalsIgnoreCase("Export to DataSchedule") || title.toLowerCase().contains("dataschedule"))
+			if(title.contains("Combine"))
+			{
+				logger.info("export to combine");
+				flag=clickExportToDataSchedule(true);//TODO modify it according to requirements, may be i can zip them here.
+			}else if(title.equalsIgnoreCase("Export to DataSchedule") || title.toLowerCase().contains("dataschedule"))
 			{
 				logger.info("export to DataSchedule");
-				flag=clickExportToDataSchedule();
+				flag=clickExportToDataSchedule(false);
 			}else
 			{
 				logger.info("export to regulator");
@@ -333,7 +338,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	 * @author kun shen
 	 * @throws Exception
 	 */
-	private Boolean clickExportToDataSchedule() throws Exception
+	private Boolean clickExportToDataSchedule(Boolean combined) throws Exception
 	{
 		Boolean flag=true;
 		
@@ -371,7 +376,6 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				lockDownloadDir(downloadFolder);//relock it after new jobResultDialog
 				String status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
 				
-				
 				IWebElementWrapper _exportFileLoation=element("filf.exportFileLoation",form.getName(),form.getVersion().substring(1),form.getProcessDate());
 				if(_exportFileLoation.isPresent() && _exportFileLoation.isDisplayed())
 				{
@@ -379,7 +383,19 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					loadingDlg();
 					ExportedFileLocationDialog efld=new ExportedFileLocationDialog(getWebDriverWrapper(),getTestDataManager());
 					String downloadFileName_Server=efld.exportedFileName();
-					getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server);
+					getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server,combined);
+					
+				}else
+				{
+					if(status.startsWith("fail"))
+					{
+						getDownloadFromServerToLocalSSH(prefixOfRegulator,status,form.getExpectationFile(),combined);
+					}else
+					{
+						logger.error("error: job failed and no exported file.");
+						flag=false;
+					}
+					
 				}
 							
 				if(forceSubmit.isThisPage())
@@ -397,24 +413,44 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		return flag;
 	}
 	//TODO judge status with FAILURE: Export file failed XML schema validation!
-	private void getDownloadFromServerToLocalSSH(String prefixOfRegulator,String statusType, String downloadFileName_Server) throws Exception
+	private void getDownloadFromServerToLocalSSH(String prefixOfRegulator,String statusType, String downloadFileName_Server,Boolean combined) throws Exception
 	{
+		String returnZipFile=null;
 		logger.info("start downloading export file from server to local.");
 		String statusTypeL=statusType.toLowerCase();
 		ServerInfo serverInfo=new ServerInfo(getDBInfo().getApplicationServer_Key());
 		String processDate=uniformDate(form.getProcessDate(),"YYYYMMDD");
 		String downloadPath_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/";
-		if(statusTypeL.startsWith("fail"))
+		Boolean searchCombinedFile=false;
+		String downloadPath_combine_Server=downloadPath_Server+"combine/";
+		String downloadPath_validationErrors_Server=downloadPath_Server+"ValidationErrors/";
+		if(combined && form.getExpectationFile().toUpperCase().contains("COMBINE"))
 		{
-			downloadPath_Server=serverInfo.getDownloadPath()+"/Submission/"+prefixOfRegulator+"/"+form.getEntity()+"/"+processDate+"/ValidationErrors/";
-			downloadFileName_Server=prefixOfRegulator+"_"+form.getEntity()+"_"+form.getTransmission().getModule()+"_"+processDate+"*";
+			searchCombinedFile=true;
+			if(downloadFileName_Server.contains(";"))
+			{
+				String[] downloadFileArr_server=downloadFileName_Server.split(";");
+				for(String tmp:downloadFileArr_server)
+				{
+					if(!tmp.toLowerCase().contains("combine"))
+					{
+						downloadFileName_Server=tmp;
+						break;
+					}
+				}
+			}
 			
+		}
+		
+		if(statusTypeL.startsWith("fail") && !searchCombinedFile)
+		{
+			downloadPath_Server=downloadPath_validationErrors_Server;			
 		}
 		if(serverInfo.getDownloadPath().contains("\\"))
 		{
 			downloadPath_Server=downloadPath_Server.replace("/", "\\");
 			//download from Windows
-			if(statusTypeL.startsWith("fail") || statusTypeL.startsWith("pass"))
+			if(statusTypeL.startsWith("pass") || statusTypeL.startsWith("fail"))
 			{
 				logger.info("start downloading file from windows server: name["+downloadPath_Server+"]");
 				FileUtil.copyToNewFile(downloadPath_Server,downloadFolder,downloadFileName_Server);
@@ -425,18 +461,66 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			}
 		}else
 		{
-			//download from Linux
-			if(statusTypeL.startsWith("fail") || statusTypeL.startsWith("pass"))
+
+			logger.info("start downloading file from Linux server: ["+downloadPath_Server+"]");
+			if(JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort()))
 			{
-				logger.info("start downloading file from Linux server: name["+downloadPath_Server+"]");
-				JschUtil.connect(serverInfo.getUser(), serverInfo.getPassword(), serverInfo.getHost(), serverInfo.getPort());
-				JschUtil.downloadFileToLocal(downloadPath_Server+downloadFileName_Server, downloadFolder);
+				ArrayList<String> downloadFiles=new ArrayList<String>();
+				
+				if(searchCombinedFile){
+					if(statusTypeL.startsWith("pass") && JschUtil.execCmd("cd "+downloadPath_combine_Server)==0 && JschUtil.downloadFileToLocal(downloadPath_combine_Server+downloadFileName_Server, downloadFolder)){
+						//if(JschUtil.execCmd("mv -f "+downloadPath_combine_Server+downloadFileName_Server+" "+downloadPath_combine_Server+downloadFileName_combine_Server)==0 && JschUtil.downloadFileToLocal(downloadPath_combine_Server+downloadFileName_combine_Server, downloadFolder))
+						String exportfile=exportToFile();
+						String exportfileRename=FileUtil.createNewFileWithSuffix(exportfile,"_combine",null);
+						new File(exportfile).renameTo(new File(exportfileRename));
+						logger.info("download file(combine):"+exportfileRename);
+						downloadFiles.add(exportfileRename);
+						
+					}
+					if(statusTypeL.startsWith("fail") && JschUtil.execCmd("cd "+downloadPath_validationErrors_Server)==0 && JschUtil.downloadFileToLocal(downloadPath_validationErrors_Server+downloadFileName_Server, downloadFolder))
+					{
+						String exportfile=exportToFile();
+						String exportfileRename=FileUtil.createNewFileWithSuffix(exportfile,"_combine",null);
+						new File(exportfile).renameTo(new File(exportfileRename));
+						logger.info("download file(ValidationErrors):"+exportfileRename);
+						downloadFiles.add(exportfileRename);
+						/*String downloadFileName_validationErrors_Server=downloadFileName_Server.substring(0,downloadFileName_Server.lastIndexOf(".")).concat("_combine.xml");
+						if(JschUtil.execCmd("mv -f "+downloadPath_validationErrors_Server+downloadFileName_Server+" "+downloadPath_validationErrors_Server+downloadFileName_validationErrors_Server)==0 && JschUtil.downloadFileToLocal(downloadPath_validationErrors_Server+downloadFileName_validationErrors_Server, downloadFolder))
+						{}*/
+					}
+				}
+				
+				if(JschUtil.execCmd("cd "+downloadPath_Server)==0){
+					if(JschUtil.downloadFileToLocal(downloadPath_Server+downloadFileName_Server, downloadFolder)){
+						String exportfile=exportToFile();
+						returnZipFile=exportfile.substring(0,exportfile.lastIndexOf(".")).concat(".zip");
+						logger.info("download file:"+exportfile);
+						downloadFiles.add(exportfile);
+					}else{
+						if(searchCombinedFile && JschUtil.downloadFileToLocal(downloadPath_validationErrors_Server+downloadFileName_Server, downloadFolder)){
+							String exportfile=exportToFile();
+							returnZipFile=exportfile.substring(0,exportfile.lastIndexOf(".")).concat(".zip");
+							logger.info("download file(combinesituation,no combined file with ValidationErrors):"+exportfile);
+							downloadFiles.add(exportfile);
+						}
+					}
+						
+				}else{
+					logger.error("error: no such directory["+downloadPath_Server+"] in remote linux server.");
+				}
 				JschUtil.close();
 				logger.info("stop downloading export file from server to local.");
+				if(downloadFiles.size()>1)
+				{
+					
+					FileUtil.ZipFiles(downloadFiles, returnZipFile);
+				}
+				
 			}else
 			{
-				logger.error("error: no export file exists in Linux server ["+downloadPath_Server+"].");
-			}
+				logger.error("error: fail to connect to remote server.");
+			}			
+		
 		}
 		
 	}

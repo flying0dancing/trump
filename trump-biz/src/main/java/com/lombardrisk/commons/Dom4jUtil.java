@@ -287,16 +287,27 @@ public static void writeFormToXml(String identifer,Form form,String xmlFileStr,S
             	while(formit.hasNext())
             	{
             		Element elementForm=formit.next();
-            		if(form.getName().equalsIgnoreCase(elementForm.attributeValue("name")) && form.getVersion().equalsIgnoreCase(elementForm.attributeValue("version")) && form.getRegulator().equalsIgnoreCase(elementForm.attributeValue("regulator")) )
+            		/*if(form.getName().equalsIgnoreCase(elementForm.attributeValue("name")) && form.getVersion().equalsIgnoreCase(elementForm.attributeValue("version")) && form.getRegulator().equalsIgnoreCase(elementForm.attributeValue("regulator")) )
             		{
             			if(form.getEntity().equalsIgnoreCase(elementForm.elementText("entity")) &&form.getProcessDate().equalsIgnoreCase(elementForm.elementText("processDate")))
             			{
-            				//elementForm.element("importFile").setText(form.getImportFile());
-            				//elementForm.element("executionStatus").setText(form.getExecutionStatus());
-            				//flag=true;
-            				elementForm.detach();
-            				break;
+            				if(form.getImportFile().equalsIgnoreCase(elementForm.elementText("importFile")) &&form.getExpectationFile().equalsIgnoreCase(elementForm.elementText("expectationFile")))
+            				{
+            					//elementForm.element("importFile").setText(form.getImportFile());
+                				//elementForm.element("executionStatus").setText(form.getExecutionStatus());
+                				//flag=true;
+                				elementForm.detach();
+                				break;
+            				}
             			}
+            		}*/
+            		
+            		Form elementFormBean = (Form) XmlUtil.fromXmlToBean(elementForm, Form.class); 
+            		if(form.equals(elementFormBean))
+            		{
+            			logger.debug("cover same form");
+            			elementForm.detach();
+        				break;
             		}
             	}
             	if(!flag)

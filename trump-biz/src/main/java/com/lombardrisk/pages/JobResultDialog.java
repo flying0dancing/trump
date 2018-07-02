@@ -60,6 +60,7 @@ public class JobResultDialog extends AbstractPage {
 				waitThat("jrd.title").toBeInvisible();
 				loadingDlg();
 			}*/
+			loadingDlg();
 			element("jrd.ok").click();
 			waitThat("jrd.title").toBeInvisible();
 			loadingDlg();

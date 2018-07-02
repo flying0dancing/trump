@@ -793,10 +793,11 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	public Boolean unlockForm() throws Exception
 	{
 		Boolean flag=changeFormStatus(element("fipf.unlockBtn"),element("fipf.lockBtn"));
-		int times=2;
+		int times=50;
 		while(!flag && times>0)
 		{
 			super.refreshPage();
+			loadingDlg(15000);
 			flag=changeFormStatus(element("fipf.unlockBtn"),element("fipf.lockBtn"));
 			times--;
 		}
@@ -819,7 +820,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element1.click();
 			waitThat().timeout(1000);
 			loadingDlg();
-			//TODO
+			//TODO 
 			List<IWebElementWrapper> elements=element("uolwd.ok").getAllMatchedElements();
 			for(IWebElementWrapper element:elements)
 			{
@@ -1233,7 +1234,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		if(element("fipf.validateNowBtn").isEnabled())
 		{
 			element("fipf.validateNowBtn").click();
-			//loadingDlg();
+			loadingDlg();
 			loadingDlg(element("fipf.validateNowBtn"),30);
 			String failCount=element("fipf.validateFails").getInnerText();
 			

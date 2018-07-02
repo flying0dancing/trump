@@ -3,6 +3,8 @@ package com.lombardrisk.test.pojo;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringUtils;
+
 public class Form {
 private String name;
 private String version;
@@ -178,7 +180,7 @@ public String toString()
 		try {
 			String value=null;
 			Object obj=field.get(this);
-			if(obj==null || obj.toString().trim().equals(""))
+			if(obj==null || StringUtils.isBlank(obj.toString()))
 			{continue;}
 			else value=field.get(this).toString();
 			stringBuffer.append(field.getName()+"[" + value+"] ");
@@ -189,6 +191,49 @@ public String toString()
 		}
 	}
 	return stringBuffer.toString();
+}
+
+public Boolean equals(Form formCmp)
+{
+	Boolean flag=true;
+	Field[] fields=this.getClass().getDeclaredFields();
+	Field[] fieldsCmp=formCmp.getClass().getDeclaredFields();
+	ArrayList<String> ignoreList=new ArrayList<String>();
+	ignoreList.add("executionStatus");
+	ignoreList.add("exec_ExpectationFile");
+	ignoreList.add("frequency");
+	for(Field field:fields)
+	{
+		try{
+			String fieldname=field.getName();
+			for(Field fieldCmp:fieldsCmp)
+			{
+				String fieldnameCmp=fieldCmp.getName();
+				if(fieldname.equals(fieldnameCmp) && !ignoreList.contains(fieldname))
+				{
+					Object obj=field.get(this);
+					Object objCmp=fieldCmp.get(formCmp);
+					String value=null,valueCmp=null;
+					if(obj!=null && objCmp!=null)
+					{
+						value=obj.toString();
+						valueCmp=objCmp.toString();
+						if(!StringUtils.isBlank(value) && !StringUtils.isBlank(valueCmp) && !value.equalsIgnoreCase(valueCmp))
+						{
+							flag=false;
+						}
+					}
+				}
+			}
+		}catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			flag=false;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			flag=false;
+		}
+	}
+	return flag;
 }
 
 public int getRunFrequency()

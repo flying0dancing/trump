@@ -254,9 +254,10 @@ public class DBInfo{
 	public String getEntityCode(String regulator,String entityName)
 	{
 		String SQL="";
-		String ID_Start = getRegulatorIDRangeStart(regulator);
+		/*String ID_Start = getRegulatorIDRangeStart(regulator);
 		String ID_End = getRegulatorIDRangEnd(regulator);
-		SQL="select \"ENTITY_CODE\" from \"USR_NATIVE_ENTITY\" where \"ENTITY_NAME\"='"+entityName+"' and \"ID\" between "+ID_Start+" and "+ID_End;
+		SQL="select \"ENTITY_CODE\" from \"USR_NATIVE_ENTITY\" where \"ENTITY_NAME\"='"+entityName+"' and \"ID\" between "+ID_Start+" and "+ID_End;*/
+		SQL="select \"ENTITY_CODE\" from \"USR_NATIVE_ENTITY\" where \"ENTITY_NAME\"='"+entityName+"'";
 		return getDBQuery().queryRecord(SQL);
 	}
 	
