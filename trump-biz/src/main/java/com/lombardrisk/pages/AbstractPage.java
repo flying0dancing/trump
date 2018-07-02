@@ -295,7 +295,7 @@ public abstract class AbstractPage extends PageBase
 		waitThat().timeout(2000);
 	}
 	/**
-	 * Wait for ajax dialog disappear
+	 * Wait for ajax dialog disappear, and some element appear
 	 * 
 	 * @throws Exception
 	 */
@@ -310,6 +310,7 @@ public abstract class AbstractPage extends PageBase
 			setT--;
 		}
 	}
+	
 	/**
 	 * Wait for elements loaded
 	 * 
@@ -743,7 +744,7 @@ public abstract class AbstractPage extends PageBase
 		{
 			try{
 				element.selectByVisibleText(it.trim());
-				loadingDlg();
+				loadingDlg(15000);
 			}catch(Exception e){}
 			finally{
 				if(element.getSelectedText().equalsIgnoreCase(it.trim()))
@@ -963,7 +964,7 @@ public abstract class AbstractPage extends PageBase
 				String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
 				filePath=renameFile(downloadFolder, oldName, fileName);
 			}
-			else//"export to data-schedule" use this part
+			else//"export to data-schedule","Export to XSLT-Combine" use this part
 			{
 				filePath=downloadFile(downloadFolder);
 			}
@@ -1076,7 +1077,7 @@ public abstract class AbstractPage extends PageBase
 		try
 		{
 			IWebElementWrapper element=element("abstract.message");
-			if(element.isPresent())
+			if(element.isPresent() && element.isDisplayed())
 			{
 				String msgType=element("abstract.messageType").getInnerText();
 				String tip=element.getInnerText();
@@ -1088,6 +1089,7 @@ public abstract class AbstractPage extends PageBase
 					logger.error(tip);
 					flag=false;
 				}
+				loadingDlg(10000);
 				waitThat("abstract.message").toBeInvisible();
 			}
 		}catch(Exception e)

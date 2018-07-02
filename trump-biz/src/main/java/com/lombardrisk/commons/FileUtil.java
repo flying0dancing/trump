@@ -40,8 +40,9 @@ public class FileUtil extends FileUtils
 			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipfile));
 			for (String fileNAME : fileNames)
 			{
-				FileInputStream in = new FileInputStream(new File(fileNAME));
-				out.putNextEntry(new ZipEntry(fileNAME));
+				File filehd=new File(fileNAME);
+				FileInputStream in = new FileInputStream(filehd);
+				out.putNextEntry(new ZipEntry(filehd.getName()));
 				int len;
 				while ((len = in.read(buf)) > 0)
 				{

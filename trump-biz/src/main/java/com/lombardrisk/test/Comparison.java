@@ -448,10 +448,16 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		if(expectationFiles!=null && expectationFiles.size()==1){expectationFileName=form.getExpectationFile();}
 		if(expectationFiles!=null && expectationFiles.size()>1)
 		{
+			String str=exportedFileName.substring(exportedFileName.indexOf("_"),exportedFileName.lastIndexOf("_")+1);
+			str=str.replace("_"+form.getEntity()+"_", "_");//something like _group_hkma-returnName_
+			if(form.getName().toUpperCase().equals("FR2052A"))//special case for FED FR2052A
+			{
+				String[] tmp=exportedFileName.split("\\.|_|\\-");
+				str=tmp[tmp.length-2]+"."+tmp[tmp.length-1];//combine last two string like COMMENT.xml, or Combine.xml
+				str=str.replaceAll("\\(.*\\)", "");
+			}
 			for(String exepc:expectationFiles)
 			{
-				String str=exportedFileName.substring(exportedFileName.indexOf("_"),exportedFileName.lastIndexOf("_")+1);
-				str=str.replace("_"+form.getEntity()+"_", "_");//something like _xx_aa-ss_
 				Pattern p = Pattern.compile(str, Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(exepc);
 				if(m.find())
@@ -460,6 +466,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 					break;
 				}
 			}
+			
 		}
 		
 		File expectationFile = new File(expectationFolder+expectationFileName);

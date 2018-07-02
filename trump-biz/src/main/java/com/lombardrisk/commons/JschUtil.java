@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
@@ -19,11 +22,11 @@ import com.jcraft.jsch.SftpException;
  *
  */
 public class JschUtil {
-
+	final static Logger logger=LoggerFactory.getLogger(JschUtil.class);
 	private static JSch jsch;
 	private static Session session;
 	
-	public static void connect(String user, String passwd, String host, int port) throws JSchException
+	public static Boolean connect(String user, String passwd, String host, int port) throws JSchException
 	{
 		jsch= new JSch();
 		session=jsch.getSession(user, host, port);
@@ -34,16 +37,21 @@ public class JschUtil {
 		session.setConfig(config);
 		session.setTimeout(1500);
 		session.connect();
+		logger.debug("session's connected status:"+session.isConnected());
+		return session.isConnected();
 				
 	}
 	
-	public static void close()
+	public static Boolean close()
 	{
 		session.disconnect();
+		logger.debug("session's connected status:"+session.isConnected());
+		return !session.isConnected();
 	}
 	
-	public static void execCmd(String command) throws JSchException 
+	public static int execCmd(String command) throws JSchException 
 	 {
+		 int retrn=1;//l:error, 0:success
 		 Channel channel = null;
 		 try
 		 {
@@ -63,12 +71,13 @@ public class JschUtil {
 					 {
 						 int i=in.read(tmp,0,1024);
 						 if(i<0)break;
-						 System.out.println(new String(tmp,0,i));
+						 logger.info(new String(tmp,0,i));
 					 }
 					 if(channel.isClosed())
 					 {
 						 if(in.available()>0) continue;
-						 System.out.println("exit-status: " + channel.getExitStatus());
+						 retrn=channel.getExitStatus();
+						 logger.info("remote execute command exit-status: " + retrn);
 						 break;
 					 }
 					 Thread.sleep(1000);
@@ -85,21 +94,34 @@ public class JschUtil {
 		 {
 			 channel.disconnect();
 		 }
-	
+		 return retrn;
 	 }
 	
-	public static void downloadFileToLocal(String src, String dst) throws JSchException, SftpException 
+	public static Boolean downloadFileToLocal(String src, String dst) throws JSchException, SftpException 
 	 {
+		Boolean flag=false;
 		ChannelSftp channelSftp =null;
 		try
 		{
 			channelSftp = (ChannelSftp) session.openChannel("sftp");
 			channelSftp.connect();
-			channelSftp.get(src, dst);
+			if(channelSftp.isConnected())
+			{
+				try
+				 {
+					channelSftp.get(src, dst);
+					flag=true;
+				 }catch(SftpException sftpe)
+				 {
+					 String errorMsg=sftpe.getMessage();
+					 if(errorMsg.contains("No such file"))
+					 {
+						 logger.error("no such file");
+					 }
+				 }
+			}
 			channelSftp.quit();
-		}catch (SftpException e)
-		 {e.printStackTrace();}
-		 catch (JSchException e)
+		}catch (JSchException e)
 		 { e.printStackTrace();} 
 		 catch (Exception e) 
 		 {e.printStackTrace();}
@@ -110,6 +132,7 @@ public class JschUtil {
 				channelSftp.disconnect();
 			}
 		}
+		return flag;
 	 }
 	
 	
