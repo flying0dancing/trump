@@ -68,6 +68,7 @@ public class RetrieveForm extends TestManager{
 	
 	/**
 	 * retrieve Multiple forms<br>
+	 * it suits for AgileREPORTER version greater than or equal 1.15.9<br><br>
 	 * scenario file must contains these columns: retrieveGroup, abortOnFailure, regulator, processDate, run<br>
 	 * scenario file may contains these columns: expiration<br>
 	 * special instruction: when abortOnFailure is null, trump will not click this check box, using its default settings.
