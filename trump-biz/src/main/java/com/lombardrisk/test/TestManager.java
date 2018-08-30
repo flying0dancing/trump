@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.testng.*;
 import org.testng.annotations.*;
 import org.testng.annotations.Parameters;
@@ -40,7 +42,7 @@ public class TestManager extends TestBase implements IComFolder {
 	private static long totalSkip=0;
 	private static long totalFail=0;
 	private static Map<String,String> rerunTestMap=new LinkedHashMap<String,String>();
-	
+	private List<String> dateFormats=Arrays.asList("zh_CN","en_GB","en_US");
 	public ListPage getListPage()
 	{
 		return listPage;
@@ -193,8 +195,8 @@ public class TestManager extends TestBase implements IComFolder {
 	  }
 	  
 	  @BeforeClass(dependsOnMethods="beforeClass")
-	  @Parameters({"indexAppServers", "indexDBServers", "indexToolsetDBServers"})
-	  public void beforeClassInTestManager(ITestContext context, @Optional String indexAppServers, @Optional String indexDBServers, @Optional String indexToolsetDBServers) throws Exception {
+	  @Parameters({"indexAppServers", "indexDBServers", "indexToolsetDBServers", "selectLanguage"})
+	  public void beforeClassInTestManager(ITestContext context, @Optional String indexAppServers, @Optional String indexDBServers, @Optional String indexToolsetDBServers,@Optional String dateFormat) throws Exception {
 		  logger.info(getClass().getName()+" beforeClass-setUpTest running!"); 
 		  indexAppServer=changeStringToInt(indexAppServers,0);
 		  indexDBServer=changeStringToInt(indexDBServers,0);
@@ -207,6 +209,13 @@ public class TestManager extends TestBase implements IComFolder {
 		  super.setTestDataManager(new TestDataManager(indexAppServer, indexDBServer, indexToolsetDBServer));
 		  setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
 		  logger.info("Database Language:"+getDBInfo().getLanguage(getDBInfo().getApplicationServer_UserName()));
+		  if(StringUtils.isNotBlank(dateFormat)){
+				dateFormat=dateFormat.trim();
+				String prop_dateFormat=PropHelper.getProperty("Regional.language");
+				if(!prop_dateFormat.equals(dateFormat) && dateFormats.contains(dateFormat)){
+					System.setProperty("Regional.language",dateFormat);
+				}
+			}
 		  getDBInfo().resetDeActivateDate();
 		  logger.info("reset DeActivateDate to null in database's CFG_RPT_Rets table.");
 		  List<String> regulators=getDBInfo().getRegulatorDescription();

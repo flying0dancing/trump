@@ -575,7 +575,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	}
 
 	/**check download validation rules' file. <br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(ExportValidation)<br><br>
-	 * it suits for AgileREPORTER version less than or equal 1.15.0<br><br>
+	 * it suits for AgileREPORTER version greater than or equal 1.15.0<br><br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
 	 * scenario file may contains these columns: expiration<br>
 	 * @author kun shen
