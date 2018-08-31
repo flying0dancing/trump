@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="../../../../webcore/src/main/resources/locatorBean.xsl"?>
+<locatorBean xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="http://artifactory.london.lombardrisk.com:8081/artifactory/libs-snapshot-local/org/yiwan/webcore/0.0.1-SNAPSHOT/webcore-0.0.1-SNAPSHOT.jar!/locatorBean.xsd">
+    
+    <page id="abstract" name="abstractPage" description="abstractPage created by Kun Shen">
+    	<locator id="abstract.ajaxstatusDlg" type="WebElement" by="xpath" expression="//*[starts-with(@id,'ajaxstatusDlg')]" name="ajaxstatusDlg" description="ajaxstatusDlg"/>
+    	<locator id="abstract.calendar.year" type="WebElement" by="xpath" expression="//div[@id='ui-datepicker-div']/div/div/select[@class='ui-datepicker-year']" name="calendar.year" description="calendar.year"/>
+		<locator id="abstract.calendar.month" type="WebElement" by="xpath" expression="//div[@id='ui-datepicker-div']/div/div/select[@class='ui-datepicker-month']" name="calendar.month" description="calendar.month"/>
+		<locator id="abstract.calendar.day" type="WebElement" by="xpath" expression="//table[@class='ui-datepicker-calendar']/tbody/tr[td/a='?']/td[a='?']/a" name="calendar.day" description="calendar.day"/>
+    	<locator id="abstract.importFileUpload_input" type="WebElement" by="xpath" expression="//input[@id='?:importFileUpload_input']" name="importFileUpload_input" description="importFileUpload_input"/>
+    	<locator id="abstract.errorTextarea" type="WebElement" by="xpath" expression="//textarea[@id='?:errorTextarea']" name="importFileUpload_input" description="importFileUpload_input"/>
+    	<locator id="abstract.importFileUpload" type="WebElement" by="xpath" expression="//div[@id='?:importFileUpload']/div[span='Upload']/span/span[1]" name="importFileUpload" description="importFileUpload(not used)"/>
+    	<locator id="abstract.importFileUploadMessge1" type="WebElement" by="xpath" expression="//div[@id='?:importFileUpload']/div[2]/div/div/ul[li]" name="importFileUploadMessge1" description="importFileUploadMessge1"/>
+    	<locator id="abstract.importFileUploadMessge1Txt" type="WebElement" by="xpath" expression="//div[@id='?:importFileUpload']/div[2]/div/div/ul/li" name="importFileUploadMessge1Txt" description="importFileUploadMessge1Txt"/>
+    	<locator id="abstract.importFileUploadMessge1Detail" type="WebElement" by="xpath" expression="//div[@id='?:importFileUpload']/div[2]/div/div/ul/li[?]/span" name="importFileUploadMessge1Detail" description="importFileUploadMessge1Detail"/>
+    	<locator id="abstract.importFileUploadMessge2" type="WebElement" by="xpath" expression="//div[@id='?:messages']/div/ul[li]" name="importFileUploadMessge2" description="importFileUploadMessge2"/>
+    	<locator id="abstract.importFileUploadMessge2Txt" type="WebElement" by="xpath" expression="//div[@id='?:messages']/div/ul/li" name="importFileUploadMessge2Txt" description="importFileUploadMessge2Txt"/>
+    	<locator id="abstract.importFileUploadMessge2Detail" type="WebElement" by="xpath" expression="//div[@id='?:messages']/div/ul/li[?]/span" name="importFileUploadMessge2Detail" description="importFileUploadMessge2Detail"/>
+    	<locator id="abstract.importFileUploading" type="WebElement" by="xpath" expression="//div[@id='?:importFileUpload']/div[2]/table/tbody[tr]" name="importFileUploading" description="importFileUploading"/>
+    	<locator id="abstract.uploadFileInitToZero" type="WebElement" by="xpath" expression="//*[starts-with(@id,'?:')]/div[ contains(@class,'ui-chkbox-box')][../../span='Initialise to zeros']" name="uploadFileInitToZero" description="uploadFileInitToZero"/>
+        <locator id="abstract.uploadFileInitToZeroChecked" type="WebElement" by="xpath" expression="//*[starts-with(@id,'?:')]/div[ contains(@class,'ui-chkbox-box')][../../span='Initialise to zeros']/span[contains(@class,'ui-icon-check')]" name="uploadFileInitToZeroChecked" description="uploadFileInitToZeroChecked"/>
+       	<locator id="abstract.message" type="WebElement" by="xpath" expression="//*[@id='growl_container']/div/div/div[2]/p" name="message" description="message"/>
+    	<locator id="abstract.messageType" type="WebElement" by="xpath" expression=".//*[@id='growl_container']/div//div/span[contains(@class,'ui-growl-title')]" name="messageType" description="message type"/>
+    	<locator id="abstract.clickDashboard" type="WebElement" by="id" expression="formHeader:errorBarBtn" name="clickDashboard" description="click Dashboard"/>
+    </page>
+    
+    <page id="hm" name="HomePage" description="Home Page">
+    	<locator id="hm.timeoutBar" type="WebElement" by="id" expression="timeoutBar" name="timeoutBar"  description="timeoutBar"/>
+        <locator id="hm.name" type="WebEdit" by="id" expression="loginForm:inputUsername" name="usernameLocator"  description="input user name"/>
+        <locator id="hm.pwd" type="WebEdit" by="id" expression="loginForm:inputPassword" name="passwordLocator"  description="input password"/>
+        <locator id="hm.login" type="WebButton" by="id" expression="loginForm:btnSignIn" name="loginButtonLocator"  description="login button"/>
+        <locator id="hm.pageError" type="WebButton" by="xpath" expression="//*[@id='main-message']/h1" name="pageError"  description="page load error"/>
+        <locator id="hm.message" type="WebElement" by="xpath" expression="//*[@id='loginForm:msgs_container']/div/div/div[2]/p" name="loginMessage" description="longin message"/>
+    </page>
+    
+    <page id="prp" name="PreferencePage" description="Preference Page">
+        <locator id="prp.TZC" type="WebElement" by="id" expression="preferencesForm:timeZoneCheck"  name="preferenceTimeZoneCheckLocator" description="time zone check"/>
+        <locator id="prp.TZS" type="WebEdit" by="id" expression="preferencesForm:selectTimeZone" name="preferneceTimeZoneSelectLocator" description="select time zone"/>
+        <locator id="prp.LC" type="WebElement" by="id" expression="preferencesForm:languageCheck" name="preferenceLanguageCheckLocator" description="language check"/>
+        <locator id="prp.LS" type="WebEdit" by="id" expression="preferencesForm:selectLanguage" name="preferenceLanguageSelectLocator" description="select language"/>
+        <locator id="prp.confirm" type="WebButton" by="id" expression="preferencesForm:confirm" name="preferenceConfirmButtonLocator" description="confirm button"/>
+        <locator id="prp.canel" type="WebButton" by="id" expression="preferencesForm:cancel"  name="preferenceCancelButtonLocator" description="cancal button"/>
+    </page>
+    
+    <page id="fipf" name="formInstPageForm" description="form instance page created by Kun Shen">
+    	<locator id="fipf.lblUserName" type="WebElement" by="xpath" expression=".//*[@id='formHeader:lblUser_button']/span[starts-with(text(),'hi ')]" name="lblUserName" description="lblUserName"/>
+    	<locator id="fipf.lblUser_button" type="WebElement" by="id" expression="formHeader:lblUser_button" name="lblUser_button" description="lblUser_button"/>
+        <locator id="fipf.btnPreferences" type="WebElement" by="id" expression="formHeader:btnPreferences" name="btnPreferences" description="btnPreferences"/>
+        <locator id="fipf.btnLogout" type="WebElement" by="id" expression="formHeader:btnLogout" name="btnLogout" description="btnLogout"/>
+        <locator id="fipf.pageTab" type="WebElement" by="id" expression="formInstPageForm:pagesDataTable_data" name="pageTab" description="page table"/>
+        <locator id="fipf.pageName" type="WebElement" by="xpath" expression="//*[@id='formInstPageForm:pagesDataTable_data']/tr[?]/td/span[@class='pageContent']" name="pageName" description="page name"/>
+    	<locator id="fipf.getCells" type="WebElement" by="xpath" expression="//*[@id='formInstContentForm']/table//td[not(@role)]/div/input[@type!='hidden']|//*[@id='formInstContentForm']/table//td[not(@role)]/div/textarea" name="getCells" description="get Cells"/> 
+    	<locator id="fipf.getOneCell" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']/table//td[not(@role)]/div/input[@type!='hidden'][@id='?']|//*[@id='formInstContentForm']/table//td[not(@role)]/div/textarea[@id='?']" name="getOneCell" description="get one cell"/> 
+   		<locator id="fipf.getGridTbody" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[contains(@id,'formInstContentForm:')]" name="getGridTbody" description="get Grid Tbody"/>   
+        <locator id="fipf.getGridTr" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr" name="getGridTr"  description="get Grid row"/>
+        <locator id="fipf.getGridCells" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td//input|.//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td//textarea" name="getGridCells"  description="get Grid Cells"/>  
+    	<locator id="fipf.getGridCells1st" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td[1]//input" name="getGridCells1st"  description="get first Grid Cells as rowId"/>  
+    	<locator id="fipf.getOneInGridCells" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//input[@id='?']|.//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//textarea[@id='?']" name="getOneInGridCells"  description="get one cell in Grid Cells"/>
+    	
+    	<locator id="fipf.firstPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/span[1]" name="firstPageSta2" description="first page status"/>
+    	<locator id="fipf.nextPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>
+    	<locator id="fipf.instaceTab" type="WebTable" by="xpath" expression="//div[@id='formHeader:currentPageInstance_panel']/div/table/tbody" name="instanceTable" description="instanceTable"/>
+    	<locator id="fipf.instace" type="WebElement" by="xpath" expression="//*[@id='formHeader:currentPageInstance_panel']/div/table/tbody/tr[?]" name="instance" description="instance"/>
+    	<locator id="fipf.curInst" type="WebElement" by="id" expression="formHeader:currentPageInstance_label" name="currentInstance" description="current instance"/>
+    	<locator id="fipf.selectInstace" type="WebElement" by="xpath" expression="//*[@id='formHeader:currentPageInstance_panel']/div/table/tbody/tr[@data-label='?']/td[1]/span[2]" name="select instance" description="select instance"/>
+    	<locator id="fipf.ajaxErrorBtn" type="WebElement" by="xpath" expression="//div[@id='ajaxErrorHandlerDialog']/div/button[contains(span,'Close warning')]" name="ajaxErrorBtn" description="occur ajaxErrorDialog"/>
+    	<locator id="fipf.pageLocalRow" type="WebElement" by="xpath" expression="//*[@id='formInstPageForm:pagesDataTable_data']/tr[?]" name="pageLocalRow" description="page local row"/>
+    	<locator id="fipf.form" type="WebElement" by="xpath" expression=".//*[@id='headerMenu']/div[3]/label[1]" name="regulator" description="form info"/>
+    	<!--<locator id="fipf.message" type="WebElement" by="xpath" expression="//*[@id='growl_container']/div/div/div[2]/p" name="message" description="message"/>  -->
+    	<locator id="fipf.importDlgmodal" type="WebElement" by="id" expression="importFilesDialog_modal" name="importFilesDialog_modal" description="importFilesDialog_modal"/>
+    	<locator id="fipf.close" type="WebElement" by="id" expression="formHeader:closeFormInstanceBtn" name="closeFormInstanceButton" description="close FormInstance Button"/>
+    	<locator id="fipf.formInstContentForm" type="WebElement" by="id" expression="formInstContentForm" name="formInstContentForm" description="formInstContentForm"/>
+    	<locator id="fipf.formInstTitle" type="WebElement" by="xpath" expression="//div[@id='headerMenu']/div[3][label[1]='?'][label[2]='?'][label[3]='?']" name="formInstTitle" description="formInstTitle"/>
+    	<locator id="fipf.formInstTitleLabels" type="WebElement" by="xpath" expression="//div[@id='headerMenu']/div[3]/label" name="formInstTitleLabels" description="formInstTitleLabels (Deprecated)"/>
+    	<locator id="fipf.warnConfirmBtn" type="WebButton" by="id" expression="warnConfirm" name="warnConfirmBtn" description="warnConfirmBtn"/>
+    	<locator id="fipf.adjustmentLogTable_data" type="WebElement" by="xpath" expression="//tbody[@id='formInstDetailFooterTabView:adjustmentLogForm:adjustmentLogTable_data']/tr[contains(td,'No records found')]/td" name="adjustmentLogTable_data" description="adjustmentLogTable_data"/>
+    	<locator id="fipf.adjust_button" type="WebButton" by="id" expression="formHeader:adjust_button" name="adjust_button" description="adjust_button"/>
+    	<locator id="fipf.importAdjustLog" type="WebElement" by="xpath" expression="//a[@id='formHeader:importAdjustLog']/span" name="importAdjustLog" description="Import adjustments"/>
+    	<locator id="fipf.checkAdjustLog" type="WebElement" by="xpath" expression="//a[@id='formHeader:checkAdjustLog']/span" name="checkAdjustLog" description="View adjustment log"/>
+    	<locator id="fipf.exportToFile_button" type="WebButton" by="id" expression="formHeader:exportToFile_button" name="exportToFile_button" description="exportToFile_button"/>
+    	<locator id="fipf.exportToFile_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a[span='?']/span" name="exportToFile_menu" description="exportToFile_menu"/>
+    	<locator id="fipf.exportToFile_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a/span" name="exportToFile_menuList" description="exportToFile_menuList"/>
+    	<locator id="fipf.exportToFile4Fed_button" type="WebButton" by="id" expression="formHeader:exportToFile4Fed_button" name="exportToFile4Fed_button" description="exportToFile4Fed_button"/>
+    	<locator id="fipf.exportToFileOption" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile4Fed_menu']//a[span='?']/span" name="exportToFileOption" description="exportToFileOption"/>
+    	<locator id="fipf.exportToFile_li" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li" name="exportToFile_li" description="exportToFile_li"/>
+    	<locator id="fipf.exportToFile_li_Txt" type="WebElement" by="xpath" expression="//*[@id='formHeader:exportToFile4Fed_menu']/ul/li[?]/a/span" name="exportToFile_li_Txt" description="exportToFile_li_Txt"/>
+    	<locator id="fipf.lockBtn" type="WebButton" by="id" expression="formHeader:lockBtn" name="lockBtn" description="click it to lock form which status is unlock"/>
+    	<locator id="fipf.unlockBtn" type="WebButton" by="id" expression="formHeader:unlockBtn" name="unlockBtn" description="click it to unlock form which status is lock"/>
+    	<locator id="fipf.validateNowBtn" type="WebButton" by="id" expression="formHeader:validateNowBtn" name="validateNow" description="click validate Now Button"/>
+    	<locator id="fipf.doValidationBtn" type="WebButton" by="id" expression="formHeader:doValidationBtn" name="doValidationBtn" description="click Live Validation Button"/>
+    	<locator id="fipf.unDoValidationBtn" type="WebButton" by="id" expression="formHeader:unDoValidationBtn" name="unDoValidationBtn" description="click Live Validation Button"/>
+    	<locator id="fipf.workflow_button" type="WebButton" by="xpath" expression=".//*[@id='formHeader:workflow_button']/span[1]" name="workflow_button" description="workflow_button"/>
+    	<locator id="fipf.workflow_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a[span='?']/span" name="workflow_menu" description="workflow_menu"/>
+    	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a/span" name="workflow_menu" description="workflow_menu"/>
+    	<locator id="fipf.workflow_CommentDialogComments" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/textarea" name="workflow_CommentDialogComment" description="workflow's CommentDialog Comment textarea"/>
+    	<locator id="fipf.workflow_CommentDialogOKs" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/button[span='OK']" name="workflow_CommentDialogOKButton" description="workflow's CommentDialog OK button"/>
+    	<locator id="fipf.validateFails" type="WebElement" by="xpath" expression="//div[span='VALIDATION FAILURE']/span[1]" name="validateFails" description="validation Failure in Pages"/>
+    	
+    </page>
+    
+    <page id="ifd" name="importformdialog" description="import form dialog created by Kun Shen">
+	<locator id="ifd.closeImportFile" type="WebElement" by="xpath" expression="//*[@id='importFilesDialog']/div[1]/a/span" name="closeImportFile" description="closeImportFile"/>
+	</page>
+	
+	<page id="filf" name="formInstanceListForm" description="form Instance List Page(dashboard) created by Kun Shen">
+	<locator id="filf.formInstanceListForm" type="WebElement" by="id" expression="formInstanceListForm" name="formInstanceListForm" description="formInstanceListForm"/>
+    <locator id="filf.exportToFile_button" type="WebButton" by="id" expression="FormInstImpExpMenu:exportToFile_button" name="exportToFile_button" description="exportToFile_button checked by Kun Shen"/>
+    <locator id="filf.exportToFileOption" type="WebElement" by="xpath" expression="//div[@id='FormInstImpExpMenu:exportToFile_menu']//a[span=?]/span" name="exportToFileOption" description="exportToFileOption"/>      
+    <locator id="filf.retrieve" type="WebButton" by="id" expression="FormInstImpExpMenu:retrieve" name="retrieve" description="retrieve button for open retrieve dialog"/>
+    <locator id="filf.retrieveMenu" type="WebButton" by="id" expression="FormInstImpExpMenu:retrieveMenu_button" name="retrieveMenu" description="retrieve menu button for select retrieve functions"/>
+    <locator id="filf.retrieveSingle" type="WebElement" by="xpath" expression="//div[@id='FormInstImpExpMenu:retrieveMenu_menu']/ul/li[1]" name="retrieveSingle" description="retrieve single return"/>
+    <locator id="filf.retrieveMultiple" type="WebElement" by="xpath" expression="//div[@id='FormInstImpExpMenu:retrieveMenu_menu']/ul/li[2]" name="retrieveMultiple" description="retrieve multiple returns"/>
+    
+    <locator id="filf.compute" type="WebButton" by="id" expression="FormInstImpExpMenu:compute" name="compute" description="compute button for open compute dialog"/>
+    <locator id="filf.notification" type="WebElement" by="xpath" expression="//*[@id='formHeader:message-center:message-notification']/span" name="notification" description="notification"/>
+    <locator id="filf.notification_title" type="WebElement" by="xpath" expression="//*[@id='formHeader:message-center:message-data-table']/div[1]" name="notification_title" description="notification"/>
+    <locator id="filf.notification_message" type="WebElement" by="xpath" expression="//*[@id='formHeader:message-center:message-data-table_data']/tr[?]/td[1]/span" name="notification_message" description="notification"/>
+    <locator id="filf.notification_DelIcon" type="WebElement" by="xpath" expression="//*[@id='formHeader:message-center:message-data-table_data']/tr[?]/td[2]/a" name="filf.notification_DelIcon" description="notification"/>
+    <locator id="filf.regulator" type="WebElement" by="id" expression="formFilter:regulator" name="regulator" description="regulator"/>
+    <locator id="filf.selectGroup" type="WebElement" by="id" expression="formFilter:selectGroup" name="selectGroup" description="selectGroup"/>
+    <locator id="filf.selectForm" type="WebElement" by="id" expression="formFilter:selectForm" name="selectForm" description="selectForm"/>
+    <locator id="filf.selectProcessDate" type="WebElement" by="id" expression="formFilter:selectProcessDate" name="selectProcessDate" description="selectProcessDate"/>
+    <locator id="filf.clickFormLinkEntity" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr/td[1]" name="clickFormLinkEntity" description="clickFormLink Entity or Group(deprecated)"/>
+    <locator id="filf.clickFormLinkName" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr/td[2]/a" name="clickFormLinkName" description="clickFormLink formName(deprecated)"/>
+    <locator id="filf.clickFormLink" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[1]/a" name="clickFormLink" description="clickFormLink"/>
+    <locator id="filf.deleteForm" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[last()]/a" name="deleteForm" description="deleteForm"/>
+    <locator id="filf.exportFileLoation" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']//td/a[contains(@id,':exportFileLoation')]/img" name="exportFileLoation" description="exportFileLoation"/>    
+    <locator id="filf.exportFileLoac_OLD" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?']/td[last()-4]/a/img" name="exportFileLoation" description="exportFileLoation OLD"/>    
+    
+    <locator id="filf.selectApproval" type="WebElement" by="id" expression="formInstanceListForm:formInstanceListTable:0:selectApproval" name="selectApproval" description="selectApproval in first row"/>    
+    <locator id="filf.deleteReturnConfirm" type="WebElement" by="id" expression="deleteReturnMessageForm:deleteReturnConfirm" name="deleteReturnConfirm" description="deleteReturnConfirm"/>
+    <locator id="filf.createNew" type="WebButton" by="id" expression="FormInstImpExpMenu:createNew" name="createNew" description="createNew"/>
+    <locator id="filf.createNewEmptyLink" type="WebElement" by="xpath" expression="//*[@id='FormInstImpExpMenu:createFormInstEmpty'][span='Create New']/span" name="createNewEmptyLink" description="createNewEmptyLink"/>
+    <locator id="filf.createNewFromExcelLink" type="WebElement" by="xpath" expression="//*[@id='FormInstImpExpMenu:createFormInstFromExcel'][span='Create from Excel']/span" name="createNewFromExcelLink" description="createNewFromExcelLink"/>
+    <locator id="filf.noRecordsFound" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[contains(td,'No records found')]/td" name="noRecordsFound" description="noRecordsFound"/>
+    <locator id="filf.exportToFile_li" type="WebElement" by="xpath" expression="//*[@id='FormInstImpExpMenu:exportToFile_menu']/ul/li" name="exportToFile_li" description="exportToFile_li"/>
+    <locator id="filf.exportToFile_li_Txt" type="WebElement" by="xpath" expression="//*[@id='FormInstImpExpMenu:exportToFile_menu']/ul/li[?]/a/span" name="exportToFile_li_Txt" description="exportToFile_li_Txt"/>
+    <locator id="filf.jobManager" type="WebButton" by="id" expression="formHeader:jobManager" name="jobManager" description="jobManager"/>
+    <locator id="filf.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/span[1]" name="firstPageSta" description="first page status"/>
+    <locator id="filf.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>	
+    <locator id="filf.FormRow" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?' and @data-ri]" name="FormRow" description="FormRow"/>
+    	
+    </page>
+    
+    <page id="td" name="transmitDialog" description="transmit(export to regulator) Dialog created by Kun Shen">
+    <locator id="td.transmitDialogTitles" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')]/div[1]/span" name="transmitDialogTitles" description="transmitDialogTitles"/>
+	<locator id="td.transmitDialogTitle" type="WebElement" by="xpath" expression="//div[@id='transmitDialog']/div[1]/span" name="transmitDialogTitle" description="transmitDialogTitle"/>
+	<locator id="td.transmitDialog4FedTitle" type="WebElement" by="xpath" expression="//div[@id='transmitDialog4Fed']/div[1]/span" name="transmitDialog4FedTitle" description="transmitDialog4FedTitle"/>
+	<locator id="td.transmitDialog" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')]/div[1][starts-with(span,'?')]" name="transmitDialog" description="transmitDialog"/>
+	<locator id="td.closeTransmitDialog" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')]/div[1][starts-with(span,'?')]/a/span" name="closeTransmitDialog" description="closeTransmitDialog"/>
+    <locator id="td.selectGroup" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectGroup')]" name="selectGroup" description="selectGroup"/>
+    <locator id="td.selectProcessDate" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectProcessDate')]" name="selectProcessDate" description="selectProcessDate"/>
+    <locator id="td.selectFramework" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectFramework')]" name="selectFramework" description="selectFramework"/>
+    <locator id="td.selectTaxonomy" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectTaxonomy')]" name="selectTaxonomy" description="selectTaxonomy"/>
+    <locator id="td.selectModule" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectModule')]" name="selectModule" description="selectModule"/>
+    <locator id="td.compressTypeSelector" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'compressTypeSelector')]" name="compressTypeSelector" description="compressTypeSelector"/>
+    <locator id="td.exportButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit']" name="exportButton" description="exportButton"/>
+    <locator id="td.noRecordsFound" type="WebElement" by="xpath" expression="//tbody[starts-with(@id,'transmitForm')][contains(@id,'formInstanceListTable_data')]/tr[contains(td,'No records found')]/td" name="noRecordsFound" description="noRecordsFound"/>
+    
+    <locator id="td.logButton" type="WebElement" by="xpath" expression="//div[@id='transmitLogDialog']//button[span='OK']" name="logButton" description="logButton"/>
+    <locator id="td.selectCheckBox" type="WebElement" by="xpath" expression=".//*[@id='transmitForm4Fed:formInstanceListTable:0:selectAllCheckbox']/div[2]" name="selectCheckBox" description="selectCheckBox"/>
+    </page>
+    
+    <page id="drcfd" name="deleteReturnCommentForm" description="deleteReturnCommentForm Dialog created by Kun Shen">
+	<locator id="drcfd.deleteComment" type="WebElement" by="id" expression="deleteReturnCommentForm:deleteReturnCommentTxt" name="deleteComnent" description="delete return comment"/>
+    <locator id="drcfd.deleteReturn" type="WebButton" by="id" expression="deleteReturnCommentForm:deleteReturn" name="deleteReturn" description="deleteReturn"/>
+    
+    </page>
+    
+    <page id="ficd" name="formInstanceCreateDialog" description="form Instance Create New Dialog created by Kun Shen">
+	<locator id="ficd.createNewReturnTitle" type="WebElement" by="id" expression="formInstanceCreateDialog_title" name="createNewReturnTitle" description="createNewReturnTitle"/>
+    <locator id="ficd.closeCreateNewReturn" type="WebElement" by="xpath" expression="//*[@id='formInstanceCreateDialog']/div[1]/a/span" name="closeCreateNewReturn" description="closeCreateNewReturn"/>
+    <locator id="ficd.selectForm" type="WebElement" by="id" expression="createForm:selectForm" name="selectForm" description="selectForm"/>
+    <locator id="ficd.selectGroup" type="WebElement" by="id" expression="createForm:selectGroup" name="selectGroup" description="selectGroup"/>
+    <locator id="ficd.selectProcessDate" type="WebElement" by="id" expression="createForm:processDate_input" name="selectProcessDate" description="selectProcessDate"/>
+    <locator id="ficd.cloneCheck" type="WebElement" by="xpath" expression="//*[@id='createForm:cloneCheck']/div[2]" name="cloneCheck" description="cloneCheck"/>
+    <locator id="ficd.selectCloneDate" type="WebElement" by="id" expression="createForm:selectCloneDate" name="selectCloneDate" description="selectCloneDate"/>
+    <locator id="ficd.initToZeroCheck" type="WebElement" by="xpath" expression="//*[@id='createForm:initToZeroCheck']/div[2]" name="initToZeroCheck" description="initToZeroCheck"/>
+    <locator id="ficd.create" type="WebButton" by="id" expression="createForm:createformInstanceBtn" name="createFormInstanceButton" description="createFormInstanceButton"/>
+    <locator id="ficd.cancel" type="WebButton" by="id" expression="createForm:cancel" name="cancelButton" description="cancelButton"/>
+    <locator id="ficd.messages" type="WebElement" by="xpath" expression="//div[@id='createForm:messages']/div/a" name="messages" description="create form messages"/>
+    <locator id="ficd.createconfirm" type="WebElement" by="xpath" expression="//div[@id='createConfirmDialog']/div/button[@id='createconfirm'][span='OK'][not(@aria-disabled)]/span" name="createconfirm" description="createconfirm"/>
+   
+    </page>
+    
+    <page id="cfed" name="createFromExcelDialog" description="createFromExcelDialog created by Kun Shen">
+	<locator id="cfed.createFromExcelDialogTitle" type="WebElement" by="id" expression="createFromExcelDialog_title" name="createFromExcelDialogTitle" description="createFromExcelDialogTitle"/>
+    <locator id="cfed.closeDialog" type="WebElement" by="xpath" expression="//*[@id='createFromExcelDialog']/div[1]/a" name="closeDialog" description="closeDialog"/>
+    <locator id="cfed.listimportBtn" type="WebButton" by="id" expression="?:listimportBtn" name="listimportBtn" description="listimportBtn"/>
+    <locator id="cfed.confirmBtn" type="WebButton" by="id" expression="createInformForm:confirmBtn" name="confirmBtn" description="confirmBtn"/>
+    <locator id="cfed.replaceconfirm" type="WebElement" by="xpath" expression="//div[@id='?ConfirmDialog'][div[@style]]//button[@id='replaceconfirm']" name="replaceconfirm" description="replaceconfirm"/>
+    <locator id="cfed.uploadFileName" type="WebButton" by="id" expression="?:listuploadedFileName" name="uploadFileName" description="uploadFileName"/>
+    <locator id="cfed.applayScale" type="WebElement" by="xpath" expression=".//*[@id='?:applyScaleRadio']//div[div/input[@value='?']]" name="applayScale" description="applayScale"/>  	
+    </page>
+    
+    <page id="aifd" name="adjustmentsImportFilesDialog" description="adjustmentsImportFilesDialog created by Kun Shen">
+	<locator id="aifd.importFilesDialogTitle" type="WebElement" by="id" expression="importFilesDialog_title" name="importFilesDialogTitle" description="importFilesDialogTitle"/>
+    <locator id="aifd.closeDialog" type="WebElement" by="xpath" expression="//div[@id='importFilesDialog']/div[1]/a/span" name="closeDialog" description="closeDialog"/>
+    <locator id="aifd.importBtn" type="WebButton" by="id" expression="?:importBtn" name="importBtn" description="importBtn"/>
+    <locator id="aifd.uploadFileName" type="WebButton" by="id" expression="?:uploadedFileName" name="uploadFileName" description="uploadFileName"/>
+    <locator id="aifd.importMode" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//div[div/input[@value='?']]" name="importMode" description="importMode(Override, Additive)"/>
+        
+    </page>
+    
+    <page id="fird" name="formInstanceRetrieveDialog" description="RetrieveDialog created by Kun Shen">
+	<locator id="fird.title" type="WebElement" by="id" expression="formInstanceRetrieveDialog_title" name="formInstanceRetrieveDialog_title" description="formInstanceRetrieveDialog_title"/>
+    <locator id="fird.closeDialog" type="WebElement" by="xpath" expression="//*[@id='formInstanceRetrieveDialog']/div[1]/a" name="closeDialog" description="closeDialog"/>
+    <locator id="fird.selectForm" type="WebElement" by="id" expression="retrieveForm:selectForm" name="selectForm" description="selectForm"/>
+    <locator id="fird.selectGroup" type="WebElement" by="id" expression="retrieveForm:selectGroup" name="selectGroup" description="selectGroup"/>
+    <locator id="fird.selectProcessDate" type="WebElement" by="id" expression="retrieveForm:referenceDate_input" name="selectProcessDate" description="selectProcessDate"/>
+    <locator id="fird.selectLogLevel" type="WebElement" by="id" expression="retrieveForm:selectLogLevel" name="selectLogLevel" description="selectLogLevel"/>
+    <locator id="fird.ok" type="WebElement" by="xpath" expression=".//form[@id='retrieveForm']//button[span='OK']" name="okButton" description="okButton"/>
+    <locator id="fird.cancel" type="WebButton" by="id" expression="retrieveForm:cancel" name="cancelButton" description="cancelButton"/>
+    <locator id="fird.messages" type="WebElement" by="xpath" expression="//div[@id='retrieveForm:retrievemessages']/div/a" name="messages" description="form messages"/>	
+    <locator id="fird.messagesDetail" type="WebElement" by="xpath" expression="//div[@id='retrieveForm:retrievemessages']/div//li/span" name="messages_details" description="form messages"/>	
+    <locator id="fird.translate" type="WebElement" by="xpath" expression="//tr[td/label='Translate']/td[1]" name="translateCheckbox" description="click Translate checkbox"/>	
+    <locator id="fird.preserveAdjustments" type="WebElement" by="xpath" expression="//tr[td/label='Preserve adjustments']/td[1]" name="PreserveAdjustmentsCheckbox" description="click Preserve adjustments checkbox"/>
+    </page>
+    
+    <page id="jrd" name="jobResultDialog" description="jobResultDialog created by Kun Shen">
+	<locator id="jrd.title" type="WebElement" by="id" expression="jobResultDialog_title" name="jobResultDialog_title" description="jobResultDialog_title"/>
+    <locator id="jrd.startedTimeLabel" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']//form//td[contains(label,'Started:')]//label[1]" name="startedTime" description="startedTime"/>
+    <locator id="jrd.closeDialog" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']/div[1]/a" name="closeDialog" description="closeDialog"/>
+    <locator id="jrd.ok" type="WebButton" by="id" expression="jobResultForm:ok" name="okButton" description="okButton"/>
+    </page>
+    
+    <page id="fjmlf" name="formJobManagerListForm" description="formJobManagerListForm created by Kun Shen">
+	<locator id="fjmlf.formJobManagerListTable" type="WebElement" by="id" expression="formJobManagerListForm:formJobManagerListTable" name="formJobManagerListTable" description="formJobManagerListTable"/>
+    <locator id="fjmlf.backToDashBoard" type="WebElement" by="id" expression="formJobManagerHeadingsBar:errorBarBtn" name="backToDashBoard" description="backToDashBoard"/>
+    <locator id="fjmlf.closeDialog" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']/div[1]/a" name="closeDialog" description="closeDialog"/>
+    <locator id="fjmlf.ok" type="WebButton" by="id" expression="jobResultForm:ok" name="okButton" description="okButton"/>
+    </page>
+    
+    <page id="ficmptd" name="formInstanceComputeDialog" description="ComputeDialog created by Kun Shen">
+	<locator id="ficmptd.title" type="WebElement" by="id" expression="formInstanceComputeDialog_title" name="formInstanceComputeDialog_title" description="formInstanceComputeDialog_title"/>
+    <locator id="ficmptd.closeDialog" type="WebElement" by="xpath" expression="//*[@id='formInstanceComputeDialog']/div[1]/a" name="closeDialog" description="closeDialog"/>
+    <locator id="ficmptd.selectForm" type="WebElement" by="id" expression="computeForm:selectForm" name="selectForm" description="selectForm"/>
+    <locator id="ficmptd.selectGroup" type="WebElement" by="id" expression="computeForm:selectGroup" name="selectGroup" description="selectGroup"/>
+    <locator id="ficmptd.selectProcessDate" type="WebElement" by="id" expression="computeForm:processDate_input" name="selectProcessDate" description="selectProcessDate"/>
+    <locator id="ficmptd.ok" type="WebButton" by="id" expression="computeForm:compute" name="okButton" description="okButton"/>
+    <locator id="ficmptd.cancel" type="WebButton" by="id" expression="computeForm:cancel" name="cancelButton" description="cancelButton"/>
+    <locator id="ficmptd.messages" type="WebElement" by="xpath" expression="//div[@id='computeForm:computemessages']/div/a" name="messages" description="create form messages"/>	
+    <locator id="ficmptd.computeConfirm" type="WebElement" by="xpath" expression="//div[@id='computeConfirmDialog']/div/button[@id='computeConfirm'][span='OK'][not(@aria-disabled)]/span" name="computeConfirm" description="computeConfirm"/>
+    <locator id="ficmptd.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/span[1]" name="firstPageSta" description="first page status"/>
+    <locator id="ficmptd.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>	
+   
+    <locator id="ficmptd.getStatus" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatus" description="getStatus"/>
+    <locator id="ficmptd.getStatusAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatusAR1153" description="getStatus"/>
+    <locator id="ficmptd.getstartDate" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDate" description="getstartDate"/>
+    <locator id="ficmptd.getstartDateAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDateAR1153" description="getstartDate"/>
+    <locator id="ficmptd.getStatusMessage" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[8]" name="getStatusMessage" description="getStatusMessage"/>
+    <locator id="ficmptd.getStatusMessageAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[8]" name="getStatusMessageAR1153" description="getStatusMessage"/>
+    
+    
+    </page>
+    
+    <page id="fidf" name="formInstDetailFooterTabView" description="form instance bottom page created by Kun Shen">
+	<locator id="fidf.bottomPage" type="WebElement" by="id" expression="formInstDetailFooterTabView" name="formInstDetailFooterTabView" description="formInstDetailFooterTabView"/>
+    <locator id="fidf.linkTab" type="WebElement" by="linkText" expression="?" name="linkTab" description="link Tab in left panel" />
+    <locator id="fidf.linkText" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//a[text()='?']" name="linkText" description="link Tab(text) in left panel" />
+    <locator id="fidf.export" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//a[@title='Export']" name="export" description="export in buttom page" />
+    <locator id="fidf.noRecordsFound" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//tr//td[starts-with(text(),'No records found')]" name="noRecordsFound" description="no Records Found" />
+    <locator id="fidf.close" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//img[contains(@id,'minimizeArro')]" name="closeButtomPage" description="close buttom page" />
+   
+    </page>
+    
+     <page id="wkld" name="workflowLogDialog" description="workflow Log Dialog created by Kun Shen">
+    <locator id="wkld.title" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog_title']" name="workflowLogTitle" description="workflowLogTitle"/>
+	<locator id="wkld.close" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']/div[1]/a/span" name="closeworkflowLog" description="closeworkflowLog"/>
+    <locator id="wkld.initToZeroCheck" type="WebElement" by="id" expression="workflowLogForm:initToZeroCheck" name="initToZeroCheck" description="initToZeroCheck"/>
+    <locator id="wkld.dataRow" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']//tbody[contains(@id,'workflowLogTable_data')]//tr" name="logdata" description="log data rows"/>
+    <locator id="wkld.dataCol" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']//tbody[contains(@id,'workflowLogTable_data')]//tr/td" name="logdataCols" description="log data columns"/>
+    <locator id="wkld.data" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']//tbody[contains(@id,'workflowLogTable_data')]//tr[?]/td[?]" name="logdata" description="log data"/>
+    <locator id="wkld.noRecordsFound" type="WebElement" by="xpath" expression=".//*[@id='workflowLogDialog']//tr/td[contains(text(),'No records found')]" name="noRecordsFound" description="noRecordsFound"/>
+    	
+    </page>
+    
+    <page id="wkacf" name="workflowApproveCommentForm" description="workflowApproveCommentForm Dialog created by Kun Shen">
+	<locator id="wkacf.Comment" type="WebElement" by="id" expression="approveCommentForm:approveCommentTextarea" name="Comnent" description="comment"/>
+    <locator id="wkacf.ok" type="WebButton" by="id" expression="approveCommentForm:addApproveComment" name="ok" description="ok"/>
+    </page>
+    
+    <page id="efld" name="exportedFileLocationDialog" description="exportedFileLocationDialog created by Kun Shen">
+	<locator id="efld.title" type="WebElement" by="id" expression="exportedFileLocationDlg_title" name="exportedFileLocationDlg_title" description="exportedFileLocationDlg_title"/>
+    <locator id="efld.exportedFilePath" type="WebElement" by="xpath" expression=".//*[@id='exportedFileLocationDlg']//form//label[@id='exportedFileLocationForm:exportedFilePath']" name="exportedFilePath" description="exportedFilePath"/>
+    <locator id="efld.ok" type="WebButton" by="id" expression="exportedFileLocationForm:exportedFileOk" name="okButton" description="okButton"/>
+    </page>
+    
+    <page id="fscd" name="forceSubmitCommonDialog" description="forceSubmitCommonDialog created by Kun Shen on AR1.15.7">
+	<locator id="fscd.title" type="WebElement" by="id" expression="forceSubmitCommonDialog_title" name="forceSubmitCommonDialog_title" description="forceSubmitCommonDialog_title"/>
+    <locator id="fscd.commentTextarea" type="WebElement" by="id" expression="forceSubmitCommonForm:commentTextarea" name="commentTextarea" description="commentTextarea"/>
+    <locator id="fscd.submit" type="WebButton" by="id" expression="forceSubmitCommonForm:exportStreamBtn" name="submitButton" description="submitButton"/>
+    <locator id="fscd.DataSchedulesubmit" type="WebButton" by="id" expression="forceSubmitCommonForm:exportJobBtn" name="submitButton" description="submitButton"/>
+    <locator id="fscd.cancel" type="WebButton" by="id" expression="forceSubmitCommonForm:cancelBtn" name="cancelButton" description="cancelButton"/>
+    </page>
+    
+    <page id="uolwd" name="lockWarningDialog" description="unlockorlockWarningDialog created by Kun Shen">
+	<locator id="uolwd.title" type="WebElement" by="xpath" expression=".//*[contains(@id,'lockWarningDialog_title')]" name="lockWarningDialog_title" description="lockWarningDialog_title"/>
+    <locator id="uolwd.Comment" type="WebElement" by="xpath" expression=".//*[contains(@id,'lockWarningDialog')]//textarea[string-length(@class)=0]" name="Comnent" description="comment"/>
+    <locator id="uolwd.ok" type="WebElement" by="xpath" expression=".//*[contains(@id,'lockWarningDialog')]//button[@type='submit']" name="ok" description="ok"/>
+    <locator id="uolwd.cancel" type="WebElement" by="xpath" expression=".//*[contains(@id,'lockWarningDialog')]//button[@type='button' and span='Cancel']" name="cancel" description="cancel"/>
+    </page>
+    
+    <page id="ulwd" name="unlockWarningDialog" description="unlockWarningDialog created by Kun Shen">
+	<locator id="ulwd.title" type="WebElement" by="id" expression="unlockWarningDialog_title" name="unlockWarningDialog_title" description="unlockWarningDialog_title"/>
+    <locator id="ulwd.Comment" type="WebElement" by="xpath" expression=".//*[@id='unlockWarningDialog']//textarea[contains(@id,'unlockMsgText')]" name="Comnent" description="comment"/>
+    <locator id="ulwd.ok" type="WebElement" by="xpath" expression=".//*[@id='unlockWarningDialog']//button[@type='submit']" name="ok" description="ok"/>
+    <locator id="ulwd.cancel" type="WebElement" by="xpath" expression=".//*[@id='unlockWarningDialog']//button[@type='button' and span='Cancel']" name="cancel" description="cancel"/>
+    </page>
+	
+	<page id="egfp" name="executionGroupsFormPage" description="executionGroupsForm created by Kun Shen">
+	<locator id="egfp.title" type="WebElement" by="id" expression="executionGroupsForm" name="executionGroupsForm" description="Execution Groups table"/>
+    <locator id="egfp.runAGroup" type="WebElement" by="xpath" expression=".//div[@id='executionGroupsForm:executionGroupTable']//tr[td/span='?']/td[3]//img" name="ExecutedAGroup" description="Executed selected Group"/>
+    </page>
+    
+    <page id="egrd" name="executionGroupRunDialog" description="unlockWarningDialog created by Kun Shen">
+	<locator id="egrd.title" type="WebElement" by="id" expression="executionGroupRunDialog_title" name="executionGroupRunDialog_title" description="executionGroupRunDialog_title"/>
+    <locator id="egrd.referenceDate" type="WebElement" by="id" expression="executionGroupRunDialogForm:referenceDate_input" name="referenceProcessDate" description="reference Process Date"/>
+    <locator id="egrd.abortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-state-active')]/span" name="AbortOnFailure" description="Abort on failure"/>
+    <locator id="egrd.tickAbortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-chkbox-box')]/span" name="tickAbortOnFail" description="tick Abort on failure"/>
+    <locator id="egrd.ok" type="WebElement" by="id" expression="executionGroupRunDialogForm:save" name="run" description="run"/>
+    <locator id="egrd.cancel" type="WebElement" by="id" expression="executionGroupRunDialogForm:cancel" name="cancel" description="cancel button"/>
+    </page>
+    
+</locatorBean>

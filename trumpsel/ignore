@@ -1,7 +1,0 @@
-src
-suites
-.bat
-ignore
-target\result
-target\test-classes\test.properties
-test-output

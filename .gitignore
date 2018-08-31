@@ -1,5 +1,5 @@
 public
-suites
+suite
 target
 test-output
 /src
@@ -40,6 +40,8 @@ Thumbs.db
 #.swp
 *.*~
 ~*.*
+ignore
+${resultFolder}
 
 
 
