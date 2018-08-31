@@ -337,11 +337,11 @@ public static void writeFormToXml(String identifer,Form form,String xmlFileStr,S
 }
 
 /**
- * 
+ * sort xml content with ignore attributes and ignore elements.
  * @param fileFullName
  * @param ignoreAttributes
  * @param ignoreElements
- * @return sorted file's full name
+ * @return sorted file's full name with "_sort" suffix.
  */
 public static String sortXmlContentToNewFileByName(String fileFullName,List<String> ignoreAttributes,List<String> ignoreElements,String newFilePath)
 {
@@ -357,15 +357,7 @@ public static String sortXmlContentToNewFileByName(String fileFullName,List<Stri
 		Document docNew=DocumentHelper.createDocument();
 		//add new element as root
 		Element rootNew=docNew.addElement(root.getName());
-		@SuppressWarnings("unchecked")
-		List<Attribute> attributes=root.attributes();
-		for(Attribute attr:attributes)
-		{
-			if(!ignoreAttributes.contains(attr.getName()))
-			{
-				rootNew.addAttribute(attr.getName(), attr.getValue());
-			}
-		}
+		
 		sortXmlElementByName(root,rootNew,ignoreAttributes,ignoreElements);
 		newFileFullName=FileUtil.createNewFileWithSuffix(fileFullName,"_sort",newFilePath);
 		writeDocumentToXml(docNew,newFileFullName);
@@ -384,37 +376,74 @@ public static String sortXmlContentToNewFileByName(String fileFullName,List<Stri
  */
 public static void sortXmlElementByName(Element element,Element elementNew,List<String> ignoreAttributes,List<String> ignoreElements)
 {
-	@SuppressWarnings("unchecked")
-	List<Element> list=element.elements();
-	if(list!=null && list.size()!=0)
-	{
-		Collections.sort(list, new Comparator<Element>(){
-			public int compare(Element o1, Element o2) {
-				return o1.getName().compareToIgnoreCase(o2.getName());
-			}
-		});
-	}
-	for(Element ele:list)
-	{
-		if(ignoreElements.contains(ele.getName()))
-		{continue;}
-		//add new element and attributes
-		Element eleNew=elementNew.addElement(ele.getName());
+	Element eleNew;
+	if(!ignoreElements.contains(element.getName())){
+		eleNew=elementNew.addElement(element.getName());
+		eleNew.addText(element.getText());
 		@SuppressWarnings("unchecked")
-		List<Attribute> attributes=ele.attributes();
-		for(Attribute attr:attributes)
+		List<Attribute> attrs=element.attributes();
+		List<Attribute> attrsNew=new ArrayList<Attribute>();
+		for(Attribute attr:attrs)
 		{
 			if(!ignoreAttributes.contains(attr.getName()))
 			{
+				attrsNew.add(attr);
+			}
+		}
+		if(attrsNew.size()>0){
+			Collections.sort(attrsNew, new Comparator<Attribute>(){
+				public int compare(Attribute o1, Attribute o2) {
+					return o1.getName().compareToIgnoreCase(o2.getName());
+				}
+			});
+			for(Attribute attr:attrsNew){
 				eleNew.addAttribute(attr.getName(), attr.getValue());
 			}
 		}
-		eleNew.addText(ele.getText());
 		
-		sortXmlElementByName(ele,eleNew,ignoreAttributes,ignoreElements);
+		@SuppressWarnings("unchecked")
+		List<Element> list=element.elements();
+		if(list!=null && list.size()>0)
+		{
+			Collections.sort(list, new Comparator<Element>(){
+				public int compare(Element o1, Element o2) {
+					int flag=o1.getName().compareToIgnoreCase(o2.getName());
+					if(flag==0){
+						@SuppressWarnings("unchecked")
+						List<Attribute> o1Attrs=o1.attributes();
+						@SuppressWarnings("unchecked")
+						List<Attribute> o2Attrs=o2.attributes();
+						sortAttributes(o1Attrs);
+						sortAttributes(o2Attrs);
+						//sorted by first attribute's value if element are same
+						if(o1Attrs.size()>0 && o2Attrs.size()>0){
+							flag=o1Attrs.get(0).getValue().compareToIgnoreCase(o2Attrs.get(0).getValue());
+						}
+					}
+					return flag;
+				}
+			});
+		}
+		
+		for(Element ele:list)
+		{
+			sortXmlElementByName(ele,eleNew,ignoreAttributes,ignoreElements);
+		}
 	}
 	
+	
 	return ;
+}
+
+public static void sortAttributes(List<Attribute> attrs){
+	if(attrs!=null && attrs.size()>0){
+		Collections.sort(attrs, new Comparator<Attribute>(){
+			public int compare(Attribute o1, Attribute o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
+		
+	}
 }
 
 }
