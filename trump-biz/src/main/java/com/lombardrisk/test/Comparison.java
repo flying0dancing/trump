@@ -543,7 +543,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		return returnStatus;
 	}
 	
-	private static String getReturnStatus(String cmdLine)
+	public static String getReturnStatus(String cmdLine)
 	{
 		String returnStatus=null;
 		BufferedReader input=null;
