@@ -87,6 +87,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			}
 			if(flag && liTxt!=null)
 			{
+				logger.info("select "+liTxt);
 				String js = "document.getElementById('FormInstImpExpMenu:exportToFile_menu').getElementsByTagName('ul')[0].getElementsByTagName('li')["+String.valueOf(i-1)+"].getElementsByTagName('a')[0].getElementsByTagName('span')[0].click();";
 				executeScript(js);
 				loadingDlg();

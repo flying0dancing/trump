@@ -2,6 +2,8 @@ package com.lombardrisk.testcase;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -14,6 +16,7 @@ import com.lombardrisk.test.TestManager;
 import com.lombardrisk.test.pojo.Form;
 
 public class ExportToRegulator extends TestManager implements IExecFuncFolder{
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**
 	 * click export to regulator button in opened form instance, and then export download file, and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
@@ -181,7 +184,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	 * click export to regulator button in opened form instance, and then export download file(lock form before, and then unlock form), and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
 	 * scenario file may contains these columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
-	 * special instruction: when Transmission.module are contains many modules, Transmission.fileType is essential.
+	 * <b>special instruction</b>: when Transmission.module are contains many modules, Transmission.fileType is essential. more files in expectationFile are joined by semicolon(;), the name of return FRY2052A's expected files have to end with COMMENT.xml or combine.xml, the name of other returns's expected files have to contains <i>returnName_returnVersion</i>.
+	 * 
 	 * @author kun shen
 	 * @param form
 	 */

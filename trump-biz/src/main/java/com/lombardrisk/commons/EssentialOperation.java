@@ -9,7 +9,7 @@ public class EssentialOperation {
 	 * @param path
 	 * @return
 	 */
-	public static String removeFileSeparator(String path)
+	public static String removeLastFileSeparator(String path)
 	{
 		if(path.endsWith("/") || path.endsWith("\\"))
 		{

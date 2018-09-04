@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.*;
 import org.testng.annotations.*;
 import org.testng.annotations.Parameters;
@@ -30,7 +32,7 @@ import com.lombardrisk.test.pojo.Form;
 
 
 public class TestManager extends TestBase implements IComFolder {
-	
+	private final Logger logger = LoggerFactory.getLogger(TestManager.class);
 	private ListPage listPage;
 	private  int indexAppServer;
 	private  int indexDBServer;

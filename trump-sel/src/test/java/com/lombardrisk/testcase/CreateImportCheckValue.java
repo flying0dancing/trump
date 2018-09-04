@@ -1,6 +1,8 @@
 package com.lombardrisk.testcase;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -16,6 +18,7 @@ import com.lombardrisk.test.TestManager;
 import com.lombardrisk.test.pojo.Form;
 
 public class CreateImportCheckValue extends TestManager implements IExecFuncFolder{
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**create new form with deleted existent or not, and then import adjustment, check some values in UI at last<br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile, expectationFile<br>
 	 * scenario file may contains these columns: deleteExistent, expiration, cloneData, initToZero<br>

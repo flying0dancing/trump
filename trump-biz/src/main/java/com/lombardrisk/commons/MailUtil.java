@@ -165,18 +165,19 @@ public class MailUtil {
         if(StringUtils.isNotBlank(PropHelper.getProperty("mail.subject.prefix")))
         {
         	subject=PropHelper.getProperty("mail.subject.prefix");
-        	if(resultPath!=null)
-        	{
-        		int i=StringUtils.lastIndexOfAny(resultPath, "/","\\");
-        		if(i!=-1)
-        		{
-        			subject=PropHelper.getProperty("mail.subject.prefix")+resultPath.substring(i+1);
-        		}
-        	}
         }else
         {
-        	subject="trump result";
+        	subject="trump result:";
         }
+        if(resultPath!=null)
+    	{
+        	resultPath=EssentialOperation.removeLastFileSeparator(resultPath);
+    		int i=StringUtils.lastIndexOfAny(resultPath, "/","\\");
+    		if(i!=-1)
+    		{
+    			subject+=resultPath.substring(i+1);
+    		}
+    	}
         if(rerunFlag)
 		{
         	subject+="(rerun)";
