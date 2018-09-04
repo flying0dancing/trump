@@ -1062,7 +1062,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		loadingDlg();
 		String title=null;
 		String fileType=form.getTransmission().getFileType();
-
+		
 		String liTxt=null;
 		flag=false;//reset flag for finding matched Export to something
 		int count=element("fipf.exportToFile_li").getNumberOfMatches();
@@ -1094,6 +1094,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		}
 		if(flag && liTxt!=null) //found matched Export to something
 		{
+			logger.info("select "+liTxt);
 			String js = "document.getElementById('formHeader:exportToFile4Fed_menu').getElementsByTagName('ul')[0].getElementsByTagName('li')["+String.valueOf(i-1)+"].getElementsByTagName('a')[0].getElementsByTagName('span')[0].click();";
 			executeScript(js);
 			if(liTxt.toUpperCase().contains("XBRL")){waitThat().timeout(2000);}

@@ -1,5 +1,7 @@
 package com.lombardrisk.testcase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -11,7 +13,7 @@ import com.lombardrisk.test.TestManager;
 import com.lombardrisk.test.pojo.Form;
 
 public class RetrieveForm extends TestManager{
-
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**
 	 * retrieve form<br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, deleteExistent, translate<br>

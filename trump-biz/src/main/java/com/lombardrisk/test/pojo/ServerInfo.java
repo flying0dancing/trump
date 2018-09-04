@@ -68,7 +68,7 @@ public class ServerInfo{
 			{
 				setHost(serverInfoArr[0]);
 				setPort(StringUtils.isBlank(serverInfoArr[1])?-1:Integer.parseInt(serverInfoArr[1]));
-				String downloadPath=EssentialOperation.removeFileSeparator(serverInfoArr[2]);
+				String downloadPath=EssentialOperation.removeLastFileSeparator(serverInfoArr[2]);
 				setDownloadPath(downloadPath);
 				if(serverInfoArr.length>=5)
 				{

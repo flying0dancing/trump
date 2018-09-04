@@ -1,6 +1,8 @@
 package com.lombardrisk.testcase;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -15,7 +17,7 @@ import com.lombardrisk.test.TestManager;
 import com.lombardrisk.test.pojo.Form;
 
 public class CreateImportPrecision extends TestManager implements IExecFuncFolder{
-
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**create new form, and then import adjustment, check some values in UI , if these values are checked as pass or fail, not as error, then all values in UI will be checked.<br>
 	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile, expectationFile<br>
 	 * scenario file may contains these columns: deleteExistent, expiration, cloneData, initToZero<br>

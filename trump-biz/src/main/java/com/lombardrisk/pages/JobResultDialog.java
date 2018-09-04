@@ -60,10 +60,10 @@ public class JobResultDialog extends AbstractPage {
 				waitThat("jrd.title").toBeInvisible();
 				loadingDlg();
 			}*/
-			loadingDlg();
+			loadingDlg(5000);
 			element("jrd.ok").click();
 			waitThat("jrd.title").toBeInvisible();
-			loadingDlg();
+			loadingDlg(3000);
 			
 		}
 		return jobStartTimeLabel;

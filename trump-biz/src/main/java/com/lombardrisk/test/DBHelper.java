@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DBHelper
 {
-	private final static Logger logger = LoggerFactory.getLogger(DBHelper.class);
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	private String dbms;
 	private String dbmsDriver;
 	private String host;

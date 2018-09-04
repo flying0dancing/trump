@@ -2,6 +2,8 @@ package com.lombardrisk.testcase;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -15,7 +17,7 @@ import com.lombardrisk.test.TestManager;
 import com.lombardrisk.test.pojo.Form;
 
 public class CheckValue extends TestManager implements IExecFuncFolder{
-
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**
 	 * check form exists or not
 	 * @author kun shen

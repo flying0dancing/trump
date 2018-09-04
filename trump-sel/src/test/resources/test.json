@@ -32,10 +32,10 @@
         {
       	"id": 8,
         "name": "fed",
-        "url": "http://sha-com-qa-3:8089",
+        "url": "http://172.20.31.7:8089",
         "username": "admin",
         "password": "password",
-        "key": "sha-com-qa-3:22:/home/test/export/:test:password"
+        "key": "172.20.31.7:22:/home/test/export/:test:password"
       },
       {
       	"id": 9,
