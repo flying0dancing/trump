@@ -17,7 +17,7 @@ import com.lombardrisk.test.IExecFuncFolder;
 public class TestSortXML implements IExecFuncFolder{
 	private final static Logger logger = LoggerFactory.getLogger(TestSortXML.class);
 	
-	@Test
+	//@Test
 	public void checkFormExist() throws Exception
 	{
 		logger.info("testing FFIEC030S for solving same element sorted issue, sorted by first attribute's value if element are same");
