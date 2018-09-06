@@ -134,11 +134,24 @@ public abstract class AbstractPage extends PageBase
 		File realFile = new File(path);
 		if (realFile.isDirectory())
 		{
-			final String prefixFilter=filterStr.substring(0, filterStr.indexOf("*"));
-			final String suffixFilter=filterStr.substring(filterStr.indexOf("*")+1);
+			//final String prefixFilter=filterStr.substring(0, filterStr.indexOf("*"));
+			//final String suffixFilter=filterStr.substring(filterStr.indexOf("*")+1);
+			final String[] fileters=filterStr.split("\\*");
 			File[] subfiles = realFile.listFiles(new FilenameFilter(){
-	             public boolean accept(File f , String name){ 
-	                 return name.startsWith(prefixFilter) && name.endsWith(suffixFilter);}  
+	             public boolean accept(File dir , String name){ 
+	            	 boolean flag=true;
+	 				if(new File(dir,name).isDirectory()){
+	 					return flag;
+	 				}
+	 				for(String filter:fileters)
+	 				{
+	 					if(!name.toLowerCase().contains(filter.toLowerCase())) {
+	 						flag=false;
+	 						break;
+	 						}
+	 				}
+	 				return flag;
+	             }  
 	                });
 			for (File file : subfiles)
 			{
