@@ -417,7 +417,18 @@ public static void sortXmlElementByName(Element element,Element elementNew,List<
 						sortAttributes(o2Attrs);
 						//sorted by first attribute's value if element are same
 						if(o1Attrs.size()>0 && o2Attrs.size()>0){
-							flag=o1Attrs.get(0).getValue().compareToIgnoreCase(o2Attrs.get(0).getValue());
+							if(o1Attrs.size()==o2Attrs.size()){
+								int flagT=0;
+								for(int i=0;i<o1Attrs.size();i++){
+									flagT=o1Attrs.get(i).getValue().compareToIgnoreCase(o2Attrs.get(i).getValue());
+									if(flagT!=0){
+										flag=flagT;
+										break;
+									}
+								}
+							}else{
+								flag=o1Attrs.get(0).getValue().compareToIgnoreCase(o2Attrs.get(0).getValue());
+							}
 						}
 					}
 					return flag;

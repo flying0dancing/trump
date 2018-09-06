@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -630,47 +631,46 @@ public class FileUtil extends FileUtils
 		
 		try {
 			exportReader=new BufferedReader(new FileReader(exportFile));
+			//adding "" for empty one, like AUTHOFF,1,TEST,, -> AUTHOFF,1,TEST,"",""
 			while(baselineStr.matches(".*,,.*"))
 			{
 				baselineStr=baselineStr.replaceAll(",,", ",\"\",");
 			}
 			baselineStr=baselineStr.substring(baselineStr.length()-1).equals(",")?baselineStr.concat("\"\""):baselineStr;
+			//adding "" for all items in one line of a csv
 			String[] baselineStrArray=null;
-			if(baselineStr.matches("[A-Za-z0-9].*"))
-			{
-				baselineStrArray=baselineStr.split(",");
-				baselineStrArray[0]="\""+baselineStrArray[0]+"\"";
-				if(!baselineStrArray[1].matches("\".*\""))
-				{
-					baselineStrArray[1]="\""+baselineStrArray[1]+"\"";
+			baselineStrArray=baselineStr.split(",");
+			List<String> newBaselineStrList=new ArrayList<String>();
+			for(int i=0;i<baselineStrArray.length;i++){
+				int starcount=StringUtils.countMatches(baselineStrArray[i],"\"");
+				if(starcount>0){
+					if(starcount%2==1){
+						String temp=baselineStrArray[i];
+						int j=i+1;
+						for(;j<baselineStrArray.length;j++){
+							int startcount2=StringUtils.countMatches(baselineStrArray[j],"\"");
+							temp+=","+baselineStrArray[j];
+							i++;
+							if(startcount2%2==1){
+								newBaselineStrList.add(temp);
+								break;
+							}							
+						}
+					}else{
+						newBaselineStrList.add(baselineStrArray[i]);
+					}
+				}else{
+					baselineStrArray[i]="\""+baselineStrArray[i]+"\"";
+					newBaselineStrList.add(baselineStrArray[i]);
 				}
-				
-				if(baselineStrArray[baselineStrArray.length-1].matches(".*[^\"]"))
-				{
-					baselineStrArray[baselineStrArray.length-1]="\""+baselineStrArray[baselineStrArray.length-1]+"\"";
-				}
-				String tmp=baselineStrArray[0]+","+baselineStrArray[1]+",";
-				if(baselineStrArray[2].matches("[^\"].*"))
-				{
-					baselineStrArray[2]="\""+baselineStrArray[2];
-				}
-				if(baselineStrArray[baselineStrArray.length-3].matches(".*[^\"]"))
-				{
-					baselineStrArray[baselineStrArray.length-3]=baselineStrArray[baselineStrArray.length-3]+"\"";
-				}
-				for(int i=2;i<=baselineStrArray.length-3;i++)
-				{
-					tmp=tmp+baselineStrArray[i]+",";
-				}
-				tmp=tmp+baselineStrArray[baselineStrArray.length-2]+","+baselineStrArray[baselineStrArray.length-1];
-				
-				baselineStr=tmp;
 			}
-			//System.out.println("findLineInCSV:"+baselineStr);
-			baselineStrArray=baselineStr.split("\",\"");
+			baselineStrArray = new String[newBaselineStrList.size()];
+			newBaselineStrList.toArray(baselineStrArray);
+
+
 			if(baselineStrArray.length==5)
 			{
-				String regex=baselineStrArray[0]+"\",.*\""+baselineStrArray[1]+"\",\""+"(.*)\",.*"+",\""+baselineStrArray[4];
+				String regex=baselineStrArray[0]+",.*"+baselineStrArray[1]+",(.*),.*,"+baselineStrArray[4];
 				
 				Pattern pattern=Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 				//long line=0;
@@ -683,18 +683,18 @@ public class FileUtil extends FileUtils
 						//System.out.println(m.group(1));
 						if(baselineStrArray[2].equalsIgnoreCase(m.group(1)))
 						{
-							status=",\""+m.group(1)+"\",\"pass\"";
+							status=","+m.group(1)+",\"pass\"";
 						}else
 						{
-							status=",\""+m.group(1)+"\",\"fail\"";
+							status=","+m.group(1)+",\"fail\"";
 						}
 						break;
 					}
 					
 				}
-			}else if(baselineStrArray.length==6 && (baselineStrArray[1]==null || baselineStrArray[1].equals("") || baselineStrArray[1].contains("Derived")))//TODO
+			}else if(baselineStrArray.length==6 && (baselineStrArray[1].equals("") || baselineStrArray[1].contains("Derived")))//TODO
 			{
-				String regex=baselineStrArray[0]+"\",.*\""+baselineStrArray[2]+"\",\""+"(.*)\",.*"+",\""+baselineStrArray[5];
+				String regex=baselineStrArray[0]+",.*"+baselineStrArray[2]+",(.*),.*,"+baselineStrArray[5];
 				
 				Pattern pattern=Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 				//long line=0;
@@ -707,10 +707,10 @@ public class FileUtil extends FileUtils
 						//System.out.println(m.group(1));
 						if(baselineStrArray[3].equalsIgnoreCase(m.group(1)))
 						{
-							status=",\""+m.group(1)+"\",\"pass\"";
+							status=","+m.group(1)+",\"pass\"";
 						}else
 						{
-							status=",\""+m.group(1)+"\",\"fail\"";
+							status=","+m.group(1)+",\"fail\"";
 						}
 						break;
 					}
