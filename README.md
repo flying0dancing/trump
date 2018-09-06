@@ -17,6 +17,7 @@ usage
 		* `indexAppServers` set the ID of `applicationServers` from test.json.
 		* `scenarioName` set value to scenario file's name.
 		* `scenarioSheet` set value to `scenarioName`'s sheet name.
+		* `selectLanguage` set value to zh_CN or en_GB or en_US, higher priority than `Regional.language` in test.properties.
 * [resultFolder]
 	* the full path with name of result folder(exist or not). suggest every product following same folder naming rule.
 * [rerun]
