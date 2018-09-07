@@ -176,8 +176,11 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		Boolean flag=false;
 		if (element("cfed.uploadFileName", type).isDisplayed())
 		{
-			if (element("cfed.uploadFileName", type).getInnerText().equalsIgnoreCase(form.getImportFile()))
-				{flag=true;}
+			if (element("cfed.uploadFileName", type).getInnerText().equalsIgnoreCase(form.getImportFile())){
+				flag=true;
+			}else{
+				logger.error("fail to upload file["+form.getImportFile()+"]");
+			}
 		}
 		
 		if(flag)
@@ -188,72 +191,108 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 				if(!element("abstract.uploadFileInitToZeroChecked",type).isPresent())
 				{uploadFileInitToZero.click();}
 			}
-			//difference
-			IWebElementWrapper listimportBtn=element("cfed.listimportBtn",type);
-			if(listimportBtn.isEnabled())
-			{
-				logger.info("click import button");
-				listimportBtn.click();
-				loadingDlg();
-				String type2=type.substring(0, type.length()-4);
-				IWebElementWrapper replaceconfirm=element("cfed.replaceconfirm",type2);
-				if( replaceconfirm.isDisplayed())
-				{
-					replaceconfirm.click();
-					loadingDlg();
-				}
-				IWebElementWrapper confirmBtn=element("cfed.confirmBtn");
-				if(confirmBtn.isDisplayed())
-				{
-					confirmBtn.click();
-					loadingDlg();
-					//add a judge for import successfully
-					if(!element("fipf.pageTab").isPresent())
-					{
-						flag=false;
-						logger.info("can't open form instance");
-						super.getWebDriverWrapper().navigate().backward();
-					}else
-					{
-						waitThat("fipf.adjustmentLogTable_data").toBePresent();
-						if(element("fipf.adjustmentLogTable_data").isPresent())
-						{
-							fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form);
-							if(!fip.isThisPage())
-							{
-								logger.info("open a wrong form instance, please check your excel file.");
-								fip.closeThisPage();//for these tester open a wrong form instance.
-								waitThat().timeout(3000);
-								fip=null;
-							}
-						}
-					}
-					
-				}
-			}else
-			{
-				logger.info("can't click import button");
-				flag=false;
+			
+			flag=applyScaleRadio();
+			if(flag){
+				fip=clickImportButton();
+			}else{
 				closeThisPage();
 			}
+			
 		}
 		return fip;
 	}
 	
-	public void applyScaleRadio() throws Exception
+	private FormInstancePage clickImportButton() throws Exception{
+
+		FormInstancePage fip=null;
+		//click import button
+		IWebElementWrapper listimportBtn;
+		listimportBtn = element("cfed.listimportBtn",type);
+		
+		if(listimportBtn.isEnabled())
+		{
+			logger.info("click import button");
+			listimportBtn.click();
+			loadingDlg();
+			String type2=type.substring(0, type.length()-4);
+			IWebElementWrapper replaceconfirm=element("cfed.replaceconfirm",type2);
+			if( replaceconfirm.isDisplayed())
+			{
+				replaceconfirm.click();
+				loadingDlg();
+			}
+			IWebElementWrapper confirmBtn=element("cfed.confirmBtn");
+			if(confirmBtn.isDisplayed())
+			{
+				confirmBtn.click();
+				loadingDlg();
+				//add a judge for import successfully
+				if(!element("fipf.pageTab").isPresent())
+				{
+					//flag=false;
+					logger.error("can't open form instance");
+					super.getWebDriverWrapper().navigate().backward();
+				}else
+				{
+					waitThat("fipf.adjustmentLogTable_data").toBePresent();
+					if(element("fipf.adjustmentLogTable_data").isPresent())
+					{
+						fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form);
+						if(!fip.isThisPage())
+						{
+							logger.info("open a wrong form instance, please check your excel file.");
+							fip.closeThisPage();//for these tester open a wrong form instance.
+							waitThat().timeout(3000);
+							fip=null;
+						}
+					}
+				}
+				
+			}
+		}else
+		{
+			logger.error("fail to click import button");
+			//flag=false;
+			closeThisPage();
+		}
+		return fip;
+	}
+	
+	public Boolean applyScaleRadio() throws Exception
 	{
+		Boolean flag=true;
 		if(StringUtils.isNotBlank(form.getApplyScale()))
 		{
-			String mode=form.getApplyScale().toLowerCase();
+			String mode=form.getApplyScale();
 			if(mode.equalsIgnoreCase("y"))
 			{
+				logger.info("click scaled radio");
 				element("cfed.applayScale",type,"true").click();
+				loadingDlg();
+				if(!element("cfed.scaled_status").isPresent()){
+					flag=false;
+					logger.error("fail to select Scaled radio");
+				}
 			}else if(mode.equalsIgnoreCase("n"))
 			{
+				logger.info("click No Scale radio");
 				element("cfed.applayScale",type,"false").click();
+				loadingDlg();
+				if(!element("cfed.noScale_status").isPresent()){
+					flag=false;
+					logger.error("fail to select No scale radio");
+				}
+			}else{
+				flag=false;
+				logger.warn("wrong value in column applyScale, should be y or n.");
 			}
-			loadingDlg();
+			
+		}else{
+			logger.info("use default scale setting");
 		}
+		
+		return flag;
 	}
 	
 }
