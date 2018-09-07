@@ -191,7 +191,9 @@
     <locator id="cfed.confirmBtn" type="WebButton" by="id" expression="createInformForm:confirmBtn" name="confirmBtn" description="confirmBtn"/>
     <locator id="cfed.replaceconfirm" type="WebElement" by="xpath" expression="//div[@id='?ConfirmDialog'][div[@style]]//button[@id='replaceconfirm']" name="replaceconfirm" description="replaceconfirm"/>
     <locator id="cfed.uploadFileName" type="WebButton" by="id" expression="?:listuploadedFileName" name="uploadFileName" description="uploadFileName"/>
-    <locator id="cfed.applayScale" type="WebElement" by="xpath" expression=".//*[@id='?:applyScaleRadio']//div[div/input[@value='?']]" name="applayScale" description="applayScale"/>  	
+    <locator id="cfed.applayScale" type="WebElement" by="xpath" expression=".//*[@id='?:applyScaleRadio']//div[div/input[@value='?']]" name="applayScale" description="applayScale"/>
+    <locator id="cfed.scaled_status" type="WebElement" by="xpath" expression=".//*[@id='createFromExcelForm:applyScaleRadio']//td[1]//div[contains(@class,'ui-state-active')]" name="scaled_status" description="scaled_status"/>
+    <locator id="cfed.noScale_status" type="WebElement" by="xpath" expression=".//*[@id='createFromExcelForm:applyScaleRadio']//td[3]//div[contains(@class,'ui-state-active')]" name="noScale_status" description="noScale_status"/>  	
     </page>
     
     <page id="aifd" name="adjustmentsImportFilesDialog" description="adjustmentsImportFilesDialog created by Kun Shen">

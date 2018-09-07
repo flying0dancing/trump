@@ -167,7 +167,7 @@ public class MailUtil {
         	subject=PropHelper.getProperty("mail.subject.prefix");
         }else
         {
-        	subject="trump result:";
+        	subject="trump:";
         }
         if(resultPath!=null)
     	{
