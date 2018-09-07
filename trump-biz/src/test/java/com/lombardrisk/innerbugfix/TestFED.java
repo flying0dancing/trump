@@ -25,8 +25,9 @@ public class TestFED implements IExecFuncFolder{
 		logger.info("testing FFIEC030S for solving same element sorted issue, sorted by first attribute's value if element are same");
 		String fileFullName="Z:\\ProductLine\\FED\\TestResults\\FED_1.14.2\\Auto\\1.14.2_AR1.16.0b75\\download\\US FED Reserve(ExportToRegulator)\\FED_2999_RepCentral-FFIEC030S_V1_20160331(3).XML";
 		List<String> ignoreAttributes=new ArrayList<String>();
-		ignoreAttributes.add("contextRef");
-		ignoreAttributes.add("schemaRef");
+		ignoreAttributes.add("createDate");
+		ignoreAttributes.add("createTime");
+		ignoreAttributes.add("asOfDate");
 		List<String> ignoreElements=new ArrayList<String>();
 		ignoreElements.add("xml");
 		String newFilePath="E:\\abc\\";
@@ -35,7 +36,7 @@ public class TestFED implements IExecFuncFolder{
 		String expectedFile="Z:\\ProductLine\\FED\\TestResults\\FED_1.14.2\\Auto\\1.14.2_AR1.16.0b75\\expectation\\US FED Reserve\\FED_2999_RepCentral-FFIEC030S_V1_20181231.XML";
 		String sorted_expectedFileFullName=Dom4jUtil.sortXmlContentToNewFileByName(expectedFile,ignoreAttributes, ignoreElements,newFilePath);
 		String path_BComp=new File(System.getProperty("user.dir")).getParent().replace("\\", "/").replace("/", System.getProperty("file.separator"))+PropHelper.getProperty("path.BComp").replace("..", "").replace("\\", "/").replace("/", System.getProperty("file.separator"));
-		String cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + sortFileFullName.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" "+"\"" + sorted_expectedFileFullName + "\" "+ "\""+"E:\\abc\\test.report2.html"+"\"";
+		String cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + sortFileFullName.replace("\\", "/").replace("/", System.getProperty("file.separator")) + "\" "+"\"" + sorted_expectedFileFullName + "\" "+ "\""+"E:\\abc\\test.report3.html"+"\"";
 		String returnStatus=Comparison.getReturnStatus(cmdLine);
 		Assert.assertEquals(returnStatus.substring(0,4), "pass");
 	}

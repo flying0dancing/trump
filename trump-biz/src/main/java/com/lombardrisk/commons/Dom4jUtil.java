@@ -407,30 +407,8 @@ public static void sortXmlElementByName(Element element,Element elementNew,List<
 		{
 			Collections.sort(list, new Comparator<Element>(){
 				public int compare(Element o1, Element o2) {
-					int flag=o1.getName().compareToIgnoreCase(o2.getName());
-					if(flag==0){
-						@SuppressWarnings("unchecked")
-						List<Attribute> o1Attrs=o1.attributes();
-						@SuppressWarnings("unchecked")
-						List<Attribute> o2Attrs=o2.attributes();
-						sortAttributes(o1Attrs);
-						sortAttributes(o2Attrs);
-						//sorted by first attribute's value if element are same
-						if(o1Attrs.size()>0 && o2Attrs.size()>0){
-							if(o1Attrs.size()==o2Attrs.size()){
-								int flagT=0;
-								for(int i=0;i<o1Attrs.size();i++){
-									flagT=o1Attrs.get(i).getValue().compareToIgnoreCase(o2Attrs.get(i).getValue());
-									if(flagT!=0){
-										flag=flagT;
-										break;
-									}
-								}
-							}else{
-								flag=o1Attrs.get(0).getValue().compareToIgnoreCase(o2Attrs.get(0).getValue());
-							}
-						}
-					}
+					int flag=compareElements( o1,  o2);
+					
 					return flag;
 				}
 			});
@@ -456,5 +434,77 @@ public static void sortAttributes(List<Attribute> attrs){
 		
 	}
 }
+
+public static void sortElements(List<Element> element){
+	if(element!=null && element.size()>0){
+		Collections.sort(element, new Comparator<Element>(){
+			public int compare(Element o1, Element o2) {
+				return o1.getName().compareToIgnoreCase(o2.getName());
+			}
+		});
+		
+	}
+}
+
+@SuppressWarnings("unchecked")
+public static int compareElements(Element o1, Element o2){
+	int flag=o1.getName().compareToIgnoreCase(o2.getName());
+	if(flag==0){
+		List<Attribute> o1Attrs=o1.attributes();
+		List<Attribute> o2Attrs=o2.attributes();
+		flag=compareAttributes(o1Attrs,o2Attrs);
+		if(flag==0){
+			List<Element> o1Elements=o1.elements();
+			List<Element> o2Elements=o2.elements();
+			sortElements(o1Elements);
+			sortElements(o2Elements);
+			if(o1Elements.size()>0 && o2Elements.size()>0){
+				if(o1Elements.size()==o2Elements.size()){
+					int flagT=0;
+					for(int i=0;i<o1Elements.size();i++){
+						flagT=compareElements(o1Elements.get(i),o2Elements.get(i));
+						if(flagT!=0){
+							break;
+						}
+					}
+					flag=flagT;
+				}else{
+					flag=compareElements(o1Elements.get(0),o2Elements.get(0));
+				}
+			}
+			
+		}
+		
+	}
+	
+	return flag;
+}
+
+public static int compareAttributes(List<Attribute> o1Attrs,List<Attribute> o2Attrs){
+	int flag=0;
+	sortAttributes(o1Attrs);
+	sortAttributes(o2Attrs);
+	if(o1Attrs.size()>0 && o2Attrs.size()>0){
+		if(o1Attrs.size()==o2Attrs.size()){
+			int flagT=0;
+			for(int i=0;i<o1Attrs.size();i++){
+				flagT=o1Attrs.get(i).getValue().compareToIgnoreCase(o2Attrs.get(i).getValue());
+				if(flagT!=0){
+					//flag=flagT;
+					break;
+				}
+			}
+			flag=flagT;
+		}else{
+			flag=o1Attrs.get(0).getValue().compareToIgnoreCase(o2Attrs.get(0).getValue());
+		}
+	}
+	return flag;
+}
+
+
+
+
+
 
 }
