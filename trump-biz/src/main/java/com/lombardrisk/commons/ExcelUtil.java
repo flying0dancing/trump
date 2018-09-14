@@ -13,6 +13,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -1462,7 +1464,7 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String
 /**
  * use in "create new return from excel" function, update some values for QA.
  * @param importExcelPath
- * @param cells( sheetName, rowIndex, colIndex, value)
+ * @param cells( sheetName, rowIndex, colIndex, value, date type) or (CellReferenceName,"-1","-1",value, date type)
  * @since 2017/7/13
  */
 public static void UpdateCellsInExcel(String importExcelPath,String[][] cells)
@@ -1496,9 +1498,20 @@ public static void UpdateCellsInExcel(File importExcel,String[][] cells)
 		int rowIndex,colIndex;
 		for(int i=0;i<cells.length;i++)
 		{
-			sheetName=cells[i][0];
-			rowIndex=Integer.parseInt(cells[i][1])-1;//0-base
-			colIndex=Integer.parseInt(cells[i][2])-1;//0-base
+			if(!cells[i][1].equals("-1") && !cells[i][2].equals("-1")){
+				sheetName=cells[i][0];
+				rowIndex=Integer.parseInt(cells[i][1])-1;//0-base, row number
+				colIndex=Integer.parseInt(cells[i][2])-1;//0-base, column runmber
+			}else{
+				Name aNamedCell=xwb.getName(cells[i][0]);
+				String aNamedAddress=aNamedCell.getRefersToFormula();
+				AreaReference[] arefs=AreaReference.generateContiguous(aNamedAddress);
+				CellReference crefs=arefs[0].getFirstCell();
+				sheetName=crefs.getSheetName();
+				rowIndex=crefs.getRow();
+				colIndex=crefs.getCol();
+			}
+			
 			value=cells[i][3];
 			valueType=cells[i][4];
 			if(sheetName!=null)
