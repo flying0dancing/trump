@@ -19,8 +19,8 @@ import com.lombardrisk.test.pojo.Form;
 public class CreateImportPrecision extends TestManager implements IExecFuncFolder{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**create new form, and then import adjustment, check some values in UI , if these values are checked as pass or fail, not as error, then all values in UI will be checked.<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile, expectationFile<br>
-	 * scenario file may contains these columns: deleteExistent, expiration, cloneData, initToZero<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, importFile, expectationFile<br>
+	 * scenario file optional columns: deleteExistent, expiration, cloneData, initToZero<br>
 	 * special instruction: when this method used in retrieve form and do precision check, the column importFile's value must be "retrieve".
 	 * @author kun shen
 	 * @param form

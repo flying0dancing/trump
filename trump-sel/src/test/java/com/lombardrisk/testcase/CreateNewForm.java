@@ -16,8 +16,8 @@ public class CreateNewForm extends TestManager{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**
 	 * create new form with deleted existent or not<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run<br>
-	 * scenario file may contains these columns: deleteExistent, expiration, cloneData, initToZero<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run<br>
+	 * scenario file optional columns: deleteExistent, expiration, cloneData, initToZero<br>
 	 * @author kun shen
 	 * @param form
 	 */
@@ -95,8 +95,8 @@ public class CreateNewForm extends TestManager{
 	
 	/**
 	 * create new from excel with deleted existent or not<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile<br>
-	 * scenario file may contains these columns: applyScale, deleteExistent, expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, importFile<br>
+	 * scenario file optional columns: applyScale, deleteExistent, expiration<br>
 	 * if importFile does not exist in import folder, it will copy from download/<i>regulator<i>(EXPORTTOEXCEL***) folder to import folder automatically.
 	 * @author kun shen
 	 * @param form

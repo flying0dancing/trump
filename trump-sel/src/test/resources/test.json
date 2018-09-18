@@ -4,7 +4,7 @@
     {
       	"id": 0,
         "name": "european",
-        "url": "http://172.20.31.38:8085",
+        "url": "http://172.20.31.38:8285",
         "username": "admin",
         "password": "password"
       },

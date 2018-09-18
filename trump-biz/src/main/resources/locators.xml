@@ -155,7 +155,8 @@
     <locator id="td.selectTaxonomy" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectTaxonomy')]" name="selectTaxonomy" description="selectTaxonomy"/>
     <locator id="td.selectModule" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectModule')]" name="selectModule" description="selectModule"/>
     <locator id="td.compressTypeSelector" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'compressTypeSelector')]" name="compressTypeSelector" description="compressTypeSelector"/>
-    <locator id="td.exportButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit']" name="exportButton" description="exportButton"/>
+    <locator id="td.exportButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit' and not(contains(@id,'Direct'))]" name="exportButton" description="exportButton"/>
+    <locator id="td.directSubmitButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit' and contains(@id,'DirectSubmit')]" name="DirectSubmitButton" description="DirectSubmitButton"/>
     <locator id="td.noRecordsFound" type="WebElement" by="xpath" expression="//tbody[starts-with(@id,'transmitForm')][contains(@id,'formInstanceListTable_data')]/tr[contains(td,'No records found')]/td" name="noRecordsFound" description="noRecordsFound"/>
     
     <locator id="td.logButton" type="WebElement" by="xpath" expression="//div[@id='transmitLogDialog']//button[span='OK']" name="logButton" description="logButton"/>
@@ -324,5 +325,15 @@
     <locator id="egrd.ok" type="WebElement" by="id" expression="executionGroupRunDialogForm:save" name="run" description="run"/>
     <locator id="egrd.cancel" type="WebElement" by="id" expression="executionGroupRunDialogForm:cancel" name="cancel" description="cancel button"/>
     </page>
+    
+    <page id="fdsd" name="forceDirectSubmitDialog" description="forceDirectSubmitDialog created by Kun Shen on AR1.16">
+	<locator id="fdsd.title" type="WebElement" by="id" expression="forceDirectSubmitDialog_title" name="forceDirectSubmitDialog_title" description="forceDirectSubmitDialog_title"/>
+    <locator id="fdsd.commentTextarea" type="WebElement" by="id" expression="forceDirectSubmitForm:commentTextarea" name="commentTextarea" description="commentTextarea"/>
+    <locator id="fdsd.submit" type="WebButton" by="id" expression="forceDirectSubmitForm:directSubmitXmlBtn" name="submitButton" description="submitButton"/>
+    <locator id="fdsd.cancel" type="WebButton" by="id" expression="forceDirectSubmitForm:cancelBtn" name="cancelButton" description="cancelButton"/>
+    <locator id="fdsd.submitConfirmMsg" type="WebElement" by="xpath" expression=".//*[@id='submitConfirmDialog']/div[2]" name="submitConfirmMessage" description="submitConfirmMessage"/>
+    <locator id="fdsd.submitConfirmOK" type="WebButton" by="id" expression="submitConfirm" name="submitConfirmOKButton" description="submitConfirmOKButton"/>
+    </page>
+    
     
 </locatorBean>

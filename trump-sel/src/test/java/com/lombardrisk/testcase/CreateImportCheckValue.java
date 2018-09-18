@@ -20,8 +20,8 @@ import com.lombardrisk.test.pojo.Form;
 public class CreateImportCheckValue extends TestManager implements IExecFuncFolder{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**create new form with deleted existent or not, and then import adjustment, check some values in UI at last<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile, expectationFile<br>
-	 * scenario file may contains these columns: deleteExistent, expiration, cloneData, initToZero<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, importFile, expectationFile<br>
+	 * scenario file optional columns: deleteExistent, expiration, cloneData, initToZero<br>
 	 * @author kun shen
 	 * @param form
 	 */
@@ -133,8 +133,8 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 	
 	/**
 	 * create new form from excel, and then check some values in UI.<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile, expectationFile<br>
-	 * scenario file may contains these columns: deleteExistent, expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, importFile, expectationFile<br>
+	 * scenario file optional columns: deleteExistent, expiration<br>
 	 * @author kun shen
 	 * @param form
 	 */

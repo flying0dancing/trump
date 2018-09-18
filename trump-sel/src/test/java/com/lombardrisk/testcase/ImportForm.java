@@ -15,8 +15,8 @@ public class ImportForm extends TestManager{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**
 	 * only import into existed form <br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, importFile<br>
-	 * scenario file may contains these columns: importMode, expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, importFile<br>
+	 * scenario file optional columns: importMode, expiration<br>
 	 * special instruction: importMode's value(override, additive, over(=override), y(=override), add(=additive), append(=additive), n(=additive))
 	 * @author kun shen
 	 * @param form
