@@ -9,11 +9,11 @@ import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.test.IComFolder;
 
-public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
+public class ForceDirectSubmitDialog extends AbstractPage implements IComFolder{
 	
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public ForceSubmitCommonDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager) {
+	public ForceDirectSubmitDialog(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager) {
 		super(webDriverWrapper,testDataManager);
 	}
 	/**
@@ -24,13 +24,13 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 	public Boolean isThisPage() throws Exception
 	{
 		Boolean flag=false;
-		flag=element("fscd.title").isDisplayed();
+		flag=element("fdsd.title").isDisplayed();
 		return flag;
 	}
 	
 	public void closeThisPage() throws Exception
 	{
-		element("fscd.cancel").click();
+		element("fdsd.cancel").click();
 		loadingDlg();
 	}
 	
@@ -42,11 +42,12 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 	public Boolean typeSubmitComment() throws Exception
 	{
 		Boolean flag=false;
-		IWebElementWrapper element=element("fscd.commentTextarea");
+		IWebElementWrapper element=element("fdsd.commentTextarea");
 		if(element.isDisplayed())
 		{
-			logger.info("typing \"Force Submit by automation\" on \"Force Submit Dialog\"");
-			element.type("Force Submit by automation");
+			logger.info("typing \"Force Direct Submit by automation\" on \"Force Direct Submit Dialog\"");
+			element.clear();
+			element.type("Force Direct Submit by automation");
 			loadingDlg();
 			
 			flag=true;
@@ -55,22 +56,22 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 	}
 	
 	/**
-	 * click submit button
+	 * click submit button, return submit message
 	 * @return
 	 * @throws Exception
 	 */
-	public void clickSubmit() throws Exception
+	public String clickSubmit() throws Exception
 	{
-		logger.info("clicking submit button on \"Force Submit Dialog\"");
-		element("fscd.submit").click();
-		loadingDlg(null,20);
-		waitThat("fscd.title").toBeInvisible();
+		logger.info("clicking submit button on \"Force Direct Submit Dialog\"");
+		element("fdsd.submit").click();
+		loadingDlg(element("fdsd.submitConfirmMsg"),20);
+		String msg=element("fdsd.submitConfirmMsg").getInnerText();
+		logger.info(msg);
+		loadingDlg();
+		element("fdsd.submitConfirmOK").click();
+		loadingDlg();
+		return msg;
 	}
 	
-	public void clickDataScheduleSubmit() throws Exception
-	{
-		logger.info("clicking submit button on \"Force Submit Dialog\"");
-		element("fscd.DataSchedulesubmit").click();
-		loadingDlg();
-	}
+	
 }

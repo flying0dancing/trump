@@ -56,14 +56,20 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		{
 			FileUtil.createDirectory(downloadFolder);
 		}
+		
 		String fileFullPath=formInstancePage.getAllCellsValue(downloadFolder);
 		if(fileFullPath==null)
 		{
-			testRstFlag="error:cannot find file in UIDisplay folder[ "+downloadFolder+"].";
+			testRstFlag="fail: cannot find file in UIDisplay folder[ "+downloadFolder+"].";
 			logger.error(testRstFlag);
 		}else
 		{
 			long begin_Comparison=System.currentTimeMillis();
+			if(!new File(expectationFolder+form.getExpectationFile()).exists()){
+				String str1="fail: expectated File missing..."+expectationFolder+form.getExpectationFile();
+				logger.error(str1);
+				return str1;
+			}
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
 			form.setExec_ExpectationFile(newFileName);

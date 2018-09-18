@@ -692,7 +692,7 @@ public class FileUtil extends FileUtils
 					}
 					
 				}
-			}else if(baselineStrArray.length==6 && (baselineStrArray[1].equals("") || baselineStrArray[1].contains("Derived")))//TODO
+			}else if(baselineStrArray.length==6 && (baselineStrArray[1].equals("\"\"") || baselineStrArray[1].contains("Derived")))//TODO
 			{
 				String regex=baselineStrArray[0]+",.*"+baselineStrArray[2]+",(.*),.*,"+baselineStrArray[5];
 				

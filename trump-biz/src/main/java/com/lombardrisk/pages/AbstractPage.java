@@ -308,7 +308,7 @@ public abstract class AbstractPage extends PageBase
 		waitThat().timeout(2000);
 	}
 	/**
-	 * Wait for ajax dialog disappear, and some element appear
+	 * Wait for ajax dialog disappear, and some element appear, element could be null
 	 * 
 	 * @throws Exception
 	 */

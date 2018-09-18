@@ -15,8 +15,8 @@ public class DataScheduleWorkflow extends TestManager{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**
 	 * click "Ready for approval" and "Approval"<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run<br>
+	 * scenario file optional columns: expiration<br>
 	 * special instruction: use two properties for approver, test.approver.user=admin2 and test.approver.password=password, specify them in test.properties.
 	 * @author kun shen
 	 * @param form

@@ -16,8 +16,8 @@ public class RetrieveForm extends TestManager{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**
 	 * retrieve form<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, deleteExistent, translate<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, deleteExistent, translate<br>
+	 * scenario file optional columns: expiration<br>
 	 * special instruction: when the retrieved form exists and deleteExistent not set to Y, and this form will not be retrieved.
 	 * @author kun shen
 	 * @param form
@@ -71,8 +71,8 @@ public class RetrieveForm extends TestManager{
 	/**
 	 * retrieve Multiple forms<br>
 	 * it suits for AgileREPORTER version greater than or equal 1.15.9<br><br>
-	 * scenario file must contains these columns: retrieveGroup, abortOnFailure, regulator, processDate, run<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: retrieveGroup, abortOnFailure, regulator, processDate, run<br>
+	 * scenario file optional columns: expiration<br>
 	 * special instruction: when abortOnFailure is null, trump will not click this check box, using its default settings.
 	 * @author kun shen
 	 * @param form

@@ -161,6 +161,8 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		return flag;
 	}
 	
+	
+	
 	/**
 	 * click export button get download files.<br> If successfully return files' full path, others return null.
 	 * @author kun shen
@@ -229,6 +231,73 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		return unCompressDestFiles;
 	
 	}
+	
+
+		public String clickDirectSubmit() throws Exception
+		{
+			Boolean flag=true;
+			String message="";
+			if(!element("td.noRecordsFound").isDisplayed())
+			{
+				selectFormInfoInDialogue();
+				IWebElementWrapper exportEle=element("td.directSubmitButton",title);
+				if(exportEle.isEnabled())
+				{
+					logger.info("click force direct Submit button");
+					
+					exportEle.click();
+					loadingDlg();
+					flag=getTipMessageStatus();
+					ForceDirectSubmitDialog forceSubmit=new ForceDirectSubmitDialog(getWebDriverWrapper(),getTestDataManager());
+					if(forceSubmit.isThisPage())
+					{
+						forceSubmit.typeSubmitComment();
+						message=forceSubmit.clickSubmit();
+						if(forceSubmit.isThisPage())
+						{
+							forceSubmit.closeThisPage();
+						}
+					}
+					
+					if(isThisPage())
+					{
+						closeThisPage();
+					}				
+					//click log buttkon
+					if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
+					{
+						element("td.logButton").click();
+						loadingDlg();
+					}
+					if(isThisPage())
+					{
+						closeThisPage();
+					}
+					
+					if(element("fipf.formInstTitleLabels").isDisplayed())
+					{
+						FormInstancePage fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager());// unlock return
+						fip.unlockForm();
+						fip.closeThisPage();
+						fip=null;
+					}
+					
+				}else
+				{
+					logger.error("error: export button is disable.");
+					flag=false;
+				}
+			}else
+			{
+				logger.error("error: no records found.");
+				flag=false;
+			}
+			
+			
+			return message;
+		
+		}
+		
 	/**
 	 * click export button, return true if export without errors, others return false.
 	 * @author kun shen
@@ -253,7 +322,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				if (PropHelper.ENABLE_FILE_DOWNLOAD)
 				{
 					String exportBtnId=exportEle.getAttribute("id");
-					if(exportBtnId.contains("force"))
+					if(exportBtnId.contains("forceS"))//forceSubmitBtn, seperate from foceDirectSubmitBtn
 					{
 						exportEle.click();
 						loadingDlg();

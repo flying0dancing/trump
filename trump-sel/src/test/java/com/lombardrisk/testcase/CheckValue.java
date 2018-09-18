@@ -57,8 +57,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	
 	}
 	/** check display value in UI. <br>the cell which type is checkbox's value equals to 1 if checked, equals 0 if unchecked.<br>This method cannot checks hidden cells.<br> display UI values are stored at <i>result</i>\download\<i>regulator</i>(UIDisplay)<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
 	 * @author kun shen
 	 * @param form
 	 * @throws Exception
@@ -127,8 +127,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	}
 	
 	/** check display value in UI(waste time method). <br>the cell which type is checkbox's value equals to 1 if checked, equals 0 if unchecked.<br>This method cannot checks hidden cells.<br> display UI values are stored at <i>result</i>\download\<i>regulator</i>(UIDisplay)<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
 	 * @author kun shen
 	 * @param form
 	 * @throws Exception
@@ -198,8 +198,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	
 	/**check download excel file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToExcel)<br><br>
 	 * it suits for AgileREPORTER version less than or equal 1.15.0<br><br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
 	 * @author kun shen
 	 * @param form
 	 */
@@ -273,8 +273,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	}
 	
 	/**check download csv file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToCSV)<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
 	 * @author kun shen
 	 * @param form
 	 */
@@ -352,8 +352,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	
 	/**check download excel file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToExcelApplyScale)<br><br>
 	 * it suits for AgileREPORTER version greater than or equal 1.15.1<br><br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
 	 * @author kun shen
 	 * @param form
 	 */
@@ -427,8 +427,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 	
 	/**check download excel file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToExcelNoScale)<br><br>
 	 * it suits for AgileREPORTER version greater than or equal 1.15.1<br><br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
 	 * @author kun shen
 	 * @param form
 	 */
@@ -502,8 +502,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 
 	/**check download PDF file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToPDF)<br><br>
 	 * it suits for AgileREPORTER version greater than or equal 1.15.0<br><br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
 	 * @author kun shen
 	 * @param form
 	 */
@@ -578,8 +578,8 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 
 	/**check download validation rules' file. <br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(ExportValidation)<br><br>
 	 * it suits for AgileREPORTER version greater than or equal 1.15.0<br><br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, expectationFile<br>
-	 * scenario file may contains these columns: expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
 	 * @author kun shen
 	 * @param form
 	 */

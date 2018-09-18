@@ -19,8 +19,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	/**
 	 * click export to regulator button in opened form instance, and then export download file, and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
-	 * scenario file may contains these columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
+	 * scenario file optional columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
 	 * special instruction: when Transmission.module are contains many modules, Transmission.fileType is essential.
 	 * @author kun shen
 	 * @param form
@@ -120,8 +120,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	
 	/**
 	 * click export to regulator button in dashboard, and then export download file, and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
-	 * scenario file may contains these columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
+	 * scenario file optional columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
 	 * special instruction: when Transmission.module are contains many modules, Transmission.fileType is essential.
 	 * @author kun shen
 	 * @param form
@@ -182,8 +182,8 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 	
 	/**
 	 * click export to regulator button in opened form instance, and then export download file(lock form before, and then unlock form), and then store and uncompress files at <i>result</i>\download\<i>regulator</i>(exportToRegulator).<br>
-	 * scenario file must contains these columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
-	 * scenario file may contains these columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, Transmission.fileType, Transmission.module, expectationFile<br>
+	 * scenario file optional columns: Transmission.fileType, Transmission.framework, Transmission.taxonomy, Transmission.compressType, expiration<br>
 	 * <b>special instruction</b>: when Transmission.module are contains many modules, Transmission.fileType is essential. more files in expectationFile are joined by semicolon(;), the name of return FRY2052A's expected files have to end with COMMENT.xml or combine.xml, the name of other returns's expected files have to contains <i>returnName_returnVersion</i>.
 	 * 
 	 * @author kun shen
@@ -283,4 +283,93 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 		}
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
+	
+	/**
+	 * click export to regulator button in opened form instance, and then click force Submit button.<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run<br>
+	 * scenario file optional columns: expiration<br>
+	 * @since 2018/9/18
+	 * @author kun shen
+	 * @param form
+	 */
+	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
+	public void checkDirectSubmit(Form form)
+	{
+		if(runIt(form.getExecutionStatus()))
+		{
+			form.accumulateRunFrequency();
+			FormInstancePage formInstancePage=null;
+			try
+			{
+				ListPage listPage=super.getListPage();
+				if(listPage!=null)
+				{
+					listPage.loginAfterTimeout(listPage);
+					if(listPage.selectFormInfo(form))
+					{
+						formInstancePage=listPage.openFormInstance(form);
+						if(formInstancePage!=null)
+						{
+							List<String> status=ExportToFiles.exportToRegulator_DirectSubmit(formInstancePage, form);
+							
+							if(status.size()==1)
+							{
+								form.setExecutionStatus(status.get(0));
+							}else
+							{
+								String s="";
+								Boolean totalStatus=true;
+								for(String t:status)
+								{
+									if(t.toLowerCase().startsWith("pass")){}else{totalStatus=false;}
+									s=s+t+System.getProperty("line.separator");
+								}
+								if(totalStatus)
+								{
+									form.setExecutionStatus(s);
+								}else
+								{
+									form.setExecutionStatus("fail:"+s);
+								}
+							}
+							
+						}else
+						{
+							form.setExecutionStatus("fail on open form instance in list page");
+						}
+					}else
+					{
+						form.setExecutionStatus("fail on select form in list page");
+					}
+					
+				}else
+				{
+					form.setExecutionStatus("fail: cannot get list page");
+				}
+			
+			}catch(Exception e)
+			{
+				logger.error(e.getMessage());
+				form.setExecutionStatus("error:"+e.getMessage());
+			}
+			finally
+			{
+				try
+				{
+					if(formInstancePage!=null && formInstancePage.isThisPage())
+					{
+						formInstancePage.closeThisPage();
+					}
+				}catch(Exception e)
+				{
+					logger.error(e.getMessage());
+					form.setExecutionStatus("error:"+e.getMessage());
+				}
+				
+			}
+		}
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
+	}
+	
+	
 }
