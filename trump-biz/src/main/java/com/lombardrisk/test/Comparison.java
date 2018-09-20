@@ -343,7 +343,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 	 * @return
 	 * @throws Exception
 	 */
-	public static String compareWithExportedCSV(Form form, String exportedFileFullPath) throws Exception
+	public static String compareWithExportedCSV(Form form, String exportedFileFullPath,String functionFolderName) throws Exception
 	{
 		logger.info("Begin verify \"export to csv\" file");
 		Runtime run=Runtime.getRuntime();
@@ -357,7 +357,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			File exportedFile = new File(exportedFileFullPath);
 			if(exportedFile.exists())
 			{
-				String reslutFolder=expectationFolder+EXPORTTOCSV+"/";
+				String reslutFolder=expectationFolder+functionFolderName+"/";
 				String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
 				form.setExec_ExpectationFile(newFileName);
 				String newFilePath=reslutFolder+newFileName;
@@ -368,7 +368,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				StringBuffer strBuffer=null;
 				try
 				{
-					File newExportedFile=FileUtil.writeToNewFile(exportedFile,EXPORTTOCSV);
+					File newExportedFile=FileUtil.writeToNewFile(exportedFile,functionFolderName);
 					logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 					logger.info("Exportation File(new):"+newExportedFile+" size:"+newExportedFile.length()/1024+"KB");
 					baselineReader=new BufferedReader(new FileReader(expectationFile));

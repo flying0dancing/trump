@@ -2,6 +2,7 @@ package com.lombardrisk.pages;
 
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.slf4j.Logger;
@@ -1120,4 +1121,46 @@ public abstract class AbstractPage extends PageBase
 	public void setTestDataManager(ITestDataManager testDataManager) {
 		this.testDataManager = testDataManager;
 	}
+	
+	public Boolean applyScaleRadio(String importDialogueName,String applyScaleMode) throws Exception
+	{
+		Boolean flag=true;
+		if(StringUtils.isNotBlank(applyScaleMode))
+		{
+			String mode=applyScaleMode;
+			if(mode.equalsIgnoreCase("y"))
+			{
+				logger.info("click radio \"Scaled\"");
+				element("abstract.applayScale",importDialogueName,"true").click();
+				loadingDlg();
+				if(!element("abstract.applayScale_status",importDialogueName,"1").isPresent()){
+					flag=false;
+					logger.error("fail to select radio \"Scaled\"");
+				}
+			}else if(mode.equalsIgnoreCase("n"))
+			{
+				logger.info("click radio \"No scale\"");
+				element("abstract.applayScale",importDialogueName,"false").click();
+				loadingDlg();
+				if(!element("abstract.applayScale_status",importDialogueName,"3").isPresent()){
+					flag=false;
+					logger.error("fail to select radio \"No scale\"");
+				}
+			}else{
+				flag=false;
+				logger.warn("wrong value in column applyScale, should be y or n, also could be empty.");
+			}
+			
+		}else{
+			if(element("abstract.applayScale_status",importDialogueName,"3").isPresent()){
+				logger.info("use default setting \"No scale\"");
+			}else{
+				logger.info("use default setting \"Scaled\"");
+			}
+			
+		}
+		
+		return flag;
+	}
+	
 }

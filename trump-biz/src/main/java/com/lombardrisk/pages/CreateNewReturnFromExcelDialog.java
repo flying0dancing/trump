@@ -192,7 +192,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 				{uploadFileInitToZero.click();}
 			}
 			
-			flag=applyScaleRadio();
+			flag=super.applyScaleRadio(type,form.getApplyScale());
 			if(flag){
 				fip=clickImportButton();
 			}else{
@@ -257,42 +257,6 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 			closeThisPage();
 		}
 		return fip;
-	}
-	
-	public Boolean applyScaleRadio() throws Exception
-	{
-		Boolean flag=true;
-		if(StringUtils.isNotBlank(form.getApplyScale()))
-		{
-			String mode=form.getApplyScale();
-			if(mode.equalsIgnoreCase("y"))
-			{
-				logger.info("click scaled radio");
-				element("cfed.applayScale",type,"true").click();
-				loadingDlg();
-				if(!element("cfed.scaled_status").isPresent()){
-					flag=false;
-					logger.error("fail to select Scaled radio");
-				}
-			}else if(mode.equalsIgnoreCase("n"))
-			{
-				logger.info("click No Scale radio");
-				element("cfed.applayScale",type,"false").click();
-				loadingDlg();
-				if(!element("cfed.noScale_status").isPresent()){
-					flag=false;
-					logger.error("fail to select No scale radio");
-				}
-			}else{
-				flag=false;
-				logger.warn("wrong value in column applyScale, should be y or n.");
-			}
-			
-		}else{
-			logger.info("use default scale setting");
-		}
-		
-		return flag;
 	}
 	
 }

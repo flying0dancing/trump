@@ -96,8 +96,17 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 				{uploadFileInitToZero.click();}
 			}
 			
+			flag=super.applyScaleRadio(type,form.getApplyScale());
+			if(!flag){
+				closeThisPage();
+				return flag;
+			}
+			flag=selectImportMode();//select importMode(override, additive)
+			if(!flag){
+				closeThisPage();
+				return flag;
+			}
 			//difference
-			selectImportMode();//select importMode(override, additive)
 			IWebElementWrapper listimportBtn=element("aifd.importBtn",type);
 			if(listimportBtn.isEnabled())
 			{
@@ -108,33 +117,60 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 				if(!element("fipf.pageTab").isPresent())
 				{
 					flag=false;
-					logger.info("can't open form instance");
+					logger.error("can't open form instance");
 					super.getWebDriverWrapper().navigate().backward();
 				}
 			}else
 			{
-				logger.info("can't click import button");
+				logger.error("can't click import button");
 				flag=false;
 				closeThisPage();
 			}
+			
 		}
 		return flag;
 	}
 	
-	public void selectImportMode() throws Exception
+	public Boolean selectImportMode() throws Exception
 	{
+		Boolean flag=true;
+		String str_replace="\"Replace existing return(if any)\"";
+		String str_additive="\"Add to existing value (Numeric cells only)\"";
 		if(StringUtils.isNotBlank(form.getImportMode()))
 		{
 			String mode=form.getImportMode().toLowerCase();
 			if(mode.equals("override") || mode.equals("over") || mode.equals("y"))
 			{
+				logger.info("click radio "+str_replace);
 				element("aifd.importMode",type,"Override").click();
+				loadingDlg();
+				if(!element("aifd.importMode_status",type,"1").isPresent()){
+					flag=false;
+					logger.error("fail to select radio"+str_replace);
+				}
 			}else if(mode.equals("additive") || mode.equals("add") || mode.equals("append")|| mode.equals("n"))
 			{
+				logger.info("click radio "+str_additive);
 				element("aifd.importMode",type,"Additive").click();
+				loadingDlg();
+				if(!element("aifd.importMode_status",type,"3").isPresent()){
+					flag=false;
+					logger.error("fail to select radio"+str_additive);
+				}
+			}else{
+				flag=false;
+				logger.error("wrong value in column importMode, should be override or additive, also could be empty.");
 			}
-			loadingDlg();
+			
+		}else{
+			if(element("aifd.importMode_status",type,"3").isPresent()){
+				logger.info("use default setting "+str_additive);
+			}else{
+				logger.info("use default setting "+str_replace);
+			}
+			
 		}
+		return flag;
 	}
 	
 	

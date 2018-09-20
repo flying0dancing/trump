@@ -51,7 +51,7 @@ public class TestFED implements IExecFuncFolder{
 		form.setRegulator("US FED Reserve");
 		form.setExpectationFile("DBO95_v1.csv");
 		String exportedFileFullPath="Z:\\APAutomation\\results\\download\\US FED Reserve(ExportToCSV)\\FED_2999_DBO95_v1_20180330.csv";
-		returnStatus=Comparison.compareWithExportedCSV(form, exportedFileFullPath);
+		returnStatus=Comparison.compareWithExportedCSV(form, exportedFileFullPath,"ExportToSCV");
 		Assert.assertEquals(returnStatus.substring(0,4), "pass");
 	}
 }
