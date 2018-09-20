@@ -10,5 +10,7 @@ public interface IExecFuncFolder {
 	String EXPORTTOEXCELNOSCALE="ExportToExcelNoScale";
 	String EXPORTVALIDATION="ExportValidation";
 	String EXPORTPROBLEMS="ExportProblems";
+	String EXPORTTOCSVAPPLYSCALE="ExportToCSVApplyScale";
+	String EXPORTTOCSVNOSCALE="ExportToCSVNoScale";
 	
 }

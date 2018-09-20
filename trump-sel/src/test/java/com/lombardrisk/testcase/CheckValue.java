@@ -304,7 +304,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 							
 							if(exportedFileFullPath!=null && new File(exportedFileFullPath).exists())
 							{
-								String status=Comparison.compareWithExportedCSV(form, exportedFileFullPath);
+								String status=Comparison.compareWithExportedCSV(form, exportedFileFullPath,EXPORTTOCSV);
 								form.setExecutionStatus(status);
 							}else
 							{
@@ -349,6 +349,161 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 		
 	}
 	
+	/**check download csv file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToCSVApplyScale)<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
+	 * @author kun shen
+	 * @param form
+	 * @since 2018/9/20 ARv1.16.1
+	 */
+	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
+	public void checkExportToCSVApplyScale(Form form)
+	{
+		if(runIt(form.getExecutionStatus()))
+		{
+			form.accumulateRunFrequency();
+			FormInstancePage formInstancePage=null;
+			try
+			{
+				ListPage listPage=super.getListPage();
+				if(listPage!=null)
+				{
+					listPage.loginAfterTimeout(listPage);
+					if(listPage.selectFormInfo(form))
+					{
+						formInstancePage=listPage.openFormInstance(form);
+						if(formInstancePage!=null)
+						{
+							String exportedFileFullPath=formInstancePage.exportToCSVApplyScale();
+							if(formInstancePage.isThisPage())
+							{
+								formInstancePage.closeThisPage();
+							}
+							
+							if(exportedFileFullPath!=null && new File(exportedFileFullPath).exists())
+							{
+								String status=Comparison.compareWithExportedCSV(form, exportedFileFullPath,EXPORTTOCSVAPPLYSCALE);
+								form.setExecutionStatus(status);
+							}else
+							{
+								form.setExecutionStatus("fail on open not existed file:"+exportedFileFullPath);
+							}
+						}else
+						{
+							form.setExecutionStatus("fail on open form instance");
+						}
+					}else
+					{
+						form.setExecutionStatus("fail on select form");
+					}
+					
+				}
+			
+			}catch(Exception e)
+			{
+				logger.error(e.getMessage());
+				form.setExecutionStatus("error:"+e.getMessage());
+			}
+			finally
+			{
+				try
+				{
+					if(formInstancePage!=null && formInstancePage.isThisPage())
+					{
+						formInstancePage.closeThisPage();
+					}
+				}catch(Exception e)
+				{
+					logger.error(e.getMessage());
+					form.setExecutionStatus("error:"+e.getMessage());
+				}
+				
+			}
+		}
+	
+		addReportLink(EXPORTTOCSVAPPLYSCALE,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
+		
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
+		
+	}
+	
+	/**check download csv file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToCSVNoScale)<br>
+	 * scenario file required columns: name, version, regulator, entity, processDate, run, expectationFile<br>
+	 * scenario file optional columns: expiration<br>
+	 * @author kun shen
+	 * @param form
+	 * @since 2018/9/20 ARv1.16.1
+	 */
+	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
+	public void checkExportToCSVNoScale(Form form)
+	{
+		if(runIt(form.getExecutionStatus()))
+		{
+			form.accumulateRunFrequency();
+			FormInstancePage formInstancePage=null;
+			try
+			{
+				ListPage listPage=super.getListPage();
+				if(listPage!=null)
+				{
+					listPage.loginAfterTimeout(listPage);
+					if(listPage.selectFormInfo(form))
+					{
+						formInstancePage=listPage.openFormInstance(form);
+						if(formInstancePage!=null)
+						{
+							String exportedFileFullPath=formInstancePage.exportToCSVNoScale();
+							if(formInstancePage.isThisPage())
+							{
+								formInstancePage.closeThisPage();
+							}
+							
+							if(exportedFileFullPath!=null && new File(exportedFileFullPath).exists())
+							{
+								String status=Comparison.compareWithExportedCSV(form, exportedFileFullPath,EXPORTTOCSVNOSCALE);
+								form.setExecutionStatus(status);
+							}else
+							{
+								form.setExecutionStatus("fail on open not existed file:"+exportedFileFullPath);
+							}
+						}else
+						{
+							form.setExecutionStatus("fail on open form instance");
+						}
+					}else
+					{
+						form.setExecutionStatus("fail on select form");
+					}
+					
+				}
+			
+			}catch(Exception e)
+			{
+				logger.error(e.getMessage());
+				form.setExecutionStatus("error:"+e.getMessage());
+			}
+			finally
+			{
+				try
+				{
+					if(formInstancePage!=null && formInstancePage.isThisPage())
+					{
+						formInstancePage.closeThisPage();
+					}
+				}catch(Exception e)
+				{
+					logger.error(e.getMessage());
+					form.setExecutionStatus("error:"+e.getMessage());
+				}
+				
+			}
+		}
+	
+		addReportLink(EXPORTTOCSVNOSCALE,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
+		
+		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
+		
+	}
 	
 	/**check download excel file. <br>if cell's expected value and actual value contain blanks at both ends, those blanks will be ignored.<br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(exportToExcelApplyScale)<br><br>
 	 * it suits for AgileREPORTER version greater than or equal 1.15.1<br><br>

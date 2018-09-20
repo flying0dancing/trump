@@ -22,7 +22,7 @@ public class TestSRDD implements IExecFuncFolder{
 		form.setRegulator("Stats and Regulatory Data Div");
 		form.setExpectationFile("C1_V1.csv");
 		String exportedFileFullPath="Z:\\APAutomation\\results\\download\\Stats and Regulatory Data Div(ExportToCSV)\\MFSD_3999_C1_v1_20170701.csv";
-		returnStatus=Comparison.compareWithExportedCSV(form, exportedFileFullPath);
+		returnStatus=Comparison.compareWithExportedCSV(form, exportedFileFullPath,"ExportToSCV");
 		Assert.assertEquals(returnStatus.substring(0,4), "pass");
 	}
 	
@@ -36,7 +36,7 @@ public class TestSRDD implements IExecFuncFolder{
 		form.setRegulator("Monetary Authority of Singapore");
 		form.setExpectationFile("AMR2011W_V1_0001_20190731.csv");
 		String exportedFileFullPath="Z:\\APAutomation\\results\\download\\Monetary Authority of Singapore(ExportToCSV)\\MAS_0002_AMR2011W_v1_20190731.csv";
-		returnStatus=Comparison.compareWithExportedCSV(form, exportedFileFullPath);
+		returnStatus=Comparison.compareWithExportedCSV(form, exportedFileFullPath,"ExportToSCV");
 		Assert.assertEquals(returnStatus.substring(0,4), "pass");
 	}
 }

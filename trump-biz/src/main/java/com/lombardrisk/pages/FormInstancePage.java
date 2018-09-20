@@ -1006,6 +1006,58 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		return destFileFullPath;
 	
 	}
+	
+	/**
+	 * click export to file button, and click "Export To CSV" to download file.<br> If successfully return full file path, others return null.
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public String exportToCSVApplyScale() throws Exception
+	{
+		Boolean flag=false;
+		if(lockDownloadDir(downloadFolder))
+		{
+			flag=clickExportToFile("Export to CSV (Apply Scale)");
+		}
+		if(!flag)
+		{
+			unlockDownloadDir(downloadFolder);
+			return null;
+		}
+		String sourceFileFullPath=exportToFile();
+		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTTOCSVAPPLYSCALE+")/");
+		unlockDownloadDir(downloadFolder);
+		Runtime.getRuntime().gc();
+		return destFileFullPath;
+	
+	}
+	
+	/**
+	 * click export to file button, and click "Export To CSV" to download file.<br> If successfully return full file path, others return null.
+	 * @author kun shen
+	 * @return
+	 * @throws Exception
+	 */
+	public String exportToCSVNoScale() throws Exception
+	{
+		Boolean flag=false;
+		if(lockDownloadDir(downloadFolder))
+		{
+			flag=clickExportToFile("Export to CSV (No Scale)");
+		}
+		if(!flag)
+		{
+			unlockDownloadDir(downloadFolder);
+			return null;
+		}
+		String sourceFileFullPath=exportToFile();
+		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTTOCSVNOSCALE+")/");
+		unlockDownloadDir(downloadFolder);
+		Runtime.getRuntime().gc();
+		return destFileFullPath;
+	
+	}
 	/**
 	 * click export to file button, and click "Export To Excel" or "Export To CSV" or ... to download file.<br>
 	 * return true if click export button without error. others return false. 
