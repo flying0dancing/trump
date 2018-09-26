@@ -30,46 +30,20 @@ public class Comparison implements IComFolder,IExecFuncFolder
 	private final static Logger logger = LoggerFactory.getLogger(Comparison.class);
 	private Comparison(){}
 	
-	/**compare expectation with UI display values, return compare result(pass, fail, error:...). <br>
-	 * @author kun shen
-	 * @param formInstancePage
-	 * @param form
-	 * @return
-	 * @throws Exception
-	 */
-	public static String compareWithUIDisplay(FormInstancePage formInstancePage,Form form) throws Exception
-	{
-		logger.info("Begin verify \"cells in UI pages\"");
-		String testRstFlag=null;
-		long begin=System.currentTimeMillis();
-		int indexOfCellName=0;
-		int indexOfRowId=1;
-		int indexOfInstance=2;
-		int indexOfExpectedValue=4;
-		int indexOfActualValue=5;
-		int indexOfTestResult=8;
+	//used in function compareWithUIDisplay
+	public static String compareUIDisplayFile(Form form,String exportedFileFullPath,int indexOfCellName,int indexOfRowId,int indexOfInstance,int indexOfExpectedValue,int indexOfActualValue,int indexOfTestResult) 
+	{	
 		String regulator=form.getRegulator();
-		String downloadFolder=TARGET_DOWNLOAD_FOLDER+regulator+"("+UIDISPLAY+")/";
 		String expectationFolder=TARGET_EXPECTATION_FOLDER+regulator+"/";
-		//String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
-		if(!new File(downloadFolder).exists())
-		{
-			FileUtil.createDirectory(downloadFolder);
+		String testRstFlag=null;
+		
+		if(!new File(expectationFolder+form.getExpectationFile()).exists()){
+			String str1="fail: expectated File missing..."+expectationFolder+form.getExpectationFile();
+			logger.error(str1);
+			return str1;
 		}
 		
-		String fileFullPath=formInstancePage.getAllCellsValue(downloadFolder);
-		if(fileFullPath==null)
-		{
-			testRstFlag="fail: cannot find file in UIDisplay folder[ "+downloadFolder+"].";
-			logger.error(testRstFlag);
-		}else
-		{
-			long begin_Comparison=System.currentTimeMillis();
-			if(!new File(expectationFolder+form.getExpectationFile()).exists()){
-				String str1="fail: expectated File missing..."+expectationFolder+form.getExpectationFile();
-				logger.error(str1);
-				return str1;
-			}
+		try {
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
 			form.setExec_ExpectationFile(newFileName);
@@ -79,7 +53,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			int amt=ExcelUtil.getRowNum(xwb, null);
 			
 			//String searchedFilePrefix=downloadFolder+form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
-			String searchedFileName=fileFullPath;
+			String searchedFileName=exportedFileFullPath;
 			logger.info("comparison used download file ["+searchedFileName+"]");
 			for (int i = 1; i <= amt; i++)
 			{
@@ -123,6 +97,51 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			
 			ExcelUtil.saveWorkbook(newFile, xwb);
 			logger.info("Expectation File:"+newFile+" size:"+newFile.length()/1024+"KB, row count:"+String.valueOf(amt));
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			testRstFlag="error:"+e.getMessage();
+		}
+		
+		return testRstFlag;
+	
+	}
+	
+	/**compare expectation with UI display values, return compare result(pass, fail, error:...). <br>
+	 * @author kun shen
+	 * @param formInstancePage
+	 * @param form
+	 * @return
+	 * @throws Exception
+	 */
+	public static String compareWithUIDisplay(FormInstancePage formInstancePage,Form form) throws Exception
+	{
+		logger.info("Begin verify \"cells in UI pages\"");
+		String testRstFlag=null;
+		long begin=System.currentTimeMillis();
+		int indexOfCellName=0;
+		int indexOfRowId=1;
+		int indexOfInstance=2;
+		int indexOfExpectedValue=4;
+		int indexOfActualValue=5;
+		int indexOfTestResult=8;
+		String regulator=form.getRegulator();
+		String downloadFolder=TARGET_DOWNLOAD_FOLDER+regulator+"("+UIDISPLAY+")/";
+		//String expectationFolder=TARGET_EXPECTATION_FOLDER+regulator+"/";
+		//String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
+		if(!new File(downloadFolder).exists())
+		{
+			FileUtil.createDirectory(downloadFolder);
+		}
+		
+		String fileFullPath=formInstancePage.getAllCellsValue(downloadFolder);
+		if(fileFullPath==null)
+		{
+			testRstFlag="fail: cannot find file in UIDisplay folder[ "+downloadFolder+"].";
+			logger.error(testRstFlag);
+		}else
+		{
+			long begin_Comparison=System.currentTimeMillis();
+			testRstFlag=compareUIDisplayFile(form, fileFullPath, indexOfCellName, indexOfRowId, indexOfInstance, indexOfExpectedValue, indexOfActualValue, indexOfTestResult);
 			
 			long end=System.currentTimeMillis();
 			if(testRstFlag==null){testRstFlag="error: no expectation value.";}

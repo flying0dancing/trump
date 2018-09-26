@@ -713,10 +713,18 @@ public class ExcelUtil
 				Cell cell = row.getCell(colID);
 				if (cell == null)
 					cell = row.createCell(colID);
-				CellStyle cellStyle2 = xwb.createCellStyle();
-				DataFormat format = xwb.createDataFormat();
-				cellStyle2.setDataFormat(format.getFormat("@"));
-				cell.setCellStyle(cellStyle2);
+				
+				int number_CellStyle=xwb.getNumCellStyles();
+				CellStyle cellStyle=null;
+				if(number_CellStyle>0){
+					cellStyle=xwb.getCellStyleAt(number_CellStyle-1);
+					cell.setCellStyle(cellStyle);
+				}else{
+					cellStyle = xwb.createCellStyle();
+					DataFormat format = xwb.createDataFormat();
+					cellStyle.setDataFormat(format.getFormat("@"));
+					cell.setCellStyle(cellStyle);
+				}
 				cell.setCellValue(value);
 
 				FileOutputStream out = new FileOutputStream(fileName);
@@ -844,9 +852,12 @@ public class ExcelUtil
 public static Workbook openWorkbook(File filename) throws Exception
 {
 	FileInputStream inp = new FileInputStream(filename);
-	 Workbook workBook = WorkbookFactory.create(inp);
-	 inp.close();
-	 return workBook;
+	Workbook workBook = WorkbookFactory.create(inp);
+	CellStyle cellStyle = workBook.createCellStyle();
+	DataFormat format = workBook.createDataFormat();
+	cellStyle.setDataFormat(format.getFormat("@"));
+	inp.close();
+	return workBook;
 }
 /**
  * save Workbook.<br>created by Kun.Shen
@@ -957,10 +968,18 @@ public static void editCell(Workbook workBook,String sheetName, int rowIndex, in
 			{
 				cell = row.createCell(colIndex);
 			}
-		CellStyle cellStyle2 = workBook.createCellStyle();
-		DataFormat format = workBook.createDataFormat();
-		cellStyle2.setDataFormat(format.getFormat("@"));
-		cell.setCellStyle(cellStyle2);
+
+		int number_CellStyle=workBook.getNumCellStyles();
+		CellStyle cellStyle=null;
+		if(number_CellStyle>0){
+			cellStyle=workBook.getCellStyleAt(number_CellStyle-1);
+			cell.setCellStyle(cellStyle);
+		}else{
+			cellStyle = workBook.createCellStyle();
+			DataFormat format = workBook.createDataFormat();
+			cellStyle.setDataFormat(format.getFormat("@"));
+			cell.setCellStyle(cellStyle);
+		}
 		cell.setCellValue(value);
 	}
 }

@@ -25,5 +25,26 @@ public class TestPRA implements IExecFuncFolder{
 		
 	}
 	
+	@Deprecated
+	//@Test
+	public void uiDisplay_excelCellStyleswasexceeded()
+	{
+		
+		logger.info("testing excel Cell Styles was exceeded in return PRA PRA110 v1");
+		Form form=new Form();
+		form.setRegulator("Prudential Regulation Authority");
+		form.setExpectationFile("PRA110_v1_ARDisplay.xlsx");
+		String exportedFileFullPath="Z:\\APAutomation\\results\\download\\Prudential Regulation Authority(UIDisplay)\\PRA110_v1_3000_30092019(2).csv";
+		int indexOfCellName=0;
+		int indexOfRowId=1;
+		int indexOfInstance=2;
+		int indexOfExpectedValue=4;
+		int indexOfActualValue=5;
+		int indexOfTestResult=8;
+		
+		String a=Comparison.compareUIDisplayFile( form, exportedFileFullPath, indexOfCellName, indexOfRowId, indexOfInstance, indexOfExpectedValue, indexOfActualValue, indexOfTestResult);
+		logger.info(a);
+		
+	}
 	
 }
