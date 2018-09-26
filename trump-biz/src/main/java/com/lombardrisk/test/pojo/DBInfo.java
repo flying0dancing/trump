@@ -228,6 +228,7 @@ public class DBInfo{
 	 */
 	public String getRegulatorIDRangeStart(String regulator)
 	{
+		//SELECT "ID_RANGE_START" FROM "CFG_INSTALLED_CONFIGURATIONS" WHERE lower("DESCRIPTION")=lower('abc')
 		String SQL = "SELECT \"ID_RANGE_START\" FROM \"CFG_INSTALLED_CONFIGURATIONS\" WHERE lower(\"DESCRIPTION\")='" + regulator.toLowerCase() + "'  AND \"STATUS\"='A' ";
 		return getDBQuery().queryRecord(SQL);
 
@@ -241,6 +242,7 @@ public class DBInfo{
 	 */
 	public String getRegulatorIDRangEnd(String regulator)
 	{
+		//SELECT "ID_RANGE_END" FROM "CFG_INSTALLED_CONFIGURATIONS" WHERE lower("DESCRIPTION")=lower('abc')
 		String SQL = "SELECT \"ID_RANGE_END\" FROM \"CFG_INSTALLED_CONFIGURATIONS\" WHERE lower(\"DESCRIPTION\")='" + regulator.toLowerCase() + "' AND \"STATUS\"='A'  ";
 		return getDBQuery().queryRecord(SQL);
 	}
@@ -360,6 +362,7 @@ public class DBInfo{
 		{
 			String ID_Start = getRegulatorIDRangeStart(regulator);
 			String ID_End = getRegulatorIDRangEnd(regulator);
+			//select "InstSetId" from "CFG_RPT_List" where "ID" BETWEEN 13000001 and 14000000 and "PageName"='P1 (R010-R6070~C6000-C080)' and "ReturnId" in (select "ReturnId" from "CFG_RPT_Rets" where "ID" BETWEEN 13000001 and 14000000 and "Return"='PRA110' and "Version"=1)
 			SQL="select \"InstSetId\" from \"CFG_RPT_List\" where \"ID\" BETWEEN "+ID_Start+" and "+ID_End+" and \"PageName\"='"+pageName+"' and \"ReturnId\" in (select \"ReturnId\" from \"CFG_RPT_Rets\" where \"ID\" BETWEEN "+ID_Start+" and "+ID_End+" and \"Return\"='"+form+"' and \"Version\"="+version+")";
 			String instSetId=getDBQuery().queryRecord(SQL).trim();
 			if(instSetId.equals("-1"))
@@ -373,6 +376,7 @@ public class DBInfo{
 					SQL="select \"InstDescription\" from \"CFG_RPT_Instances\" where \"ID\" BETWEEN "+ID_Start+" and "+ID_End+" and \"InstSetId\"="+instSetId+" and \"InstCode\"='"+instanceCodeOrLabel+"'";
 				}else
 				{
+					//select "InstCode" from "CFG_RPT_Instances" where "ID" BETWEEN 13000001 and 14000000 and "InstSetId"=1 and "InstDescription"='Egyptian Pound'
 					SQL="select \"InstCode\" from \"CFG_RPT_Instances\" where \"ID\" BETWEEN "+ID_Start+" and "+ID_End+" and \"InstSetId\"="+instSetId+" and \"InstDescription\"='"+instanceCodeOrLabel+"'";
 				}
 			}
