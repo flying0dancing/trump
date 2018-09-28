@@ -47,4 +47,18 @@ public class TestPRA implements IExecFuncFolder{
 		
 	}
 	
+	@Deprecated
+	//@Test
+	public void csvTotalResultIssue() throws Exception
+	{
+		logger.info("testing comma issue on PRA PRA110 v1");
+		String returnStatus="";
+		Form form=new Form();
+		form.setRegulator("Prudential Regulation Authority");
+		form.setExpectationFile("PRA110_V1.csv");
+		String exportedFileFullPath="Z:\\APAutomation\\results\\download\\Prudential Regulation Authority(ExportToCSVNoScale)\\PRA_3000_PRA110_v1_20190930(2).csv";
+		returnStatus=Comparison.compareWithExportedCSV(form, exportedFileFullPath,"ExportTocsvNoScale");
+		Assert.assertEquals(returnStatus.substring(0,4), "pass");
+	}
+	
 }

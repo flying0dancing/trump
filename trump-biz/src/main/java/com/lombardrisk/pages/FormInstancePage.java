@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -1076,29 +1077,59 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		{
 			if(txt.equalsIgnoreCase(type)){type=txt;break;}
 		}
+		
 		waitThat("fipf.exportToFile_menu",type).toBeVisible();
 		if (PropHelper.ENABLE_FILE_DOWNLOAD)
 		{
 			TestCaseManager.getTestCase().startTransaction("");
 			TestCaseManager.getTestCase().setPrepareToDownload(true);
 			element("fipf.exportToFile_menu",type).click();
-			loadingDlg();
-			loadingDlg();
+			loadingDlg(null, 10000);
+			loadingDlg(null, 10000);
 			flag=getTipMessageStatus();
 			TestCaseManager.getTestCase().stopTransaction();
 			
 		}
 		else
 		{
+			
+			/*int position=getItemPositionOfExportToFileMenu(type);
+			logger.info("click "+type);
+			String js = "document.getElementById('formHeader:exportToFile_menu').getElementsByTagName('ul')[0].getElementsByTagName('li')["+String.valueOf(position-1)+"].getElementsByTagName('a')[0].click();";
+			executeScript(js);*/
 			element("fipf.exportToFile_menu",type).click();
-			loadingDlg();
-			loadingDlg();
+			loadingDlg(null, 10000);
+			loadingDlg(null, 10000);
 			flag=getTipMessageStatus();
 		}
 		
 		return flag;
 	}
 	
+	/**
+	 * position started from 1...
+	 * @param type
+	 * @return -1 means not found
+	 * @throws Exception 
+	 */
+	private int getItemPositionOfExportToFileMenu(String type) throws Exception{
+		int pos=1;
+		int count=element("fipf.exportToFile_menu_li").getNumberOfMatches();
+		Boolean flag=false;
+		for(;pos<=count;pos++){
+			String innerText=element("fipf.exportToFile_menu_li_Txt",String.valueOf(pos)).getInnerText();
+			if(innerText.equals(type)){
+				flag=true;
+				break;
+			}
+		}
+		if(!flag){
+			pos=-1;
+			logger.error("cannot found items in \"ExportToFile\" Menu");
+		}
+		
+		return pos;
+	}
 		
 	/**
 	 * export to regulator in form instance page
@@ -1287,7 +1318,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		if(element("fipf.validateNowBtn").isEnabled())
 		{
 			element("fipf.validateNowBtn").click();
-			loadingDlg();
+			loadingDlg(null,10000);
 			loadingDlg(element("fipf.validateNowBtn"),30);
 			String failCount=element("fipf.validateFails").getInnerText();
 			
