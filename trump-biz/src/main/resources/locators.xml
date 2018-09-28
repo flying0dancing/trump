@@ -83,6 +83,8 @@
     	<locator id="fipf.checkAdjustLog" type="WebElement" by="xpath" expression="//a[@id='formHeader:checkAdjustLog']/span" name="checkAdjustLog" description="View adjustment log"/>
     	<locator id="fipf.exportToFile_button" type="WebButton" by="id" expression="formHeader:exportToFile_button" name="exportToFile_button" description="exportToFile_button"/>
     	<locator id="fipf.exportToFile_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a[span='?']/span" name="exportToFile_menu" description="exportToFile_menu"/>
+    	<locator id="fipf.exportToFile_menu_li" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']/ul/li" name="exportToFile_menu_li" description="exportToFile_menu_li"/>
+    	<locator id="fipf.exportToFile_menu_li_Txt" type="WebElement" by="xpath" expression=".//*[@id='formHeader:exportToFile_menu']/ul/li[?]/a" name="exportToFile_menu_li_Txt" description="exportToFile_menu_li_Txt"/>
     	<locator id="fipf.exportToFile_menuList" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile_menu']//a/span" name="exportToFile_menuList" description="exportToFile_menuList"/>
     	<locator id="fipf.exportToFile4Fed_button" type="WebButton" by="id" expression="formHeader:exportToFile4Fed_button" name="exportToFile4Fed_button" description="exportToFile4Fed_button"/>
     	<locator id="fipf.exportToFileOption" type="WebElement" by="xpath" expression="//div[@id='formHeader:exportToFile4Fed_menu']//a[span='?']/span" name="exportToFileOption" description="exportToFileOption"/>
