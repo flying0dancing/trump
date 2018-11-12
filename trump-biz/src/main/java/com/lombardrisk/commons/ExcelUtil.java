@@ -1108,14 +1108,20 @@ private static String getCellValue(Cell cell)
     return cellValue;
 }
 
-/**
- *  translate a object to a excel row<br>created by Kun.Shen
- * @param rootRow the row you want to write object
+
+/***
+ * translate a object to a excel row
+ * @param rootRow the row you want to write object, skip head row(index=0)
  * @param obj the object you want to write to the rootRow
+ * @param claes inner classes of this obj's class
+ * @param indexOfColumn start index of column
+ * @return index of column
  * @throws Exception
+ * @author kun shen
+ * @since 2018/11/12
  */
 @SuppressWarnings("rawtypes")  
-private static void fromBeanToRow(Row rootRow, Object obj, List<Class> claes) throws Exception  
+private static int fromBeanToRow(Row rootRow, Object obj, List<Class> claes,int indexOfColumn) throws Exception  
 {  
 	Class pojo=obj.getClass();
     // 首先得到pojo所定义的字段  
@@ -1132,7 +1138,7 @@ private static void fromBeanToRow(Row rootRow, Object obj, List<Class> claes) th
     		titleRow=rootRow.getSheet().createRow(0);
     	}
     }
-    int indexOfColumn=0;
+
     for (Field field : fields)  
     {  
     	int mod=field.getModifiers();
@@ -1144,7 +1150,11 @@ private static void fromBeanToRow(Row rootRow, Object obj, List<Class> claes) th
         Object valueObj=field.get(obj);
         Cell cell=null;
         try  
-        {  
+        {  	
+        	if(claes.contains(field.getType())){
+        		indexOfColumn=fromBeanToRow(rootRow,valueObj,claes,indexOfColumn);
+        		continue;
+        	}
         	if(valueObj!=null)
         	{
         		cell=rootRow.createCell(indexOfColumn);
@@ -1171,7 +1181,7 @@ private static void fromBeanToRow(Row rootRow, Object obj, List<Class> claes) th
         indexOfColumn++;
         
     }  
-    
+    return indexOfColumn;
 }
 
 /**
@@ -1373,7 +1383,7 @@ public static <T> void writeObjectsToExcel(List<T> forms,String excelFileStr,Str
 		for(i=0;i<forms.size();i++)
 		{
 			Row row=sheet.createRow(i+1);
-			fromBeanToRow(row,forms.get(i),innerClaes);
+			fromBeanToRow(row,forms.get(i),innerClaes,0);
 		}
 		FileOutputStream out = new FileOutputStream(excelFileStr);
 		xwb.write(out);
