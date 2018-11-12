@@ -21,7 +21,7 @@ public class TestPRA implements IExecFuncFolder{
 			
 		String importFileFullPath="Z:\\ProductLine\\PRA\\Test Results\\1.2.0\\Auto\\PRA1.2.0.1_AR1.16.0b71\\import\\Prudential Regulation Authority\\PRA_3000_RFB001_v1_20190930.xlsx";
 		String[][] cells=new String[][]{{"_ReportingDate","-1","-1", "31/12/2019","date:en_GB"},{"_EntityCode","-1","-1", "3000",null}};
-		ExcelUtil.UpdateCellsInExcel(importFileFullPath, cells);
+		ExcelUtil.updateCellsInExcel(importFileFullPath, cells);
 		
 	}
 	

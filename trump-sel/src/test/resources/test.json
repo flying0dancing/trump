@@ -81,7 +81,7 @@
         "name": "ar_database",
         "driver": "oracle",
         "host": "172.20.20.49@ora11g",        
-        "schema": "AR115MAS$OWNER"
+        "schema": "AR4HKMA$OWNER"
       },
       {
       	"id": 7,

@@ -15,7 +15,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.AreaReference;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +24,7 @@ import com.lombardrisk.test.pojo.Transmission;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +42,6 @@ import java.util.regex.Pattern;
 public class ExcelUtil
 {
 	private final static Logger logger = LoggerFactory.getLogger(ExcelUtil.class);
-	private static int indexOfColumn=0;
 	
 	private ExcelUtil(){}
 	public static int getColumnNums(File file, String sheetName) throws Exception
@@ -994,7 +993,7 @@ public static void editCell(Workbook workBook,String sheetName, int rowIndex, in
  */
 
 @SuppressWarnings("rawtypes")  
-private static Object fromRowToBean(Row titleRow,Row rootRow, Class pojo) throws Exception  
+private static Object fromRowToBean(Row titleRow,Row rootRow, Class pojo, List<Class> claes) throws Exception  
 {  
     // 首先得到pojo所定义的字段  
     Field[] fields = pojo.getDeclaredFields();  
@@ -1003,6 +1002,8 @@ private static Object fromRowToBean(Row titleRow,Row rootRow, Class pojo) throws
     
     for (Field field : fields)  
     {  
+    	int mod=field.getModifiers();
+    	if(Modifier.isFinal(mod) && Modifier.isStatic(mod)&& field.getType().equals(Logger.class)) continue;
         // 设置字段可访问（必须，否则报错）  
         field.setAccessible(true);  
         // 得到字段的属性名  
@@ -1010,18 +1011,20 @@ private static Object fromRowToBean(Row titleRow,Row rootRow, Class pojo) throws
         // 这一段的作用是如果字段在Element中不存在会抛出异常，如果出异常，则跳过。
         String rootCellValue=null;
         try  
-        {  
-        	if (field.getType().equals(Transmission.class))  
-            {  
-        		field.set(obj,fromRowToBean(titleRow,rootRow,Transmission.class));
-        		continue;
-            }
+        {
+        	if (claes!=null && claes.contains(field.getType()))  
+        	{  
+        		 field.set(obj,fromRowToBean(titleRow,rootRow,field.getType(),claes));
+        		 continue;
+        	}
         	int lastCellNum=titleRow.getLastCellNum();
+        	Cell titleCell=null;
+        	String titleCellValue=null;
         	for(int cellNum=0;cellNum<lastCellNum;cellNum++)
         	{
-        		Cell titleCell=titleRow.getCell(cellNum);
+        		titleCell=titleRow.getCell(cellNum);
         		if(titleCell==null){continue;}
-        		String titleCellValue=getCellValue(titleCell).trim();
+        		titleCellValue=getCellValue(titleCell).trim();
         		
         		if(titleCellValue!=null && (name.equalsIgnoreCase(titleCellValue) || titleCellValue.equalsIgnoreCase(pojo.getSimpleName()+"."+name)))
         		{
@@ -1029,18 +1032,14 @@ private static Object fromRowToBean(Row titleRow,Row rootRow, Class pojo) throws
         			if(rootCell!=null) {rootCellValue=getCellValue(rootCell).trim();}
         			break;
         			
-        		}else
-        		{
-        			continue;
         		}
         	}
         	
-        }  
-        catch (Exception ex)  
+        }catch (Exception ex)  
         {  
         	continue;  
         }  
-        if (rootCellValue != null && !rootCellValue.equals(""))  
+        if (StringUtils.isNotBlank(rootCellValue))  
         {  
             // 根据字段的类型将值转化为相应的类型，并设置到生成的对象中。  
             if (field.getType().equals(String.class))  
@@ -1059,15 +1058,11 @@ private static Object fromRowToBean(Row titleRow,Row rootRow, Class pojo) throws
             {  
                 field.set(obj, Integer.parseInt(rootCellValue));  
             }
-            else  
-            {  
-                continue;  
-            }  
         }  
         
     }  
     return obj;  
-} 
+}
 
 
 private static String getCellValue(Cell cell)
@@ -1120,27 +1115,28 @@ private static String getCellValue(Cell cell)
  * @throws Exception
  */
 @SuppressWarnings("rawtypes")  
-private static void fromBeanToRow(Row rootRow, Object obj) throws Exception  
+private static void fromBeanToRow(Row rootRow, Object obj, List<Class> claes) throws Exception  
 {  
 	Class pojo=obj.getClass();
     // 首先得到pojo所定义的字段  
     Field[] fields = pojo.getDeclaredFields();
+    
     Boolean flagForWriteTitle=false;
     int index=rootRow.getRowNum();
     Row titleRow=null;
     if(index==1)
     {
     	flagForWriteTitle=true;
-    	if(pojo.equals(Transmission.class))
-    	{
-    		titleRow=rootRow.getSheet().getRow(0);
-    	}else
-    	{
+    	titleRow=rootRow.getSheet().getRow(0);
+    	if(titleRow==null){
     		titleRow=rootRow.getSheet().createRow(0);
     	}
     }
+    int indexOfColumn=0;
     for (Field field : fields)  
     {  
+    	int mod=field.getModifiers();
+    	if(Modifier.isFinal(mod) && Modifier.isStatic(mod)&& field.getType().equals(Logger.class)) continue;
         // 设置字段可访问（必须，否则报错）  
         field.setAccessible(true);  
         // 得到字段的属性名  
@@ -1149,23 +1145,17 @@ private static void fromBeanToRow(Row rootRow, Object obj) throws Exception
         Cell cell=null;
         try  
         {  
-        	if (field.getType().equals(Transmission.class))  
-            {  
-        		fromBeanToRow(rootRow,valueObj);
-        		continue;
-            }
         	if(valueObj!=null)
         	{
         		cell=rootRow.createCell(indexOfColumn);
         		cell.setCellType(Cell.CELL_TYPE_STRING);
         		cell.setCellValue(valueObj.toString());
-        		
         	}
         	if(flagForWriteTitle)
         	{
         		cell=titleRow.createCell(indexOfColumn);
         		cell.setCellType(Cell.CELL_TYPE_STRING);
-        		if(pojo.equals(Transmission.class))
+        		if(claes!=null && claes.contains(pojo))
         		{
         			cell.setCellValue(pojo.getSimpleName()+"."+name);
         		}else
@@ -1182,7 +1172,7 @@ private static void fromBeanToRow(Row rootRow, Object obj) throws Exception
         
     }  
     
-} 
+}
 
 /**
  * get forms from excel<br>created by Kun.Shen
@@ -1205,46 +1195,27 @@ public static List<Form> getForms(String excelFileStr)
  */
 public static List<Form> getForms(String excelFileStr,String sheetName)
 {
-	/*List<Form> list = new ArrayList<Form>(); 
-	Workbook xwb =null;
-	try
-	{
-		xwb =ExcelUtil.openWorkbook(new File(excelFileStr));
-		Sheet sheet = null;
-		if(sheetName!=null)
-		{sheet=xwb.getSheet(sheetName);}
-		if(sheet==null)
-		{sheet = xwb.getSheetAt(0);}
-		Row titleRow=sheet.getRow(0);
-		int rowNum=sheet.getLastRowNum();
-		for(int i=1;i<=rowNum;i++)
-		{
-			Row row=sheet.getRow(i);
-			if(row==null){continue;}
-			Form form=(Form)fromRowToBean(titleRow,row,Form.class);
-			if(!form.toString().equals("") && form.getRun().equalsIgnoreCase("Y") && !form.getExpiration().equalsIgnoreCase("Y"))
-			{
-				list.add(form);
-			}
-		}
-		
-	}catch(Exception e)
-	{
-		System.out.println("data parsed error");  
-	}
-	return list;*/
-	return getForms(excelFileStr,sheetName, false);
+	return getObjects(excelFileStr,sheetName, false,Form.class);
 }
 
-public static List<Form> getForms(String excelFileStr,String sheetName,Boolean getLastOne)
+/***
+ * get objects from excel
+ * @param excelFileStr excel's full path and name
+ * @param sheetName excel's sheet name, if {sheetName} is null, {getLastOne} is true, get the last sheet; if {sheetName} is null, {getLastOne} is false, get the first sheet
+ * @param getLastOne true get last sheet start with {sheetName} plus numbers, like ExportToCSV3, false get the sheet named {sheetName}
+ * @param pojo
+ * @return
+ */
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public static <T> List<T> getObjects(String excelFileStr,String sheetName,Boolean getLastOne,Class pojo)
 {
-	List<Form> list = new ArrayList<Form>(); 
+	List<T> list = new ArrayList<T>(); 
 	Workbook xwb =null;
 	try
 	{
 		xwb =ExcelUtil.openWorkbook(new File(excelFileStr));
 		Sheet sheet = null;
-		if(sheetName!=null)
+		if(StringUtils.isNotBlank(sheetName))
 		{
 			sheet=xwb.getSheet(sheetName);
 			if(getLastOne)
@@ -1253,38 +1224,45 @@ public static List<Form> getForms(String excelFileStr,String sheetName,Boolean g
 				for(int index=lastIndex;index>=0;index--)
 				{
 					String sheetNameTmp=xwb.getSheetName(index);
-					if(sheetNameTmp.startsWith(sheetName))
-					{
-						if(sheetNameTmp.length()==sheetName.length())
+					if(sheetNameTmp.equalsIgnoreCase(sheetName)){break;}
+					if(sheetNameTmp.startsWith(sheetName)){
+						String a=sheetNameTmp.substring(sheetName.length());
+						Pattern patern=Pattern.compile("\\d+");
+						Matcher isNum=patern.matcher(a);
+						if(isNum.matches())
 						{
+							sheet=xwb.getSheet(sheetNameTmp);
 							break;
-						}else
-						{
-							String a=sheetNameTmp.substring(sheetName.length());
-							Pattern patern=Pattern.compile("\\d+");
-							Matcher isNum=patern.matcher(a);
-							if(isNum.matches())
-							{
-								sheet=xwb.getSheet(sheetNameTmp);
-								break;
-							}
 						}
 					}
 				}
 			}
+		}else{
+			if(getLastOne){
+				sheet=xwb.getSheetAt(xwb.getNumberOfSheets()-1);
+			}
 		}
 		if(sheet==null)
 		{sheet = xwb.getSheetAt(0);}
+		List<Class> innerClaes=new ArrayList<Class>();
+		innerClaes.add(Transmission.class);
 		Row titleRow=sheet.getRow(0);
 		int rowNum=sheet.getLastRowNum();
 		for(int i=1;i<=rowNum;i++)
 		{
 			Row row=sheet.getRow(i);
 			if(row==null){continue;}
-			Form form=(Form)fromRowToBean(titleRow,row,Form.class);
-			if(StringUtils.isNoneBlank(form.toString()) && StringUtils.isNoneBlank(form.getRun()) && form.getRun().equalsIgnoreCase("Y") && (StringUtils.isBlank(form.getExpiration()) ||!form.getExpiration().equalsIgnoreCase("Y")))
+			//Form form=(Form)fromRowToBean(titleRow,row,Form.class,innerClaes);
+			T form=(T)fromRowToBean(titleRow,row,pojo,innerClaes);
+			if(StringUtils.isNoneBlank(form.toString()))
 			{
-				list.add(form);
+				if(form instanceof Form){
+					if(StringUtils.isNoneBlank(((Form)form).getRun()) && ((Form)form).getRun().equalsIgnoreCase("Y") && (StringUtils.isBlank(((Form)form).getExpiration()) ||!((Form)form).getExpiration().equalsIgnoreCase("Y"))){
+						list.add(form);
+					}
+				}else{
+					list.add(form);
+				}
 			}
 		}
 		
@@ -1293,67 +1271,6 @@ public static List<Form> getForms(String excelFileStr,String sheetName,Boolean g
 		System.out.println("data parsed error");  
 	}
 	return list;
-}
-
-/**
- * write forms to Excel <br>created by Kun.Shen
- * @param forms
- * @param excelFileStr fullpath with file name (support .xlsx and .xls formats)
- */
-public static void WriteFormsToExcel(List<Form> forms,String excelFileStr)
-{
-	File excelFile=new File(excelFileStr);
-	Workbook xwb=null;
-	FileInputStream fileInputStream=null;
-	try
-	{
-		if(!excelFile.exists())
-		{
-			//excelFile.createNewFile();
-			if(excelFileStr.endsWith(".xls"))
-			{
-				xwb=new HSSFWorkbook();
-			}
-			if(excelFileStr.endsWith(".xlsx"))
-			{
-				xwb=new XSSFWorkbook();
-			}
-			
-		}
-		else
-		{
-			fileInputStream = new FileInputStream(excelFile);
-			xwb = WorkbookFactory.create(fileInputStream);
-			fileInputStream.close();
-		}
-		Sheet sheet = xwb.createSheet();
-		for(int i=0;i<forms.size();i++)
-		{
-			Row row=sheet.createRow(i+1);
-			indexOfColumn=0;
-			fromBeanToRow(row,forms.get(i));
-		}
-		FileOutputStream out = new FileOutputStream(excelFileStr);
-		xwb.write(out);
-		out.flush();
-		out.close();
-	}
-	catch (Exception e)
-	{
-		logger.error(e.getMessage());
-	}
-	finally
-	{
-		if(fileInputStream!=null)
-		{
-			
-			try {  
-				fileInputStream.close();  
-				} catch (IOException e) { logger.error(e.getMessage()); }  
-
-		}
-	}
-	
 }
 
 
@@ -1365,20 +1282,22 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr)
  * @param sheetName
  * @since 2017.03.01
  */
-public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String sheetName)
+public static void writeFormsToExcel(List<Form> forms,String excelFileStr,String sheetName)
 {
-	WriteFormsToExcel(forms, excelFileStr, sheetName, false);
+	writeObjectsToExcel(forms, excelFileStr, sheetName, false);
 }
 
 /**
- * write forms to Excel 
+ * write objects to Excel 
  * @author kun shen
  * @param forms
  * @param excelFileStr fullpath with file name (support .xlsx and .xls formats)
- * @param sheetName
+ * @param sheetName, if {sheetName} is null, {rewrite} is true, get the last sheet
+ * @param rewrite
  * @since 2017.10.25
  */
-public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String sheetName,Boolean rewrite)
+@SuppressWarnings("rawtypes")
+public static <T> void writeObjectsToExcel(List<T> forms,String excelFileStr,String sheetName,Boolean rewrite)
 {
 	File excelFile=new File(excelFileStr);
 	Workbook xwb=null;
@@ -1407,55 +1326,54 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String
 			{
 				int lastIndex=xwb.getNumberOfSheets()-1;
 				String sheetNameTmp=null;
-				for(int index=lastIndex;index>=0;index--)
+				int index=lastIndex;
+				for(;index>=0;index--)
 				{
 					sheetNameTmp=xwb.getSheetName(index);
-					if(sheetNameTmp.startsWith(sheetName))
+					if(StringUtils.isNotBlank(sheetName))
 					{
-						if(sheetNameTmp.length()==sheetName.length())
-						{
+						if(sheetNameTmp.equalsIgnoreCase(sheetName)){
 							break;
-						}else
-						{
+						}
+						if(sheetNameTmp.startsWith(sheetName)){
 							String a=sheetNameTmp.substring(sheetName.length());
 							Pattern patern=Pattern.compile("\\d+");
 							Matcher isNum=patern.matcher(a);
 							if(isNum.matches())
 							{
-								sheetName=sheetNameTmp;
 								break;
 							}
 						}
+					}else{
+						break;
 					}
 				}
-				xwb.removeSheetAt(xwb.getSheetIndex(sheetName));
+				sheetName=sheetNameTmp;
+				xwb.removeSheetAt(index);//remove it, create new one at next step
 			}
 		}
 		Sheet sheet = null;
-		if(sheetName!=null && !sheetName.trim().equals(""))
+		int i=1;
+		String sheetNameVar=sheetName;
+		while(sheet==null)
 		{
-			int i=1;
-			String sheetNameVar=sheetName;
-			while(sheet==null)
+			try
 			{
-				try
-				{
-					sheet=xwb.createSheet(sheetName);
-				}catch(Exception e)
-				{
-					sheetName = sheetNameVar+String.valueOf(i);
-					i++;
-					continue;
-				}
+				sheet=xwb.createSheet(sheetName);
+			}catch(Exception e)
+			{
+				sheetName = sheetNameVar+String.valueOf(i);
+				i++;
+				continue;
 			}
 		}
-		if(sheet==null)
-		{sheet = xwb.createSheet();}
-		for(int i=0;i<forms.size();i++)
+
+		List<Class> innerClaes=new ArrayList<Class>();
+		innerClaes.add(Transmission.class);
+		for(i=0;i<forms.size();i++)
 		{
 			Row row=sheet.createRow(i+1);
-			indexOfColumn=0;
-			fromBeanToRow(row,forms.get(i));
+			fromBeanToRow(row,forms.get(i),innerClaes);
 		}
 		FileOutputStream out = new FileOutputStream(excelFileStr);
 		xwb.write(out);
@@ -1486,12 +1404,12 @@ public static void WriteFormsToExcel(List<Form> forms,String excelFileStr,String
  * @param cells( sheetName, rowIndex, colIndex, value, date type) or (CellReferenceName,"-1","-1",value, date type)
  * @since 2017/7/13
  */
-public static void UpdateCellsInExcel(String importExcelPath,String[][] cells)
+public static void updateCellsInExcel(String importExcelPath,String[][] cells)
 {
 	File importExcel=new File(importExcelPath);
 	if(importExcel.exists())
 	{
-		UpdateCellsInExcel(importExcel,cells);
+		updateCellsInExcel(importExcel,cells);
 	}else
 	{
 		logger.error("File Not Found: "+importExcelPath);
@@ -1504,7 +1422,7 @@ public static void UpdateCellsInExcel(String importExcelPath,String[][] cells)
  * @param cells( sheetName, rowIndex, colIndex, value)
  * @since 2017/7/13
  */
-public static void UpdateCellsInExcel(File importExcel,String[][] cells)
+public static void updateCellsInExcel(File importExcel,String[][] cells)
 {
 	Workbook xwb=null;
 	FileInputStream fileInputStream=null;
