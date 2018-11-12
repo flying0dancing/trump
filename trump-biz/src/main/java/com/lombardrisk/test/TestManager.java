@@ -376,8 +376,8 @@ public class TestManager extends TestBase implements IComFolder {
 				  }
 				  if(resultFile.endsWith(".xlsx")||resultFile.endsWith(".xls"))
 				  {
-					  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+resultFile,scenarioSheet,ICCB_RERUN);
-					  ExcelUtil.WriteFormsToExcel(forms, TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xlsx",scenarioSheet,ICCB_RERUN);
+					  ExcelUtil.writeObjectsToExcel(forms, TARGET_SCENARIOS_FOLDER+resultFile,scenarioSheet,ICCB_RERUN);
+					  ExcelUtil.writeObjectsToExcel(forms, TARGET_SCENARIOS_FOLDER+context.getCurrentXmlTest().getSuite().getName()+"_total.xlsx",scenarioSheet,ICCB_RERUN);
 				  }
 			  }
 			  StringBuffer identifier=new StringBuffer(resultFile);

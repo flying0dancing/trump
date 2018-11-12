@@ -157,7 +157,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 		}
 		catch(Exception e)
 		{
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(),e);
 		}
 		finally
 		{
@@ -289,7 +289,7 @@ private StringBuffer getExtendGridCells(String instanceCode) throws Exception
 			{
 				if(!gridBarFirstPointer.getAttribute("class").contains("ui-state-disabled"))
 				{
-					gridBarFirstPointer.click();
+					gridBarFirstPointer.clickByJavaScript();
 					loadingDlg();	
 				}
 				IWebElementWrapper nextPageBar=element("fipf.nextPageSta2",gridPrefix);

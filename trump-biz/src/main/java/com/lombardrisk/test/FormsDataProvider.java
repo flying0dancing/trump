@@ -44,7 +44,7 @@ public class FormsDataProvider implements IComFolder{
 				forms=Dom4jUtil.getForms(tmp);
 			}else if(tmp.endsWith(".xlsx") || tmp.endsWith(".xls") )
 			{
-				forms=ExcelUtil.getForms(tmp,context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET),ICCB_RERUN);
+				forms=ExcelUtil.getObjects(tmp,context.getCurrentXmlTest().getParameter(PARAMETER_SCENARIOS_SHEET),ICCB_RERUN,Form.class);
 			}
 			else
 			{

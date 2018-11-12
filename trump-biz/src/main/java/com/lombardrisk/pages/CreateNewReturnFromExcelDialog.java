@@ -133,7 +133,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 			importFileFullName=findNewFileForUpload(importFileFullName);
 			if(importFileFullName!=null && new File(importFileFullName).exists())
 			{
-				ExcelUtil.UpdateCellsInExcel(importFileFullName, new String[][]{{"_ReportingDate","-1","-1", form.getProcessDate(),"date:"+dateFormat},{"_EntityCode","-1","-1", getDBInfo().getEntityCode(form.getRegulator(), form.getEntity()),null}});//update process date and entity by form's getProcessDate
+				ExcelUtil.updateCellsInExcel(importFileFullName, new String[][]{{"_ReportingDate","-1","-1", form.getProcessDate(),"date:"+dateFormat},{"_EntityCode","-1","-1", getDBInfo().getEntityCode(form.getRegulator(), form.getEntity()),null}});//update process date and entity by form's getProcessDate
 			}else
 			{
 				return "no exist import file";
