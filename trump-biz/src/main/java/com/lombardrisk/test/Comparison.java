@@ -321,6 +321,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			if(exportedFile.exists())
 			{
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
+				logger.info("Expectation File:"+newFilePath);
 				ExcelChecker excelChecker=new ExcelChecker(exportedFileFullPath,newFilePath);
 				excelChecker.checker();
 				returnStatus=excelChecker.getExecutionStatus();
