@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+
+
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -17,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.util.PropHelper;
 
 import com.google.common.base.Strings;
+import com.lombardrisk.arproduct.arfilechecker.ExcelChecker;
+import com.lombardrisk.arproduct.arfilechecker.ValidationRuleChecker;
 import com.lombardrisk.commons.ExcelUtil;
 import com.lombardrisk.commons.FileUtil;
 import com.lombardrisk.commons.SortUtil;
@@ -315,25 +321,9 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			if(exportedFile.exists())
 			{
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
-				String[] commons={ PropHelper.getProperty("path.GetCellValueFromExcel"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", "\""+TARGET_LOG_FOLDER+"\"" };
-				cmdLine=PropHelper.getProperty("path.GetCellValueFromExcel")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" \""+TARGET_LOG_FOLDER+"\"";
-				logger.info(cmdLine);
-				Process process = Runtime.getRuntime().exec(commons);
-				process.waitFor();
-				logger.info("Expectation File(new):"+newFilePath);
-				File compareRstFile = new File(TARGET_LOG_FOLDER + "/queryCellValueRst.txt");
-				if(compareRstFile.exists())
-				{
-					String rst = TxtUtil.getAllContent(compareRstFile).trim();
-					if (!String.valueOf(rst.substring(0,1)).matches("[a-zA-Z0-9]"))
-						rst = rst.substring(1);
-					returnStatus=rst;
-					compareRstFile.delete();
-				}else
-				{
-					returnStatus="fail:File Not Find " +compareRstFile.getAbsolutePath();
-				}
-				
+				ExcelChecker excelChecker=new ExcelChecker(exportedFileFullPath,newFilePath);
+				excelChecker.checker();
+				returnStatus=excelChecker.getExecutionStatus();
 			}else
 			{
 				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();
@@ -751,24 +741,9 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			{
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newFilePath);
-				String[] commons={ PropHelper.getProperty("path.GetValidationResult"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", "\""+TARGET_LOG_FOLDER+"\"", "Y" };
-				cmdLine=PropHelper.getProperty("path.GetValidationResult")+" \"" + exportedFileFullPath + "\" \"" + newFilePath + "\" \""+TARGET_LOG_FOLDER+"\" \"Y\"";
-				logger.info(cmdLine);
-				Process process = Runtime.getRuntime().exec(commons);
-				process.waitFor();
-				File compareRstFile = new File(TARGET_LOG_FOLDER + "/rule_compareRst.txt");
-				if(compareRstFile.exists())
-				{
-					String rst = TxtUtil.getAllContent(compareRstFile).trim();
-					if (!String.valueOf(rst.substring(0,1)).matches("[a-zA-Z0-9]"))
-						rst = rst.substring(1).toLowerCase();//change to lower case.
-					returnStatus=rst;
-					compareRstFile.delete();
-				}else
-				{
-					returnStatus="fail:File Not Find " +compareRstFile.getAbsolutePath();
-				}
-				
+				ValidationRuleChecker valRuleChecker=new ValidationRuleChecker(exportedFileFullPath,newFilePath);
+				valRuleChecker.checker();
+				returnStatus=valRuleChecker.getExecutionStatus();
 			}else
 			{
 				returnStatus="fail:File Not Find:"+exportedFile.getAbsolutePath();

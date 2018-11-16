@@ -1070,6 +1070,29 @@ private static String getCellValue(Cell cell)
 	if (cell ==null){return null; }
     String cellValue=null;
     DataFormatter formatter = new DataFormatter();
+    /*if(cell.getCellType().equals(CellType.NUMERIC)){
+    	if (DateUtil.isCellDateFormatted(cell))
+		{
+			cellValue = formatter.formatCellValue(cell);
+		}
+		else
+		{
+			double value = cell.getNumericCellValue();
+			long intValue = (long) value;
+			cellValue = value - intValue == 0 ? String.valueOf(intValue) : String.valueOf(value);
+							
+		}
+    }else if(cell.getCellType().equals(CellType.STRING)){
+    	cellValue = cell.getStringCellValue();
+    }else if(cell.getCellType().equals(CellType.BOOLEAN)){
+    	cellValue = String.valueOf(cell.getBooleanCellValue());
+    }else if(cell.getCellType().equals(CellType.FORMULA)){
+    	cellValue = cell.getStringCellValue();
+    }else if(cell.getCellType().equals(CellType.BLANK) || cell.getCellType().equals(CellType.ERROR)){
+    	cellValue = "";
+    }else{
+    	cellValue = cell.toString().trim();
+    }*/
     switch (cell.getCellType())
 	{
 		case Cell.CELL_TYPE_NUMERIC:
@@ -1151,20 +1174,20 @@ private static int fromBeanToRow(Row rootRow, Object obj, List<Class> claes,int 
         Cell cell=null;
         try  
         {  	
-        	if(claes.contains(field.getType())){
+        	if(claes!=null && claes.contains(field.getType())){
         		indexOfColumn=fromBeanToRow(rootRow,valueObj,claes,indexOfColumn);
         		continue;
         	}
         	if(valueObj!=null)
         	{
         		cell=rootRow.createCell(indexOfColumn);
-        		cell.setCellType(Cell.CELL_TYPE_STRING);
+        		cell.setCellType(1);//CellType.STRING
         		cell.setCellValue(valueObj.toString());
         	}
         	if(flagForWriteTitle)
         	{
         		cell=titleRow.createCell(indexOfColumn);
-        		cell.setCellType(Cell.CELL_TYPE_STRING);
+        		cell.setCellType(1);
         		if(claes!=null && claes.contains(pojo))
         		{
         			cell.setCellValue(pojo.getSimpleName()+"."+name);
