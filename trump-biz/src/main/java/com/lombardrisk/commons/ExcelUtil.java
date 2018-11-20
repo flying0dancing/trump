@@ -1070,6 +1070,7 @@ private static String getCellValue(Cell cell)
 	if (cell ==null){return null; }
     String cellValue=null;
     DataFormatter formatter = new DataFormatter();
+    //poi 4.0.0
     /*if(cell.getCellType().equals(CellType.NUMERIC)){
     	if (DateUtil.isCellDateFormatted(cell))
 		{
@@ -1093,7 +1094,7 @@ private static String getCellValue(Cell cell)
     }else{
     	cellValue = cell.toString().trim();
     }*/
-    switch (cell.getCellType())
+   switch (cell.getCellType())
 	{
 		case Cell.CELL_TYPE_NUMERIC:
 			if (DateUtil.isCellDateFormatted(cell))
@@ -1115,7 +1116,7 @@ private static String getCellValue(Cell cell)
 			cellValue = String.valueOf(cell.getBooleanCellValue());
 			break;
 		case Cell.CELL_TYPE_FORMULA:
-			/*cellValue = String.valueOf(cell.getCellFormula());*/
+			//cellValue = String.valueOf(cell.getCellFormula());
 			cellValue = cell.getStringCellValue();
 			break;
 		case Cell.CELL_TYPE_BLANK:

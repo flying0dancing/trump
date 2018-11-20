@@ -22,6 +22,7 @@ private String importFile;
 private String expectationFile;
 private String executionStatus;
 private String exec_ExpectationFile;
+private String exec_DownloadFile;
 private int frequency;
 private String translate;
 private String retrieveGroup;
@@ -245,6 +246,14 @@ public void setRunFrequency(int frequency)
 public void accumulateRunFrequency()
 {
 	setRunFrequency(getRunFrequency()+1);
+}
+
+public String getExec_DownloadFile() {
+	return exec_DownloadFile;
+}
+
+public void setExec_DownloadFile(String exec_DownloadFile) {
+	this.exec_DownloadFile = exec_DownloadFile;
 }
 
 }

@@ -2,29 +2,189 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.lombardrisk</groupId>
+  <groupId>com.lombardrisk.arproduct</groupId>
   <artifactId>trump</artifactId>
   <version>1.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>trump</name>
   <url>http://maven.apache.org</url>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-<!--  
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  -->
-  <modules>
+ <modules>
     <module>trump-biz</module>
     <module>trump-sel</module>
   </modules>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+    <maven.jacoco.plugin.version>0.8.2</maven.jacoco.plugin.version>
+    <maven.surefire.plugin.version>2.19.1</maven.surefire.plugin.version>
+    
+    
+    <ar-file-checker.version>1.0.0-SNAPSHOT</ar-file-checker.version>
+    <webcore.version>2.0.0</webcore.version>
+    <com4j.version>2.1</com4j.version>
+    <jetty.version>8.1.15.v20140411</jetty.version>
+    <dom4j.version>1.6.1</dom4j.version>
+    <xmlunit.version>1.6</xmlunit.version>
+    <commons-lang3.version>3.4</commons-lang3.version>
+    <commons-compress.version>1.10</commons-compress.version>
+    <commons-dbutils.version>1.6</commons-dbutils.version>
+    <jtds.version>1.2.4</jtds.version>
+    <xml-apis.version>1.4.01</xml-apis.version>
+    <jsch.version>0.1.53</jsch.version>
+    <commons-email.version>1.1</commons-email.version>
+    
+    <guice.version>3.0</guice.version>
+    <reportng.version>1.1.4</reportng.version> 
+
+  </properties>
+  <dependencyManagement> 
+    <dependencies>
+      <dependency>
+        <groupId>com.lombardrisk.arproduct</groupId>
+        <artifactId>ar-file-checker</artifactId>
+        <version>${ar-file-checker.version}</version>
+        <exclusions>
+        		<exclusion>
+                    <artifactId>junit</artifactId>
+                    <groupId>junit</groupId>
+                </exclusion>
+                <exclusion>
+                	<groupId>org.apache.commons</groupId>
+    				<artifactId>commons-lang3</artifactId>
+                </exclusion>
+                <exclusion>
+                	<groupId>org.apache.commons</groupId>
+    				<artifactId>commons-io</artifactId>
+    			</exclusion>
+        		<exclusion>
+        			<groupId>ch.qos.logback</groupId>
+      				<artifactId>logback-classic</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>commons-dbutils</groupId>
+      				<artifactId>commons-dbutils</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>org.apache.poi</groupId>
+        			<artifactId>poi</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>org.apache.poi</groupId>
+        			<artifactId>poi-ooxml</artifactId>
+        		</exclusion>
+        	</exclusions>
+  	  </dependency>
+  	  
+  	  <dependency>
+    	<groupId>org.yiwan</groupId>
+   		<artifactId>webcore</artifactId>
+    	<version>${webcore.version}</version>
+     </dependency>
+     
+     <dependency>
+        <groupId>org.jvnet.com4j</groupId>
+        <artifactId>com4j</artifactId>
+        <version>${com4j.version}</version>
+     </dependency>
+     
+  		<dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-websocket</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+   		<dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>${dom4j.version}</version>
+        </dependency>     
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <version>${xmlunit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>${commons-compress.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-dbutils</groupId>
+            <artifactId>commons-dbutils</artifactId>
+            <version>${commons-dbutils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.jtds</groupId>
+            <artifactId>jtds</artifactId>
+            <version>${jtds.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>xml-apis</groupId>
+        	<artifactId>xml-apis</artifactId>
+        	<version>${xml-apis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>${jsch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>${commons-email.version}</version>
+        </dependency>
+        
+    <dependency> 
+      <groupId>com.google.inject</groupId>  
+      <artifactId>guice</artifactId>  
+      <version>${guice.version}</version>  
+      <scope>test</scope> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.uncommons</groupId>  
+      <artifactId>reportng</artifactId>  
+      <version>${reportng.version}</version>  
+      <scope>test</scope>  
+      <exclusions> 
+        <exclusion> 
+          <groupId>org.testng</groupId>  
+          <artifactId>testng</artifactId> 
+        </exclusion> 
+      </exclusions> 
+    </dependency> 
+    
+    </dependencies>
+  </dependencyManagement>
+<build>
+	<pluginManagement>
+  		<plugins>
+  			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+            </plugin>
+  			<plugin>
+				<groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${maven.jacoco.plugin.version}</version>
+            </plugin>
+            <plugin> 
+        		<groupId>org.apache.maven.plugins</groupId>  
+        		<artifactId>maven-surefire-plugin</artifactId>
+        		<version>${maven.surefire.plugin.version}</version>
+            </plugin>
+  		</plugins>
+  	</pluginManagement>	
+</build>
+  		
+  			
+       
+  		
+ 
 </project>

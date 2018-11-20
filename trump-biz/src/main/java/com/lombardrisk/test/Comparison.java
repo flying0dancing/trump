@@ -52,8 +52,10 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		try {
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
-			form.setExec_ExpectationFile(newFileName);
+			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
+			form.setExec_ExpectationFile(newFilePath);
+			form.setExec_DownloadFile(exportedFileFullPath);
 			File newFile=new File(newFilePath);
 			Workbook xwb =ExcelUtil.openWorkbook(newFile);
 			int amt=ExcelUtil.getRowNum(xwb, null);
@@ -216,8 +218,9 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
 			
-			form.setExec_ExpectationFile(newFileName);
+			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
+			form.setExec_ExpectationFile(newFilePath);
 			File newFile=new File(newFilePath);
 			
 			Workbook xwb =ExcelUtil.openWorkbook(newFile);
@@ -313,15 +316,17 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			String reslutFolder=expectationFolder+functionFolderName+"/";
 			
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
-			form.setExec_ExpectationFile(newFileName);
+			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
-			
+			form.setExec_ExpectationFile(newFilePath);
 			File exportedFile = new File(exportedFileFullPath);
 			
 			if(exportedFile.exists())
 			{
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newFilePath);
+				form.setExec_DownloadFile(exportedFileFullPath);
+				ClassLoader.getSystemResource("com.lombardrisk.arproduct.arfilechecker.ExcelChecker");
 				ExcelChecker excelChecker=new ExcelChecker(exportedFileFullPath,newFilePath);
 				excelChecker.checker();
 				returnStatus=excelChecker.getExecutionStatus();
@@ -381,6 +386,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 					File newExportedFile=FileUtil.writeToNewFile(exportedFile,functionFolderName);
 					logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 					logger.info("Exportation File(new):"+newExportedFile+" size:"+newExportedFile.length()/1024+"KB");
+					form.setExec_DownloadFile(newExportedFile.getCanonicalPath());
 					baselineReader=new BufferedReader(new FileReader(expectationFile));
 					strBuffer=new StringBuffer();
 					String status=null;
@@ -492,21 +498,30 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			String reportName=expectationFileName.substring(0,expectationFileName.lastIndexOf("."))+".html";
 			String newReportName=FileUtil.copyToNewFile(reslutFolder,reslutFolder,reportName);
 			
-			String exec_tmp=form.getExec_ExpectationFile();
+			/*String exec_tmp=form.getExec_ExpectationFile();
 			if(exec_tmp==null || exec_tmp.trim().equals(""))
 			{
 				form.setExec_ExpectationFile(newReportName);
 			}else
 			{
 				form.setExec_ExpectationFile(exec_tmp+";"+newReportName);
-			}
+			}*/
 			
 			String newReportPath=reslutFolder+newReportName;
-			
+			if(StringUtils.isBlank(form.getExec_ExpectationFile())){
+				form.setExec_ExpectationFile(newReportPath);
+			}else{
+				form.setExec_ExpectationFile(form.getExec_ExpectationFile()+";"+newReportPath);
+			}
 			File exportedFile = new File(exportedFileFullPath);
 			
 			if(exportedFile.exists())
 			{
+				if(StringUtils.isBlank(form.getExec_DownloadFile())){
+					form.setExec_DownloadFile(exportedFileFullPath);
+				}else{
+					form.setExec_DownloadFile(form.getExec_DownloadFile()+";"+exportedFileFullPath);
+				}
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newReportPath);
 				String path_BComp=new File(System.getProperty("user.dir")).getParent().replace("\\", "/").replace("/", System.getProperty("file.separator"))+PropHelper.getProperty("path.BComp").replace("..", "").replace("\\", "/").replace("/", System.getProperty("file.separator"));
@@ -650,7 +665,6 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			String newReportName=FileUtil.copyToNewFile(reslutFolder,reslutFolder,reportName);
 			
 			form.setExec_ExpectationFile(newReportName);
-			
 			String newReportPath=reslutFolder+newReportName;
 			
 			//adding function: pdf to text--named expected text name
@@ -664,7 +678,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			File exportedFile = new File(exportedFileFullPath);
 			if(exportedFile.exists())
 			{
-				
+				form.setExec_DownloadFile(exportedFileFullPath);
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newReportPath);
 				String path_BComp=new File(System.getProperty("user.dir")).getParent().replace("\\", "/").replace("/", System.getProperty("file.separator"))+PropHelper.getProperty("path.BComp").replace("..", "").replace("\\", "/").replace("/", System.getProperty("file.separator"));
@@ -733,15 +747,16 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			String reslutFolder=expectationFolder+EXPORTVALIDATION+System.getProperty("file.separator");
 			
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
-			form.setExec_ExpectationFile(newFileName);
+			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
-			
+			form.setExec_ExpectationFile(newFilePath);
 			File exportedFile = new File(exportedFileFullPath);
 			
 			if(exportedFile.exists())
 			{
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newFilePath);
+				form.setExec_DownloadFile(exportedFileFullPath);
 				ValidationRuleChecker valRuleChecker=new ValidationRuleChecker(exportedFileFullPath,newFilePath);
 				valRuleChecker.checker();
 				returnStatus=valRuleChecker.getExecutionStatus();
@@ -787,13 +802,14 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			String reslutFolder=expectationFolder+EXPORTPROBLEMS+System.getProperty("file.separator");
 			
 			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
-			form.setExec_ExpectationFile(newFileName);
+			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
-			
+			form.setExec_ExpectationFile(newFilePath);
 			File exportedFile = new File(exportedFileFullPath);
 			
 			if(exportedFile.exists())
 			{
+				form.setExec_DownloadFile(exportedFileFullPath);
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newFilePath);
 				String[] commons={ PropHelper.getProperty("path.GetProblemResult"), "\"" + exportedFileFullPath + "\"", "\"" + newFilePath + "\"", "\""+TARGET_LOG_FOLDER+"\"" };
