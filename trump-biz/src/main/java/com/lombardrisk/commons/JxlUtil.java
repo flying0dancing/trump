@@ -2,14 +2,14 @@ package com.lombardrisk.commons;
 
 import java.io.File;
 import java.io.FileInputStream;
-
+/*
 import jxl.Cell;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.format.CellFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
-
+*/
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class JxlUtil {
 
 
 	private JxlUtil(){}
-	
+	/*
 	public static void UpdateCellInExcel(String importExcelPath,String[][] cells)
 	{
 		File importExcel=new File(importExcelPath);
@@ -71,6 +71,6 @@ public class JxlUtil {
 			logger.error(e.getMessage());
 		}
 		
-	}
+	}*/
 	
 }

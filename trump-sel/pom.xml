@@ -3,9 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.lombardrisk</groupId>
+    <groupId>com.lombardrisk.arproduct</groupId>
     <artifactId>trump</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
   </parent>
   <artifactId>trump-sel</artifactId>
   
@@ -14,27 +14,23 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <argLine>-Dfile.encoding=UTF-8</argLine> 
-    <reportng.version>1.1.4</reportng.version>  
-    <guice.version>3.0</guice.version>  
     <xmlFileName>suites/TestTP.xml</xmlFileName> 
 	<reportOutput>reportng-reports</reportOutput>
   </properties>
   <dependencies> 
    <dependency> 
-      <groupId>com.lombardrisk</groupId>  
+      <groupId>com.lombardrisk.arproduct</groupId>  
       <artifactId>trump-biz</artifactId>  
-      <version>1.1.0-SNAPSHOT</version> 
+      <version>${project.version}</version> 
     </dependency>  
     <dependency> 
       <groupId>com.google.inject</groupId>  
-      <artifactId>guice</artifactId>  
-      <version>${guice.version}</version>  
+      <artifactId>guice</artifactId> 
       <scope>test</scope> 
     </dependency>  
     <dependency> 
       <groupId>org.uncommons</groupId>  
-      <artifactId>reportng</artifactId>  
-      <version>${reportng.version}</version>  
+      <artifactId>reportng</artifactId> 
       <scope>test</scope>  
       <exclusions> 
         <exclusion> 
@@ -50,16 +46,14 @@
       <plugin>
          <groupId>org.apache.maven.plugins</groupId>
          <artifactId>maven-compiler-plugin</artifactId>
-         <version>2.3.2</version>
          <configuration>
-         	<source>1.7</source>
-         	<target>1.7</target>
+         	<source>${java.version}</source>
+         	<target>${java.version}</target>
          </configuration>
       </plugin>
       <plugin> 
         <groupId>org.apache.maven.plugins</groupId>  
-        <artifactId>maven-surefire-plugin</artifactId>  
-        <version>2.19</version>  
+        <artifactId>maven-surefire-plugin</artifactId> 
         <configuration> 
           <suiteXmlFiles>
             <suiteXmlFile>${xmlFileName}</suiteXmlFile>
@@ -92,6 +86,25 @@
           </dependency> 
         </dependencies> 
       </plugin> 
+      
+      <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <configuration>
+                            <!-- passing property which will contains settings for JaCoCo agent.
+                            If not specified, then "argLine" would be used for "jar" packaging -->
+                            <propertyName>failsafeArgLine</propertyName>
+                            <destFile>${project.build.directory}/result/jacoco-it.exec</destFile>
+                        </configuration>
+                    </execution>
+                </executions>
+      </plugin>
     </plugins> 
    
   </build>
