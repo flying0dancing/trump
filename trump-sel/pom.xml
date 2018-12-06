@@ -87,24 +87,7 @@
         </dependencies> 
       </plugin> 
       
-      <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default-prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                        <configuration>
-                            <!-- passing property which will contains settings for JaCoCo agent.
-                            If not specified, then "argLine" would be used for "jar" packaging -->
-                            <propertyName>failsafeArgLine</propertyName>
-                            <destFile>${project.build.directory}/result/jacoco-it.exec</destFile>
-                        </configuration>
-                    </execution>
-                </executions>
-      </plugin>
+      
     </plugins> 
    
   </build>
