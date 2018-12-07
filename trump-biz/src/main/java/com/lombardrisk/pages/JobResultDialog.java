@@ -29,7 +29,7 @@ public class JobResultDialog extends AbstractPage {
 	public void closeThisPage() throws Exception
 	{
 		element("jrd.closeDialog").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	public String jobStartTime() throws Exception
@@ -60,10 +60,10 @@ public class JobResultDialog extends AbstractPage {
 				waitThat("jrd.title").toBeInvisible();
 				loadingDlg();
 			}*/
-			loadingDlg(5000);
+			loadingDlg(null,5);//loadingDlg(5000);
 			element("jrd.ok").click();
 			waitThat("jrd.title").toBeInvisible();
-			loadingDlg(3000);
+			loadingDlg(null,5);//loadingDlg(3000);
 			
 		}
 		return jobStartTimeLabel;
@@ -80,7 +80,7 @@ public class JobResultDialog extends AbstractPage {
 		FormInstancePage fip=null;
 		long timeout=600000;//10 min
 		long refreshWaittime=30000; //0.5 min
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		logger.info("job name["+jobName+"], type["+jobRunType+"]");
 		String jobStartTimeLabel=jobStartTime();
 		if(element("fipf.formInstTitleLabels").isDisplayed())
@@ -90,7 +90,7 @@ public class JobResultDialog extends AbstractPage {
 			{
 				forceSubmit.closeThisPage();
 			}
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager());
 			fip.unlockForm();//new add on 2017.10.31 for ar1.15.6-b1293 //TODO
 			fip.closeThisPage();
@@ -115,7 +115,7 @@ public class JobResultDialog extends AbstractPage {
 				while(status==null || !(status.toUpperCase().startsWith("FAILURE") || status.equalsIgnoreCase("SUCCESS")))
 				{
 					refreshPage();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel,refreshWaittime);
 					long jobEndTime=System.currentTimeMillis();
 					if(jobEndTime-jobStartTime>timeout)

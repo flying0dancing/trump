@@ -6,6 +6,7 @@ import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
+import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
@@ -35,7 +36,7 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	public void closeThisPage() throws Exception
 	{
 		element("fidf.close").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/** click "validation" link in left panel and then export/download validation rules.<br> If validation rules doesn't exist, return null.<br> If validation rules exists, download it and rename it with form's name_version_entity_processdate
@@ -109,9 +110,9 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	 */
 	private void clickLinkText(String text) throws Exception
 	{
-		loadingDlg(3000);
+		loadingDlg(null,5);//loadingDlg(3000);
 		element("fidf.linkText",text).click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/** click "export" button at the bottom page of form list page. return false and don't click "export" button if no records are found.
@@ -124,7 +125,7 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	{
 		Boolean flag=true;
 		clickLinkText(text);
-		loadingDlg(3000);
+		loadingDlg(null,5);//loadingDlg(3000);
 		if(element("fidf.noRecordsFound").isDisplayed())
 		{
 			logger.error("error: no records found to export.");
@@ -136,13 +137,13 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 				TestCaseManager.getTestCase().startTransaction("");
 				TestCaseManager.getTestCase().setPrepareToDownload(true);
 				element("fidf.export").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				TestCaseManager.getTestCase().stopTransaction();
 			}
 			else
 			{
 				element("fidf.export").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}
 		}
 		return flag;

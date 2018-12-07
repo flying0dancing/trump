@@ -286,9 +286,10 @@ public abstract class AbstractPage extends PageBase
 	
 	/**
 	 * Wait for ajax dialog disappear
-	 * 
+	 * replace by loadingDlg(null,5)
 	 * @throws Exception
 	 */
+	@Deprecated
 	protected void loadingDlg() throws Exception
 	{
 		logger.info("wait loading disappear");
@@ -298,9 +299,10 @@ public abstract class AbstractPage extends PageBase
 	}
 	/**
 	 * Wait for ajax dialog disappear
-	 * 
+	 * replace by loadingDlg(null,15)
 	 * @throws Exception
 	 */
+	@Deprecated 
 	protected void loadingDlg(long timeout) throws Exception
 	{
 		logger.info("wait loading disappear");
@@ -310,17 +312,18 @@ public abstract class AbstractPage extends PageBase
 	}
 	/**
 	 * Wait for ajax dialog disappear, and some element appear, element could be null
-	 * 
+	 * @param element it can be null, or some element needs to be waiting displayed
+	 * @param setT timeout(milliseconds)
 	 * @throws Exception
 	 */
 	protected void loadingDlg(IWebElementWrapper element,int setT) throws Exception
 	{
-		logger.info("wait loading disappear, some element appear");
-		waitThat().timeout(2100);
+		logger.info("wait loading disappear, or element appear");
+		waitThat().timeout(2000);
 		if(setT<=0){setT=10;}
 		while((element("abstract.ajaxstatusDlg").isDisplayed()||(element!=null && !element.isDisplayed())) && setT>0)
 		{
-			waitThat().timeout(8000);
+			waitThat().timeout(1000);
 			setT--;
 		}
 	}
@@ -489,7 +492,7 @@ public abstract class AbstractPage extends PageBase
 			{
 				element("abstract.calendar.day", day,day).click();
 				waitThat("abstract.calendar.day", day,day).toBeInvisible();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}else
 			{
 				
@@ -758,7 +761,7 @@ public abstract class AbstractPage extends PageBase
 		{
 			try{
 				element.selectByVisibleText(it.trim());
-				loadingDlg(15000);
+				loadingDlg(null,15);//loadingDlg(15000);
 			}catch(Exception e){}
 			finally{
 				if(element.getSelectedText().equalsIgnoreCase(it.trim()))
@@ -770,7 +773,7 @@ public abstract class AbstractPage extends PageBase
 					if(list.contains(it.trim()))
 					{
 						element.selectByVisibleText(it.trim());
-						loadingDlg();
+						loadingDlg(null,5);//loadingDlg();
 						flag=true;
 					}else
 					{
@@ -779,7 +782,7 @@ public abstract class AbstractPage extends PageBase
 							if(it.trim().equalsIgnoreCase(item.trim()))
 							{
 								element.selectByVisibleText(item);
-								loadingDlg();
+								loadingDlg(null,5);//loadingDlg();
 								flag=true;
 								break;
 							}
@@ -1103,7 +1106,7 @@ public abstract class AbstractPage extends PageBase
 					logger.error(tip);
 					flag=false;
 				}
-				loadingDlg(10000);
+				loadingDlg(null,15);//loadingDlg(10000);
 				waitThat("abstract.message").toBeInvisible();
 			}
 		}catch(Exception e)
@@ -1132,7 +1135,7 @@ public abstract class AbstractPage extends PageBase
 			{
 				logger.info("click radio \"Scaled\"");
 				element("abstract.applayScale",importDialogueName,"true").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				if(!element("abstract.applayScale_status",importDialogueName,"1").isPresent()){
 					flag=false;
 					logger.error("fail to select radio \"Scaled\"");
@@ -1141,7 +1144,7 @@ public abstract class AbstractPage extends PageBase
 			{
 				logger.info("click radio \"No scale\"");
 				element("abstract.applayScale",importDialogueName,"false").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				if(!element("abstract.applayScale_status",importDialogueName,"3").isPresent()){
 					flag=false;
 					logger.error("fail to select radio \"No scale\"");

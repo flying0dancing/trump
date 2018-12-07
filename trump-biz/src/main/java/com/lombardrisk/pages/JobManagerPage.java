@@ -42,7 +42,7 @@ public class JobManagerPage extends AbstractPage
 	public void closeThisPage() throws Exception
 	{
 		element("fjmlf.backToDashBoard").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class JobManagerPage extends AbstractPage
 			if(!gridBarFirstPointer.getAttribute("class").contains("ui-state-disabled"))
 			{
 				gridBarFirstPointer.click();
-				loadingDlg();	
+				loadingDlg(null,5);//loadingDlg();	
 			}
 			
 			status=getGridCells(name,referenceDate,started);
@@ -114,7 +114,7 @@ public class JobManagerPage extends AbstractPage
 						continue;
 					}
 					nextPageBar.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					nextPageBar=element("ficmptd.nextPageSta");
 				}
 			}

@@ -37,7 +37,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 	public void closeThisPage() throws Exception
 	{
 		element("aifd.closeDialog").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/**
@@ -112,7 +112,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 			{
 				logger.info("click import button");
 				listimportBtn.click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				//add a judge for import successfully
 				if(!element("fipf.pageTab").isPresent())
 				{
@@ -143,7 +143,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 			{
 				logger.info("click radio "+str_replace);
 				element("aifd.importMode",type,"Override").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				if(!element("aifd.importMode_status",type,"1").isPresent()){
 					flag=false;
 					logger.error("fail to select radio"+str_replace);
@@ -152,7 +152,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 			{
 				logger.info("click radio "+str_additive);
 				element("aifd.importMode",type,"Additive").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				if(!element("aifd.importMode_status",type,"3").isPresent()){
 					flag=false;
 					logger.error("fail to select radio"+str_additive);

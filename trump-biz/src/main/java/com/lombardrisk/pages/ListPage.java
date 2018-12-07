@@ -52,7 +52,7 @@ public class ListPage extends AbstractPage implements IExportTo
 		{
 			logger.info("click \"Export to Regulator Format\" button");
 			element("filf.exportToFile_button").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			String title=null;
 			String fileType=form.getTransmission().getFileType();
 
@@ -90,7 +90,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				logger.info("select "+liTxt);
 				String js = "document.getElementById('FormInstImpExpMenu:exportToFile_menu').getElementsByTagName('ul')[0].getElementsByTagName('li')["+String.valueOf(i-1)+"].getElementsByTagName('a')[0].getElementsByTagName('span')[0].click();";
 				executeScript(js);
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				//reuse this part of select displayed transmit dialog from 20170113
 				List<IWebElementWrapper> elements=element("td.transmitDialogTitles").getAllMatchedElements();
 				for(IWebElementWrapper element:elements)
@@ -121,7 +121,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			}else{
 				logger.info("click \"Export to Regulator Format\" button");
 				element("filf.exportToFile_button").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}
 			
 		}
@@ -144,7 +144,7 @@ public class ListPage extends AbstractPage implements IExportTo
 		{
 			logger.info("click \"Preferences\" button");
 			element("fipf.btnPreferences").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 		}
 		return new PreferencePage(getWebDriverWrapper(),getTestDataManager());
 	}
@@ -187,7 +187,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				}
 			}
 		}
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		if(element("filf.noRecordsFound").isPresent() && element("filf.noRecordsFound").isDisplayed())
 		{
 			flag=false;
@@ -279,7 +279,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			element("filf.createNew").click();
 			waitThat("filf.createNewEmptyLink").toBeVisible();
 			element("filf.createNewEmptyLink").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			createNewReturn=new CreateNewReturnDialog(getWebDriverWrapper(),getTestDataManager(),form);
 		}
 	
@@ -304,7 +304,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			if(element("filf.retrieve").isPresent() && element("filf.retrieve").isDisplayed())
 			{
 				element("filf.retrieve").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				dialog=new RetrieveDialog(getWebDriverWrapper(),getTestDataManager(),form);
 			}
 			//added by AR1.15.7-b68 for Asia
@@ -313,7 +313,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				element("filf.retrieveMenu").click();
 				waitThat("filf.retrieveSingle").toBeVisible();
 				element("filf.retrieveSingle").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				dialog=new RetrieveDialog(getWebDriverWrapper(),getTestDataManager(),form);
 			}
 			
@@ -343,7 +343,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				element("filf.retrieveMenu").click();
 				waitThat("filf.retrieveMultiple").toBeVisible();
 				element("filf.retrieveMultiple").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				page=new ExecutionGroupsFormPage(getWebDriverWrapper(),getTestDataManager(),form);
 			}
 			
@@ -370,7 +370,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			if(element("filf.compute").isPresent() && element("filf.compute").isDisplayed())
 			{
 				element("filf.compute").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				dialog=new ComputeDialog(getWebDriverWrapper(),getTestDataManager(),form);
 			}
 		}
@@ -398,7 +398,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			element("filf.createNew").click();
 			waitThat("filf.createNewFromExcelLink").toBeVisible();
 			element("filf.createNewFromExcelLink").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			createNewReturn=new CreateNewReturnFromExcelDialog(getWebDriverWrapper(),getTestDataManager(),form);
 		}
 		
@@ -430,21 +430,21 @@ public class ListPage extends AbstractPage implements IExportTo
 		{
 			logger.info("delete existed form instance");
 			element.click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			IWebElementWrapper deleteReturnConfirm=element("filf.deleteReturnConfirm");
 			
 			if (deleteReturnConfirm!=null && deleteReturnConfirm.isDisplayed())
 			{
 				deleteReturnConfirm.click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				IWebElementWrapper deleteComment=element("drcfd.deleteComment");
 				
 				if(deleteComment!=null && deleteComment.isDisplayed())
 				{
 					deleteComment.type("delete by automation");
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					element("drcfd.deleteReturn").click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					flag=getTipMessageStatus();
 					//flag=true;
 				}
@@ -601,7 +601,7 @@ public class ListPage extends AbstractPage implements IExportTo
 	{
 		JobManagerPage jmp=null;
 		element("filf.jobManager").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		jmp=new JobManagerPage(getWebDriverWrapper(),getTestDataManager());
 		if(!jmp.isThisPage())
 		{
@@ -636,7 +636,7 @@ public class ListPage extends AbstractPage implements IExportTo
 				if(!gridBarFirstPointer.getAttribute("class").contains("ui-state-disabled"))
 				{
 					gridBarFirstPointer.click();
-					loadingDlg();	
+					loadingDlg(null,5);//loadingDlg();	
 				}
 				IWebElementWrapper nextPageBar=element("filf.nextPageSta");
 				while(nextPageBar.isDisplayed() && !nextPageBar.getAttribute("class").contains("ui-state-disabled"))
@@ -647,7 +647,7 @@ public class ListPage extends AbstractPage implements IExportTo
 						break;
 					}
 					nextPageBar.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					nextPageBar=element("ficmptd.nextPageSta");
 				}
 			}
@@ -700,7 +700,7 @@ public class ListPage extends AbstractPage implements IExportTo
 		if(element("fipf.btnLogout").isDisplayed())
 		{
 			element("fipf.btnLogout").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 		}
 		return new HomePage(getWebDriverWrapper(),getTestDataManager());
 	}

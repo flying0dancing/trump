@@ -32,7 +32,7 @@ public class WorkflowLogDialog extends AbstractPage implements IComFolder,IExecF
 	public void closeThisPage() throws Exception
 	{
 		element("wkld.close").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	public String getUserWhoReadyForApproval() throws Exception

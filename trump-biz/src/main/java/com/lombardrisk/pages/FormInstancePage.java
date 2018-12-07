@@ -290,7 +290,7 @@ private StringBuffer getExtendGridCells(String instanceCode) throws Exception
 				if(!gridBarFirstPointer.getAttribute("class").contains("ui-state-disabled"))
 				{
 					gridBarFirstPointer.clickByJavaScript();
-					loadingDlg();	
+					loadingDlg(null,5);//loadingDlg();	
 				}
 				IWebElementWrapper nextPageBar=element("fipf.nextPageSta2",gridPrefix);
 				while(nextPageBar.isDisplayed() && nextPageBar.getAttribute("tabindex").equals("0"))
@@ -298,7 +298,7 @@ private StringBuffer getExtendGridCells(String instanceCode) throws Exception
 					strBuffer.append(getGridCells(instanceCode,tbodyId,gridPrefix).toString());
 					
 					nextPageBar.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					nextPageBar=element("fipf.nextPageSta2",gridPrefix);
 				}
 			}
@@ -406,7 +406,7 @@ private StringBuffer getExtendGridCells(String instanceCode,String cellName) thr
 				if(!gridBarFirstPointer.getAttribute("class").contains("ui-state-disabled"))
 				{
 					gridBarFirstPointer.click();
-					loadingDlg();	
+					loadingDlg(null,5);//loadingDlg();	
 				}
 				IWebElementWrapper nextPageBar=element("fipf.nextPageSta2",gridPrefix);
 				while(nextPageBar.isDisplayed() && nextPageBar.getAttribute("tabindex").equals("0"))
@@ -414,7 +414,7 @@ private StringBuffer getExtendGridCells(String instanceCode,String cellName) thr
 					strBuffer.append(getGridCells(instanceCode,tbodyId,gridPrefix,cellName).toString());
 					
 					nextPageBar.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					nextPageBar=element("fipf.nextPageSta2",gridPrefix);
 				}
 			}
@@ -511,9 +511,9 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			{
 				logger.info("select instance " + instanceLabel);
 				element("fipf.curInst").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				element("fipf.selectInstace", instanceLabel).click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}
 
 		}
@@ -545,10 +545,10 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		Boolean selected=false;
 		do
 		{
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			logger.info("Trying to click page index[" + pageIndex+"]");
 			element("fipf.pageName", pageIndex).click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			
 			//if fp.ajaxErrorBtn selected=false
 			if(element("fipf.ajaxErrorBtn").isPresent())
@@ -614,7 +614,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				super.getWebDriverWrapper().navigate().backward();
 				return false;
 			}
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			waitForPageLoaded();
 			if (element("fipf.warnConfirmBtn").isDisplayed())
 			{
@@ -641,15 +641,15 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			{
 				logger.info("Close form");
 				element("fipf.close").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				waitThat("fipf.close").toBeInvisible();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}
 			if (element("fipf.close").isDisplayed())
 			{
 				logger.info("can't close form, navigate to backward.");
 				super.getWebDriverWrapper().navigate().backward();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}
 		}
 	}
@@ -798,7 +798,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		while(!flag && times>0)
 		{
 			super.refreshPage();
-			loadingDlg(15000);
+			loadingDlg(null,15);//loadingDlg(15000);
 			flag=changeFormStatus(element("fipf.unlockBtn"),element("fipf.lockBtn"));
 			times--;
 		}
@@ -820,7 +820,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		{
 			element1.click();
 			waitThat().timeout(1000);
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			//TODO 
 			List<IWebElementWrapper> elements=element("uolwd.ok").getAllMatchedElements();
 			for(IWebElementWrapper element:elements)
@@ -834,7 +834,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 					break;
 				}
 			}
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			getTipMessageStatus();
 		}
 		if(element2.isPresent())
@@ -864,7 +864,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				element("fipf.adjust_button").click();
 				waitThat("fipf.importAdjustLog").toBeVisible();
 				element("fipf.importAdjustLog").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				importFileDlg=new ImportFileFormDialog(getWebDriverWrapper(),getTestDataManager(),form);
 				if(!importFileDlg.isThisPage())
 				{
@@ -1140,9 +1140,9 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	{
 		ExportToRegulatorDialog td=null;
 		Boolean flag=true;
-		loadingDlg(15000);
+		loadingDlg(null,15);//loadingDlg(15000);
 		element("fipf.exportToFile4Fed_button").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		String title=null;
 		String fileType=form.getTransmission().getFileType();
 		
@@ -1181,7 +1181,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			String js = "document.getElementById('formHeader:exportToFile4Fed_menu').getElementsByTagName('ul')[0].getElementsByTagName('li')["+String.valueOf(i-1)+"].getElementsByTagName('a')[0].getElementsByTagName('span')[0].click();";
 			executeScript(js);
 			if(liTxt.toUpperCase().contains("XBRL")){waitThat().timeout(2000);}
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			/*IWebElementWrapper element=element("td.transmitDialog4FedTitle");
 			if(element.isDisplayed())
 			{
@@ -1211,7 +1211,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			
 		}else{
 			element("fipf.exportToFile4Fed_button").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 		}
 		
 		
@@ -1233,7 +1233,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		element("fipf.adjust_button").click();
 		waitThat("fipf.checkAdjustLog").toBeVisible();
 		element("fipf.checkAdjustLog").click();
-		loadingDlg(3000);
+		loadingDlg(null,5);//loadingDlg(3000);
 		//loadingDlg(element("fidf.bottomPage"));
 		if(element("fidf.bottomPage").isDisplayed())
 		{
@@ -1270,13 +1270,13 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		if(element("fipf.doValidationBtn").isPresent())
 		{
 			element("fipf.doValidationBtn").click();//not live
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 		}else
 		{
 			if(element("fipf.unDoValidationBtn").isPresent())
 			{
 				element("fipf.unDoValidationBtn").click();//live
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}
 		}
 		if(element("fipf.doValidationBtn").isPresent())
@@ -1298,7 +1298,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		if(element("fipf.unDoValidationBtn").isPresent())
 		{
 			element("fipf.unDoValidationBtn").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 		}
 		if(element("fipf.doValidationBtn").isPresent())
 		{
@@ -1378,9 +1378,9 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			if(approveComment.isDisplayed())
 			{
 				approveComment.type("approved by automation");
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				element("wkacf.ok").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				getTipMessageStatus();
 			}
 
@@ -1525,14 +1525,14 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		if(element("fipf.workflow_menuList",type).isPresent())
 		{
 			element("fipf.workflow_menuList",type).click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			List<IWebElementWrapper> elements=element("fipf.workflow_CommentDialogComments").getAllMatchedElements();
 			for(IWebElementWrapper element:elements)
 			{
 				if(element.isDisplayed())
 				{
 					element.type("click \""+type+"\" by automation");
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					break;
 				}
 			}
@@ -1542,16 +1542,16 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				if(element.isDisplayed())
 				{
 					element.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					break;
 				}
 			}
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			flag=getTipMessageStatus();
 		}else
 		{
 			logger.info("fipf.workflow_menuList doesn't contains \""+type+"\"");
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			element("fipf.workflow_button").click();
 			waitThat("fipf.workflow_menu").toBeInvisible();
 		}

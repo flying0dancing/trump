@@ -31,7 +31,7 @@ public class ForceDirectSubmitDialog extends AbstractPage implements IComFolder{
 	public void closeThisPage() throws Exception
 	{
 		element("fdsd.cancel").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class ForceDirectSubmitDialog extends AbstractPage implements IComFolder{
 			logger.info("typing \"Force Direct Submit by automation\" on \"Force Direct Submit Dialog\"");
 			element.clear();
 			element.type("Force Direct Submit by automation");
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			
 			flag=true;
 		}
@@ -67,9 +67,9 @@ public class ForceDirectSubmitDialog extends AbstractPage implements IComFolder{
 		loadingDlg(element("fdsd.submitConfirmMsg"),20);
 		String msg=element("fdsd.submitConfirmMsg").getInnerText();
 		logger.info(msg);
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		element("fdsd.submitConfirmOK").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		return msg;
 	}
 	

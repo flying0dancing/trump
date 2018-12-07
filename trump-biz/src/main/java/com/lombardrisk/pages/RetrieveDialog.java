@@ -43,7 +43,7 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 	public void closeThisPage() throws Exception
 	{
 		element("fird.closeDialog").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 				{
 					logger.info("select process date:" + processDate);
 					element("fird.selectProcessDate").input(processDate);
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					selectDate(processDate);
 					if(formAndVersion != null && flag)
 					{
@@ -93,7 +93,7 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 				
 			}
 			
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			if(!flag)
 			{
 				closeThisPage();
@@ -143,16 +143,16 @@ public class RetrieveDialog extends AbstractPage implements IReturnDialog{
 			//ListPage listPage=null;
 			logger.info("click retrieve button");
 			element("fird.ok").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			//error messages display
 			if(element("fird.messages").isDisplayed())
 			{
 				status="error:job cannot do retrieve. "+getAllInnerText(element("fird.messagesDetail"));
 				element("fird.cancel").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}else
 			{
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());
 				
 				String jobRunType="RetrieveJob";
