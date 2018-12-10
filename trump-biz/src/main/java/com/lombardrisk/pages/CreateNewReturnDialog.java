@@ -32,7 +32,7 @@ public class CreateNewReturnDialog extends AbstractPage implements IReturnDialog
 	public void closeThisPage() throws Exception
 	{
 		element("ficd.closeCreateNewReturn").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 /**
@@ -59,7 +59,7 @@ public class CreateNewReturnDialog extends AbstractPage implements IReturnDialog
 			{
 				logger.info("select process date:" + processDate);
 				element("ficd.selectProcessDate").input(processDate);
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				selectDate(processDate);
 				if(formAndVersion != null && flag)
 				{
@@ -70,7 +70,7 @@ public class CreateNewReturnDialog extends AbstractPage implements IReturnDialog
 					if(cloneData != null && !cloneData.trim().equals("")&& flag)
 					{
 						element("ficd.cloneCheck").click();
-						loadingDlg();
+						loadingDlg(null,5);//loadingDlg();
 						flag=selectIt(element("ficd.selectCloneDate"),cloneData);
 					}else
 					{
@@ -85,7 +85,7 @@ public class CreateNewReturnDialog extends AbstractPage implements IReturnDialog
 			}
 			
 		}
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		waitThat().timeout(2000);
 		if(!flag)
 		{
@@ -150,17 +150,17 @@ public FormInstancePage clickOK() throws Exception
 	FormInstancePage fip=null;
 	logger.info("click create button");
 	element("ficd.create").click();
-	loadingDlg();
+	loadingDlg(null,5);//loadingDlg();
 	if(element("ficd.messages").isDisplayed())
 	{
 		element("ficd.cancel").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}else
 	{
 		if(element("ficd.createconfirm").isDisplayed())
 		{
 			element("ficd.createconfirm").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 		}
 		waitThat("ficd.createNewReturnTitle").toBeInvisible();
 		waitThat("fipf.form").toBeVisible();

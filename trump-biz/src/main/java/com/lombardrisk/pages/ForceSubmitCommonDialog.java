@@ -31,7 +31,7 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 	public void closeThisPage() throws Exception
 	{
 		element("fscd.cancel").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 		{
 			logger.info("typing \"Force Submit by automation\" on \"Force Submit Dialog\"");
 			element.type("Force Submit by automation");
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			
 			flag=true;
 		}
@@ -71,6 +71,6 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 	{
 		logger.info("clicking submit button on \"Force Submit Dialog\"");
 		element("fscd.DataSchedulesubmit").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 }

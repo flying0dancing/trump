@@ -31,7 +31,7 @@ public class ComputeDialog extends AbstractPage implements IReturnDialog{
 	public void closeThisPage() throws Exception
 	{
 		element("ficmptd.closeDialog").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class ComputeDialog extends AbstractPage implements IReturnDialog{
 					logger.info("select process date:" + processDate);
 					element("ficmptd.selectProcessDate").clear();
 					element("ficmptd.selectProcessDate").input(processDate);
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					selectDate(processDate);
 					if(formAndVersion != null && flag)
 					{
@@ -75,7 +75,7 @@ public class ComputeDialog extends AbstractPage implements IReturnDialog{
 				
 			}
 			
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			if(!flag)
 			{
 				closeThisPage();
@@ -95,17 +95,17 @@ public class ComputeDialog extends AbstractPage implements IReturnDialog{
 			FormInstancePage fip=null;
 			logger.info("click compute button");
 			element("ficmptd.ok").click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			if(element("ficmptd.messages").isDisplayed())
 			{
 				element("ficmptd.cancel").click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}else
 			{
 				if(element("ficmptd.computeConfirm").isDisplayed())
 				{
 					element("ficmptd.computeConfirm").click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 				}
 				waitThat("ficmptd.title").toBeInvisible();
 				waitThat("fipf.form").toBeVisible();

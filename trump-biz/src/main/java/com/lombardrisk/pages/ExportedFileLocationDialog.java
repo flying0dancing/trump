@@ -30,7 +30,7 @@ public class ExportedFileLocationDialog extends AbstractPage {
 	public void closeThisPage() throws Exception
 	{
 		element("efld.ok").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	public String exportedFileName() throws Exception

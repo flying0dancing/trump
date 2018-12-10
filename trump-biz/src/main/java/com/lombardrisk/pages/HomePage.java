@@ -81,7 +81,7 @@ public class HomePage extends AbstractPage
 			waitThat("hm.message").toBeInvisible();
 			return null;
 		}
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		waitForPageLoaded();
 		return new ListPage(getWebDriverWrapper(),getTestDataManager());
 	}
@@ -89,7 +89,7 @@ public class HomePage extends AbstractPage
 	public HomePage submitLoginExpectingFailure() throws Exception
 	{
 		element("hm.login").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		return new HomePage(getWebDriverWrapper(),getTestDataManager());
 	}
 
@@ -100,7 +100,7 @@ public class HomePage extends AbstractPage
 		logger.info("Login AgileReporter with user [" + userName + "]");
 		typeUsername(userName);
 		typePassword(password);
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		ListPage listPage = submitLogin();
 		//assertThat("pp.userLabel").innerText().containsIgnoringCase("hi "+userName);
 		if(listPage.isThisPage())
@@ -130,7 +130,7 @@ public class HomePage extends AbstractPage
 		logger.info("Login AgileReporter with user [" + userName + "]");
 		typeUsername(userName);
 		typePassword(password);
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		ListPage listPage = submitLogin();
 		//assertThat("pp.userLabel").innerText().containsIgnoringCase("hi "+userName);
 		if(listPage==null)

@@ -30,38 +30,38 @@ public class PreferencePage extends AbstractPage
 	public void selectTimeZone(String timezone) throws Exception
 	{
 		element("prp.TZC").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		element("prp.TZS").selectByVisibleText(timezone);
 		element("prp.confirm").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	public void selectTimeZoneByValue(String timezone) throws Exception
 	{
 		element("prp.TZC").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		element("prp.TZS").selectByValue(timezone);
 		element("prp.confirm").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 
 	public void selectLanguage(String language) throws Exception
 	{
 		element("prp.LC").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		element("prp.LS").selectByVisibleText(language);
 		element("prp.confirm").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 
 	public void selectLanguageByValue(String language) throws Exception
 	{
 		element("prp.LC").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		element("prp.LS").selectByValue(language);
 		Thread.sleep(500);
 		element("prp.confirm").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 
 }

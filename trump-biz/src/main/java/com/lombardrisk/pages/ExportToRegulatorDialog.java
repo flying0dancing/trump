@@ -63,7 +63,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	public void closeThisPage() throws Exception
 	{
 		element("td.closeTransmitDialog",title).click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/**
@@ -152,7 +152,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			element=null;
 		}
 		
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 		waitThat().timeout(2000);
 		if(flag && !element("td.noRecordsFound").isDisplayed() && element("td.exportButton",title).isEnabled())
 		{
@@ -246,7 +246,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					logger.info("click force direct Submit button");
 					
 					exportEle.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					flag=getTipMessageStatus();
 					ForceDirectSubmitDialog forceSubmit=new ForceDirectSubmitDialog(getWebDriverWrapper(),getTestDataManager());
 					if(forceSubmit.isThisPage())
@@ -267,7 +267,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 					{
 						element("td.logButton").click();
-						loadingDlg();
+						loadingDlg(null,5);//loadingDlg();
 					}
 					if(isThisPage())
 					{
@@ -325,7 +325,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					if(exportBtnId.contains("forceS"))//forceSubmitBtn, seperate from foceDirectSubmitBtn
 					{
 						exportEle.click();
-						loadingDlg();
+						loadingDlg(null,5);//loadingDlg();
 						flag=getTipMessageStatus();
 						ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 						forceSubmit.typeSubmitComment();
@@ -342,7 +342,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 						TestCaseManager.getTestCase().setDownloadFileFormat(FileFormat.BINARY);
 						
 						exportEle.click();
-						loadingDlg();
+						loadingDlg(null,5);//loadingDlg();
 						flag=getTipMessageStatus();
 						TestCaseManager.getTestCase().stopTransaction();
 					}
@@ -351,7 +351,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				else
 				{
 					exportEle.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					flag=getTipMessageStatus();
 					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 					if(forceSubmit.isThisPage())
@@ -373,7 +373,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 				{
 					element("td.logButton").click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 				}
 				if(isThisPage())
 				{
@@ -420,7 +420,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				logger.info("click export/force button");
 				
 				exportEle.click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				flag=getTipMessageStatus();
 				ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 				if(forceSubmit.isThisPage())
@@ -432,7 +432,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				if(element("td.logButton").isDisplayed() && element("td.logButton").isEnabled())
 				{
 					element("td.logButton").click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 				}
 				
 				if(!flag){return flag;}
@@ -449,7 +449,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				if(_exportFileLoation.isPresent() && _exportFileLoation.isDisplayed())
 				{
 					_exportFileLoation.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					ExportedFileLocationDialog efld=new ExportedFileLocationDialog(getWebDriverWrapper(),getTestDataManager());
 					String downloadFileName_Server=efld.exportedFileName();
 					getDownloadFromServerToLocalSSH(prefixOfRegulator,status,downloadFileName_Server,combined);
@@ -603,7 +603,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		{
 			//element.checkByJavaScript(true);
 			element.click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			flag=true;
 		}else
 		{

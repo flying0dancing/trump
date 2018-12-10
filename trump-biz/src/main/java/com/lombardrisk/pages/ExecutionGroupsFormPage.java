@@ -44,7 +44,7 @@ public class ExecutionGroupsFormPage extends AbstractPage {
 	public void closeThisPage() throws Exception
 	{
 		element("abstract.clickDashboard").click(); //return back to Dashboard
-		loadingDlg(8000);
+		loadingDlg(null,10);//loadingDlg(8000);
 	}
 	
 	/**
@@ -66,12 +66,12 @@ public class ExecutionGroupsFormPage extends AbstractPage {
 				if(aGroupEle.isPresent() && aGroupEle.isDisplayed()){
 					logger.info("find retrieve group:" + group);
 					aGroupEle.click();
-					loadingDlg();
+					loadingDlg(null,5);//loadingDlg();
 					waitThat("egrd.title").toBeVisible(); // wait Run Dialog visible
 					if(StringUtils.isNotBlank(processDate))
 					{
 						element("egrd.referenceDate").input(processDate);
-						loadingDlg(1000);
+						loadingDlg(null,5);//loadingDlg(1000);
 						selectDate(processDate);
 						flag=true;
 					}
@@ -85,11 +85,11 @@ public class ExecutionGroupsFormPage extends AbstractPage {
 						{
 							element("egrd.tickAbortOnFail").click();
 						}
-						loadingDlg();
+						loadingDlg(null,5);//loadingDlg();
 					}
 				}
 			}
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			if(!flag)
 			{
 				IWebElementWrapper element=element("egrd.cancel");
@@ -97,7 +97,7 @@ public class ExecutionGroupsFormPage extends AbstractPage {
 				{
 					element("egrd.cancel").click(); // close Run Dialog
 				}
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				logger.info("can't run retrieve group, cancel it.");
 				closeThisPage();
 			}

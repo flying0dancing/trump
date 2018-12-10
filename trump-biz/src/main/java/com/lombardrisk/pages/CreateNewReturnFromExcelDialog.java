@@ -50,7 +50,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 	public void closeThisPage() throws Exception
 	{
 		element("cfed.closeDialog").click();
-		loadingDlg();
+		loadingDlg(null,5);//loadingDlg();
 	}
 	
 	/**
@@ -214,19 +214,19 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		{
 			logger.info("click import button");
 			listimportBtn.click();
-			loadingDlg();
+			loadingDlg(null,5);//loadingDlg();
 			String type2=type.substring(0, type.length()-4);
 			IWebElementWrapper replaceconfirm=element("cfed.replaceconfirm",type2);
 			if( replaceconfirm.isDisplayed())
 			{
 				replaceconfirm.click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 			}
 			IWebElementWrapper confirmBtn=element("cfed.confirmBtn");
 			if(confirmBtn.isDisplayed())
 			{
 				confirmBtn.click();
-				loadingDlg();
+				loadingDlg(null,5);//loadingDlg();
 				//add a judge for import successfully
 				if(!element("fipf.pageTab").isPresent())
 				{
