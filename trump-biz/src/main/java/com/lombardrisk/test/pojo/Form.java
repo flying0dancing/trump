@@ -202,6 +202,7 @@ public Boolean equals(Form formCmp)
 	ArrayList<String> ignoreList=new ArrayList<String>();
 	ignoreList.add("executionStatus");
 	ignoreList.add("exec_ExpectationFile");
+	ignoreList.add("exec_DownloadFile");
 	ignoreList.add("frequency");
 	for(Field field:fields)
 	{
