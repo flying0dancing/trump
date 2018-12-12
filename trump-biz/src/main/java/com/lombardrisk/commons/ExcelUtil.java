@@ -1384,6 +1384,10 @@ public static <T> void writeObjectsToExcel(List<T> forms,String excelFileStr,Str
 				}
 				sheetName=sheetNameTmp;
 				xwb.removeSheetAt(index);//remove it, create new one at next step
+			}else{
+				if(StringUtils.isBlank(sheetName)){
+					sheetName=xwb.getSheetName(0);
+				}
 			}
 		}
 		Sheet sheet = null;
