@@ -1356,9 +1356,9 @@ public static <T> void writeObjectsToExcel(List<T> forms,String excelFileStr,Str
 			fileInputStream = new FileInputStream(excelFile);
 			xwb = WorkbookFactory.create(fileInputStream);
 			fileInputStream.close();
+			int lastIndex=xwb.getNumberOfSheets()-1;
 			if(rewrite)
 			{
-				int lastIndex=xwb.getNumberOfSheets()-1;
 				String sheetNameTmp=null;
 				int index=lastIndex;
 				for(;index>=0;index--)
@@ -1366,7 +1366,7 @@ public static <T> void writeObjectsToExcel(List<T> forms,String excelFileStr,Str
 					sheetNameTmp=xwb.getSheetName(index);
 					if(StringUtils.isNotBlank(sheetName))
 					{
-						if(sheetNameTmp.equalsIgnoreCase(sheetName)){
+						if(sheetNameTmp.equalsIgnoreCase(sheetName)|| sheetName.equalsIgnoreCase("null")){
 							break;
 						}
 						if(sheetNameTmp.startsWith(sheetName)){
@@ -1385,8 +1385,8 @@ public static <T> void writeObjectsToExcel(List<T> forms,String excelFileStr,Str
 				sheetName=sheetNameTmp;
 				xwb.removeSheetAt(index);//remove it, create new one at next step
 			}else{
-				if(StringUtils.isBlank(sheetName)){
-					sheetName=xwb.getSheetName(0);
+				if(StringUtils.isBlank(sheetName) || sheetName.equalsIgnoreCase("null")){
+					sheetName=xwb.getSheetName(lastIndex);
 				}
 			}
 		}
