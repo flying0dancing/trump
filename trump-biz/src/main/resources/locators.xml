@@ -100,7 +100,8 @@
     	<locator id="fipf.workflow_menu" type="WebElement" by="xpath" expression="//div[@id='formHeader:workflow_menu']//a/span" name="workflow_menu" description="workflow_menu"/>
     	<locator id="fipf.workflow_CommentDialogComments" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/textarea" name="workflow_CommentDialogComment" description="workflow's CommentDialog Comment textarea"/>
     	<locator id="fipf.workflow_CommentDialogOKs" type="WebElement" by="xpath" expression=".//div[contains(@id,'CommentDialog')]//div/button[span='OK']" name="workflow_CommentDialogOKButton" description="workflow's CommentDialog OK button"/>
-    	<locator id="fipf.validateFails" type="WebElement" by="xpath" expression="//div[span='VALIDATION FAILURE']/span[1]" name="validateFails" description="validation Failure in Pages"/>
+    	<locator id="fipf.validateFails" type="WebElement" by="xpath" expression="//div[span='VALIDATION FAILURE']/span[1]" name="validateFails" description="validation Failure in Pages arver smaller and equal to 1.16.1"/>
+    	<locator id="fipf.validateCritical" type="WebElement" by="xpath" expression="//div[contains(@class,'apValidationClass')]/h3[1]/span[2]" name="validateCritical" description="validation Critical in Pages arver larger than 1.16.2"/>
     	
     </page>
     

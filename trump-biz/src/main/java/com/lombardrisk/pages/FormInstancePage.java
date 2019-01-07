@@ -1320,7 +1320,15 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			element("fipf.validateNowBtn").click();
 			loadingDlg(null,10000);
 			loadingDlg(element("fipf.validateNowBtn"),30);
-			String failCount=element("fipf.validateFails").getInnerText();
+			IWebElementWrapper validateFailsEle=element("fipf.validateFails"); //this element suits for ar version<=1.16.1
+			IWebElementWrapper validateCriticalEle=element("fipf.validateCritical");//this element suits for ar version>=1.16.2
+			String failCount=null;
+			if(validateFailsEle.isPresent() && validateFailsEle.isDisplayed())
+			{
+				failCount=validateFailsEle.getInnerText();
+			}else if(validateCriticalEle.isPresent() && validateCriticalEle.isDisplayed()){
+				failCount=validateCriticalEle.getInnerText();
+			}
 			
 			if(failCount!=null)
 			{
@@ -1331,7 +1339,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				}
 				
 			}
-			
 		}
 		return failNum;
 	}

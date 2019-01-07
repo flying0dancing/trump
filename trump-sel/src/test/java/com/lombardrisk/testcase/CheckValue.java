@@ -780,7 +780,7 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 							
 							if(exportedFileFullPath==null)
 							{
-								form.setExecutionStatus("fail on no records found to export.");
+								form.setExecutionStatus("pass on no records found to export.");
 							}else if(new File(exportedFileFullPath).exists())
 							{
 								String status=Comparison.compareWithExportedValidation(form, exportedFileFullPath);
