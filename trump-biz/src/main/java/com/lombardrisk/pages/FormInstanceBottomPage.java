@@ -64,7 +64,11 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
 		String destFileName=form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
-		destFileFullPath=renameFile(destFileFullPath, destFileName);
+		String tmp="_"+form.getName()+"_";
+		if(!destFileFullPath.contains(tmp)){//add for agile reporter v1.16.2
+			destFileFullPath=renameFile(destFileFullPath, destFileName);
+		}
+		
 		
 		closeThisPage();//close bottom page after export.
 		Runtime.getRuntime().gc();
