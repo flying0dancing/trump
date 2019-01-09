@@ -55,11 +55,24 @@ public class JobManagerPage extends AbstractPage
 	 * @return
 	 * @throws Exception
 	 */
+	public String search(String name,String referenceDate,String started) throws Exception
+	{
+		return getExtendGridCells(name,referenceDate, started,20000);
+	}
+	/**
+	 * search job status(NULL;SUCCESS,FAILURE:...)
+	 * @author kun shen
+	 * @param name
+	 * @param referenceDate
+	 * @param runType
+	 * @param started
+	 * @return
+	 * @throws Exception
+	 */
 	public String search(String name,String referenceDate,String started,long refreshTimeoutMilliseconds) throws Exception
 	{
 		return getExtendGridCells(name,referenceDate, started,refreshTimeoutMilliseconds);
 	}
-	
 	/**
 	 * search job status(NULL;SUCCESS,FAILURE:...)
 	 * @author kun shen

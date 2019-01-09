@@ -79,7 +79,7 @@ public class JobResultDialog extends AbstractPage {
 		String status=null;
 		FormInstancePage fip=null;
 		long timeout=600000;//10 min
-		long refreshWaittime=30000; //0.5 min
+		long refreshWaittime=20000; //20 seconds
 		loadingDlg(null,5);//loadingDlg();
 		logger.info("job name["+jobName+"], type["+jobRunType+"]");
 		String jobStartTimeLabel=jobStartTime();
@@ -100,7 +100,7 @@ public class JobResultDialog extends AbstractPage {
 		if(element("egfp.title").isPresent() && element("egfp.title").isDisplayed())
 		{
 			timeout=1200000;//20 min
-			refreshWaittime=60000; //1 min
+			refreshWaittime=40000; //40 seconds
 		}
 		IWebElementWrapper element=element("filf.jobManager");  
 		if(element.isPresent() && element.isDisplayed())
@@ -110,7 +110,7 @@ public class JobResultDialog extends AbstractPage {
 			JobManagerPage jobManagerPage=new JobManagerPage(getWebDriverWrapper(),getTestDataManager());
 			if(jobManagerPage!=null && jobStartTimeLabel!=null)
 			{
-				status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel,refreshWaittime*2);
+				status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel);
 				long jobStartTime=System.currentTimeMillis();
 				while(status==null || !(status.toUpperCase().startsWith("FAILURE") || status.equalsIgnoreCase("SUCCESS")))
 				{
