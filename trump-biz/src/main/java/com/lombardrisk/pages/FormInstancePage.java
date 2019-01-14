@@ -513,7 +513,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				element("fipf.curInst").click();
 				loadingDlg(null,5);//loadingDlg();
 				element("fipf.selectInstace", instanceLabel).click();
-				loadingDlg(null,5);//loadingDlg();
+				loadingDlg(null,30);//loadingDlg();
 			}
 
 		}
