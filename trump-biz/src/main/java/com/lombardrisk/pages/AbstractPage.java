@@ -320,7 +320,7 @@ public abstract class AbstractPage extends PageBase
 	{
 		logger.info("wait loading disappear, or element appear");
 		waitThat().timeout(2000);
-		if(setT<=0){setT=10;}
+		if(setT<10){setT=10;}
 		while((element("abstract.ajaxstatusDlg").isDisplayed()||(element!=null && !element.isDisplayed())) && setT>0)
 		{
 			waitThat().timeout(1000);
