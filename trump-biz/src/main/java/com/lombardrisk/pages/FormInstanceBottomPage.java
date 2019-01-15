@@ -58,14 +58,15 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 			closeThisPage();//close bottom page after export.
 			return null;
 		}
-		String sourceFileFullPath=exportToFile();
+		//String sourceFileFullPath=exportToFile();
+		String sourceFileFullPath=downloadFile(System.getProperty("user.home")+System.getProperty("file.separator")+"downloads"+System.getProperty("file.separator"));//update for agile reporter v1.16.2
 		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTVALIDATION+")/");
 		unlockDownloadDir(downloadFolder);
 		
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
 		String destFileName=form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
 		String tmp="_"+form.getName()+"_";
-		if(!destFileFullPath.contains(tmp)){//add for agile reporter v1.16.2
+		if(!destFileFullPath.contains(tmp)){//add for agile reporter v1.16.2;agile reporter v1.16.2 can download files with names.
 			destFileFullPath=renameFile(destFileFullPath, destFileName);
 		}
 		
