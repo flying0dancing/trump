@@ -636,20 +636,20 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				waitThat("abstract.message").toBeInvisible();
 			if (element("fipf.importDlgmodal").isDisplayed())
 				waitThat("fipf.importDlgmodal").toBeInvisible();
-
-			if (element("fipf.close").isDisplayed())
+			IWebElementWrapper closeElt=element("fipf.close");
+			if (closeElt.isPresent() && closeElt.isDisplayed())
 			{
 				logger.info("Close form");
-				element("fipf.close").click();
-				loadingDlg(null,5);//loadingDlg();
+				closeElt.click();
+				loadingDlg(null,20);//loadingDlg();
 				waitThat("fipf.close").toBeInvisible();
-				loadingDlg(null,5);//loadingDlg();
+				loadingDlg(null,20);//loadingDlg();
 			}
-			if (element("fipf.close").isDisplayed())
+			if (closeElt.isDisplayed())
 			{
 				logger.info("can't close form, navigate to backward.");
 				super.getWebDriverWrapper().navigate().backward();
-				loadingDlg(null,5);//loadingDlg();
+				loadingDlg(null,20);//loadingDlg();
 			}
 		}
 	}
@@ -782,6 +782,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 */
 	public Boolean lockForm() throws Exception
 	{
+		logger.info("lock form");
 		return changeFormStatus(element("fipf.lockBtn"),element("fipf.unlockBtn"));
 	}
 	
@@ -793,6 +794,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 */
 	public Boolean unlockForm() throws Exception
 	{
+		logger.info("unlock form");
 		Boolean flag=changeFormStatus(element("fipf.unlockBtn"),element("fipf.lockBtn"));
 		int times=50;
 		while(!flag && times>0)
@@ -815,6 +817,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 	 */
 	private Boolean changeFormStatus(IWebElementWrapper element1,IWebElementWrapper element2) throws Exception
 	{
+		logger.info("change unlock/lock form to lock/unlock");
 		Boolean flag=false;
 		if(element1.isPresent())
 		{

@@ -30,4 +30,8 @@ usage
 	* If the result folder doesn't exist, and use `updateSource` flag or not, it will executes the same effect.
 
 -------
-
+change log 
+===
+trump 1.2.0 support agile reporter version 1.16.1+
+trump 1.1.0 support agile reporter version 1.15.3 - 1.16.0
+trump 1.0.0 support agile reporter version 1.15.0 - 1.15.3
