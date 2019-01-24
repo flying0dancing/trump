@@ -302,7 +302,7 @@ public abstract class AbstractPage extends PageBase
 	 * replace by loadingDlg(null,15)
 	 * @throws Exception
 	 */
-	@Deprecated 
+	@Deprecated
 	protected void loadingDlg(long timeout) throws Exception
 	{
 		logger.info("wait loading disappear");
@@ -328,6 +328,17 @@ public abstract class AbstractPage extends PageBase
 		}
 	}
 	
+	protected void loadingDlgDis(IWebElementWrapper element,int setT) throws Exception
+	{
+		logger.info("wait loading disappear, some element disappear");
+		waitThat().timeout(2000);
+		if(setT<10){setT=10;}
+		while((element("abstract.ajaxstatusDlg").isDisplayed()||(element!=null && element.isDisplayed())) && setT>0)
+		{
+			waitThat().timeout(1000);
+			setT--;
+		}
+	}
 	/**
 	 * Wait for elements loaded
 	 * 

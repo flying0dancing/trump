@@ -9,6 +9,7 @@ import org.yiwan.webcore.web.IWebDriverWrapper;
 import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.test.TestDataManager;
+import com.lombardrisk.test.pojo.DBInfo;
 import com.lombardrisk.test.pojo.Form;
 
 
@@ -19,6 +20,7 @@ import com.lombardrisk.test.pojo.Form;
 public class ListPage extends AbstractPage implements IExportTo
 {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private DBInfo dBInfo;
 	public String getLoginUser() throws Exception
 	{
 		String loginUser=element("fipf.lblUserName").getInnerText();
@@ -35,6 +37,7 @@ public class ListPage extends AbstractPage implements IExportTo
 	public ListPage(IWebDriverWrapper webDriverWrapper,ITestDataManager testDataManager)
 	{
 		super(webDriverWrapper,testDataManager);
+		dBInfo=((TestDataManager)getTestDataManager()).getDBInfo();
 	}
 
 	/**
@@ -424,8 +427,13 @@ public class ListPage extends AbstractPage implements IExportTo
 		
 		/*form.setEntity(getRealText(element("filf.clickFormLinkEntity"),form.getEntity()));		
 		form.setName(getRealText(element("filf.clickFormLinkName"),form.getName()));*/
-		
-		IWebElementWrapper element=element("filf.deleteForm",form.getName(),form.getVersion().substring(1),form.getProcessDate());
+		String regulatorPrefix=dBInfo.getRegulatorPrefix(form.getRegulator());
+		String formVersion=form.getVersion().substring(1);
+		int affectRow=dBInfo.unlockLockedReturn(regulatorPrefix, form.getName(), formVersion);
+		if(affectRow==1){
+			super.getWebDriverWrapper().navigate().refresh();
+		}
+		IWebElementWrapper element=element("filf.deleteForm",form.getName(),formVersion,form.getProcessDate());
 		if(element!=null && element.isPresent())
 		{
 			logger.info("delete existed form instance");
@@ -449,14 +457,10 @@ public class ListPage extends AbstractPage implements IExportTo
 					//flag=true;
 				}
 			}
-			
-			
 		}else
 		{
 			logger.error("error: cannot delete form.");
 		}
-		
-	
 		
 		return flag;
 	}

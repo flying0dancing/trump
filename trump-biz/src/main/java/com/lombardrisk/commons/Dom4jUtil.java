@@ -345,7 +345,7 @@ public static void writeFormToXml(String identifer,Form form,String xmlFileStr,S
  */
 public static String sortXmlContentToNewFileByName(String fileFullName,List<String> ignoreAttributes,List<String> ignoreElements,String newFilePath)
 {
-	logger.info("sorte xml by element.");
+	logger.info("sort xml by element.");
 	String newFileFullName=null;
 	Document doc =null;
 	SAXReader reader=new SAXReader();

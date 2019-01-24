@@ -18,6 +18,7 @@ public class SortUtil {
 	
 	public static String allocateSortType(String transPropFullPath,String formName,String fileFullName,String newFilePath)
     {
+		logger.info("allocate sort type");
     	String newFileFullName=null;
     	File file=new File(fileFullName);
     	if(file!=null && file.exists() && file.isFile())
@@ -56,6 +57,7 @@ public class SortUtil {
     
     public static List<List<String>> searchTransmissionProperties(String transPropFullPath,String formName,String fileType)
     {
+    	logger.info("search transmission properties");
     	List<List<String>> parts=new ArrayList<List<String>>();
     	List<String> list=null;
     	//String suffix=".transmissionProperties.csv";

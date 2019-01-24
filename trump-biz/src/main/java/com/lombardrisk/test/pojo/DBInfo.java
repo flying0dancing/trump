@@ -437,4 +437,14 @@ public class DBInfo{
 		String SQL="update \"CFG_RPT_Rets\" set \"DeActivateDate\" =null where \"DeActivateDate\" is not null ";
 		int result=getDBQuery().update(SQL);
 	}
+	
+	public int unlockLockedReturn(String regulatorPrefix,String returnName,String returnVersion)
+	{
+		//String ID_Start = getRegulatorIDRangeStart(regulator);
+		//String ID_End = getRegulatorIDRangEnd(regulator);
+		//String SQL="update \"CFG_RPT_Rets\" set \"DeActivateDate\" =null where ID BETWEEN "+ID_Start+" and "+ID_End+" and \"DeActivateDate\" is not null ";
+		String SQL="update fin_form_instance set is_read_only=0 where edition_status='ACTIVE' and is_read_only=1 and config_prefix='"+regulatorPrefix+"' and form_code='"+returnName+"' and form_version="+returnVersion;
+		int result=getDBQuery().update(SQL);
+		return result;
+	}
 }
