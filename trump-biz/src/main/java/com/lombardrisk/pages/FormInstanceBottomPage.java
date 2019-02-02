@@ -131,6 +131,15 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		Boolean flag=true;
 		clickLinkText(text);
 		loadingDlg(null,5);//loadingDlg(3000);
+		//logger.info("\"level\" select all \"Status\"");
+		String js = "document.getElementById('formInstDetailFooterTabView:validationForm:result').getElementsByTagName('option')[0].click();";
+		executeScript(js);
+		if(element("fidf.valResultStatus").isDisplayed()){//add in agile reporter version 1.16.2, for select level=Status
+			//selectIt(element("fidf.valResultStatus"),"Status");//<Kun:this function not work on this element, why> use next one instead
+			logger.info("\"level\" select all \"Status\"");
+			selectIt(element("fidf.valResultStatus"),"Status");
+		}
+		
 		if(element("fidf.noRecordsFound").isDisplayed())
 		{
 			logger.error("error: no records found to export.");

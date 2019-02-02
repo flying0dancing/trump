@@ -269,7 +269,8 @@
     <locator id="fidf.export" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//a[@title='Export']" name="export" description="export in buttom page" />
     <locator id="fidf.noRecordsFound" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//tr//td[starts-with(text(),'No records found')]" name="noRecordsFound" description="no Records Found" />
     <locator id="fidf.close" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//img[contains(@id,'minimizeArro')]" name="closeButtomPage" description="close buttom page" />
-   
+    <locator id="fidf.valResultStatus" type="WebElement" by="xpath" expression=".//*[@id='formInstDetailFooterTabView:validationForm:result']" name="validationResultStatus" description="validation result satatus" />
+    
     </page>
     
      <page id="wkld" name="workflowLogDialog" description="workflow Log Dialog created by Kun Shen">
