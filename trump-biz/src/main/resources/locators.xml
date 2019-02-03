@@ -166,8 +166,9 @@
     <locator id="td.noRecordsFound" type="WebElement" by="xpath" expression="//tbody[starts-with(@id,'transmitForm')][contains(@id,'formInstanceListTable_data')]/tr[contains(td,'No records found')]/td" name="noRecordsFound" description="noRecordsFound"/>
     
     <locator id="td.logButton" type="WebElement" by="xpath" expression="//div[@id='transmitLogDialog']//button[span='OK']" name="logButton" description="logButton"/>
-    <locator id="td.selectCheckBox" type="WebElement" by="xpath" expression=".//*[@id='transmitForm4Fed:formInstanceListTable:0:selectAllCheckbox']/div[2]" name="selectCheckBox" description="selectCheckBox"/>
-    </page>
+    <locator id="td.selectCheckBox" type="WebElement" by="xpath" expression=".//div[@id='transmitForm4Fed:formInstanceListTable:0:selectAllCheckbox']/div[2]" name="selectCheckBox" description="selectCheckBox"/>
+    <locator id="td.selectCheckBoxXBRL" type="WebElement" by="xpath" expression=".//div[@id='transmitForm:selectAllCheckbox']/div[2]" name="selectCheckBoxXBRL" description="selectCheckBoxXBRL"/>
+   	</page>
     
     <page id="drcfd" name="deleteReturnCommentForm" description="deleteReturnCommentForm Dialog created by Kun Shen">
 	<locator id="drcfd.deleteComment" type="WebElement" by="id" expression="deleteReturnCommentForm:deleteReturnCommentTxt" name="deleteComnent" description="delete return comment"/>
@@ -295,12 +296,13 @@
     <locator id="efld.ok" type="WebButton" by="id" expression="exportedFileLocationForm:exportedFileOk" name="okButton" description="okButton"/>
     </page>
     
-    <page id="fscd" name="forceSubmitCommonDialog" description="forceSubmitCommonDialog created by Kun Shen on AR1.15.7">
-	<locator id="fscd.title" type="WebElement" by="id" expression="forceSubmitCommonDialog_title" name="forceSubmitCommonDialog_title" description="forceSubmitCommonDialog_title"/>
-    <locator id="fscd.commentTextarea" type="WebElement" by="id" expression="forceSubmitCommonForm:commentTextarea" name="commentTextarea" description="commentTextarea"/>
+    <page id="fscd" name="forceSubmitCommonDialog" description="forceSubmitCommonDialog created by Kun Shen on AR1.15.7 update on AR1.16.2.2">
+	<locator id="fscd.title" type="WebElement" by="xpath" expression=".//*[contains(@id,'forceSubmit')][contains(@id,'Dialog_title')]" name="forceSubmitCommonDialog_title" description="forceSubmitCommonDialog_title"/>
+    <locator id="fscd.commentTextarea" type="WebElement" by="xpath" expression=".//*[contains(@id,'forceSubmit')][contains(@id,'Form:commentTextarea')]" name="commentTextarea" description="commentTextarea"/>
     <locator id="fscd.submit" type="WebButton" by="id" expression="forceSubmitCommonForm:exportStreamBtn" name="submitButton" description="submitButton"/>
-    <locator id="fscd.DataSchedulesubmit" type="WebButton" by="id" expression="forceSubmitCommonForm:exportJobBtn" name="submitButton" description="submitButton"/>
-    <locator id="fscd.cancel" type="WebButton" by="id" expression="forceSubmitCommonForm:cancelBtn" name="cancelButton" description="cancelButton"/>
+    <locator id="fscd.DataSchedulesubmit" type="WebButton" by="id" expression="forceSubmitCommonForm:exportJobBtn" name="DataScheduleSubmitButton" description="DataScheduleSubmitButton"/>
+    <locator id="fscd.submitXBRL" type="WebButton" by="id" expression="forceSubmitForm:nextBtn" name="submitButtonXBRL" description="submitButtonXBRL"/>
+    <locator id="fscd.cancel" type="WebButton" by="xpath" expression=".//*[contains(@id,'forceSubmit')][contains(@id,'Form:cancelBtn')]" name="cancelButton" description="cancelButton"/>
     </page>
     
     <page id="uolwd" name="lockWarningDialog" description="unlockorlockWarningDialog created by Kun Shen">

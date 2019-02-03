@@ -1,6 +1,8 @@
 package com.lombardrisk.pages;
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -24,14 +26,28 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 	public Boolean isThisPage() throws Exception
 	{
 		Boolean flag=false;
-		flag=element("fscd.title").isDisplayed();
+		List<IWebElementWrapper> elements=element("fscd.title").getAllMatchedElements();
+		for(IWebElementWrapper element:elements)
+		{
+			if(element.isDisplayed()){
+				flag=true;
+				break;
+			}
+		}
 		return flag;
 	}
 	
 	public void closeThisPage() throws Exception
 	{
-		element("fscd.cancel").click();
-		loadingDlg(null,5);//loadingDlg();
+		List<IWebElementWrapper> elements=element("fscd.cancel").getAllMatchedElements();
+		for(IWebElementWrapper element:elements)
+		{
+			if(element.isDisplayed()){
+				element.click();
+				loadingDlg(null,5);//loadingDlg();
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -69,8 +85,16 @@ public class ForceSubmitCommonDialog extends AbstractPage implements IComFolder{
 	
 	public void clickDataScheduleSubmit() throws Exception
 	{
-		logger.info("clicking submit button on \"Force Submit Dialog\"");
+		logger.info("clicking dataschedule submit button on \"Force Submit Dialog\"");
 		element("fscd.DataSchedulesubmit").click();
 		loadingDlg(null,5);//loadingDlg();
+	}
+	
+	public void clickXbrlSubmit() throws Exception
+	{
+		logger.info("clicking xbrl submit button on \"Force Submit Dialog\"");
+		element("fscd.submitXBRL").click();
+		loadingDlg(null,20);
+		waitThat("fscd.title").toBeInvisible();
 	}
 }

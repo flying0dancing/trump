@@ -640,6 +640,8 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			if (closeElt.isPresent() && closeElt.isDisplayed())
 			{
 				logger.info("Close form");
+				loadingDlg(null,10);
+				waitThat("fipf.close").toBeVisible();
 				closeElt.click();
 				loadingDlg(null,20);//loadingDlg();
 				waitThat("fipf.close").toBeInvisible();

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.FileFormat;
@@ -185,8 +186,14 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				flag=clickExportToDataSchedule(false);
 			}else
 			{
-				logger.info("export to regulator");
-				flag=clickExport();
+				if(title.equalsIgnoreCase("Export to XBRL")){
+					logger.info("export to regulator(XBRL)");
+					flag=clickExport("xbrl");
+				}else{
+					logger.info("export to regulator");
+					flag=clickExport(null);
+				}
+				
 			}
 			
 		}
@@ -239,7 +246,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			String message="";
 			if(!element("td.noRecordsFound").isDisplayed())
 			{
-				selectFormInfoInDialogue();
+				checkedFormBoxInfoInDialogue(null);
 				IWebElementWrapper exportEle=element("td.directSubmitButton",title);
 				if(exportEle.isEnabled())
 				{
@@ -303,13 +310,13 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	 * @author kun shen
 	 * @throws Exception
 	 */
-	private Boolean clickExport() throws Exception
+	private Boolean clickExport(String xbrl) throws Exception
 	{
 		Boolean flag=true;
 		
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
-			selectFormInfoInDialogue();
+			checkedFormBoxInfoInDialogue(xbrl);
 			IWebElementWrapper exportEle=element("td.exportButton",title);
 			if(exportEle.isEnabled())
 			{
@@ -332,8 +339,11 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 						TestCaseManager.getTestCase().startTransaction("");
 						TestCaseManager.getTestCase().setPrepareToDownload(true);
 						TestCaseManager.getTestCase().setDownloadFileFormat(FileFormat.BINARY);
-						
-						forceSubmit.clickSubmit();
+						if(StringUtils.isBlank(xbrl)){
+							forceSubmit.clickSubmit();
+						}else{
+							forceSubmit.clickXbrlSubmit();
+						}
 						TestCaseManager.getTestCase().stopTransaction();
 					}else
 					{
@@ -357,7 +367,11 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					if(forceSubmit.isThisPage())
 					{
 						forceSubmit.typeSubmitComment();
-						forceSubmit.clickSubmit();
+						if(StringUtils.isBlank(xbrl)){
+							forceSubmit.clickSubmit();
+						}else{
+							forceSubmit.clickXbrlSubmit();
+						}
 						if(forceSubmit.isThisPage())
 						{
 							forceSubmit.closeThisPage();
@@ -413,7 +427,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		
 		if(!element("td.noRecordsFound").isDisplayed())
 		{
-			selectFormInfoInDialogue();
+			checkedFormBoxInfoInDialogue(null);
 			IWebElementWrapper exportEle=element("td.exportButton",title);
 			if(exportEle.isEnabled())
 			{
@@ -594,22 +608,37 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		
 	}
 	
-	private Boolean selectFormInfoInDialogue() throws Exception
+	/***
+	 * check forms for "export to ..." dialog
+	 * @param exportType you can set "xbrl" for "export to xbrl", others are use blank or null
+	 * @return
+	 */
+	private Boolean checkedFormBoxInfoInDialogue(String exportType)
 	{
 		Boolean flag=false;
-		IWebElementWrapper element=element("td.selectCheckBox");
-		String attribute=element.getAttribute("class");
-		if(!attribute.contains("ui-state-active"))//span:ui-icon-check,div:ui-state-active
-		{
-			//element.checkByJavaScript(true);
-			element.click();
-			loadingDlg(null,5);//loadingDlg();
-			flag=true;
-		}else
-		{
-			flag=true;
+		IWebElementWrapper element=null;
+		try{
+			if(StringUtils.isBlank(exportType)){
+				element=element("td.selectCheckBox");
+			}else{
+				//String js = "document.getElementById('transmitForm:formInstanceListTable:0:selectReturnCheckbox').getElementsByTagName('div')[1].click();";
+				//executeScript(js);
+				element=element("td.selectCheckBoxXBRL");
+			}
+			String attribute=element.getAttribute("class");
+			if(!attribute.contains("ui-state-active"))//span:ui-icon-check,div:ui-state-active
+			{
+				//element.checkByJavaScript(true);
+				element.click();
+				loadingDlg(null,5);//loadingDlg();
+				flag=true;
+			}else
+			{
+				flag=true;
+			}
+		}catch(Exception e){
+			logger.info("error:"+e.getMessage());
 		}
-		
 		return flag;
 	}
 	
