@@ -37,7 +37,7 @@ public class SortUtil {
         			{
         				newFileFullName=TxtUtil.sortTxtContentToNewFileByName(fileFullName, transProps.get(0).get(0),transProps.get(1).get(0),newFilePath);
         			}
-        			if(fileType.equalsIgnoreCase("xml"))
+        			if(fileType.equalsIgnoreCase("xml") || fileType.equalsIgnoreCase("xbrl"))
     				{
         				newFileFullName=Dom4jUtil.sortXmlContentToNewFileByName(fileFullName,transProps.get(0),transProps.get(1),newFilePath);
     				}

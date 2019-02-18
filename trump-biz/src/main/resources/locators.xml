@@ -168,7 +168,8 @@
     <locator id="td.logButton" type="WebElement" by="xpath" expression="//div[@id='transmitLogDialog']//button[span='OK']" name="logButton" description="logButton"/>
     <locator id="td.selectCheckBox" type="WebElement" by="xpath" expression=".//div[@id='transmitForm4Fed:formInstanceListTable:0:selectAllCheckbox']/div[2]" name="selectCheckBox" description="selectCheckBox"/>
     <locator id="td.selectCheckBoxXBRL" type="WebElement" by="xpath" expression=".//div[@id='transmitForm:selectAllCheckbox']/div[2]" name="selectCheckBoxXBRL" description="selectCheckBoxXBRL"/>
-   	</page>
+   	<locator id="td.logMsg" type="WebElement" by="xpath" expression="//div[@id='transmitLogDialog']//label[not(@id)]" name="logMsg" description="logMessage"/>
+    </page>
     
     <page id="drcfd" name="deleteReturnCommentForm" description="deleteReturnCommentForm Dialog created by Kun Shen">
 	<locator id="drcfd.deleteComment" type="WebElement" by="id" expression="deleteReturnCommentForm:deleteReturnCommentTxt" name="deleteComnent" description="delete return comment"/>
