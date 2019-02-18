@@ -354,15 +354,16 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 						exportEle.click();
 						loadingDlg(null,5);//loadingDlg();
 						flag=getTipMessageStatus();
+						clickXbrlLogButton();//adding here at 2019.2.18 but not test
 						TestCaseManager.getTestCase().stopTransaction();
 					}
 					
-				}
-				else
+				}else
 				{
 					exportEle.click();
 					loadingDlg(null,5);//loadingDlg();
 					flag=getTipMessageStatus();
+					clickXbrlLogButton();//adding here at 2019.2.18
 					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
 					if(forceSubmit.isThisPage())
 					{
@@ -640,6 +641,19 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			logger.info("error:"+e.getMessage());
 		}
 		return flag;
+	}
+	
+	public void clickXbrlLogButton() throws Exception{
+		IWebElementWrapper xbrlLogElt=element("td.logMsg");
+		if(xbrlLogElt.isPresent() && xbrlLogElt.isDisplayed()){
+			logger.info("click OK in \"XBRL Log\" Dialog");
+			String log=xbrlLogElt.getInnerText();
+			if(StringUtils.isNotEmpty(log)){
+				logger.info(log);
+			}
+			element("td.logButton").click();
+			loadingDlg(null,5);
+		}
 	}
 	
 }

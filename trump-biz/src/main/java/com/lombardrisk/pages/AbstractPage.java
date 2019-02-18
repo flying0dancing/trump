@@ -660,6 +660,9 @@ public abstract class AbstractPage extends PageBase
 				}
 				String fileName=sourceFile.getName();
 				String fileName_Prefix=fileName.substring(0, fileName.lastIndexOf("."));
+				if(fileName_Prefix.toLowerCase().endsWith(".xbrl")){//for xbrl.gz or xbrl.zip file
+					fileName_Prefix=fileName_Prefix.substring(0,fileName_Prefix.lastIndexOf("."));
+				}
 				String fileName_Prefix_Tmp=fileName_Prefix;
 				String fileName_Suffix=fileName.replace(fileName_Prefix, "");
 				
