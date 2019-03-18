@@ -43,7 +43,7 @@
         "url": "http://172.20.31.38:8285",
         "username": "admin",
         "password": "password",
-        "key": "172.20.31.38:22:/home/testp/export:testp:password"
+        "key": "172.20.31.38:22:/home/test/export:test:password"
       },
       {
       	"id": 10,
