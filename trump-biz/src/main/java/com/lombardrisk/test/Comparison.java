@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 
 
 
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -463,6 +465,15 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		String returnStatus=null;
 		String cmdLine="";
 		String exportedFileName=new File(exportedFileFullPath).getName();
+		if(exportedFileName.contains("&")){
+			logger.info("exported file name contains &, remove &, change "+exportedFileName);
+			exportedFileName=exportedFileName.replaceAll("&", "");
+			logger.info(" to "+exportedFileName);
+			String pathS=new File(exportedFileFullPath).getParent()+System.getProperty("file.separator")+exportedFileName;
+			logger.info("copy origin name with new name.");
+			FileUtil.copyFile(new File(exportedFileFullPath), new File(pathS));
+			exportedFileFullPath=pathS;
+		}
 		String regulator=form.getRegulator();
 		String expectationFolder=TARGET_EXPECTATION_FOLDER.replace("\\", "/").replace("/", System.getProperty("file.separator"))+regulator+System.getProperty("file.separator");
 		String expectationFileName=null;
