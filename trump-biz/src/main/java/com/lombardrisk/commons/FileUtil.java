@@ -676,6 +676,13 @@ public class FileUtil extends FileUtils
 				//long line=0;
 				while((exportStr=exportReader.readLine())!=null)
 				{
+					int starcount=StringUtils.countMatches(exportStr,"\"");
+					while(starcount%2==1){
+						String tmpline=exportReader.readLine();
+						if(StringUtils.isEmpty(tmpline)){continue;}
+						exportStr=exportStr+tmpline;
+						starcount=StringUtils.countMatches(exportStr,"\"");
+					}
 					//line++;
 					Matcher m=pattern.matcher(exportStr);
 					if(m.find())
@@ -700,6 +707,13 @@ public class FileUtil extends FileUtils
 				//long line=0;
 				while((exportStr=exportReader.readLine())!=null)
 				{
+					int starcount=StringUtils.countMatches(exportStr,"\"");
+					while(starcount%2==1){
+						String tmpline=exportReader.readLine();
+						if(StringUtils.isEmpty(tmpline)){continue;}
+						exportStr=exportStr+tmpline;
+						starcount=StringUtils.countMatches(exportStr,"\"");
+					}
 					//line++;
 					Matcher m=pattern.matcher(exportStr);
 					if(m.find())

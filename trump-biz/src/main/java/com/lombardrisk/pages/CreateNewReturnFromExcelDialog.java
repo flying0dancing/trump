@@ -214,7 +214,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		{
 			logger.info("click import button");
 			listimportBtn.click();
-			loadingDlg(null,5);//loadingDlg();
+			loadingDlg(null,100);//loadingDlg();
 			String type2=type.substring(0, type.length()-4);
 			IWebElementWrapper replaceconfirm=element("cfed.replaceconfirm",type2);
 			if( replaceconfirm.isDisplayed())

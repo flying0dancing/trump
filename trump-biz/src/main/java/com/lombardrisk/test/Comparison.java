@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 
 
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -403,6 +404,13 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						{
 							strBuffer.append(baselineStr+",actualValue,result"+System.getProperty("line.separator"));
 							continue;
+						}
+						int starcount=StringUtils.countMatches(baselineStr,"\"");
+						while(starcount%2==1){
+							String tmpline=baselineReader.readLine();
+							if(StringUtils.isEmpty(tmpline)){continue;}
+							baselineStr=baselineStr+tmpline;
+							starcount=StringUtils.countMatches(baselineStr,"\"");
 						}
 						status=FileUtil.findLineInCSV(newExportedFile, baselineStr);
 						strBuffer.append(baselineStr+status+System.getProperty("line.separator"));
