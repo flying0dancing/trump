@@ -12,6 +12,10 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.FileFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -399,7 +403,11 @@ public class FileUtil extends FileUtils
 			{
 				File sourceFile=new File(sourcePath);
 				File destFile=new File(destPath);
-				copyDirectory(sourceFile,destFile);
+				//IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
+				IOFileFilter notThumb=FileFilterUtils.notFileFilter(FileFilterUtils.nameFileFilter("Thumbs.db"));
+			    IOFileFilter txtFiles = FileFilterUtils.and(FileFilterUtils.fileFileFilter(),notThumb);//exclude Thumbs.db
+			    FileFilter filter = FileFilterUtils.or(FileFilterUtils.directoryFileFilter(), txtFiles);
+				copyDirectory(sourceFile,destFile,filter);
 			}
 		
 		}catch(Exception e)
