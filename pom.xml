@@ -38,18 +38,18 @@
     <reportng.version>1.1.4</reportng.version> 
     <!-- config properties -->
       <!-- config test pool -->
-      <server.info.jsonfilename>test.json</server.info.jsonfilename>
-      <testqa.source.pool>\\\\172.20.20.57\\ProductQA\\APAutomation\\sources</testqa.source.pool>
-      <testqa.scenarios.pool>\\\\172.20.20.57\\ProductQA\\APAutomation\\scenarios</testqa.scenarios.pool>
-      <testqa.target.path>\\\\172.20.20.57\\ProductQA\\APAutomation\\results</testqa.target.path>
+      <server.info>test.json</server.info>
+      <test.source>\\\\172.20.20.57\\ProductQA\\APAutomation\\sources</test.source>
+      <test.scenarios>\\\\172.20.20.57\\ProductQA\\APAutomation\\scenarios</test.scenarios>
+      <test.target>\\\\172.20.20.57\\ProductQA\\APAutomation\\results</test.target>
       <!-- mail default setting(no need to changed) -->
-      <mail.hostname>10.17.3.150</mail.hostname>
+      <mail.host>10.17.3.150</mail.host>
       <mail.port>25</mail.port>
-      <mail.senderAddress>Prod.Auto@lombardrisk.com</mail.senderAddress>
-      <mail.senderPassword>Password1</mail.senderPassword>
+      <mail.sender.address>Prod.Auto@lombardrisk.com</mail.sender.address>
+      <mail.sender.password>Password1</mail.sender.password>
       <!-- mail settings for product(changeable) -->
-      <mail.receiver.toList>kshen@vermeg.com</mail.receiver.toList>
-      <mail.receiver.ccList>Kun.Shen@lombardrisk.com</mail.receiver.ccList>
+      <mail.receiver.to.list>kshen@vermeg.com</mail.receiver.to.list>
+      <mail.receiver.cc.list>Kun.Shen@lombardrisk.com</mail.receiver.cc.list>
       <mail.subject.prefix>trump result:</mail.subject.prefix>
       <!-- command line args for product(changeable) -->
       <xmlFileName>suites/TestTP.xml</xmlFileName>

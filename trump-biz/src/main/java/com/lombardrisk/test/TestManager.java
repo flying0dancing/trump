@@ -53,7 +53,6 @@ public class TestManager extends TestBase implements IComFolder {
 	 @BeforeSuite
 	  public void beforeSuite() {
 		 report("suite start.");
-		 System.out.println(System.getProperty("test.source"));////// debug 20190505
 		  try
 		  {
 			  //create new result folder and subfolders if need.
@@ -201,7 +200,6 @@ public class TestManager extends TestBase implements IComFolder {
 	  @Parameters({"indexAppServers", "indexDBServers", "indexToolsetDBServers", "selectLanguage"})
 	  public void beforeClassInTestManager(ITestContext context, @Optional String indexAppServers, @Optional String indexDBServers, @Optional String indexToolsetDBServers,@Optional String dateFormat) throws Exception {
 		  logger.info(getClass().getName()+" beforeClass-setUpTest running!");
-		  System.out.println(System.getProperty("test.source"));////// debug 20190505
 		  indexAppServer=changeStringToInt(indexAppServers,0);
 		  indexDBServer=changeStringToInt(indexDBServers,0);
 		  indexToolsetDBServer=changeStringToInt(indexToolsetDBServers,0);

@@ -3,16 +3,16 @@ package com.lombardrisk.commons;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.lombardrisk.test.IComFolder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yiwan.webcore.util.PropHelper;
 
 
-public class MailUtil {
+public class MailUtil implements IComFolder {
 	private final static Logger logger = LoggerFactory.getLogger(MailUtil.class);
 	
 	public static Boolean sendARResultMail(String resultPath, String suitePath,long totalPass,long totalFail,long totalSkip,float totalTime,Boolean rerunFlag)
@@ -112,17 +112,17 @@ public class MailUtil {
 	public static Boolean sendARResultMail(String resultPath,String html,Boolean rerunFlag)
 	{
 		MailInfo mail=new MailInfo();
-        mail.setHost(StringUtils.isNotBlank(PropHelper.getProperty("mail.hostname"))?PropHelper.getProperty("mail.hostname"):"172.20.20.143");
-        mail.setPort(StringUtils.isNotBlank(PropHelper.getProperty("mail.port"))?PropHelper.getProperty("mail.port"):"25");
-        mail.setSenderName(PropHelper.getProperty("mail.senderName"));
-        mail.setSenderAddress(PropHelper.getProperty("mail.senderAddress"));
-        mail.setSenderPassword(PropHelper.getProperty("mail.senderPassword"));
+        mail.setHost(MAIL_HOST);
+        mail.setPort(MAIL_PORT);
+        mail.setSenderName(MAIL_SENDER_NAME);
+        mail.setSenderAddress(MAIL_SENDER_ADDRESS);
+        mail.setSenderPassword(MAIL_SENDER_PASSWORD);
         String[] toList=null;
         Map<String,String> toMap=null;
         
-        if(StringUtils.isNotBlank(PropHelper.getProperty("mail.receiver.toList")))
+        if(StringUtils.isNotBlank(MAIL_RECEIVER_TO))
         {
-        	toList=PropHelper.getProperty("mail.receiver.toList").trim().split(";");
+        	toList=MAIL_RECEIVER_TO.trim().split(";");
             toMap=new HashMap<String,String>();
             for(String to:toList)
             {
@@ -134,9 +134,9 @@ public class MailUtil {
             mail.setTo(toMap);
         }
         
-        if(StringUtils.isNotBlank(PropHelper.getProperty("mail.receiver.ccList")))
+        if(StringUtils.isNotBlank(MAIL_RECEIVER_CC))
         {
-        	toList=PropHelper.getProperty("mail.receiver.ccList").trim().split(";");
+        	toList=MAIL_RECEIVER_CC.trim().split(";");
         	toMap=new HashMap<String,String>();
             for(String to:toList)
             {
@@ -148,9 +148,9 @@ public class MailUtil {
             mail.setCc(toMap);
         }
         
-        if(StringUtils.isNotBlank(PropHelper.getProperty("mail.receiver.bccList")))
+        if(StringUtils.isNotBlank(MAIL_RECEIVER_BCC))
         {
-        	toList=PropHelper.getProperty("mail.receiver.bccList").trim().split(";");
+        	toList=MAIL_RECEIVER_BCC.trim().split(";");
         	toMap=new HashMap<String,String>();
             for(String to:toList)
             {
@@ -162,9 +162,9 @@ public class MailUtil {
             mail.setBcc(toMap);
         }
         String subject=null;
-        if(StringUtils.isNotBlank(PropHelper.getProperty("mail.subject.prefix")))
+        if(StringUtils.isNotBlank(MAIL_SUBJECT_PREFIX))
         {
-        	subject=PropHelper.getProperty("mail.subject.prefix");
+        	subject=MAIL_SUBJECT_PREFIX;
         }else
         {
         	subject="trump:";
@@ -185,7 +185,7 @@ public class MailUtil {
         mail.setSubject(subject);
         
         mail.setHtmlMessage(html);
-        mail.setTextMessage(StringUtils.isNotBlank(PropHelper.getProperty("mail.textMsg"))?PropHelper.getProperty("mail.textMsg"):"hi,\n\n  trump had finished running test cases.\n\nThanks.");
+        mail.setTextMessage(StringUtils.isNotBlank(MAIL_MSG_TEXT)?MAIL_MSG_TEXT:"hi,\n\n  trump had finished running test cases.\n\nThanks.");
         new MailUtil().sendHtmlMail(mail);
 		return true;
 	}
