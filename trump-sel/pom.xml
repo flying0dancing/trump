@@ -14,8 +14,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <argLine>-Dfile.encoding=UTF-8</argLine> 
-    <xmlFileName>suites/TestTP.xml</xmlFileName> 
-	<reportOutput>reportng-reports</reportOutput>
+    <!--xmlFileName>suites/TestTP.xml</xmlFileName-->
+	<!--reportOutput>reportng-reports</reportOutput-->
   </properties>
   <dependencies> 
    <dependency> 
@@ -85,11 +85,15 @@
             <version>2.19.1</version> 
           </dependency> 
         </dependencies> 
-      </plugin> 
+      </plugin>
       
-      
-    </plugins> 
-   
+    </plugins>
+    <testResources>
+        <testResource>
+            <directory>src/test/resources</directory>
+            <filtering>true</filtering>
+        </testResource>
+    </testResources>
   </build>
    
 </project>

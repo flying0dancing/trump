@@ -36,7 +36,24 @@
     
     <guice.version>3.0</guice.version>
     <reportng.version>1.1.4</reportng.version> 
-
+    <!-- config properties -->
+      <!-- config test pool -->
+      <server.info.jsonfilename>test.json</server.info.jsonfilename>
+      <testqa.source.pool>\\\\172.20.20.57\\ProductQA\\APAutomation\\sources</testqa.source.pool>
+      <testqa.scenarios.pool>\\\\172.20.20.57\\ProductQA\\APAutomation\\scenarios</testqa.scenarios.pool>
+      <testqa.target.path>\\\\172.20.20.57\\ProductQA\\APAutomation\\results</testqa.target.path>
+      <!-- mail default setting(no need to changed) -->
+      <mail.hostname>10.17.3.150</mail.hostname>
+      <mail.port>25</mail.port>
+      <mail.senderAddress>Prod.Auto@lombardrisk.com</mail.senderAddress>
+      <mail.senderPassword>Password1</mail.senderPassword>
+      <!-- mail settings for product(changeable) -->
+      <mail.receiver.toList>kshen@vermeg.com</mail.receiver.toList>
+      <mail.receiver.ccList>Kun.Shen@lombardrisk.com</mail.receiver.ccList>
+      <mail.subject.prefix>trump result:</mail.subject.prefix>
+      <!-- command line args for product(changeable) -->
+      <xmlFileName>suites/TestTP.xml</xmlFileName>
+      <reportOutput>reportng-reports</reportOutput>
   </properties>
   <dependencyManagement> 
     <dependencies>
@@ -175,11 +192,7 @@
         		<version>${maven.surefire.plugin.version}</version>
             </plugin>
   		</plugins>
-  	</pluginManagement>	
+  	</pluginManagement>
 </build>
-  		
-  			
-       
-  		
- 
+
 </project>
