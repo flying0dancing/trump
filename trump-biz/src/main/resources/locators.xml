@@ -161,8 +161,8 @@
     <locator id="td.selectTaxonomy" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectTaxonomy')]" name="selectTaxonomy" description="selectTaxonomy"/>
     <locator id="td.selectModule" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'selectModule')]" name="selectModule" description="selectModule"/>
     <locator id="td.compressTypeSelector" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//select[starts-with(@id,'transmitForm')][contains(@id,'compressTypeSelector')]" name="compressTypeSelector" description="compressTypeSelector"/>
-    <locator id="td.exportButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit' and not(contains(@id,'Direct'))]" name="exportButton" description="exportButton"/>
-    <locator id="td.directSubmitButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit' and contains(@id,'DirectSubmit')]" name="DirectSubmitButton" description="DirectSubmitButton"/>
+    <locator id="td.exportButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit' and not(contains(@id,'Direct'))][contains(span,'xport')]" name="exportButton" description="exportButton"/>
+    <locator id="td.directSubmitButton" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')][starts-with(div[1]/span,'?')]//button[@type='submit' and contains(@id,'Submit')][contains(span,'ubmit')]" name="DirectSubmitButton" description="DirectSubmitButton"/>
     <locator id="td.noRecordsFound" type="WebElement" by="xpath" expression="//tbody[starts-with(@id,'transmitForm')][contains(@id,'formInstanceListTable_data')]/tr[contains(td,'No records found')]/td" name="noRecordsFound" description="noRecordsFound"/>
     
     <locator id="td.logButton" type="WebElement" by="xpath" expression="//div[@id='transmitLogDialog']//button[span='OK']" name="logButton" description="logButton"/>
@@ -343,5 +343,9 @@
     <locator id="fdsd.submitConfirmOK" type="WebButton" by="id" expression="submitConfirm" name="submitConfirmOKButton" description="submitConfirmOKButton"/>
     </page>
     
+    <page id="scd" name="submitConfirmDialog" description="submitConfirmDialog created by Kun Shen 20190513">
+	<locator id="scd.msg" type="WebElement" by="xpath" expression="//div[@id='submitConfirmDialog']//div[contains(@class,'content')]" name="submitMessage" description="submit message"/>
+    <locator id="scd.ok" type="WebElement" by="xpath" expression=".//div[@id='submitConfirmDialog']//button[@id='submitConfirm']" name="submitConfirm" description="submit confirm button"/>
+    </page>
     
 </locatorBean>

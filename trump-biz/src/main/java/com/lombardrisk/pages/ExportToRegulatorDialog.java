@@ -240,7 +240,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 	}
 	
 
-		public String clickDirectSubmit() throws Exception
+	public String clickDirectSubmit() throws Exception
 		{
 			Boolean flag=true;
 			String message="";
@@ -253,7 +253,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 					logger.info("click force direct Submit button");
 					
 					exportEle.click();
-					loadingDlg(null,5);//loadingDlg();
+					loadingDlg(null,1000);//loadingDlg();
 					flag=getTipMessageStatus();
 					ForceDirectSubmitDialog forceSubmit=new ForceDirectSubmitDialog(getWebDriverWrapper(),getTestDataManager());
 					if(forceSubmit.isThisPage())
@@ -266,6 +266,12 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 						}
 					}
 					
+					IWebElementWrapper confirmElt=element("scd.ok");//adding for ar v19.1.4
+					if(confirmElt.isDisplayed() && confirmElt.isEnabled()){
+						message=element("scd.msg").getInnerText();
+						confirmElt.click();
+						loadingDlg(null,5);
+					}
 					if(isThisPage())
 					{
 						closeThisPage();
