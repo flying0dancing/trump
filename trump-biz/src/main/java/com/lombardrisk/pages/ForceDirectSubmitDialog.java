@@ -64,7 +64,7 @@ public class ForceDirectSubmitDialog extends AbstractPage implements IComFolder{
 	{
 		logger.info("clicking submit button on \"Force Direct Submit Dialog\"");
 		element("fdsd.submit").click();
-		loadingDlg(element("fdsd.submitConfirmMsg"),20);
+		loadingDlg(element("fdsd.submitConfirmMsg"),1000);
 		String msg=element("fdsd.submitConfirmMsg").getInnerText();
 		logger.info(msg);
 		loadingDlg(null,5);//loadingDlg();
