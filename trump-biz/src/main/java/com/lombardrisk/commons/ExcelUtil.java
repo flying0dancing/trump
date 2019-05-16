@@ -1376,6 +1376,8 @@ public static <T> void writeObjectsToExcel(List<T> forms,String excelFileStr,Str
 							if(isNum.matches())
 							{
 								break;
+							}else{
+								
 							}
 						}
 					}else{
@@ -1383,7 +1385,9 @@ public static <T> void writeObjectsToExcel(List<T> forms,String excelFileStr,Str
 					}
 				}
 				sheetName=sheetNameTmp;
-				xwb.removeSheetAt(index);//remove it, create new one at next step
+				if(index>=0){
+					xwb.removeSheetAt(index);//remove it, create new one at next step
+				}
 			}else{
 				if(StringUtils.isBlank(sheetName) || sheetName.equalsIgnoreCase("null")){
 					sheetName=xwb.getSheetName(lastIndex);
