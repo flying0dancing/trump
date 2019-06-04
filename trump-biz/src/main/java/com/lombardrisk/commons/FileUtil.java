@@ -352,7 +352,7 @@ public class FileUtil extends FileUtils
 	 * @param destPath
 	 * @param startTime
 	 */
-	public static void copyDirectory(String sourcePath, String destPath,long startTime)
+	public static void copyDirectory(String sourcePath, String destPath,long startTime, long endTime)
 	{
 		try
 		{
@@ -368,20 +368,20 @@ public class FileUtil extends FileUtils
 					{
 						for(File subfile:subfiles)
 						{
-							if(subfile.isFile() && subfile.lastModified()>=startTime)
+							if(subfile.isFile() && subfile.lastModified()>=startTime && subfile.lastModified()<=endTime)
 							{
 								copyFile(subfile,new File(destPath+subfile.getAbsolutePath().replace(sourcePath, "")));
 							}
 							if(subfile.isDirectory())
 							{
 								String destSubDirectory=destPath+subfile.getAbsolutePath().replace(sourcePath, "");
-								copyDirectory(subfile.getAbsolutePath(),destSubDirectory,startTime);
+								copyDirectory(subfile.getAbsolutePath(),destSubDirectory,startTime, endTime);
 							}
 						}
 					}
 					
 				}
-				if(sourceFile.isFile() && sourceFile.lastModified()>=startTime)
+				if(sourceFile.isFile() && sourceFile.lastModified()>=startTime  && sourceFile.lastModified()<=endTime)
 				{
 					copyFile(sourceFile,destFile);
 				}
