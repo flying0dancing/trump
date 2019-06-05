@@ -37,7 +37,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 	public void closeThisPage() throws Exception
 	{
 		element("aifd.closeDialog").click();
-		loadingDlg(null,5);//loadingDlg();
+		loadingDlg(null,10);//loadingDlg();
 	}
 	
 	/**
@@ -127,6 +127,9 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 				closeThisPage();
 			}
 			
+		}
+		if(isThisPage()){
+			closeThisPage();
 		}
 		return flag;
 	}
