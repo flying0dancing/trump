@@ -50,7 +50,6 @@ public class JobManagerPage extends AbstractPage
 	 * @author kun shen
 	 * @param name
 	 * @param referenceDate
-	 * @param runType
 	 * @param started
 	 * @return
 	 * @throws Exception
@@ -64,7 +63,6 @@ public class JobManagerPage extends AbstractPage
 	 * @author kun shen
 	 * @param name
 	 * @param referenceDate
-	 * @param runType
 	 * @param started
 	 * @return
 	 * @throws Exception
@@ -78,8 +76,8 @@ public class JobManagerPage extends AbstractPage
 	 * @author kun shen
 	 * @param name
 	 * @param referenceDate
-	 * @param runType
 	 * @param started
+	 * @param refreshTimeoutMilliseconds
 	 * @return
 	 * @throws Exception
 	 */
@@ -92,7 +90,7 @@ public class JobManagerPage extends AbstractPage
 			if(!gridBarFirstPointer.getAttribute("class").contains("ui-state-disabled"))
 			{
 				gridBarFirstPointer.click();
-				loadingDlg(null,5);//loadingDlg();	
+				loadingDlg(null,25);//loadingDlg();
 			}
 			
 			status=getGridCells(name,referenceDate,started);
@@ -107,7 +105,6 @@ public class JobManagerPage extends AbstractPage
 					waitThat().timeout(refreshTimeoutMilliseconds);
 					refreshPage();
 					status=getGridCells(name,referenceDate,started);
-					continue;
 				}
 			}
 			if(status==null)
@@ -146,7 +143,6 @@ public class JobManagerPage extends AbstractPage
 	 * @author kun shen
 	 * @param name
 	 * @param referenceDate
-	 * @param runType
 	 * @param jobStartedDate job start time
 	 * @return
 	 * @throws Exception
@@ -158,8 +154,7 @@ public class JobManagerPage extends AbstractPage
 		IWebElementWrapper _getstartDate=element("ficmptd.getstartDate",name,referenceDate);
 		if(!_getstartDate.isPresent())
 		{
-			_getstartDate=element("ficmptd.getstartDateAR1153",name,referenceDate);
-			if(!_getstartDate.isPresent()){return null;}
+			return null;
 		}
 		String startDate=_getstartDate.getInnerText();
 		
@@ -174,8 +169,7 @@ public class JobManagerPage extends AbstractPage
 				IWebElementWrapper _getStatus=element("ficmptd.getStatus",name,referenceDate,startDate);
 				if(!_getStatus.isPresent())
 				{
-					_getStatus=element("ficmptd.getStatusAR1153",name,referenceDate,startDate);
-					if(!_getStatus.isPresent()){return null;}
+					return null;
 				}
 				status=_getStatus.getInnerText();
 				logger.info("current job status:"+status);
@@ -188,8 +182,7 @@ public class JobManagerPage extends AbstractPage
 			IWebElementWrapper _getStatusMsg=element("ficmptd.getStatusMessage",name,referenceDate,startDate);
 			if(!_getStatusMsg.isPresent())
 			{
-				_getStatusMsg=element("ficmptd.getStatusMessageAR1153",name,referenceDate,startDate);
-				if(!_getStatusMsg.isPresent()){return null;}
+				return null;
 			}
 			status="FAILURE:"+_getStatusMsg.getInnerText();
 		}
