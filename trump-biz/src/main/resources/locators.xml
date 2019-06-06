@@ -229,7 +229,7 @@
     
     <page id="jrd" name="jobResultDialog" description="jobResultDialog created by Kun Shen">
 	<locator id="jrd.title" type="WebElement" by="id" expression="jobResultDialog_title" name="jobResultDialog_title" description="jobResultDialog_title"/>
-    <locator id="jrd.startedTimeLabel" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']//form//td[contains(label,'Started:')]//label[1]" name="startedTime" description="startedTime"/>
+    <locator id="jrd.startedTimeLabel" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']//label[starts-with(text(),'Started:')]" name="startedTime" description="startedTime"/>
     <locator id="jrd.closeDialog" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']/div[1]/a" name="closeDialog" description="closeDialog"/>
     <locator id="jrd.ok" type="WebButton" by="id" expression="jobResultForm:ok" name="okButton" description="okButton"/>
     </page>
@@ -251,21 +251,18 @@
     <locator id="ficmptd.cancel" type="WebButton" by="id" expression="computeForm:cancel" name="cancelButton" description="cancelButton"/>
     <locator id="ficmptd.messages" type="WebElement" by="xpath" expression="//div[@id='computeForm:computemessages']/div/a" name="messages" description="create form messages"/>	
     <locator id="ficmptd.computeConfirm" type="WebElement" by="xpath" expression="//div[@id='computeConfirmDialog']/div/button[@id='computeConfirm'][span='OK'][not(@aria-disabled)]/span" name="computeConfirm" description="computeConfirm"/>
-    <locator id="ficmptd.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/span[1]" name="firstPageSta" description="first page status"/>
-    <locator id="ficmptd.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>	
+    <locator id="ficmptd.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/*[contains(@class,'ui-paginator-first')]" name="firstPageSta" description="first page status"/>
+    <locator id="ficmptd.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/*[contains(@class,'ui-paginator-prev')]" name="nextPageSta" description="next page status"/>
    
     <locator id="ficmptd.getStatus" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatus" description="getStatus"/>
-    <locator id="ficmptd.getStatusAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatusAR1153" description="getStatus"/>
     <locator id="ficmptd.getstartDate" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDate" description="getstartDate"/>
-    <locator id="ficmptd.getstartDateAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDateAR1153" description="getstartDate"/>
     <locator id="ficmptd.getStatusMessage" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[8]" name="getStatusMessage" description="getStatusMessage"/>
-    <locator id="ficmptd.getStatusMessageAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[8]" name="getStatusMessageAR1153" description="getStatusMessage"/>
-    
+
     
     </page>
     
     <page id="fidf" name="formInstDetailFooterTabView" description="form instance bottom page created by Kun Shen">
-	<locator id="fidf.bottomPage" type="WebElement" by="id" expression="formInstDetailFooterTabView" name="formInstDetailFooterTabView" description="formInstDetailFooterTabView"/>
+	  <locator id="fidf.bottomPage" type="WebElement" by="id" expression="formInstDetailFooterTabView" name="formInstDetailFooterTabView" description="formInstDetailFooterTabView"/>
     <locator id="fidf.linkTab" type="WebElement" by="linkText" expression="?" name="linkTab" description="link Tab in left panel" />
     <locator id="fidf.linkText" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//a[text()='?']" name="linkText" description="link Tab(text) in left panel" />
     <locator id="fidf.export" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//a[@title='Export']" name="export" description="export in buttom page" />
