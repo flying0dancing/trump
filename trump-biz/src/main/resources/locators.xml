@@ -61,8 +61,8 @@
     	<locator id="fipf.getGridCells1st" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td[1]//input" name="getGridCells1st"  description="get first Grid Cells as rowId"/>  
     	<locator id="fipf.getOneInGridCells" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//input[@id='?']|.//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//textarea[@id='?']" name="getOneInGridCells"  description="get one cell in Grid Cells"/>
     	
-    	<locator id="fipf.firstPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/span[1]" name="firstPageSta2" description="first page status"/>
-    	<locator id="fipf.nextPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>
+    	<locator id="fipf.firstPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/*[contains(@class,'ui-paginator-first')]" name="firstPageSta2" description="first page status"/>
+    	<locator id="fipf.nextPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/*[contains(@class,'ui-paginator-next')]" name="nextPageSta" description="next page status"/>
     	<locator id="fipf.instaceTab" type="WebTable" by="xpath" expression="//div[@id='formHeader:currentPageInstance_panel']/div/table/tbody" name="instanceTable" description="instanceTable"/>
     	<locator id="fipf.instace" type="WebElement" by="xpath" expression="//*[@id='formHeader:currentPageInstance_panel']/div/table/tbody/tr[?]" name="instance" description="instance"/>
     	<locator id="fipf.curInst" type="WebElement" by="id" expression="formHeader:currentPageInstance_label" name="currentInstance" description="current instance"/>
@@ -252,7 +252,7 @@
     <locator id="ficmptd.messages" type="WebElement" by="xpath" expression="//div[@id='computeForm:computemessages']/div/a" name="messages" description="create form messages"/>	
     <locator id="ficmptd.computeConfirm" type="WebElement" by="xpath" expression="//div[@id='computeConfirmDialog']/div/button[@id='computeConfirm'][span='OK'][not(@aria-disabled)]/span" name="computeConfirm" description="computeConfirm"/>
     <locator id="ficmptd.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/*[contains(@class,'ui-paginator-first')]" name="firstPageSta" description="first page status"/>
-    <locator id="ficmptd.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/*[contains(@class,'ui-paginator-prev')]" name="nextPageSta" description="next page status"/>
+    <locator id="ficmptd.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/*[contains(@class,'ui-paginator-next')]" name="nextPageSta" description="next page status"/>
    
     <locator id="ficmptd.getStatus" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatus" description="getStatus"/>
     <locator id="ficmptd.getstartDate" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDate" description="getstartDate"/>

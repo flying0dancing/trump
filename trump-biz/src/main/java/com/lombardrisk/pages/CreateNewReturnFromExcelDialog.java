@@ -147,6 +147,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		if(importFileFullName!=null && new File(importFileFullName).exists())
 		{
 			element("abstract.importFileUpload_input",type).type(importFileFullName);
+			loadingDlg(null,5);
 			errorTxt=uploadFileError(type);
 			if(errorTxt!=null)
 			{
@@ -191,7 +192,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 				if(!element("abstract.uploadFileInitToZeroChecked",type).isPresent())
 				{uploadFileInitToZero.click();}
 			}
-			
+			loadingDlg(null,5);
 			flag=super.applyScaleRadio(type,form.getApplyScale());
 			if(flag){
 				fip=clickImportButton();
