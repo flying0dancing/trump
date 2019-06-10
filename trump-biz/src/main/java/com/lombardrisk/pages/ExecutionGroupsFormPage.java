@@ -46,14 +46,22 @@ public class ExecutionGroupsFormPage extends AbstractPage {
 		element("abstract.clickDashboard").click(); //return back to Dashboard
 		loadingDlg(null,10);//loadingDlg(8000);
 	}
-	
+
+	public Boolean selectInfo() throws Exception {
+		IWebElementWrapper aTitleEle=element("mrf.title");
+		if(aTitleEle.isPresent() && aTitleEle.isDisplayed()){
+			return selectInfo2019();
+		}else{
+			return selectInfoBefore2019();
+		}
+	}
 	/**
 	 * select form, process date, abort on failure, return true if exists
 	 * @author kun shen
 	 * @return
 	 * @throws Exception
 	 */
-		public Boolean selectInfo() throws Exception
+		public Boolean selectInfoBefore2019() throws Exception
 		{
 			Boolean flag=false;
 			String group=form.getRetrieveGroup();
@@ -103,30 +111,80 @@ public class ExecutionGroupsFormPage extends AbstractPage {
 			}
 			return flag;
 		}
-		
 
-		/**
-		 * search job status(pass,fail:...,error:job timeout,error:job null,error:job cannot do retrieve)
-		 * @return
-		 * @throws Exception
-		 */
-		public String doRetrieve() throws Exception
+	public Boolean selectInfo2019() throws Exception
+	{
+		Boolean flag=false;
+		String group=form.getRetrieveGroup();
+		String processDate=form.getProcessDate();
+		form.setName(group); //reset form's group to name
+		form.setVersion("");
+		if(StringUtils.isNotBlank(group))
 		{
-			String status=null;
-			//ListPage listPage=null;
-			logger.info("click run button");
-			element("egrd.ok").click();
-			loadingDlg(element("jrd.title"),20); //wait for Job Result Dialog visible
-			
-			if(element("jrd.title").isPresent() && element("jrd.title").isDisplayed())
+			flag=selectIt(element("mrf.selectGroup"),group);
+			if(flag && StringUtils.isNotBlank(processDate))
 			{
-				JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());
-				String jobRunType="RetrieveGroupJob";
-				String jobName=getDBInfo().getRegulatorPrefix(form.getRegulator())+"|"+form.getRetrieveGroup();
-				status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
-				jrd=null;
+				element("mrf.referenceDate").input(processDate);
+				loadingDlg(null,5);//loadingDlg(1000);
+				selectDate(processDate);
+				flag=true;
 			}
-			
-			return status;
+			if(StringUtils.isNotBlank(form.getAbortOnFailure()))
+			{
+				if(form.getAbortOnFailure().equalsIgnoreCase("N") && element("mrf.abortOnFail").isPresent())
+				{
+					element("mrf.abortOnFail").click();
+				}
+				if(form.getAbortOnFailure().equalsIgnoreCase("Y") && !element("mrf.abortOnFail").isPresent())
+				{
+					element("mrf.tickAbortOnFail").click();
+				}
+				loadingDlg(null,5);//loadingDlg();
+			}
 		}
+		loadingDlg(null,5);//loadingDlg();
+		if(!flag)
+		{
+			IWebElementWrapper elt=element("mrf.cancel");
+			if(elt.isPresent() && elt.isDisplayed())
+			{
+				elt.click(); // close Run Dialog
+			}
+			loadingDlg(null,5);//loadingDlg();
+			logger.info("can't run retrieve group, cancel it.");
+		}
+		return flag;
+	}
+
+	/**
+	 * search job status(pass,fail:...,error:job timeout,error:job null,error:job cannot do retrieve)
+	 * @return
+	 * @throws Exception
+	 */
+	public String doRetrieve() throws Exception
+	{
+		String status=null;
+		//ListPage listPage=null;
+		logger.info("click run button");
+		IWebElementWrapper aTitleEle=element("mrf.title");
+		if(aTitleEle.isPresent() && aTitleEle.isDisplayed()){
+			element("mrf.ok").click();
+		}else{
+			element("egrd.ok").click();
+		}
+		loadingDlg(element("jrd.title"),30); //wait for Job Result Dialog visible
+
+		if(element("jrd.title").isPresent() && element("jrd.title").isDisplayed())
+		{
+			JobResultDialog jrd=new JobResultDialog(getWebDriverWrapper(),getTestDataManager());
+			String jobRunType="RetrieveGroupJob";
+			String jobName=getDBInfo().getRegulatorPrefix(form.getRegulator())+"|"+form.getRetrieveGroup();
+			status=jrd.waitJobResult(jobName, form.getProcessDate(), jobRunType);
+			jrd=null;
+		}
+
+		return status;
+	}
+
+
 }
