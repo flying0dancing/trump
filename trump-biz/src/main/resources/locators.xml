@@ -322,8 +322,8 @@
     <locator id="egfp.runAGroup" type="WebElement" by="xpath" expression=".//div[@id='executionGroupsForm:executionGroupTable']//tr[td/span='?']/td[3]//img" name="ExecutedAGroup" description="Executed selected Group"/>
     </page>
     
-    <page id="egrd" name="executionGroupRunDialog" description="unlockWarningDialog created by Kun Shen">
-	<locator id="egrd.title" type="WebElement" by="id" expression="executionGroupRunDialog_title" name="executionGroupRunDialog_title" description="executionGroupRunDialog_title"/>
+    <page id="egrd" name="executionGroupRunDialog" description="executionGroupRunDialog created by Kun Shen">
+	  <locator id="egrd.title" type="WebElement" by="id" expression="executionGroupRunDialog_title" name="executionGroupRunDialog_title" description="executionGroupRunDialog_title"/>
     <locator id="egrd.referenceDate" type="WebElement" by="id" expression="executionGroupRunDialogForm:referenceDate_input" name="referenceProcessDate" description="reference Process Date"/>
     <locator id="egrd.abortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-state-active')]/span" name="AbortOnFailure" description="Abort on failure"/>
     <locator id="egrd.tickAbortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-chkbox-box')]/span" name="tickAbortOnFail" description="tick Abort on failure"/>
@@ -341,8 +341,18 @@
     </page>
     
     <page id="scd" name="submitConfirmDialog" description="submitConfirmDialog created by Kun Shen 20190513">
-	<locator id="scd.msg" type="WebElement" by="xpath" expression="//div[@id='submitConfirmDialog']//div[contains(@class,'content')]" name="submitMessage" description="submit message"/>
+	  <locator id="scd.msg" type="WebElement" by="xpath" expression="//div[@id='submitConfirmDialog']//div[contains(@class,'content')]" name="submitMessage" description="submit message"/>
     <locator id="scd.ok" type="WebElement" by="xpath" expression=".//div[@id='submitConfirmDialog']//button[@id='submitConfirm']" name="submitConfirm" description="submit confirm button"/>
     </page>
-    
+
+  <page id="mrf" name="multipleRetrieveForm" description="multipleRetrieveForm created by Kun Shen by ar v19.2">
+    <locator id="mrf.title" type="WebElement" by="id" expression="multipleRetrieveDialog_title" name="multipleRetrieveDialog_title" description="multipleRetrieveDialog_title"/>
+    <locator id="mrf.selectGroup" type="WebElement" by="id" expression="multipleRetrieveForm:selectGroup" name="multipleRetrieveForm:selectGroup" description="multipleRetrieveForm:selectGroup"/>
+
+    <locator id="mrf.referenceDate" type="WebElement" by="id" expression="multipleRetrieveForm:referenceDate_input" name="referenceProcessDate" description="reference Process Date"/>
+    <locator id="mrf.abortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-state-active')]/span" name="AbortOnFailure" description="Abort on failure"/>
+    <locator id="mrf.tickAbortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-chkbox-box')]/span" name="tickAbortOnFail" description="tick Abort on failure"/>
+    <locator id="mrf.ok" type="WebElement" by="id" expression="multipleRetrieveForm:doRetrieve" name="run" description="run"/>
+    <locator id="mrf.cancel" type="WebElement" by="id" expression="multipleRetrieveForm:cancel" name="cancel" description="cancel button"/>
+  </page>
 </locatorBean>
