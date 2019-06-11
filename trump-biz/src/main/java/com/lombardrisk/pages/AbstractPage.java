@@ -327,7 +327,12 @@ public abstract class AbstractPage extends PageBase
 			setT--;
 		}
 	}
-	
+	/**
+	 * Wait for ajax dialog disappear, or some element disappear, element could not be null
+	 * @param element it can not be null, or some element needs to be waiting disappeared
+	 * @param setT timeout(milliseconds)
+	 * @throws Exception
+	 */
 	protected void loadingDlgDis(IWebElementWrapper element,int setT) throws Exception
 	{
 		logger.info("wait loading disappear, some element disappear");

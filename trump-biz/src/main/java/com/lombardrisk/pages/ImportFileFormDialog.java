@@ -56,12 +56,12 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 		if(new File(importFileFullName).exists())
 		{
 			element("abstract.importFileUpload_input",type).type(importFileFullName);
+			loadingDlgDis(element("aifd.checkUpload"),25);
 			errorTxt=uploadFileError(type);
 			if(errorTxt!=null)
 			{
 				closeThisPage();
 			}
-			waitThat().timeout(20000);
 		}else
 		{
 			errorTxt="no exist import file";
@@ -114,6 +114,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 			{
 				logger.info("click import button");
 				listimportBtn.click();
+				waitThat().timeout(5000);
 				loadingDlg(null,100);
 				//add a judge for import successfully
 				if(!element("fipf.pageTab").isPresent())

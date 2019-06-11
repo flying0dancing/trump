@@ -794,7 +794,7 @@ public class FileUtil extends FileUtils
 		fileWriter.close();
 	}
 	/**
-	 * copy file from expectationPath to resultPath, if resultPath already exists fileName, add suffix like (1),(2) in fileName, and return new file name
+	 * copy file from sourcePath to resultPath, if resultPath already exists fileName, add suffix like (1),(2) in fileName, and return new file name
 	 * @author kun shen
 	 * @param sourcePath
 	 * @param resultPath
