@@ -56,7 +56,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 		if(new File(importFileFullName).exists())
 		{
 			element("abstract.importFileUpload_input",type).type(importFileFullName);
-			loadingDlg(element("aifd.checkUpload"),25);
+			loadingDlgDis(element("aifd.checkUpload"),25);
 			errorTxt=uploadFileError(type);
 			if(errorTxt!=null)
 			{

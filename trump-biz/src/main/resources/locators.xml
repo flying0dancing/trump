@@ -210,7 +210,7 @@
     <locator id="aifd.uploadFileName" type="WebButton" by="id" expression="?:uploadedFileName" name="uploadFileName" description="uploadFileName"/>
     <locator id="aifd.importMode" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//div[div/input[@value='?']]" name="importMode" description="importMode(Override, Additive)"/>
     <locator id="aifd.importMode_status" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//td[?]//div[contains(@class,'ui-state-active')]" name="importMode_status" description="importMode_status(Override, Additive)"/>
-    <locator id="aifd.checkUpload" type="WebElement" by="id" expression="importFileForm:applyScaleRadio" name="checkUpload" description="checkUpload"/>
+    <locator id="aifd.checkUpload" type="WebElement" by="xpath" expression="//div[@class='ui-fileupload-progress']" name="checkUpload" description="checkUpload"/>
   </page>
     
     <page id="fird" name="formInstanceRetrieveDialog" description="RetrieveDialog created by Kun Shen">
