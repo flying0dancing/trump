@@ -129,7 +129,7 @@ public class ExportToFiles {
 						String directSubmitMsg=exportToRegulator.clickDirectSubmit();
 						if(StringUtils.isNotBlank(directSubmitMsg))
 						{
-							if(directSubmitMsg.toLowerCase().contains(" successfully")){
+							if(directSubmitMsg.toLowerCase().contains(" successful")){
 								status.add("pass:"+directSubmitMsg);
 								logger.info("pass: "+directSubmitMsg);
 							}else{

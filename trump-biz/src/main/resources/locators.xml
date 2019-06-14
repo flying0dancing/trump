@@ -61,8 +61,8 @@
     	<locator id="fipf.getGridCells1st" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr[?]/td[1]//input" name="getGridCells1st"  description="get first Grid Cells as rowId"/>  
     	<locator id="fipf.getOneInGridCells" type="WebElement" by="xpath" expression=".//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//input[@id='?']|.//*[@id='formInstContentForm']//table[@role='grid']/tbody[@id='?']/tr/td//textarea[@id='?']" name="getOneInGridCells"  description="get one cell in Grid Cells"/>
     	
-    	<locator id="fipf.firstPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/span[1]" name="firstPageSta2" description="first page status"/>
-    	<locator id="fipf.nextPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>
+    	<locator id="fipf.firstPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/*[contains(@class,'ui-paginator-first')]" name="firstPageSta2" description="first page status"/>
+    	<locator id="fipf.nextPageSta2" type="WebElement" by="xpath" expression="//div[@id='formInstContentForm:?_paginator_bottom']/*[contains(@class,'ui-paginator-next')]" name="nextPageSta" description="next page status"/>
     	<locator id="fipf.instaceTab" type="WebTable" by="xpath" expression="//div[@id='formHeader:currentPageInstance_panel']/div/table/tbody" name="instanceTable" description="instanceTable"/>
     	<locator id="fipf.instace" type="WebElement" by="xpath" expression="//*[@id='formHeader:currentPageInstance_panel']/div/table/tbody/tr[?]" name="instance" description="instance"/>
     	<locator id="fipf.curInst" type="WebElement" by="id" expression="formHeader:currentPageInstance_label" name="currentInstance" description="current instance"/>
@@ -203,14 +203,15 @@
      	
     </page>
     
-    <page id="aifd" name="adjustmentsImportFilesDialog" description="adjustmentsImportFilesDialog created by Kun Shen">
-	<locator id="aifd.importFilesDialogTitle" type="WebElement" by="id" expression="importFilesDialog_title" name="importFilesDialogTitle" description="importFilesDialogTitle"/>
+  <page id="aifd" name="adjustmentsImportFilesDialog" description="adjustmentsImportFilesDialog created by Kun Shen">
+    <locator id="aifd.importFilesDialogTitle" type="WebElement" by="id" expression="importFilesDialog_title" name="importFilesDialogTitle" description="importFilesDialogTitle"/>
     <locator id="aifd.closeDialog" type="WebElement" by="xpath" expression="//div[@id='importFilesDialog']/div[1]/a/span" name="closeDialog" description="closeDialog"/>
     <locator id="aifd.importBtn" type="WebButton" by="id" expression="?:importBtn" name="importBtn" description="importBtn"/>
     <locator id="aifd.uploadFileName" type="WebButton" by="id" expression="?:uploadedFileName" name="uploadFileName" description="uploadFileName"/>
     <locator id="aifd.importMode" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//div[div/input[@value='?']]" name="importMode" description="importMode(Override, Additive)"/>
-    <locator id="aifd.importMode_status" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//td[?]//div[contains(@class,'ui-state-active')]" name="importMode_status" description="importMode_status(Override, Additive)"/>  
-    </page>
+    <locator id="aifd.importMode_status" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//td[?]//div[contains(@class,'ui-state-active')]" name="importMode_status" description="importMode_status(Override, Additive)"/>
+    <locator id="aifd.checkUpload" type="WebElement" by="xpath" expression="//div[@class='ui-fileupload-progress']" name="checkUpload" description="checkUpload"/>
+  </page>
     
     <page id="fird" name="formInstanceRetrieveDialog" description="RetrieveDialog created by Kun Shen">
 	<locator id="fird.title" type="WebElement" by="id" expression="formInstanceRetrieveDialog_title" name="formInstanceRetrieveDialog_title" description="formInstanceRetrieveDialog_title"/>
@@ -229,7 +230,7 @@
     
     <page id="jrd" name="jobResultDialog" description="jobResultDialog created by Kun Shen">
 	<locator id="jrd.title" type="WebElement" by="id" expression="jobResultDialog_title" name="jobResultDialog_title" description="jobResultDialog_title"/>
-    <locator id="jrd.startedTimeLabel" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']//form//td[contains(label,'Started:')]//label[1]" name="startedTime" description="startedTime"/>
+    <locator id="jrd.startedTimeLabel" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']//label[starts-with(text(),'Started:')]" name="startedTime" description="startedTime"/>
     <locator id="jrd.closeDialog" type="WebElement" by="xpath" expression="//*[@id='jobResultDialog']/div[1]/a" name="closeDialog" description="closeDialog"/>
     <locator id="jrd.ok" type="WebButton" by="id" expression="jobResultForm:ok" name="okButton" description="okButton"/>
     </page>
@@ -251,21 +252,18 @@
     <locator id="ficmptd.cancel" type="WebButton" by="id" expression="computeForm:cancel" name="cancelButton" description="cancelButton"/>
     <locator id="ficmptd.messages" type="WebElement" by="xpath" expression="//div[@id='computeForm:computemessages']/div/a" name="messages" description="create form messages"/>	
     <locator id="ficmptd.computeConfirm" type="WebElement" by="xpath" expression="//div[@id='computeConfirmDialog']/div/button[@id='computeConfirm'][span='OK'][not(@aria-disabled)]/span" name="computeConfirm" description="computeConfirm"/>
-    <locator id="ficmptd.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/span[1]" name="firstPageSta" description="first page status"/>
-    <locator id="ficmptd.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>	
+    <locator id="ficmptd.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/*[contains(@class,'ui-paginator-first')]" name="firstPageSta" description="first page status"/>
+    <locator id="ficmptd.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formJobManagerListForm:formJobManagerListTable_paginator_bottom']/*[contains(@class,'ui-paginator-next')]" name="nextPageSta" description="next page status"/>
    
     <locator id="ficmptd.getStatus" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatus" description="getStatus"/>
-    <locator id="ficmptd.getStatusAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[6]/span" name="getStatusAR1153" description="getStatus"/>
     <locator id="ficmptd.getstartDate" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDate" description="getstartDate"/>
-    <locator id="ficmptd.getstartDateAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?']/td[4]" name="getstartDateAR1153" description="getstartDate"/>
     <locator id="ficmptd.getStatusMessage" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[8]" name="getStatusMessage" description="getStatusMessage"/>
-    <locator id="ficmptd.getStatusMessageAR1153" type="WebElement" by="xpath" expression="//*[@id='formJobManagerListForm:formJobManagerListTable_data']/tr[td[1]/a='?' and td[2]/span='?' and starts-with(td[4],'?')]/td[8]" name="getStatusMessageAR1153" description="getStatusMessage"/>
-    
+
     
     </page>
     
     <page id="fidf" name="formInstDetailFooterTabView" description="form instance bottom page created by Kun Shen">
-	<locator id="fidf.bottomPage" type="WebElement" by="id" expression="formInstDetailFooterTabView" name="formInstDetailFooterTabView" description="formInstDetailFooterTabView"/>
+	  <locator id="fidf.bottomPage" type="WebElement" by="id" expression="formInstDetailFooterTabView" name="formInstDetailFooterTabView" description="formInstDetailFooterTabView"/>
     <locator id="fidf.linkTab" type="WebElement" by="linkText" expression="?" name="linkTab" description="link Tab in left panel" />
     <locator id="fidf.linkText" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//a[text()='?']" name="linkText" description="link Tab(text) in left panel" />
     <locator id="fidf.export" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//a[@title='Export']" name="export" description="export in buttom page" />
@@ -325,8 +323,8 @@
     <locator id="egfp.runAGroup" type="WebElement" by="xpath" expression=".//div[@id='executionGroupsForm:executionGroupTable']//tr[td/span='?']/td[3]//img" name="ExecutedAGroup" description="Executed selected Group"/>
     </page>
     
-    <page id="egrd" name="executionGroupRunDialog" description="unlockWarningDialog created by Kun Shen">
-	<locator id="egrd.title" type="WebElement" by="id" expression="executionGroupRunDialog_title" name="executionGroupRunDialog_title" description="executionGroupRunDialog_title"/>
+    <page id="egrd" name="executionGroupRunDialog" description="executionGroupRunDialog created by Kun Shen">
+	  <locator id="egrd.title" type="WebElement" by="id" expression="executionGroupRunDialog_title" name="executionGroupRunDialog_title" description="executionGroupRunDialog_title"/>
     <locator id="egrd.referenceDate" type="WebElement" by="id" expression="executionGroupRunDialogForm:referenceDate_input" name="referenceProcessDate" description="reference Process Date"/>
     <locator id="egrd.abortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-state-active')]/span" name="AbortOnFailure" description="Abort on failure"/>
     <locator id="egrd.tickAbortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-chkbox-box')]/span" name="tickAbortOnFail" description="tick Abort on failure"/>
@@ -344,8 +342,18 @@
     </page>
     
     <page id="scd" name="submitConfirmDialog" description="submitConfirmDialog created by Kun Shen 20190513">
-	<locator id="scd.msg" type="WebElement" by="xpath" expression="//div[@id='submitConfirmDialog']//div[contains(@class,'content')]" name="submitMessage" description="submit message"/>
+	  <locator id="scd.msg" type="WebElement" by="xpath" expression="//div[@id='submitConfirmDialog']//div[contains(@class,'content')]" name="submitMessage" description="submit message"/>
     <locator id="scd.ok" type="WebElement" by="xpath" expression=".//div[@id='submitConfirmDialog']//button[@id='submitConfirm']" name="submitConfirm" description="submit confirm button"/>
     </page>
-    
+
+  <page id="mrf" name="multipleRetrieveForm" description="multipleRetrieveForm created by Kun Shen by ar v19.2">
+    <locator id="mrf.title" type="WebElement" by="id" expression="multipleRetrieveDialog_title" name="multipleRetrieveDialog_title" description="multipleRetrieveDialog_title"/>
+    <locator id="mrf.selectGroup" type="WebElement" by="id" expression="multipleRetrieveForm:selectGroup" name="multipleRetrieveForm:selectGroup" description="multipleRetrieveForm:selectGroup"/>
+
+    <locator id="mrf.referenceDate" type="WebElement" by="id" expression="multipleRetrieveForm:referenceDate_input" name="referenceProcessDate" description="reference Process Date"/>
+    <locator id="mrf.abortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-state-active')]/span" name="AbortOnFailure" description="Abort on failure"/>
+    <locator id="mrf.tickAbortOnFail" type="WebElement" by="xpath" expression=".//tr[td='Abort on failure']/td[1]//div[contains(@class,'ui-chkbox-box')]/span" name="tickAbortOnFail" description="tick Abort on failure"/>
+    <locator id="mrf.ok" type="WebElement" by="id" expression="multipleRetrieveForm:doRetrieve" name="run" description="run"/>
+    <locator id="mrf.cancel" type="WebElement" by="id" expression="multipleRetrieveForm:cancel" name="cancel" description="cancel button"/>
+  </page>
 </locatorBean>

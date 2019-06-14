@@ -37,7 +37,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 	public void closeThisPage() throws Exception
 	{
 		element("aifd.closeDialog").click();
-		loadingDlg(null,5);//loadingDlg();
+		loadingDlg(null,10);//loadingDlg();
 	}
 	
 	/**
@@ -56,6 +56,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 		if(new File(importFileFullName).exists())
 		{
 			element("abstract.importFileUpload_input",type).type(importFileFullName);
+			loadingDlgDis(element("aifd.checkUpload"),25);
 			errorTxt=uploadFileError(type);
 			if(errorTxt!=null)
 			{
@@ -70,6 +71,7 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 		{
 			logger.info("click upload button(error message):"+errorTxt);
 		}
+
 		return errorTxt;
 	}
 	/**
@@ -112,7 +114,8 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 			{
 				logger.info("click import button");
 				listimportBtn.click();
-				loadingDlg(null,5);//loadingDlg();
+				waitThat().timeout(5000);
+				loadingDlg(null,100);
 				//add a judge for import successfully
 				if(!element("fipf.pageTab").isPresent())
 				{
@@ -127,6 +130,9 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 				closeThisPage();
 			}
 			
+		}
+		if(isThisPage()){
+			closeThisPage();
 		}
 		return flag;
 	}

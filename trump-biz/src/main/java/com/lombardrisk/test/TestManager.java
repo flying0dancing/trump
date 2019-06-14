@@ -294,10 +294,11 @@ public class TestManager extends TestBase implements IComFolder {
 	  public void afterClassInTestManager(ITestContext context)  throws Exception{
 		  logger.info(getClass().getName()+" afterClass-tearDownTest running!"); 
 		  tearDownTest();
-		  String detailsLogPath=context.getCurrentXmlTest().getSuite().getName()+"/"+context.getCurrentXmlTest().getName();
-		  FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER+detailsLogPath).getAbsolutePath(), new File(TARGET_LOG_FOLDER+detailsLogPath).getAbsolutePath(),startSuiteTime);
-		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime);
-		  
+		  String detailsLogPath=context.getCurrentXmlTest().getSuite().getName()+"/"+context.getCurrentXmlTest().getName()+"/";
+		  FileUtil.copyToNewFile(SOURCE_LOG_FOLDER+detailsLogPath,TARGET_LOG_FOLDER+detailsLogPath,getLogName()+".log");
+		  //FileUtil.copyDirectory( new File(SOURCE_LOG_FOLDER+detailsLogPath).getAbsolutePath(), new File(TARGET_LOG_FOLDER+detailsLogPath).getAbsolutePath(),startSuiteTime,System.currentTimeMillis());
+		  FileUtil.copyDirectory( new File(SOURCE_SCREENSHOT_FOLDER).getAbsolutePath(), new File(TARGET_SCREENSHOT_FOLDER).getAbsolutePath(),startSuiteTime,System.currentTimeMillis());
+
 	  }
 	  
 
