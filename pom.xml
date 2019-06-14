@@ -39,9 +39,9 @@
     <!-- config properties -->
       <!-- config test pool -->
       <server.info>test.json</server.info>
-      <test.source>\\\\172.20.20.57\\ProductQA\\APAutomation\\sources</test.source>
-      <test.scenarios>\\\\172.20.20.57\\ProductQA\\APAutomation\\scenarios</test.scenarios>
-      <test.target>\\\\172.20.20.57\\ProductQA\\APAutomation\\results</test.target>
+      <test.source>Z:\\APAutomation\\sources</test.source>
+      <test.scenarios>Z:\\APAutomation\\scenarios</test.scenarios>
+      <test.target>Z:\\APAutomation\\results</test.target>
       <!-- mail default setting(no need to changed) -->
       <mail.host>10.17.3.150</mail.host>
       <mail.port>25</mail.port>

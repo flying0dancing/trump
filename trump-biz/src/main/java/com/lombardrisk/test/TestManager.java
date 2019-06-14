@@ -207,6 +207,20 @@ public class TestManager extends TestBase implements IComFolder {
 		  setScenarioId(getLogName());
 		  
 		  setUpTest();
+		  //debug ci
+		  logger.info(System.getProperty("server.info"));
+		  logger.info(System.getProperty("test.source"));
+		  logger.info(System.getProperty("test.scenarios"));
+		  logger.info(System.getProperty("test.target"));
+		  logger.info(System.getProperty("mail.host"));
+		  logger.info(System.getProperty("mail.port"));
+		  logger.info(System.getProperty("mail.sender.address"));
+		  logger.info(System.getProperty("mail.sender.password"));
+		  logger.info(System.getProperty("mail.receiver.to.list"));
+		  logger.info(System.getProperty("mail.receiver.cc.list"));
+		  logger.info(System.getProperty("mail.subject.prefix"));
+		  logger.info(System.getProperty("xmlFileName"));
+		  logger.info(System.getProperty("reportOutput"));
 		  TestCaseManager.offerTestEnvironment(getTestEnvironment());
 		  super.setTestDataManager(new TestDataManager(indexAppServer, indexDBServer, indexToolsetDBServer));
 		  setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
