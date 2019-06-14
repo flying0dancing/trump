@@ -181,16 +181,54 @@
 	<pluginManagement>
   		<plugins>
   			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
-            </plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven.compiler.plugin.version}</version>
+        </plugin>
   			
-            <plugin> 
-        		<groupId>org.apache.maven.plugins</groupId>  
-        		<artifactId>maven-surefire-plugin</artifactId>
-        		<version>${maven.surefire.plugin.version}</version>
-            </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven.surefire.plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>properties-maven-plugin</artifactId>
+          <version>1.0.0</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>set-system-properties</goal>
+              </goals>
+              <configuration>
+                <properties>
+                  <property>
+                    <name>test.source</name>
+                    <value>${test.source}</value>
+                    <name>test.scenarios</name>
+                    <value>${test.scenarios}</value>
+                    <name>test.target</name>
+                    <value>${test.target}</value>
+                    <name>mail.host</name>
+                    <value>${mail.host}</value>
+                    <name>mail.port</name>
+                    <value>${mail.port}</value>
+                    <name>mail.sender.address</name>
+                    <value>${mail.sender.address}</value>
+                    <name>mail.sender.password</name>
+                    <value>${mail.sender.password}</value>
+                    <name>mail.receiver.to.list</name>
+                    <value>kshen@vermeg.com</value>
+                    <name>mail.receiver.cc.list</name>
+                    <value>${mail.receiver.cc.list}</value>
+                    <name>mail.subject.prefix</name>
+                    <value>${mail.subject.prefix}</value>
+                  </property>
+                </properties>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
   		</plugins>
   	</pluginManagement>
 </build>

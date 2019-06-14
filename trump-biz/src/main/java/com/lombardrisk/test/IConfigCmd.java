@@ -9,13 +9,13 @@ public interface IConfigCmd {
 	String ICC_SCENARIOS_POOL=System.getProperties().containsKey("test.scenarios")?System.getProperty("test.scenarios").replace("\\", "/"):null;
 
 
-	String ICC_MAIL_HOST=System.getProperties().containsKey("mail.host")?System.getProperty("mail.host").replace("\\", "/"):null;
-	String ICC_MAIL_PORT=System.getProperties().containsKey("mail.port")?System.getProperty("mail.port").replace("\\", "/"):null;
-	String ICC_MAIL_SENDER_ADDRESS=System.getProperties().containsKey("mail.sender.address")?System.getProperty("mail.sender.address").replace("\\", "/"):null;
-	String ICC_MAIL_SENDER_PASSWORD=System.getProperties().containsKey("mail.sender.password")?System.getProperty("mail.sender.password").replace("\\", "/"):null;
-	String ICC_MAIL_RECEIVER_TO=System.getProperties().containsKey("mail.receiver.to.list")?System.getProperty("mail.receiver.to.list").replace("\\", "/"):null;
-	String ICC_MAIL_RECEIVER_CC=System.getProperties().containsKey("mail.receiver.cc.list")?System.getProperty("mail.receiver.cc.list").replace("\\", "/"):null;
-	String ICC_MAIL_SUBJECT_PREFIX=System.getProperties().containsKey("mail.subject.prefix")?System.getProperty("mail.subject.prefix").replace("\\", "/"):null;
+	String ICC_MAIL_HOST=System.getProperties().containsKey("mail.host")?System.getProperty("mail.host"):null;
+	String ICC_MAIL_PORT=System.getProperties().containsKey("mail.port")?System.getProperty("mail.port"):null;
+	String ICC_MAIL_SENDER_ADDRESS=System.getProperties().containsKey("mail.sender.address")?System.getProperty("mail.sender.address"):null;
+	String ICC_MAIL_SENDER_PASSWORD=System.getProperties().containsKey("mail.sender.password")?System.getProperty("mail.sender.password"):null;
+	String ICC_MAIL_RECEIVER_TO=System.getProperties().containsKey("mail.receiver.to.list")?System.getProperty("mail.receiver.to.list"):null;
+	String ICC_MAIL_RECEIVER_CC=System.getProperties().containsKey("mail.receiver.cc.list")?System.getProperty("mail.receiver.cc.list"):null;
+	String ICC_MAIL_SUBJECT_PREFIX=System.getProperties().containsKey("mail.subject.prefix")?System.getProperty("mail.subject.prefix"):null;
 
 
 	//base ones

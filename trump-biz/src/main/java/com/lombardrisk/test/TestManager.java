@@ -207,20 +207,6 @@ public class TestManager extends TestBase implements IComFolder {
 		  setScenarioId(getLogName());
 		  
 		  setUpTest();
-		  //debug ci
-		  logger.info(System.getProperty("server.info"));
-		  logger.info(System.getProperty("test.source"));
-		  logger.info(System.getProperty("test.scenarios"));
-		  logger.info(System.getProperty("test.target"));
-		  logger.info(System.getProperty("mail.host"));
-		  logger.info(System.getProperty("mail.port"));
-		  logger.info(System.getProperty("mail.sender.address"));
-		  logger.info(System.getProperty("mail.sender.password"));
-		  logger.info(System.getProperty("mail.receiver.to.list"));
-		  logger.info(System.getProperty("mail.receiver.cc.list"));
-		  logger.info(System.getProperty("mail.subject.prefix"));
-		  logger.info(System.getProperty("xmlFileName"));
-		  logger.info(System.getProperty("reportOutput"));
 		  TestCaseManager.offerTestEnvironment(getTestEnvironment());
 		  super.setTestDataManager(new TestDataManager(indexAppServer, indexDBServer, indexToolsetDBServer));
 		  setDBInfo(((TestDataManager)getTestDataManager()).getDBInfo());
@@ -253,7 +239,7 @@ public class TestManager extends TestBase implements IComFolder {
 			  {
 				  logger.info("try to copying regulator folder \""+regulator+"\" to result folder");
 				  if(new File(SOURCE_EXPECTATION_FOLDER+regulator).exists() && new File(SOURCE_IMPORT_FOLDER+regulator).exists())
-				  { 
+				  {
 					 if(ICCB_UPDATESOURCE)
 					 {
 						 logger.info("copying folder "+new File(SOURCE_EXPECTATION_FOLDER+regulator).getAbsolutePath()+" to "+new File(TARGET_EXPECTATION_FOLDER+regulator).getAbsolutePath());
@@ -284,7 +270,20 @@ public class TestManager extends TestBase implements IComFolder {
 				  FileUtil.copyDirectory(new File(SOURCE_FOLDER).getAbsolutePath(), new File(TARGET_FOLDER).getAbsolutePath());
 			  }
 			  logger.info("copy folders(done)");
-			  
+			  //debug ci
+			  logger.info(System.getProperty("server.info"));
+			  logger.info(System.getProperty("test.source"));
+			  logger.info(System.getProperty("test.scenarios"));
+			  logger.info(System.getProperty("test.target"));
+			  logger.info(System.getProperty("mail.host"));
+			  logger.info(System.getProperty("mail.port"));
+			  logger.info(System.getProperty("mail.sender.address"));
+			  logger.info(System.getProperty("mail.sender.password"));
+			  logger.info(System.getProperty("mail.receiver.to.list"));
+			  logger.info(System.getProperty("mail.receiver.cc.list"));
+			  logger.info(System.getProperty("mail.subject.prefix"));
+			  logger.info(System.getProperty("xmlFileName"));
+			  logger.info(System.getProperty("reportOutput"));
 		  }catch(Exception e){}
 		  
 		  String server_Url=getDBInfo().getApplicationServer_Url();
