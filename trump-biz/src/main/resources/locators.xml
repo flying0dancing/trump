@@ -143,11 +143,13 @@
     <locator id="filf.exportToFile_li" type="WebElement" by="xpath" expression="//*[@id='FormInstImpExpMenu:exportToFile_menu']/ul/li" name="exportToFile_li" description="exportToFile_li"/>
     <locator id="filf.exportToFile_li_Txt" type="WebElement" by="xpath" expression="//*[@id='FormInstImpExpMenu:exportToFile_menu']/ul/li[?]/a/span" name="exportToFile_li_Txt" description="exportToFile_li_Txt"/>
     <locator id="filf.jobManager" type="WebButton" by="id" expression="formHeader:jobManager" name="jobManager" description="jobManager"/>
-    <locator id="filf.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/span[1]" name="firstPageSta" description="first page status"/>
-    <locator id="filf.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/span[4]" name="nextPageSta" description="next page status"/>	
+    <locator id="filf.firstPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/*[contains(@class,'ui-paginator-first')]" name="firstPageSta" description="first page status"/>
+    <locator id="filf.nextPageSta" type="WebElement" by="xpath" expression="//div[@id='formInstanceListForm:formInstanceListTable_paginator_bottom']/*[contains(@class,'ui-paginator-next')]" name="nextPageSta" description="next page status"/>
     <locator id="filf.FormRow" type="WebElement" by="xpath" expression="//tbody[@id='formInstanceListForm:formInstanceListTable_data']/tr[td[1]/a='?' and td[2]='?' and td[3]='?' and @data-ri]" name="FormRow" description="FormRow"/>
-    	
-    </page>
+
+    <locator id="filf.gisetting" type="WebElement" by="id" expression="formHeader:giSetting" name="gisetting" description="config button"/>
+
+  </page>
     
     <page id="td" name="transmitDialog" description="transmit(export to regulator) Dialog created by Kun Shen">
     <locator id="td.transmitDialogTitles" type="WebElement" by="xpath" expression="//div[starts-with(@id,'transmitDialog')]/div[1]/span" name="transmitDialogTitles" description="transmitDialogTitles"/>
@@ -356,4 +358,23 @@
     <locator id="mrf.ok" type="WebElement" by="id" expression="multipleRetrieveForm:doRetrieve" name="run" description="run"/>
     <locator id="mrf.cancel" type="WebElement" by="id" expression="multipleRetrieveForm:cancel" name="cancel" description="cancel button"/>
   </page>
+
+  <page id="sm" name="settingMenu" description="settingMenu created by Kun Shen by ar v19.2">
+    <locator id="sm.configPackageBind" type="WebElement" by="id" expression="formHeader:configPackageBinding" name="configPackageBinding" description="configPackageBinding"/>
+
+  </page>
+
+  <page id="cpbp" name="configPackageBindPage" description="configPackageListForm created by Kun Shen by ar v19.2">
+    <locator id="cpbp.title" type="WebElement" by="xpath" expression="//form[@id='configPackageListForm']" name="title" description="title in configPackageListForm"/>
+    <locator id="cpbp.selectPrefix" type="WebElement" by="xpath" expression="//form[@id='configPackageListForm']//td[span='?']" name="selectProductPrefix" description="selectProductPrefix in configPackageListForm"/>
+    <locator id="cpbp.clearETL" type="WebElement" by="xpath" expression="//form[@id='selectCalcEngineForm']//button[contains(span,'Clear ETL')]" name="clearETLCache" description="clear ETL cache"/>
+    <locator id="cpbp.save" type="WebElement" by="xpath" expression="//form[@id='saveForm']//button[span='Save']" name="save" description="save"/>
+  </page>
+
+  <page id="cecd" name="clearETLCacheDialog" description="clearETLCacheDialog created by Kun Shen by ar v19.2">
+    <locator id="cecd.title" type="WebElement" by="id" expression="clearETLCacheDialog_title" name="title" description="clearETLCacheDialog_title"/>
+    <locator id="cecd.OK" type="WebElement" by="xpath" expression="//div[@id='clearETLCacheDialog_content']//button[span='OK']" name="ok" description="okClearETLCache"/>
+    <locator id="cecd.close" type="WebElement" by="id" expression="//div[@id='clearETLCacheDialog']//a[@aria-label='Close']" name="close" description="closeClearETLCache"/>
+  </page>
+
 </locatorBean>

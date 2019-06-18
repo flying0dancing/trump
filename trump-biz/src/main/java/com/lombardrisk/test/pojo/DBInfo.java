@@ -181,19 +181,17 @@ public class DBInfo{
 	{return toolSetDatabaseServer_UserPassword;}
 	
 	/**
-	 * get regulator prefix for toolset
+	 * get regulator prefix for ar database
 	 * 
-	 * @param Regulator
+	 * @param regulator
 	 * @return prefix
 	 */
-	public static String getToolsetRegPrefix(String regulator)
+	public String getToolsetRegPrefix(String regulator)
 	{
-		if (regulator.equalsIgnoreCase("European Common Reporting"))
-			return "ECR";
-		else if (regulator.equalsIgnoreCase("Hong Kong Monetary Authority"))
-			return "HKMA";
-		else
-			return "";
+		String SQL="select \"TOOLSET_REG_PREFIX\" from \"CFG_INSTALLED_CONFIGURATIONS\" where\n"
+				+ "\"TOOLSET_REG_PREFIX\"=( select \"PREFIX\" from CFG_INSTALLED_CONFIGURATIONS\n"
+				+ "where \"DESCRIPTION\"='"+regulator+"' )";
+		return getDBQuery().queryRecord(SQL);
 	}
 	
 	/**
@@ -237,7 +235,7 @@ public class DBInfo{
 	/**
 	 * get Regulator IDRange End
 	 * 
-	 * @param Regulator
+	 * @param regulator
 	 * @return IDRangeEnd
 	 */
 	public String getRegulatorIDRangEnd(String regulator)

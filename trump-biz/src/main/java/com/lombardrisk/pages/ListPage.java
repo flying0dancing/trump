@@ -2,6 +2,7 @@ package com.lombardrisk.pages;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -484,21 +485,7 @@ public class ListPage extends AbstractPage implements IExportTo
 		{
 			logger.info("open form instance");
 			element.click();
-			//
-			//waitForPageLoaded();
-			//loadingDlg();
-			/*String[] bigReturns={"MAS610_D2","MAS610_F","MAS610_D4","FRY14ASUMM"};
-			for(String bigRtn: bigReturns)
-			{
-				if(form.getName().equalsIgnoreCase(bigRtn))
-				{
-					while(element("abstract.ajaxstatusDlg").isDisplayed())
-					{
-						waitThat().timeout(10000);
-					}
-					break;
-				}
-			}*/
+
 			loadingDlg(element("fipf.form"),200);
 			waitThat("fipf.form").toBeVisible();
 			fip=new FormInstancePage(getWebDriverWrapper(),getTestDataManager(),form,userName);
@@ -718,5 +705,38 @@ public class ListPage extends AbstractPage implements IExportTo
 			status=element.getInnerText();
 		}
 		return status;
+	}
+
+	public void clickAdminMenu() throws Exception
+	{
+		logger.info("click settingMenu");
+		element("filf.gisetting").click();
+		logger.info("select administration");
+		String js = "document.getElementById('formHeader:settingMenu').getElementsByTagName('ul')[0].getElementsByTagName('li')[2].getElementsByTagName('a')[0].getElementsByTagName('span')[0].click();";
+		executeScript(js);
+	}
+	public ConfigPackageBindPage clickConfigPackageBind() throws Exception
+	{
+		clickAdminMenu();
+		logger.info("click Config Package Binding");
+		element("sm.configPackageBind").click();
+		return new ConfigPackageBindPage(getWebDriverWrapper(),getTestDataManager());
+
+	}
+
+	public void clearETL(String productDes){
+		ConfigPackageBindPage cpbp=null;
+		try{
+			cpbp=clickConfigPackageBind();
+			if(cpbp.isThisPage()){
+				String prefix=dBInfo.getRegulatorPrefix(productDes);
+				if(StringUtils.isNotBlank(prefix) && cpbp.selectProduct(prefix)){
+					cpbp.clickClearETLCache();
+				}
+				cpbp.closeThisPage();
+			}
+		} catch (Exception e) {
+			logger.error("cannot clear ETL cache");
+		}
 	}
 }
