@@ -7,7 +7,7 @@ usage
 	cd to trump-sel folder
 	check test.json and test.properties under /target/test-classes with correct settings
 	run RunTest.bat
-		mvn test -DxmlFileName="Z:\ABC\Smoke_foo.xml" -DresultFolder="Z:\ABC\foo" -DupdateSource -Drerun="error"
+		mvn test -DsrcFolder="Z:\APAutomation\sources" -DxmlFileName="Z:\ABC\Smoke_foo.xml" -DresultFolder="Z:\ABC\foo" -DupdateSource -Drerun="error"
 		
 * [xmlFileName]
 	* the full path with name of xml file(syntax following testNG schema, which paremeters following webcore and trump's definition)
@@ -28,7 +28,9 @@ usage
 	* If the result folder exists, and using `updateSouce` flag, it will only update/add new source, won’t delete results and download files.
 	* If the result folder exists, and `NOT` using `updateSource` flag, it will use existed sources, won't update/add new source if any.
 	* If the result folder doesn't exist, and use `updateSource` flag or not, it will executes the same effect.
-
+* [srcFolder]
+    * resource folder path.
+    * if not provided it, use default value of test.source in test.properties.
 -------
 change log 
 ===
