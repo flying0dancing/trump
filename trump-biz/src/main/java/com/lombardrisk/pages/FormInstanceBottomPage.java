@@ -6,11 +6,11 @@ import org.yiwan.webcore.test.ITestDataManager;
 import org.yiwan.webcore.test.TestCaseManager;
 import org.yiwan.webcore.util.PropHelper;
 import org.yiwan.webcore.web.IWebDriverWrapper;
-import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
 import com.lombardrisk.test.pojo.Form;
+import com.lombardrisk.commons.FileUtil;
 
 public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,IExecFuncFolder{
 	
@@ -67,7 +67,7 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		String destFileName=form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
 		String tmp="_"+form.getName()+"_";
 		if(!destFileFullPath.contains(tmp)){//add for agile reporter v1.16.2;agile reporter v1.16.2 can download files with names.
-			destFileFullPath=renameFile(destFileFullPath, destFileName);
+			destFileFullPath=FileUtil.renameFile(destFileFullPath, destFileName);
 		}
 		
 		
@@ -101,7 +101,7 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
 		String destFileName=form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
-		destFileFullPath=renameFile(destFileFullPath, destFileName);
+		destFileFullPath=FileUtil.renameFile(destFileFullPath, destFileName);
 		
 		closeThisPage();//close bottom page after export.
 		Runtime.getRuntime().gc();

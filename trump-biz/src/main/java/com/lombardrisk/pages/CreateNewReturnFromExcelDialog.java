@@ -2,8 +2,8 @@ package com.lombardrisk.pages;
 
 import java.io.File;
 
+import com.lombardrisk.commons.FileUtil;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yiwan.webcore.test.ITestDataManager;
@@ -12,7 +12,6 @@ import org.yiwan.webcore.web.IWebDriverWrapper.IWebElementWrapper;
 
 import com.google.common.base.Strings;
 import com.lombardrisk.commons.ExcelUtil;
-import com.lombardrisk.commons.JxlUtil;
 import com.lombardrisk.test.IComFolder;
 import com.lombardrisk.test.IExecFuncFolder;
 import com.lombardrisk.test.TestDataManager;
@@ -52,7 +51,20 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		element("cfed.closeDialog").click();
 		loadingDlg(null,5);//loadingDlg();
 	}
-	
+
+	private String getDownloadFile(String downloadFolderPath,String filterStr){
+		String newFileFullPath=null;
+		if(new File(downloadFolderPath).exists())
+		{
+			String newFile=FileUtil.getLatestFile(downloadFolderPath, filterStr,"");
+			if(new File(newFile).exists())
+			{
+				newFileFullPath=newFile;
+			}
+		}
+		return newFileFullPath;
+	}
+
 	/**
 	 * upload new file, file name according to args1(importFileFullName), and copy new file to import folder with args1(importFileFullName)'s file name.
 	 * @param importFileFullName
@@ -66,38 +78,19 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 			newFileFullPath=importFileFullName;
 		}else
 		{
-			String newFile=null;
 			String prefixFilter=form.getImportFile().lastIndexOf("(")==-1?form.getImportFile().substring(0, form.getImportFile().lastIndexOf(".")):form.getImportFile().substring(0, form.getImportFile().lastIndexOf("("));
 			String filterStr=prefixFilter+"*"+form.getImportFile().substring(form.getImportFile().lastIndexOf("."));
-			boolean flag=false;
-			if(new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")").exists())
-			{
-				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")"+"/", filterStr);
-				if(new File(newFile).exists())
-				{
-					flag=true;
-					newFileFullPath=newFile;
-				}
+
+
+			newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")"+"/", filterStr);
+			if(newFileFullPath==null){
+				newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/", filterStr);
 			}
-			if(!flag && new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")").exists())
-			{
-				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/", filterStr);
-				if(new File(newFile).exists())
-				{
-					flag=true;
-					newFileFullPath=newFile;
-				}
+			if(newFileFullPath==null){
+				newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/", filterStr);
 			}
-			if(!flag && new File(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")").exists())
-			{
-				newFile=getLatestFile(TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/", filterStr);
-				if(new File(newFile).exists())
-				{
-					flag=true;
-					newFileFullPath=newFile;
-				}
-			}
-			if(flag)
+
+			if(newFileFullPath!=null)
 			{
 				try {
 					logger.info("copy file from "+newFileFullPath+" to " + importFileFullName);

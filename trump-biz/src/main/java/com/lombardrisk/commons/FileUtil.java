@@ -15,11 +15,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -975,7 +978,242 @@ public class FileUtil extends FileUtils
 		}
 		
 	}
-	
-	
-	
+	/**
+	 * rename file
+	 * @author Leo Tu
+	 * @param path
+	 * @param oldname
+	 * @param newname
+	 */
+	public static String  renameFile(String path, String oldname, String newname)
+	{
+		String fileFullPath=null;
+		Boolean flag=true;
+		if (!oldname.equals(newname))
+		{
+			File oldfile = new File(path + System.getProperty("file.separator") + oldname);
+			File newfile = new File(path + System.getProperty("file.separator") + newname);
+			if (!oldfile.exists())
+			{
+				return null;
+			}
+			if (newfile.exists())
+			{
+				logger.warn("The file already exist, old file will be deleted");
+				flag=newfile.delete();
+			}
+			if(flag)
+			{
+				if(oldfile.renameTo(newfile))
+				{
+					fileFullPath=newfile.getAbsolutePath();
+				}
+			}
+
+		}
+		else
+		{
+			logger.error("New file name is same with old one!");
+		}
+		return fileFullPath;
+	}
+	/**
+	 * rename file
+	 * @author kun shen
+	 * @param oldFileFullPath
+	 * @param newNameWithoutSuffix
+	 */
+	public static String renameFile(String oldFileFullPath, String newNameWithoutSuffix)
+	{
+		String newFileFullPath=null;
+		File oldFile=new File(oldFileFullPath);
+		if(oldFile.exists())
+		{
+			String fileName=oldFile.getName();
+			String fileName_Prefix=fileName.substring(0, fileName.lastIndexOf("."));
+			String fileName_Suffix=fileName.replace(fileName_Prefix, "");
+			String filePath=oldFileFullPath.replace(fileName, "");
+			if(fileName_Prefix.lastIndexOf("(")!=-1)
+			{fileName_Prefix=fileName_Prefix.substring(0, fileName_Prefix.lastIndexOf("(")).trim();}
+			String fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix;
+
+			newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
+			int i=1;
+			while(new File(newFileFullPath).exists())
+			{
+				fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix+"("+String.valueOf(i)+")";
+				newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
+				i++;
+			}
+			oldFile.renameTo(new File(newFileFullPath));
+
+		}else
+		{
+			logger.error("no file found "+oldFileFullPath);
+		}
+
+		return newFileFullPath;
+	}
+
+	/***
+	 * get all file paths by filePath, maybe one file path return, or maybe more file paths return.
+	 * @param filePath maybe contains "*"
+	 */
+	public static List<String> getFilesByFilter(String filePath, String excludeFilters) {
+		if (StringUtils.isNotBlank(filePath)) {
+			return listFilesByFilter(filePath, null, excludeFilters);
+		}
+		return new ArrayList<>();
+	}
+
+	private static Pair<File, String> splitFilePathIntoParentFileAndFileName(String filePathParam) {
+		String filePath = filePathParam.replace("\"", "");
+		if (filePath.endsWith("/") || filePath.endsWith("\\")) {
+			filePath = filePath.substring(0, filePath.length() - 1);
+		}
+
+		int lastSlash = filePath.lastIndexOf("\\") == -1 ? filePath.lastIndexOf("/") : filePath.lastIndexOf("\\");
+		File parentPath = new File(filePath.substring(0, lastSlash));
+		String fileName = filePath.substring(lastSlash + 1);
+		return Pair.of(parentPath, fileName);
+	}
+
+	public static List<String> listFilesByFilter(String filePath, String filterStr, String exfilterStr) {
+		List<String> filePaths = new ArrayList<>();
+		File fileFullPath = new File(filePath);
+		if (StringUtils.isBlank(filterStr)) {
+			filterStr = "";
+		}
+		if (StringUtils.isBlank(exfilterStr)) {
+			exfilterStr = "";
+		}
+		if (fileFullPath.exists()) {
+			if (fileFullPath.isDirectory()) {
+				File[] files = filterFilesAndSubFolders(fileFullPath, filterStr, exfilterStr);
+				for (File file : files) {
+					filePaths.addAll(listFilesByFilter(file.getAbsolutePath(), filterStr, exfilterStr));
+				}
+			}
+			if (fileFullPath.isFile()) {
+				filePaths.add(fileFullPath.getAbsolutePath());
+			}
+		} else {
+			Pair<File, String> pathParts = splitFilePathIntoParentFileAndFileName(filePath);
+			String fileName = pathParts.getRight();
+			File parentPath = pathParts.getLeft();
+
+			if (parentPath.isDirectory()) {
+				File[] files = filterFilesAndSubFolders(parentPath, fileName, exfilterStr);
+				for (File file : files) {
+					filePaths.addAll(listFilesByFilter(file.getAbsolutePath(), fileName, exfilterStr));
+				}
+			} else {
+				logger.error("error: invalid path[" + filePath + "]");
+			}
+		}
+		return filePaths;
+	}
+
+	private static File[] filterFilesAndSubFolders(File parentPath, String filterStr, String excludeFileStr) {
+		final String[] filters = filterStr.toLowerCase().split("\\*");
+		final String[] exfilters = excludeFileStr.toLowerCase().replaceAll("^\\*(.*)", "$1").split(";");
+
+		return parentPath.listFiles(new CustomFileNameFilter(filters, exfilters));
+	}
+
+	public static List<File> getFiles(String filePath, String filterStr, String exfilterStr){
+		List<String> fileFullPaths=listFilesByFilter(filePath,filterStr,exfilterStr);
+		List<File> returnFiles=new ArrayList<File>();
+		for(String fileFullPath:fileFullPaths){
+			returnFiles.add(new File(fileFullPath));
+		}
+		return returnFiles;
+	}
+	public static List<File> sortFileByModifiedTime(String path, String filterStr,String exfilterStr)
+	{
+
+		List<File> list = getFiles(path,  filterStr, exfilterStr);
+		if (list != null && list.size() > 0)
+		{
+			Collections.sort(list, new Comparator<File>() {
+				public int compare(File file, File newFile)
+				{
+					if (file.lastModified() < newFile.lastModified())
+					{
+						return 1;
+					}
+					else if (file.lastModified() == newFile.lastModified())
+					{
+						return 0;
+					}
+					else
+					{
+						return -1;
+					}
+
+				}
+			});
+
+		}
+
+		return list;
+	}
+
+
+	public static String getLatestFile(String path, String filterStr,String exfileStr)
+	{
+		List<File> files = sortFileByModifiedTime(path,filterStr,exfileStr);
+		try
+		{
+			return files.get(0).toString();
+		}
+		catch (Exception e)
+		{
+			return "";
+		}
+	}
+	private static class CustomFileNameFilter implements FilenameFilter {
+
+		private final String[] filters;
+		private final String[] exFilters;
+
+		public CustomFileNameFilter(String[] filters, String[] exFilters){
+
+			this.filters = filters;
+			this.exFilters = exFilters;
+		}
+
+		@Override
+		public boolean accept(File dir, String name) {
+			if (new File(dir, name).isDirectory() && !name.startsWith(".")) {
+				return true;
+			}
+			for (String filter : filters) {
+				if (StringUtils.isNotBlank(filter) && !name.toLowerCase().contains(filter)) {
+					return false;
+				}
+			}
+			return runExcludeFilters(name);
+		}
+
+		private boolean runExcludeFilters(final String name) {
+			for (String exfilter : exFilters) {
+				boolean exflag = false;
+				if (StringUtils.isNotBlank(exfilter)) {
+					exflag = true;
+					String[] subfilters = exfilter.split("\\*");
+					for (String subexfilter : subfilters) {
+						if (StringUtils.isNotBlank(subexfilter) && !name.toLowerCase().contains(subexfilter)) {
+							exflag = false;
+							break;
+						}
+					}
+				}
+				if (exflag) {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
 }
