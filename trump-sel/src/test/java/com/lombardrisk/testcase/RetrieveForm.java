@@ -14,7 +14,7 @@ import com.lombardrisk.test.pojo.Form;
 
 public class RetrieveForm extends TestManager{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-	private static Boolean clearETL=true;
+
 	/**
 	 * retrieve form<br>
 	 * scenario file required columns: name, version, regulator, entity, processDate, run, deleteExistent, translate<br>
@@ -36,10 +36,6 @@ public class RetrieveForm extends TestManager{
 				if(listPage!=null)
 				{
 					listPage.loginAfterTimeout(listPage);
-					if(clearETL){
-						listPage.clearETL(form.getRegulator());
-						clearETL=false;
-					}
 					if(form.getDeleteExistent()!=null && form.getDeleteExistent().equalsIgnoreCase("Y"))
 					{
 						flag=listPage.deleteExistedFormInstance(form);
@@ -94,10 +90,6 @@ public class RetrieveForm extends TestManager{
 				if(listPage!=null)
 				{
 					listPage.loginAfterTimeout(listPage);
-					if(clearETL){
-						listPage.clearETL(form.getRegulator());
-						clearETL=false;
-					}
 					ExecutionGroupsFormPage retrieveGroupPage=listPage.retrieveMultiReturns(form);
 					if(retrieveGroupPage!=null && retrieveGroupPage.selectInfo())
 					{

@@ -122,7 +122,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		String importFileFullName=TARGET_IMPORT_FOLDER+form.getRegulator()+"/"+form.getImportFile();//
 		if(!new File(importFileFullName).exists())
 		{
-			//TODO: adding function for update date in importfile.
+
 			importFileFullName=findNewFileForUpload(importFileFullName);
 			if(importFileFullName!=null && new File(importFileFullName).exists())
 			{

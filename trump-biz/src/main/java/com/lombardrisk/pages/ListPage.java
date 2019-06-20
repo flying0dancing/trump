@@ -22,6 +22,7 @@ public class ListPage extends AbstractPage implements IExportTo
 {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private DBInfo dBInfo;
+	private static Boolean clearETL=true;
 	public String getLoginUser() throws Exception
 	{
 		String loginUser=element("fipf.lblUserName").getInnerText();
@@ -301,7 +302,10 @@ public class ListPage extends AbstractPage implements IExportTo
 	public RetrieveDialog retrieveReturn(Form form) throws Exception
 	{
 		RetrieveDialog dialog=null;
-
+		if(clearETL){
+			clearETL(form.getRegulator());
+			clearETL=false;
+		}
 		Boolean flag=selectIt(element("filf.regulator"),form.getRegulator());
 		if(flag)
 		{
@@ -337,7 +341,10 @@ public class ListPage extends AbstractPage implements IExportTo
 	public ExecutionGroupsFormPage retrieveMultiReturns(Form form) throws Exception
 	{
 		ExecutionGroupsFormPage page=null;
-
+		if(clearETL){
+			clearETL(form.getRegulator());
+			clearETL=false;
+		}
 		Boolean flag=selectIt(element("filf.regulator"),form.getRegulator());
 		if(flag)
 		{
