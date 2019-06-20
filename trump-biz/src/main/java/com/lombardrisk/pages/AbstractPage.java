@@ -19,13 +19,9 @@ import com.google.common.base.Strings;
 import com.lombardrisk.commons.FileUtil;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -102,187 +98,10 @@ public abstract class AbstractPage extends PageBase
 		}
 	}
 
-	/**
-	 * Get all files in specific folder
-	 * 
-	 * @param path
-	 * @param files
-	 * @return All files(List)
-	 */
-	protected static List<File> getFiles(String path, List<File> files)
-	{
-		File realFile = new File(path);
-		if (realFile.isDirectory())
-		{
-			File[] subfiles = realFile.listFiles();
-			for (File file : subfiles)
-			{
-				if (file.isDirectory())
-				{
-					getFiles(file.getAbsolutePath(), files);
-				}
-				else
-				{
-					files.add(file);
-				}
-			}
-		}
-		return files;
-	}
-	//TODO
-	protected static List<File> getFiles(String path, String filterStr, List<File> files)
-	{
-		File realFile = new File(path);
-		if (realFile.isDirectory())
-		{
-			//final String prefixFilter=filterStr.substring(0, filterStr.indexOf("*"));
-			//final String suffixFilter=filterStr.substring(filterStr.indexOf("*")+1);
-			final String[] fileters=filterStr.split("\\*");
-			File[] subfiles = realFile.listFiles(new FilenameFilter(){
-	             public boolean accept(File dir , String name){ 
-	            	 boolean flag=true;
-	 				if(new File(dir,name).isDirectory()){
-	 					return flag;
-	 				}
-	 				for(String filter:fileters)
-	 				{
-	 					if(!name.toLowerCase().contains(filter.toLowerCase())) {
-	 						flag=false;
-	 						break;
-	 						}
-	 				}
-	 				return flag;
-	             }  
-	                });
-			for (File file : subfiles)
-			{
-				if (file.isDirectory())
-				{
-					getFiles(file.getAbsolutePath(),filterStr, files);
-				}
-				else
-				{
-					files.add(file);
-				}
-			}
-		}
-		return files;
-	}
 
-	/**
-	 * Sort files by modified time
-	 * 
-	 * @param path
-	 * @return Files(List)
-	 */
-	protected static List<File> sortFileByModifiedTime(String path)
-	{
 
-		List<File> list = getFiles(path, new ArrayList<File>());
 
-		if (list != null && list.size() > 0)
-		{
-			Collections.sort(list, new Comparator<File>() {
-				public int compare(File file, File newFile)
-				{
-					if (file.lastModified() < newFile.lastModified())
-					{
-						return 1;
-					}
-					else if (file.lastModified() == newFile.lastModified())
-					{
-						return 0;
-					}
-					else
-					{
-						return -1;
-					}
 
-				}
-			});
-
-		}
-
-		return list;
-	}
-	
-	protected static List<File> sortFileByModifiedTime(String path, String filterStr)
-	{
-
-		List<File> list = getFiles(path,filterStr, new ArrayList<File>());
-
-		if (list != null && list.size() > 0)
-		{
-			Collections.sort(list, new Comparator<File>() {
-				public int compare(File file, File newFile)
-				{
-					if (file.lastModified() < newFile.lastModified())
-					{
-						return 1;
-					}
-					else if (file.lastModified() == newFile.lastModified())
-					{
-						return 0;
-					}
-					else
-					{
-						return -1;
-					}
-
-				}
-			});
-
-		}
-
-		return list;
-	}
-
-	/**
-	 * Get latest file in specific folder
-	 * 
-	 * @param path
-	 * @return Latest file
-	 */
-	protected static String getLatestFile(String path)
-	{
-		List<File> files = sortFileByModifiedTime(path);
-		try
-		{
-			return files.get(0).toString();
-		}
-		catch (Exception e)
-		{
-			return "";
-		}
-	}
-	
-	protected static String getLatestFile(String path, String filterStr)//filterStr only can contains one *
-	{
-		List<File> files = sortFileByModifiedTime(path,filterStr);
-		try
-		{
-			return files.get(0).toString();
-		}
-		catch (Exception e)
-		{
-			return "";
-		}
-	}
-
-	
-
-	/**
-	 * Wait for ajax dialog disappear
-	 * 
-	 * @throws Exception
-	 */
-	@Deprecated
-	protected void waitStatusDlg() throws Exception
-	{
-		waitThat("ap.ajaxstatusDlg").toBeInvisible();
-		waitThat("ap.ajaxstatusDlg2").toBeInvisible();
-		Thread.sleep(500);
-	}
 	
 	/**
 	 * Wait for ajax dialog disappear
@@ -521,91 +340,7 @@ public abstract class AbstractPage extends PageBase
 	}
 
 
-	/**
-	 * Click current date
-	 * 
-	 * @throws Exception
-	 */
-	@Deprecated
-	protected void clickCurrentDate() throws Exception
-	{
-		for (int r = 1; r <= 6; r++)
-		{
-			boolean clicked = false;
-			for (int c = 1; c <= 7; c++)
-			{
-				String[] list =
-				{ String.valueOf(r), String.valueOf(c) };
-				if (element("ap.calendar", list).getAttribute("class").contains("ui-datepicker-current-day"))
-				{
-					element("ap.calendar", list).click();
-					clicked = true;
-					break;
-				}
-			}
-			if (clicked)
-				break;
-		}
-	}
 
-	
-	/**
-	 * get downloaded file
-	 * @author Leo Tu
-	 * @param exportType
-	 * @param LatestFileName
-	 * @param dir
-	 * @return downloaded file
-	 * @throws Exception
-	 */
-	@Deprecated
-	protected String downloadFile(String exportType, String LatestFileName, String dir) throws Exception
-	{
-		if (exportType == null)
-			exportType = "";
-		String filePath = null;
-		if (dir == null)
-			return null;
-		String fileName = null;
-		boolean flag = true;
-		long statTime = System.currentTimeMillis();
-
-		while (flag)
-		{
-			fileName = getLatestFile(dir);
-			long curTime = System.currentTimeMillis();
-			if (!fileName.equalsIgnoreCase(LatestFileName) && !fileName.endsWith(".tmp") && !fileName.endsWith(".crdownload"))
-			{
-				flag = false;
-			}
-			else if ((curTime - statTime) / 1000 > 300)
-			{
-				flag = false;
-				fileName = null;
-			}
-			else
-			{
-				logger.info("Downloading");
-				waitThat().timeout(5000);
-			}
-		}
-		if (exportType.toLowerCase().startsWith("ds"))
-		{
-			filePath = fileName;
-		}
-		else
-		{
-			File exportedFile = new File("target\\result\\data\\download\\" + new File(fileName).getName());
-			if (exportedFile.exists())
-				exportedFile.delete();
-			if (fileName != null)
-				FileUtils.copyFile(new File(fileName), exportedFile);
-			filePath = exportedFile.getAbsolutePath();
-		}
-		Thread.sleep(3000);
-
-		return filePath;
-	}
 	/** download file return download file
 	 * @author kun shen
 	 * @param dir
@@ -622,7 +357,7 @@ public abstract class AbstractPage extends PageBase
 		int backcount=60;
 		while(flag)
 		{
-			fileName = getLatestFile(dir);
+			fileName = FileUtil.getLatestFile(dir,"",".ini;.lock");
 			long latestFileTime=new File(fileName).lastModified();
 			if(backcount<=0){
 				flag=false;
@@ -685,84 +420,9 @@ public abstract class AbstractPage extends PageBase
 		return destFileFullPath;
 	}
 
-	/**
-	 * rename file
-	 * @author Leo Tu
-	 * @param path
-	 * @param oldname
-	 * @param newname
-	 */
-	protected String  renameFile(String path, String oldname, String newname)
-	{
-		String fileFullPath=null;
-		Boolean flag=true;
-		if (!oldname.equals(newname))
-		{
-			File oldfile = new File(path + System.getProperty("file.separator") + oldname);
-			File newfile = new File(path + System.getProperty("file.separator") + newname);
-			if (!oldfile.exists())
-			{
-				return null;
-			}
-			if (newfile.exists())
-			{
-				logger.warn("The file already exist, old file will be deleted");
-				flag=newfile.delete();
-			}
-			if(flag)
-			{
-				if(oldfile.renameTo(newfile))
-				{
-					fileFullPath=newfile.getAbsolutePath();
-				}
-			}
-			
-		}
-		else
-		{
-			logger.error("New file name is same with old one!");
-		}
-		return fileFullPath;
-	}
+
 	
-	/**
-	 * rename file
-	 * @author kun shen
-	 * @param path
-	 * @param oldname
-	 * @param newname
-	 */
-	protected String  renameFile(String oldFileFullPath, String newNameWithoutSuffix)
-	{
-		String newFileFullPath=null;
-		File oldFile=new File(oldFileFullPath);
-		if(oldFile.exists())
-		{
-			String fileName=oldFile.getName();
-			String fileName_Prefix=fileName.substring(0, fileName.lastIndexOf("."));
-			String fileName_Suffix=fileName.replace(fileName_Prefix, "");
-			String filePath=oldFileFullPath.replace(fileName, "");
-			if(fileName_Prefix.lastIndexOf("(")!=-1)
-			{fileName_Prefix=fileName_Prefix.substring(0, fileName_Prefix.lastIndexOf("(")).trim();}
-			String fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix;
-			
-			newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
-			int i=1;
-			while(new File(newFileFullPath).exists())
-			{
-				fileName_Prefix_Tmp=newNameWithoutSuffix+"_"+fileName_Prefix+"("+String.valueOf(i)+")";
-				newFileFullPath=filePath+fileName_Prefix_Tmp+fileName_Suffix;
-				i++;
-			}
-			oldFile.renameTo(new File(newFileFullPath));
-			
-		}else
-		{
-			logger.error("no file found "+oldFileFullPath);
-		}
-		
-		return newFileFullPath;
-	}
+
 	
 	/**
 	 * select options in select element. 
@@ -871,44 +531,7 @@ public abstract class AbstractPage extends PageBase
 		}
 		return returnValue;
 	}
-	/** lock download folder and create a lock.  return true for set a lock, return false for not set a lock.
-	 * @author kun shen
-	 * @param downloadDirectory
-	 * @param timeout seconds
-	 * @return
-	 * @throws InterruptedException
-	 * @throws IOException
-	 */
-	@Deprecated
-	protected Boolean lockDownloadDir(String downloadDirectory, int timeout) throws InterruptedException, IOException
-	{
-		Boolean lockNow=false;
-		Boolean lock=true;
-		if(new File(downloadDirectory).isDirectory())
-		{
-			int count=0;
-			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
-			//waiting 3 minutes
-			if(timeout<180){timeout=180;}
-			while(count<=timeout)
-			{
-				if(!lockFile.exists())
-				{
-					lock=false;
-					break;
-				}
-				Thread.sleep(1000);
-				count++;
-			}
-			
-			if(!lock)
-			{
-				lockNow=lockFile.createNewFile();
-			}
-			
-		}
-		return lockNow;
-	}
+
 	
 	/** lock download folder and create a lock.  return true for set a lock, return false for not set a lock.
 	 * @author kun shen
@@ -998,7 +621,7 @@ public abstract class AbstractPage extends PageBase
 			{
 				String oldName = new File(exportedFile).getName();
 				String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
-				filePath=renameFile(downloadFolder, oldName, fileName);
+				filePath=FileUtil.renameFile(downloadFolder, oldName, fileName);
 			}
 			else//"export to data-schedule","Export to XSLT-Combine" use this part
 			{

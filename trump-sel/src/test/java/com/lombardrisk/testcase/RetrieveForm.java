@@ -14,6 +14,7 @@ import com.lombardrisk.test.pojo.Form;
 
 public class RetrieveForm extends TestManager{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
 	/**
 	 * retrieve form<br>
 	 * scenario file required columns: name, version, regulator, entity, processDate, run, deleteExistent, translate<br>
