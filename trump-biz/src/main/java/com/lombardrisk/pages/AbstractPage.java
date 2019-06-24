@@ -621,6 +621,9 @@ public abstract class AbstractPage extends PageBase
 			{
 				String oldName = new File(exportedFile).getName();
 				String fileName = TestCaseManager.getTestCase().getDefaultDownloadFileName();
+				if(fileName.contains("filename")){
+					fileName=fileName.substring(0,fileName.indexOf("filename")).trim();
+				}
 				filePath=FileUtil.renameFile(downloadFolder, oldName, fileName);
 			}
 			else//"export to data-schedule","Export to XSLT-Combine" use this part
