@@ -3,6 +3,7 @@ package com.lombardrisk.test;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -55,6 +56,10 @@ public class TestManager extends TestBase implements IComFolder {
 		 report("suite start.");
 		  try
 		  {
+		  	  if(FileUtil.checkDirectory(TARGET_FOLDER) && !ICCB_RERUN){
+		  	  	//this is solution of ARPA-91
+		  	  	Assert.fail("-DresultFolder exist, please change another name.");
+			  }
 			  //create new result folder and subfolders if need.
 			  if(!FileUtil.checkDirectory(TARGET_FOLDER))
 			  {
