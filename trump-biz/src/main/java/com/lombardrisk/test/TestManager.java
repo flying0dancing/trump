@@ -55,6 +55,14 @@ public class TestManager extends TestBase implements IComFolder {
 		 report("suite start.");
 		  try
 		  {
+		  	  if(FileUtil.checkDirectory(TARGET_SCENARIOS_FOLDER) && !ICCB_RERUN){
+		  	  	//this is solution of ARPA-91
+				  logger.error("terminated by folder ["+TARGET_SCENARIOS_FOLDER+"] existed, please change another -DresultFolder.");
+		  	  	Assert.fail("-DresultFolder exist, please change another folder.");
+			  }
+			  if(!FileUtil.checkDirectory(SOURCE_FOLDER)){
+				  Assert.fail("-DsrcFolder doesn't exist, please check.");
+			  }
 			  //create new result folder and subfolders if need.
 			  if(!FileUtil.checkDirectory(TARGET_FOLDER))
 			  {

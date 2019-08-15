@@ -48,7 +48,7 @@
       {
       	"id": 10,
         "name": "FEDforSQL",
-         "url": "http://sha-com-qa-7:8083",
+         "url": "http://172.20.30.167:8080",
         "username": "admin",
         "password": "password"
       },
@@ -116,7 +116,7 @@
         "name": "ar_database",
         "driver": "sqlserver",
         "host": "172.20.20.57\\sql2012",        
-        "schema": "ARSQL_AUTO"
+        "schema": "AR4SRDD_CORE"
       }  ,
       {
       	"id": 11,
