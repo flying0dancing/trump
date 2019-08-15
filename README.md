@@ -20,6 +20,7 @@ usage
 		* `selectLanguage` set value to zh_CN or en_GB or en_US, higher priority than `Regional.language` in test.properties.
 * [resultFolder]
 	* the full path with name of result folder(exist or not). suggest every product following same folder naming rule.
+	* if the resultFolder exist and not use return, trump will be terminated
 * [rerun]
 	* –Drerun="error" will rerun test cases which executionStatus starts with "error".
 	* –Drerun="fail" will rerun test cases which executionStatus start with "fail".
