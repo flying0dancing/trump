@@ -781,7 +781,7 @@ public abstract class AbstractPage extends PageBase
 				logger.info("click radio \"Scaled\"");
 				element("abstract.applayScale",importDialogueName,"true").click();
 				loadingDlg(null,5);//loadingDlg();
-				if(!element("abstract.applayScale_status",importDialogueName,"1").isPresent()){
+				if(!element("abstract.applayScale_status",importDialogueName,"Scaled").isPresent()){
 					flag=false;
 					logger.error("fail to select radio \"Scaled\"");
 				}
@@ -790,7 +790,7 @@ public abstract class AbstractPage extends PageBase
 				logger.info("click radio \"No scale\"");
 				element("abstract.applayScale",importDialogueName,"false").click();
 				loadingDlg(null,5);//loadingDlg();
-				if(!element("abstract.applayScale_status",importDialogueName,"3").isPresent()){
+				if(!element("abstract.applayScale_status",importDialogueName,"No Scale").isPresent()){
 					flag=false;
 					logger.error("fail to select radio \"No scale\"");
 				}
@@ -800,7 +800,7 @@ public abstract class AbstractPage extends PageBase
 			}
 			
 		}else{
-			if(element("abstract.applayScale_status",importDialogueName,"3").isPresent()){
+			if(element("abstract.applayScale_status",importDialogueName,"No Scale").isPresent()){
 				logger.info("use default setting \"No scale\"");
 			}else{
 				logger.info("use default setting \"Scaled\"");
