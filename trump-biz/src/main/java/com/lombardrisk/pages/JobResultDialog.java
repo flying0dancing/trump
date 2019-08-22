@@ -112,7 +112,7 @@ public class JobResultDialog extends AbstractPage {
 			{
 				status=jobManagerPage.search(jobName,jobReferenceDate,jobStartTimeLabel);
 				long jobStartTime=System.currentTimeMillis();
-				while(status==null || !(status.toUpperCase().startsWith("FAILURE") || status.equalsIgnoreCase("SUCCESS")))
+				while(status==null || !(status.toUpperCase().startsWith("BLOCKED")||status.toUpperCase().startsWith("FAILURE") || status.equalsIgnoreCase("SUCCESS")))
 				{
 					refreshPage();
 					loadingDlg(null,5);//loadingDlg();

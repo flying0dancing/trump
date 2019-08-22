@@ -24,7 +24,7 @@
     	<locator id="abstract.messageType" type="WebElement" by="xpath" expression=".//*[@id='growl_container']/div//div/span[contains(@class,'ui-growl-title')]" name="messageType" description="message type"/>
     	<locator id="abstract.clickDashboard" type="WebElement" by="id" expression="formHeader:errorBarBtn" name="clickDashboard" description="click Dashboard"/>
     	<locator id="abstract.applayScale" type="WebElement" by="xpath" expression=".//*[@id='?:applyScaleRadio']//div[div/input[@value='?']]" name="applayScale" description="applayScale"/>
-    	<locator id="abstract.applayScale_status" type="WebElement" by="xpath" expression=".//*[@id='?:applyScaleRadio']//td[?]//div[contains(@class,'ui-state-active')]" name="applayScale_status" description="applayScale_status"/>
+    	<locator id="abstract.applayScale_status" type="WebElement" by="xpath" expression=".//*[@id='?:applyScaleRadio']//td[label='?']//div[contains(@class,'ui-state-active')]" name="applayScale_status" description="applayScale_status"/>
     	
     </page>
     
