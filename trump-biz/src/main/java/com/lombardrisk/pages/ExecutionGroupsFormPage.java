@@ -172,7 +172,7 @@ public class ExecutionGroupsFormPage extends AbstractPage {
 		}else{
 			element("egrd.ok").click();
 		}
-		loadingDlg(element("jrd.title"),30); //wait for Job Result Dialog visible
+		loadingDlg(element("jrd.title"),200); //wait for Job Result Dialog visible
 
 		if(element("jrd.title").isPresent() && element("jrd.title").isDisplayed())
 		{
