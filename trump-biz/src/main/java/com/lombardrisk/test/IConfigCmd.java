@@ -15,4 +15,6 @@ public interface IConfigCmd {
 	Integer ICC_SCENARIO_INDEX=ICC_SCENARIO_XML.lastIndexOf('/');
 	String ICC_SCENARIOSFOLDER=ICC_SCENARIO_XML.substring(0,ICC_SCENARIO_INDEX+1);
 
+	Boolean ICCB_GOON=System.getProperties().containsKey("go");//go
+
 }
