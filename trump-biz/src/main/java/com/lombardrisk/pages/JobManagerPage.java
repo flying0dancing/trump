@@ -96,7 +96,7 @@ public class JobManagerPage extends AbstractPage
 			status=getGridCells(name,referenceDate,started);
 			while(status!=null)
 			{
-				if((status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
+				if((status.startsWith("BLOCK")||status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
 				{
 					break;
 				}
@@ -113,7 +113,7 @@ public class JobManagerPage extends AbstractPage
 				while(nextPageBar.isDisplayed() && !nextPageBar.getAttribute("class").contains("ui-state-disabled"))
 				{	
 					status=getGridCells(name,referenceDate,started);
-					if(status!=null && (status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
+					if(status!=null && (status.startsWith("BLOCK")||status.equalsIgnoreCase("SUCCESS") || status.startsWith("FAILURE")))
 					{
 						break;
 					}

@@ -55,15 +55,17 @@ public class TestManager extends TestBase implements IComFolder {
 		 report("suite start.");
 		  try
 		  {
-			  XmlSuite suite=context.getSuite().getXmlSuite().getParentSuite();
-		  	  if(FileUtil.checkDirectory(TARGET_SCENARIOS_FOLDER) && !ICCB_RERUN){
-		  	  	if(suite==null){
-					//this is solution of ARPA-91
-					logger.error("terminated by folder ["+TARGET_SCENARIOS_FOLDER+"] existed, please change another -DresultFolder.");
-					Assert.fail("-DresultFolder exist, please change another folder.");
-				}
+		  	if(!ICCB_GOON){
+				XmlSuite suite=context.getSuite().getXmlSuite().getParentSuite();
+				if(FileUtil.checkDirectory(TARGET_SCENARIOS_FOLDER) && !ICCB_RERUN){
+					if(suite==null){
+						//this is solution of ARPA-91
+						logger.error("terminated by folder ["+TARGET_SCENARIOS_FOLDER+"] existed, please change another -DresultFolder.");
+						Assert.fail("-DresultFolder exist, please change another folder.");
+					}
 
-			  }
+				}
+			}
 			  if(!FileUtil.checkDirectory(SOURCE_FOLDER)){
 				  Assert.fail("-DsrcFolder doesn't exist, please check.");
 			  }
