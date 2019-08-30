@@ -89,6 +89,7 @@ public class CreateNewForm extends TestManager{
 				
 			}
 		}
+		logger.info("[method]createNew "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
@@ -164,6 +165,7 @@ public class CreateNewForm extends TestManager{
 				form.setExecutionStatus("error:"+e.getMessage());
 			}
 		}
+		logger.info("[method]createNewFromExcel "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	

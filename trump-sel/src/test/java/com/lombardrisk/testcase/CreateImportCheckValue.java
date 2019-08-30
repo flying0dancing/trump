@@ -128,6 +128,7 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 		}
 		
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
+		logger.info("[method]createNewImportCheckValue "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
@@ -217,6 +218,7 @@ public class CreateImportCheckValue extends TestManager implements IExecFuncFold
 		}
 		
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
+		logger.info("[method]createNewFromExcelCheckValue "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}

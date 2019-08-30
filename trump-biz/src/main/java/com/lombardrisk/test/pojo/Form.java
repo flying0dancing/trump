@@ -2,6 +2,8 @@ package com.lombardrisk.test.pojo;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -193,7 +195,29 @@ public String toString()
 	}
 	return stringBuffer.toString();
 }
+	public String toLog()
+	{
+		List<String> logItems=Arrays.asList("regulator","entity","name","version","processDate","executionStatus");
+		StringBuffer stringBuffer=new StringBuffer();
 
+		for(String item:logItems){
+			try {
+				Field field=getClass().getDeclaredField(item);
+				String value="";
+				Object obj=field.get(this);
+				if(obj!=null && StringUtils.isNotEmpty(obj.toString()))
+				{
+					value=obj.toString();
+				}
+				stringBuffer.append(item+"[" + value+"] ");
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return stringBuffer.toString();
+	}
 public Boolean equals(Form formCmp)
 {
 	Boolean flag=true;
