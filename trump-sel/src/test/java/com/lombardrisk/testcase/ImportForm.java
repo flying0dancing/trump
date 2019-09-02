@@ -24,6 +24,7 @@ public class ImportForm extends TestManager{
 	@Test(dataProvider="FormInstances",dataProviderClass=FormsDataProvider.class)
 	public void importForm(Form form)
 	{
+
 		if(runIt(form.getExecutionStatus()))
 		{
 			form.accumulateRunFrequency();
@@ -100,6 +101,7 @@ public class ImportForm extends TestManager{
 				
 			}
 		}
+		logger.info("method[importForm] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
