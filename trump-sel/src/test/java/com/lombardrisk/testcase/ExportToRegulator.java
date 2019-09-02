@@ -116,7 +116,7 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 				
 			}
 		}
-		logger.info("[method]checkInForm "+FormsDataProvider.getTotalFormCount()+form.toLog());
+		logger.info("method[checkInForm] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
@@ -180,7 +180,7 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 			}
 			
 		}
-		logger.info("[method]checkInDashBoard "+FormsDataProvider.getTotalFormCount()+form.toLog());
+		logger.info("method[checkInDashBoard] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
@@ -285,7 +285,7 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 				
 			}
 		}
-		logger.info("[method]checkInFormWithLockVal "+FormsDataProvider.getTotalFormCount()+form.toLog());
+		logger.info("method[checkInFormWithLockVal] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
@@ -373,7 +373,7 @@ public class ExportToRegulator extends TestManager implements IExecFuncFolder{
 				
 			}
 		}
-		logger.info("[method]checkDirectSubmit "+FormsDataProvider.getTotalFormCount()+form.toLog());
+		logger.info("method[checkDirectSubmit] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	

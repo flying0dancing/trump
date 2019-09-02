@@ -90,7 +90,7 @@ public class DataScheduleWorkflow extends TestManager{
 				
 			}
 		}
-		logger.info("[method]dataScheduleApproval "+FormsDataProvider.getTotalFormCount()+form.toLog());
+		logger.info("method[dataScheduleApproval] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 }

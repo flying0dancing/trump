@@ -118,7 +118,7 @@ public class CreateImportPrecision extends TestManager implements IExecFuncFolde
 			}
 		}
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("[method]createImportPrecision "+FormsDataProvider.getTotalFormCount()+form.toLog());
+		logger.info("method[createImportPrecision] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	

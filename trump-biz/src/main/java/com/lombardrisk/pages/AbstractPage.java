@@ -84,13 +84,13 @@ public abstract class AbstractPage extends PageBase
 				FileUtil.createDirectory(downloadFolder);
 			}*/
 			downloadFolder=PropHelper.DOWNLOAD_FOLDER;
-			if(!new File(PropHelper.DOWNLOAD_FOLDER).exists())
-			{
-				FileUtil.createDirectory(downloadFolder);
-			}
 		}else
 		{
 			downloadFolder=System.getProperty("user.home")+System.getProperty("file.separator")+"downloads"+System.getProperty("file.separator");
+		}
+		if(!new File(downloadFolder).exists())
+		{
+			FileUtil.createDirectory(downloadFolder);
 		}
 		if(new File(downloadFolder+System.getProperty("file.separator")+LOCKNAME).exists())
 		{

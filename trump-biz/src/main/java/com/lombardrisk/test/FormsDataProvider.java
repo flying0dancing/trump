@@ -89,7 +89,7 @@ public class FormsDataProvider implements IComFolder{
 
 	public static String getTotalFormCount()
 	{
-		return "[total]"+String.valueOf(forms.size())+" ";
+		return "total["+String.valueOf(forms.size())+"] ";
 	}
 	
 }
