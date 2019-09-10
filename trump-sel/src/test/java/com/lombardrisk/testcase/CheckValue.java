@@ -51,8 +51,9 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				logger.error(e.getMessage());
 				form.setExecutionStatus("error:"+e.getMessage());
 			}
+			logger.info("method[checkFormExist] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
-		logger.info("method[checkFormExist] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
@@ -119,10 +120,11 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkUIDisplay] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 		
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkUIDisplay] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
@@ -190,10 +192,11 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkUIDisplayOneByOne] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 		
 		addReportLink(UIDISPLAY,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkUIDisplayOneByOne] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	
 	}
@@ -270,9 +273,10 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkExportToExcel] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 		addReportLink(EXPORTTOEXCEL,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkExportToExcel] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
@@ -346,10 +350,11 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkExportToCSV] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 	
 		addReportLink(EXPORTTOCSV,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkExportToCSV] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 		
 	}
@@ -425,10 +430,11 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkExportToCSVApplyScale] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 	
 		addReportLink(EXPORTTOCSVAPPLYSCALE,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkExportToCSVApplyScale] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 		
 	}
@@ -504,10 +510,11 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkExportToCSVNoScale] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 	
 		addReportLink(EXPORTTOCSVNOSCALE,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkExportToCSVNoScale] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 		
 	}
@@ -583,9 +590,10 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkExportToExcelApplyScale] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 		addReportLink(EXPORTTOEXCELAPPLYSCALE,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkExportToExcelApplyScale] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
@@ -660,9 +668,10 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkExportToExcelNoScale] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 		addReportLink(EXPORTTOEXCELNOSCALE,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkExportToExcelNoScale] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 
@@ -737,11 +746,12 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+
+			logger.info("method[checkExportToPDF] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		}
 		addReportLink(EXPORTTOPDF,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkExportToPDF] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
-		
 	}
 
 	/**check download validation rules' file. <br> ignore expected value and actual value's case, case insensitive<br> download file store at <i>result</i>\download\<i>regulator</i>(ExportValidation)<br><br>
@@ -827,9 +837,10 @@ public class CheckValue extends TestManager implements IExecFuncFolder{
 				}
 				
 			}
+			logger.info("method[checkValidation] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
 		addReportLink(EXPORTVALIDATION,form.getRegulator(),form.getExpectationFile(),form.getExec_ExpectationFile());
-		logger.info("method[checkValidation] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 

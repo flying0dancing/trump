@@ -362,10 +362,10 @@ public abstract class AbstractPage extends PageBase
 			if(backcount<=0){
 				flag=false;
 			}
-			if(latestFileLockedTime==latestFileTime)
+			if(latestFileLockedTime>=latestFileTime)
 			{
-				logger.info("Downloading");
-				Thread.sleep(1000);
+				logger.info("downloading...");
+				Thread.sleep(3000);
 				backcount--;
 				continue;
 			}else
@@ -373,10 +373,11 @@ public abstract class AbstractPage extends PageBase
 				if(!fileName.endsWith(".tmp") && !fileName.endsWith(".crdownload") && !fileName.endsWith(".part"))
 				{
 					flag = false;
+					logger.info("download file "+fileName);
 				}
 			}
 		}
-		
+
 		return fileName;
 	}
 /** move file to expectation download folder

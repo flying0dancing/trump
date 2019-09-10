@@ -394,10 +394,10 @@ public class Comparison implements IComFolder,IExecFuncFolder
 					strBuffer=new StringBuffer();
 					String status=null;
 					String baselineStr=null;
-					
+					long line=0;
 					while((baselineStr=baselineReader.readLine())!=null)
 					{
-						
+						line++;
 						if(baselineStr.trim().equals("")||baselineStr.toLowerCase().contains("--dateformat")){continue;}
 						String tmp=baselineStr.toLowerCase();
 						if(tmp.contains("cellname")&& tmp.contains("pageinstance")&& tmp.contains("adjustmentvalue"))
@@ -414,12 +414,16 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						}
 						status=FileUtil.findLineInCSV(newExportedFile, baselineStr);
 						strBuffer.append(baselineStr+status+System.getProperty("line.separator"));
-						if(returnStatus==null && !status.endsWith("\"pass\""))
+						if(!status.endsWith("\"pass\""))
 						{
 							returnStatus="fail";
+							logger.info("line["+line+"]:"+baselineStr+status);
 						}
 						if(status.startsWith("error"))
-						{returnStatus="error";}
+						{
+							returnStatus="error";
+							logger.error("line["+line+"]:"+baselineStr+status);
+						}
 						if(strBuffer.length()>5000)
 						{
 							FileUtil.writeContent(newFile,strBuffer.toString());

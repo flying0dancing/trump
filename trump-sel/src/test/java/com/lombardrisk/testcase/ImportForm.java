@@ -100,8 +100,9 @@ public class ImportForm extends TestManager{
 				}
 				
 			}
+			logger.info("method[importForm] "+FormsDataProvider.getTotalFormCount()+form.toLog());
 		}
-		logger.info("method[importForm] "+FormsDataProvider.getTotalFormCount()+form.toLog());
+
 		Assert.assertEquals(form.getExecutionStatus().substring(0, 4), "pass");
 	}
 	
