@@ -10,13 +10,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-
-
-
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
@@ -330,7 +323,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				logger.info("Expectation File:"+newFilePath);
 				form.setExec_DownloadFile(exportedFileFullPath);
 				ClassLoader.getSystemResource("com.lombardrisk.arproduct.arfilechecker.ExcelChecker");
-				ExcelChecker excelChecker=new ExcelChecker(exportedFileFullPath,newFilePath);
+				ExcelChecker excelChecker=new ExcelChecker(form.toBeLogPrefix(),exportedFileFullPath,newFilePath);
 				excelChecker.checker();
 				returnStatus=excelChecker.getExecutionStatus();
 			}else
@@ -414,15 +407,15 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						}
 						status=FileUtil.findLineInCSV(newExportedFile, baselineStr);
 						strBuffer.append(baselineStr+status+System.getProperty("line.separator"));
-						if(!status.endsWith("\"pass\""))
+						if(!status.endsWith("\"pass\"") && !status.contains("error"))
 						{
 							returnStatus="fail";
-							logger.info("line["+line+"]:"+baselineStr+status);
+							logger.info(form.toBeLogPrefix()+" line["+line+"]:"+baselineStr+status);
 						}
-						if(status.startsWith("error"))
+						if(status.contains("error"))
 						{
 							returnStatus="error";
-							logger.error("line["+line+"]:"+baselineStr+status);
+							logger.error(form.toBeLogPrefix()+" line["+line+"]:"+baselineStr+status);
 						}
 						if(strBuffer.length()>5000)
 						{
@@ -780,7 +773,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newFilePath);
 				form.setExec_DownloadFile(exportedFileFullPath);
-				ValidationRuleChecker valRuleChecker=new ValidationRuleChecker(exportedFileFullPath,newFilePath);
+				ValidationRuleChecker valRuleChecker=new ValidationRuleChecker(form.toBeLogPrefix(),exportedFileFullPath,newFilePath);
 				valRuleChecker.checker();
 				returnStatus=valRuleChecker.getExecutionStatus();
 			}else
