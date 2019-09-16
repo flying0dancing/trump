@@ -77,6 +77,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				{
 					ExcelUtil.editCell(xwb, null, i, indexOfTestResult, "Cannot find cell");
 					testRstFlag="fail";
+					logger.info(form.toBeLogPrefix()+" line["+(i+1)+"]:"+identifier+expectedValueRP+",,Cannot find cell");
 				}else
 				{
 					ExcelUtil.editCell(xwb, null, i, indexOfActualValue, actualValue);
@@ -94,6 +95,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						{
 							testRstFlag="fail";
 						}
+						logger.info(form.toBeLogPrefix()+" line["+(i+1)+"]:"+identifier+expectedValueRP+","+actualValue+","+testRstFlag);
 					}
 				}
 				if(i%5000==0){ExcelUtil.saveWorkbook(newFile, xwb);}
