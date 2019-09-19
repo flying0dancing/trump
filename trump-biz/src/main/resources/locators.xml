@@ -377,4 +377,9 @@
     <locator id="cecd.close" type="WebElement" by="id" expression="//div[@id='clearETLCacheDialog']//a[@aria-label='Close']" name="close" description="closeClearETLCache"/>
   </page>
 
+  <page id="iacd" name="importAdjustmentsConfirmDialog" description="importAdjustmentsConfirmDialog created by Hetty Wu for AR 19.3">
+    <locator id="iacd.title" type="WebElement" by="id" expression="importFileForm:importAdjustmentsConfirmDialog_title" name="importAdjustmentsConfirmDialog_title" description="importAdjustmentsConfirmDialog_title"/>
+    <locator id="iacd.confirm" type="WebButton" by="id" expression="importFileForm:j_idt853" name="confirmButton" description="confirmButton"/>
+    <locator id="iacd.cancel" type="WebButton" by="id" expression="importFileForm:j_idt854" name="cancelButton" description="cancelButton"/>
+  </page>
 </locatorBean>

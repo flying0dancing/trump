@@ -116,6 +116,14 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 				listimportBtn.click();
 				waitThat().timeout(5000);
 				loadingDlg(null,100);
+
+				//confirm to overwrite by hetty wu
+				if(element("iacd.title").isDisplayed())
+				{
+					logger.info("click confirm button");
+					element("iacd.confirm").click();
+					loadingDlg(null,100);
+				}
 				//add a judge for import successfully
 				if(!element("fipf.pageTab").isPresent())
 				{
