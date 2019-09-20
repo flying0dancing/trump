@@ -118,10 +118,11 @@ public class ImportFileFormDialog extends AbstractPage implements IComFolder{
 				loadingDlg(null,100);
 
 				//confirm to overwrite by hetty wu
-				if(element("iacd.title").isDisplayed())
+				IWebElementWrapper adjustconfirm=element("aifd.confirm");
+				if(adjustconfirm.isDisplayed())
 				{
 					logger.info("click confirm button");
-					element("iacd.confirm").click();
+					adjustconfirm.click();
 					loadingDlg(null,100);
 				}
 				//add a judge for import successfully
