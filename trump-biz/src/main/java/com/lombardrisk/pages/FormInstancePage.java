@@ -146,6 +146,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 		    		strBuffer.setLength(0);//clear strBuffer
 		    		begin=System.currentTimeMillis();
 					//get all extend grid cells
+					refreshPage();//for ARv19.3.0 scroll bar not point to top when change page.
 		    		strBuffer=getExtendGridCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
 		    		logger.info("getExtendGridCells used time[seconds]:"+(System.currentTimeMillis()-begin)/1000.00F);
