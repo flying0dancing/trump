@@ -205,7 +205,7 @@
      	
     </page>
     
-  <page id="aifd" name="adjustmentsImportFilesDialog" description="adjustmentsImportFilesDialog created by Kun Shen">
+  <page id="aifd" name="adjustmentsImportFilesDialog" description="adjustmentsImportFilesDialog created by Kun Shen,aifd.confirm added by hetty">
     <locator id="aifd.importFilesDialogTitle" type="WebElement" by="id" expression="importFilesDialog_title" name="importFilesDialogTitle" description="importFilesDialogTitle"/>
     <locator id="aifd.closeDialog" type="WebElement" by="xpath" expression="//div[@id='importFilesDialog']/div[1]/a/span" name="closeDialog" description="closeDialog"/>
     <locator id="aifd.importBtn" type="WebButton" by="id" expression="?:importBtn" name="importBtn" description="importBtn"/>
@@ -213,6 +213,7 @@
     <locator id="aifd.importMode" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//div[div/input[@value='?']]" name="importMode" description="importMode(Override, Additive)"/>
     <locator id="aifd.importMode_status" type="WebElement" by="xpath" expression=".//*[@id='?:importMode']//td[?]//div[contains(@class,'ui-state-active')]" name="importMode_status" description="importMode_status(Override, Additive)"/>
     <locator id="aifd.checkUpload" type="WebElement" by="xpath" expression="//div[@class='ui-fileupload-progress']" name="checkUpload" description="checkUpload"/>
+    <locator id="aifd.confirm" type="WebButton" by="xpath" expression="//div[@id='importFileForm:importAdjustmentsConfirmDialog']//div[3]//button[contains(@class,'btn-blue-darken')]" name="confirmButton" description="confirmButton"/>
   </page>
     
     <page id="fird" name="formInstanceRetrieveDialog" description="RetrieveDialog created by Kun Shen">
@@ -376,5 +377,6 @@
     <locator id="cecd.OK" type="WebElement" by="xpath" expression="//div[@id='clearETLCacheDialog_content']//button[span='OK']" name="ok" description="okClearETLCache"/>
     <locator id="cecd.close" type="WebElement" by="id" expression="//div[@id='clearETLCacheDialog']//a[@aria-label='Close']" name="close" description="closeClearETLCache"/>
   </page>
+
 
 </locatorBean>
