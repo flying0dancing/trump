@@ -77,7 +77,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				{
 					ExcelUtil.editCell(xwb, null, i, indexOfTestResult, "Cannot find cell");
 					testRstFlag="fail";
-					logger.info(form.toBeLogPrefix()+" line["+(i+1)+"]:"+identifier+expectedValueRP+",,Cannot find cell");
+					logger.info("checkUIDisplay "+form.toBeLogPrefix()+" line["+(i+1)+"]:"+identifier+expectedValueRP+",,Cannot find cell");
 				}else
 				{
 					ExcelUtil.editCell(xwb, null, i, indexOfActualValue, actualValue);
@@ -95,7 +95,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						{
 							testRstFlag="fail";
 						}
-						logger.info(form.toBeLogPrefix()+" line["+(i+1)+"]:"+identifier+expectedValueRP+","+actualValue+","+testRstFlag);
+						logger.info("checkUIDisplay "+form.toBeLogPrefix()+" line["+(i+1)+"]:"+identifier+expectedValueRP+","+actualValue+","+testRstFlag);
 					}
 				}
 				if(i%5000==0){ExcelUtil.saveWorkbook(newFile, xwb);}
@@ -412,12 +412,12 @@ public class Comparison implements IComFolder,IExecFuncFolder
 						if(!status.endsWith("\"pass\"") && !status.contains("error"))
 						{
 							returnStatus="fail";
-							logger.info(form.toBeLogPrefix()+" line["+line+"]:"+baselineStr+status);
+							logger.info("checkExportToCSV "+form.toBeLogPrefix()+" line["+line+"]:"+baselineStr+status);
 						}
 						if(status.contains("error"))
 						{
 							returnStatus="error";
-							logger.error(form.toBeLogPrefix()+" line["+line+"]:"+baselineStr+status);
+							logger.error("checkExportToCSV "+form.toBeLogPrefix()+" line["+line+"]:"+baselineStr+status);
 						}
 						if(strBuffer.length()>5000)
 						{

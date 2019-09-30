@@ -424,7 +424,7 @@ public class ListPage extends AbstractPage implements IExportTo
 	 */
 	public Boolean deleteExistedFormInstance(Form form) throws Exception
 	{
-		if(!selectFormInfo(form))
+		if(!selectFormInfo(form,1))
 		{
 			if(search(form)<0)
 			{
