@@ -325,7 +325,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				logger.info("Expectation File:"+newFilePath);
 				form.setExec_DownloadFile(exportedFileFullPath);
 				ClassLoader.getSystemResource("com.lombardrisk.arproduct.arfilechecker.ExcelChecker");
-				ExcelChecker excelChecker=new ExcelChecker(form.toBeLogPrefix(),exportedFileFullPath,newFilePath);
+				ExcelChecker excelChecker=new ExcelChecker("checkExportExcel "+form.toBeLogPrefix(),exportedFileFullPath,newFilePath);
 				excelChecker.checker();
 				returnStatus=excelChecker.getExecutionStatus();
 			}else
@@ -775,7 +775,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				logger.info("Exportation File:"+exportedFile+" size:"+exportedFile.length()/1024+"KB");
 				logger.info("Expectation File:"+newFilePath);
 				form.setExec_DownloadFile(exportedFileFullPath);
-				ValidationRuleChecker valRuleChecker=new ValidationRuleChecker(form.toBeLogPrefix(),exportedFileFullPath,newFilePath);
+				ValidationRuleChecker valRuleChecker=new ValidationRuleChecker("checkValidation "+form.toBeLogPrefix(),exportedFileFullPath,newFilePath);
 				valRuleChecker.checker();
 				returnStatus=valRuleChecker.getExecutionStatus();
 			}else
