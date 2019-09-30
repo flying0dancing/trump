@@ -139,6 +139,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					//String fileFullName=regulatorFolder+formName+"_"+form.getVersion()+"_"+instanceCode+"_"+form.getEntity()+"_"+processDateSimple+".csv";
 					
 					long begin=System.currentTimeMillis();
+					refreshPage();//for ARv19.3.0 scroll bar not point to top when change page.
 					//get all normal cells
 					StringBuffer strBuffer=getNormalCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
@@ -146,7 +147,7 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 		    		strBuffer.setLength(0);//clear strBuffer
 		    		begin=System.currentTimeMillis();
 					//get all extend grid cells
-					refreshPage();//for ARv19.3.0 scroll bar not point to top when change page.
+
 		    		strBuffer=getExtendGridCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
 		    		logger.info("getExtendGridCells used time[seconds]:"+(System.currentTimeMillis()-begin)/1000.00F);
@@ -512,7 +513,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			{
 				logger.info("select instance " + instanceLabel);
 				element("fipf.curInst").click();
-				loadingDlg(null,5);//loadingDlg();
+				loadingDlg(null,10);//loadingDlg();
 				element("fipf.selectInstace", instanceLabel).click();
 				loadingDlg(null,30);//loadingDlg();
 			}
