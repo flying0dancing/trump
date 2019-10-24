@@ -202,7 +202,7 @@
     <locator id="cfed.confirmBtn" type="WebButton" by="id" expression="createInformForm:confirmBtn" name="confirmBtn" description="confirmBtn"/>
     <locator id="cfed.replaceconfirm" type="WebElement" by="xpath" expression="//div[@id='?ConfirmDialog'][div[@style]]//button[@id='replaceconfirm']" name="replaceconfirm" description="replaceconfirm"/>
     <locator id="cfed.uploadFileName" type="WebButton" by="id" expression="?:listuploadedFileName" name="uploadFileName" description="uploadFileName"/>
-     	
+      <locator id="cfed.uploadProgress" type="WebElement" by="xpath" expression="//div[@class='ui-fileupload-progress']" name="uploadProgress" description="uploadProgress"/>
     </page>
     
   <page id="aifd" name="adjustmentsImportFilesDialog" description="adjustmentsImportFilesDialog created by Kun Shen,aifd.confirm added by hetty">
@@ -269,11 +269,11 @@
 	  <locator id="fidf.bottomPage" type="WebElement" by="id" expression="formInstDetailFooterTabView" name="formInstDetailFooterTabView" description="formInstDetailFooterTabView"/>
     <locator id="fidf.linkTab" type="WebElement" by="linkText" expression="?" name="linkTab" description="link Tab in left panel" />
     <locator id="fidf.linkText" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//a[text()='?']" name="linkText" description="link Tab(text) in left panel" />
-    <locator id="fidf.export" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//a[@title='Export']" name="export" description="export in buttom page" />
+    <locator id="fidf.export" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//?[@title='Export']" name="export" description="export in buttom page" />
     <locator id="fidf.noRecordsFound" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//tr//td[starts-with(text(),'No records found')]" name="noRecordsFound" description="no Records Found" />
     <locator id="fidf.close" type="WebElement" by="xpath" expression="//*[@id='formInstDetailFooterTabView']//div[@aria-hidden='false']//img[contains(@id,'minimizeArro')]" name="closeButtomPage" description="close buttom page" />
     <locator id="fidf.valResultStatus" type="WebElement" by="xpath" expression=".//*[@id='formInstDetailFooterTabView:validationForm:result']" name="validationResultStatus" description="validation result satatus" />
-    
+
     </page>
     
      <page id="wkld" name="workflowLogDialog" description="workflow Log Dialog created by Kun Shen">
@@ -376,6 +376,10 @@
     <locator id="cecd.title" type="WebElement" by="id" expression="clearETLCacheDialog_title" name="title" description="clearETLCacheDialog_title"/>
     <locator id="cecd.OK" type="WebElement" by="xpath" expression="//div[@id='clearETLCacheDialog_content']//button[span='OK']" name="ok" description="okClearETLCache"/>
     <locator id="cecd.close" type="WebElement" by="id" expression="//div[@id='clearETLCacheDialog']//a[@aria-label='Close']" name="close" description="closeClearETLCache"/>
+  </page>
+  <page id="vewd" name="validation export warning dialog" description="validation export warning dialog created by Kun Shen by ar v19.3">
+    <locator id="vewd.export" type="WebButton" by="id" expression="formInstDetailFooterTabView:simpleFormatExportForm:exportConfirm" name="exprotconfirm" description="exprot confirm"/>
+
   </page>
 
 
