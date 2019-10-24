@@ -305,7 +305,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		logger.info("Begin verify \"export to excel\" file");
 		long begin = System.currentTimeMillis();
 		String returnStatus=null;
-		String cmdLine="";
+
 		String regulator=form.getRegulator();
 		String expectationFolder=TARGET_EXPECTATION_FOLDER+regulator+"/";
 		File expectationFile = new File(expectationFolder+form.getExpectationFile());
@@ -336,12 +336,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		{
 			returnStatus="fail:File Not Find:"+expectationFile.getAbsolutePath();
 		}
-		
-		
-		if(returnStatus.toLowerCase().startsWith("fail"))
-		{
-			returnStatus=returnStatus+System.getProperty("line.separator")+cmdLine;
-		}
+
 		long end = System.currentTimeMillis();
 		logger.info("used time[seconds]:"+(end-begin)/1000.00F +" result:"+returnStatus);
 		Runtime.getRuntime().gc();
@@ -756,7 +751,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		logger.info("Begin verify \"export validation rules\"");
 		long begin = System.currentTimeMillis();
 		String returnStatus=null;
-		
+
 		String regulator=form.getRegulator();
 		String expectationFolder=TARGET_EXPECTATION_FOLDER.replace("\\", "/").replace("/", System.getProperty("file.separator"))+regulator+System.getProperty("file.separator");
 		File expectationFile = new File(expectationFolder+form.getExpectationFile());
