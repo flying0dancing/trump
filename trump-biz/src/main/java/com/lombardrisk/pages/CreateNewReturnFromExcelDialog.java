@@ -140,7 +140,9 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		if(importFileFullName!=null && new File(importFileFullName).exists())
 		{
 			element("abstract.importFileUpload_input",type).type(importFileFullName);
-			loadingDlg(null,5);
+			loadingDlg(null,100);
+			loadingDlgDis(element("cfed.uploadProgress"),100);
+			loadingDlg(null,100);
 			errorTxt=uploadFileError(type);
 			if(errorTxt!=null)
 			{

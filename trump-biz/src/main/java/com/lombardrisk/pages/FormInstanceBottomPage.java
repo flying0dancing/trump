@@ -150,16 +150,26 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 			{
 				TestCaseManager.getTestCase().startTransaction("");
 				TestCaseManager.getTestCase().setPrepareToDownload(true);
-				element("fidf.export").click();
-				loadingDlg(null,5);//loadingDlg();
+				clickExportImg();
 				TestCaseManager.getTestCase().stopTransaction();
 			}
 			else
 			{
-				element("fidf.export").click();
-				loadingDlg(null,5);//loadingDlg();
+				clickExportImg();
 			}
 		}
 		return flag;
+	}
+
+	private void clickExportImg() throws Exception {
+		try{
+			element("fidf.export","a").click();
+		}catch (Exception e){
+			element("fidf.export","button").click();//for rules larger than 1000
+			loadingDlg(null,5);
+			element("vewd.export").click();
+			loadingDlg(null,3000);
+		}
+		loadingDlg(null,5);
 	}
 }
