@@ -1187,7 +1187,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			String js = "document.getElementById('formHeader:exportToFile4Fed_menu').getElementsByTagName('ul')[0].getElementsByTagName('li')["+String.valueOf(i-1)+"].getElementsByTagName('a')[0].getElementsByTagName('span')[0].click();";
 			executeScript(js);
 			if(liTxt.toUpperCase().contains("XBRL")){waitThat().timeout(2000);}
-			loadingDlg(null,5);//loadingDlg();
+			loadingAndWaitLargeForms(form.getName(),3);
 			/*IWebElementWrapper element=element("td.transmitDialog4FedTitle");
 			if(element.isDisplayed())
 			{

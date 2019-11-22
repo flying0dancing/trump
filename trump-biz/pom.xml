@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.lombardrisk.arproduct</groupId>
     <artifactId>trump</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
   </parent>
   <artifactId>trump-biz</artifactId>
   <packaging>jar</packaging>

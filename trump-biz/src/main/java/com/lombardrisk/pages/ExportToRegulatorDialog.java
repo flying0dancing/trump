@@ -367,7 +367,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 				}else
 				{
 					exportEle.click();
-					loadingDlg(null,5);//loadingDlg();
+					loadingDlg(null,20);//loadingDlg();
 					flag=getTipMessageStatus();
 					clickXbrlLogButton();//adding here at 2019.2.18
 					ForceSubmitCommonDialog forceSubmit=new ForceSubmitCommonDialog(getWebDriverWrapper(),getTestDataManager());
@@ -625,8 +625,13 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 		Boolean flag=false;
 		IWebElementWrapper element=null;
 		try{
+			loadingDlg(null,50);
 			if(StringUtils.isBlank(exportType)){
 				element=element("td.selectCheckBox");
+				//add for ar v19.4
+				if(!(element.isPresent() && element.isDisplayed())){
+					element=element("td.selectCheckBox194");
+				}
 			}else{
 				//String js = "document.getElementById('transmitForm:formInstanceListTable:0:selectReturnCheckbox').getElementsByTagName('div')[1].click();";
 				//executeScript(js);
@@ -637,7 +642,7 @@ public class ExportToRegulatorDialog extends AbstractPage implements IComFolder,
 			{
 				//element.checkByJavaScript(true);
 				element.click();
-				loadingDlg(null,5);//loadingDlg();
+				loadingDlg(null,10);//loadingDlg();
 				flag=true;
 			}else
 			{

@@ -171,6 +171,7 @@
     <locator id="td.selectCheckBox" type="WebElement" by="xpath" expression=".//div[@id='transmitForm4Fed:formInstanceListTable:0:selectAllCheckbox']/div[2]" name="selectCheckBox" description="selectCheckBox"/>
     <locator id="td.selectCheckBoxXBRL" type="WebElement" by="xpath" expression=".//div[@id='transmitForm:selectAllCheckbox']/div[2]" name="selectCheckBoxXBRL" description="selectCheckBoxXBRL"/>
    	<locator id="td.logMsg" type="WebElement" by="xpath" expression="//div[@id='transmitLogDialog']//label[not(@id)]" name="logMsg" description="logMessage"/>
+    <locator id="td.selectCheckBox194" type="WebElement" by="xpath" expression=".//th[@id='transmitForm4Fed:formInstanceListTable:selectAllCheckbox']/div/div[2]" name="selectCheckBox" description="selectCheckBox  agilereporter v19.4"/>
     </page>
     
     <page id="drcfd" name="deleteReturnCommentForm" description="deleteReturnCommentForm Dialog created by Kun Shen">
