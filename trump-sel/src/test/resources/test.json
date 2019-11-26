@@ -59,13 +59,21 @@
         "username": "admin",
         "password": "password",
         "key": "::\\\\172.20.30.246\\DSExport:admin:password"
-      },{
+      },
+      {
       	"id": 12,
         "name": "FEDH",
         "url": "http://172.20.30.89:8290",
         "username": "admin",
         "password": "password",
         "key": "::\\\\172.20.30.246\\DSExport:admin:password"
+      },
+      {
+        "id": 13,
+        "name": "asia_arMAS_SQL",
+        "url": "http://172.20.30.228:8080",
+        "username": "auto_admin",
+        "password": "password"
       }
     ],
     "databaseServers": [
@@ -117,21 +125,28 @@
         "driver": "sqlserver",
         "host": "172.20.20.57\\sql2012",        
         "schema": "AR4SRDD_CORE"
-      }  ,
+      },
       {
       	"id": 11,
         "name": "ar_database",
         "driver": "oracle",
         "host": "172.20.31.239@ora12c",
         "schema": "AR_AUTO_OWNER_1156"
-      } ,
+      },
       {
       	"id": 12,
         "name": "ar_database",
         "driver": "oracle",
         "host": "172.20.20.49@ora12c",
         "schema": "AROFSAA$OWNER"
-      }    
+      },
+      {
+        "id": 13,
+        "name": "ar_database_MAS",
+        "driver": "sqlserver",
+        "host": "172.20.20.57\\sql2012",
+        "schema": "AR4MAS_CORE"
+      }
     ]
   }
 ]

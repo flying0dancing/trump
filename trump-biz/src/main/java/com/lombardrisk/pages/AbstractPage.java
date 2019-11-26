@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -67,7 +68,7 @@ public abstract class AbstractPage extends PageBase
 		}
 		
 	}
-	
+	protected List<String> largeForms= Arrays.asList("MAS649");
 	/**
 	 * 
 	 * @param webDriverWrapper
@@ -811,5 +812,14 @@ public abstract class AbstractPage extends PageBase
 		
 		return flag;
 	}
-	
+
+	public void loadingAndWaitLargeForms(String formName,int times) throws Exception {
+		if(largeForms.contains(formName)){
+			for(int i=0;i<times;i++){
+				loadingDlg(null,50);
+				waitThat().timeout(10000);
+			}
+		}
+		loadingDlg(null,50);
+	}
 }

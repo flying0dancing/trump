@@ -139,7 +139,9 @@ public class FormInstancePage extends AbstractPage implements IComFolder,IExecFu
 					//String fileFullName=regulatorFolder+formName+"_"+form.getVersion()+"_"+instanceCode+"_"+form.getEntity()+"_"+processDateSimple+".csv";
 					
 					long begin=System.currentTimeMillis();
-					refreshPage();//for ARv19.3.0 scroll bar not point to top when change page.
+					//refreshPage();//for ARv19.3.0 scroll bar not point to top when change page.
+					String js = "document.getElementById('formInstMainDiv').scrollTop=0;";//for AEv19.4,point to top
+					executeScript(js);
 					//get all normal cells
 					StringBuffer strBuffer=getNormalCells(instanceCode);
 		    		FileUtil.writeContent(fileToWrite,strBuffer.toString());
@@ -513,9 +515,9 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			{
 				logger.info("select instance " + instanceLabel);
 				element("fipf.curInst").click();
-				loadingDlg(null,10);//loadingDlg();
+				loadingDlg(null,200);//loadingDlg();
 				element("fipf.selectInstace", instanceLabel).click();
-				loadingDlg(null,30);//loadingDlg();
+				loadingDlg(null,200);//loadingDlg();
 			}
 
 		}
@@ -547,10 +549,10 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 		Boolean selected=false;
 		do
 		{
-			loadingDlg(null,5);//loadingDlg();
+			loadingDlg(null,200);
 			logger.info("Trying to click page index[" + pageIndex+"]");
 			element("fipf.pageName", pageIndex).click();
-			loadingDlg(null,5);//loadingDlg();
+			loadingDlg(null,200);
 			
 			//if fp.ajaxErrorBtn selected=false
 			if(element("fipf.ajaxErrorBtn").isPresent())
@@ -608,15 +610,16 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				super.getWebDriverWrapper().navigate().backward();
 				return false;
 			}
-			loadingDlg(element("fipf.pageTab"),10);
-			
+			loadingDlg(element("fipf.pageTab"),100);
+			waitThat().timeout(5000);
+			loadingDlg(null,100);
 			if(element("abstract.ajaxstatusDlg").isDisplayed())
 			{
 				logger.info("still loading");
 				super.getWebDriverWrapper().navigate().backward();
 				return false;
 			}
-			loadingDlg(null,5);//loadingDlg();
+			loadingDlg(null,100);
 			waitForPageLoaded();
 			if (element("fipf.warnConfirmBtn").isDisplayed())
 			{
@@ -1187,7 +1190,7 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 			String js = "document.getElementById('formHeader:exportToFile4Fed_menu').getElementsByTagName('ul')[0].getElementsByTagName('li')["+String.valueOf(i-1)+"].getElementsByTagName('a')[0].getElementsByTagName('span')[0].click();";
 			executeScript(js);
 			if(liTxt.toUpperCase().contains("XBRL")){waitThat().timeout(2000);}
-			loadingDlg(null,5);//loadingDlg();
+			loadingAndWaitLargeForms(form.getName(),3);
 			/*IWebElementWrapper element=element("td.transmitDialog4FedTitle");
 			if(element.isDisplayed())
 			{
