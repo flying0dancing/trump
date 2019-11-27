@@ -56,7 +56,7 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		String newFileFullPath=null;
 		if(new File(downloadFolderPath).exists())
 		{
-			String newFile=FileUtil.getLatestFile(downloadFolderPath, filterStr,"");
+			String newFile=FileUtil.getLatestFile(downloadFolderPath, filterStr,"",-1);
 			if(new File(newFile).exists())
 			{
 				newFileFullPath=newFile;
@@ -73,36 +73,35 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 	private String findNewFileForUpload(String importFileFullName)
 	{
 		String newFileFullPath=null;
-		if(new File(importFileFullName).exists())
+
+		String prefixFilter=form.getImportFile().lastIndexOf("(")==-1?form.getImportFile().substring(0, form.getImportFile().lastIndexOf(".")):form.getImportFile().substring(0, form.getImportFile().lastIndexOf("("));
+		String filterStr=prefixFilter+"*"+form.getImportFile().substring(form.getImportFile().lastIndexOf("."));
+
+		newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")"+"/", filterStr);
+		if(newFileFullPath==null){
+			newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/", filterStr);
+		}
+		if(newFileFullPath==null){
+			newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/", filterStr);
+		}
+
+		if(newFileFullPath!=null)
 		{
-			newFileFullPath=importFileFullName;
-		}else
-		{
-			String prefixFilter=form.getImportFile().lastIndexOf("(")==-1?form.getImportFile().substring(0, form.getImportFile().lastIndexOf(".")):form.getImportFile().substring(0, form.getImportFile().lastIndexOf("("));
-			String filterStr=prefixFilter+"*"+form.getImportFile().substring(form.getImportFile().lastIndexOf("."));
-
-
-			newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELNOSCALE+")"+"/", filterStr);
-			if(newFileFullPath==null){
-				newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCEL+")"+"/", filterStr);
-			}
-			if(newFileFullPath==null){
-				newFileFullPath=getDownloadFile( TARGET_DOWNLOAD_FOLDER+"/"+form.getRegulator()+"("+EXPORTTOEXCELAPPLYSCALE+")"+"/", filterStr);
-			}
-
-			if(newFileFullPath!=null)
-			{
-				try {
-					logger.info("copy file from "+newFileFullPath+" to " + importFileFullName);
-					FileUtils.copyFile(new File(newFileFullPath), new File(importFileFullName));
-					
-					newFileFullPath=importFileFullName;
-				} catch (Exception e) {
-					logger.error(e.getMessage());
+			try {
+				File file=new File(importFileFullName);
+				if(file.exists()){
+					logger.info("delete existed older file " + importFileFullName);
+					file.delete();
 				}
+				logger.info("copy file from "+newFileFullPath+" to " + importFileFullName);
+				FileUtils.copyFile(new File(newFileFullPath), new File(importFileFullName));
+
+				newFileFullPath=importFileFullName;
+			} catch (Exception e) {
+				logger.error(e.getMessage());
 			}
 		}
-		
+
 		return newFileFullPath;
 	}
 	
@@ -117,46 +116,40 @@ public class CreateNewReturnFromExcelDialog extends AbstractPage implements ICom
 		String errorTxt=null;
 		if(Strings.isNullOrEmpty(form.getImportFile()) )
 		{
+			closeThisPage();
 			return "no exist import file";
 		}
 		String importFileFullName=TARGET_IMPORT_FOLDER+form.getRegulator()+"/"+form.getImportFile();//
-		if(!new File(importFileFullName).exists())
-		{
 
-			importFileFullName=findNewFileForUpload(importFileFullName);
-			if(importFileFullName!=null && new File(importFileFullName).exists())
+		String importFileFullNameFound=findNewFileForUpload(importFileFullName);
+		if(importFileFullNameFound!=null && new File(importFileFullNameFound).exists())
+		{
+			ExcelUtil.updateCellsInExcel(importFileFullNameFound, new String[][]{{"_ReportingDate","-1","-1", form.getProcessDate(),"date:"+dateFormat},{"_EntityCode","-1","-1", getDBInfo().getEntityCode(form.getRegulator(), form.getEntity()),null}});//update process date and entity by form's getProcessDate
+			importFileFullName=importFileFullNameFound;
+		}else
+		{
+			if(!new File(importFileFullName).exists())
 			{
-				ExcelUtil.updateCellsInExcel(importFileFullName, new String[][]{{"_ReportingDate","-1","-1", form.getProcessDate(),"date:"+dateFormat},{"_EntityCode","-1","-1", getDBInfo().getEntityCode(form.getRegulator(), form.getEntity()),null}});//update process date and entity by form's getProcessDate
-			}else
-			{
+				closeThisPage();
 				return "no exist import file";
 			}
 		}
-		
+
 		logger.info("Execute js script");
 		String js = "document.getElementById('" + type + ":importFileUpload').getElementsByTagName('div')[0].getElementsByTagName('span')[0].className='';";
 		executeScript(js);
 
-		if(importFileFullName!=null && new File(importFileFullName).exists())
-		{
-			element("abstract.importFileUpload_input",type).type(importFileFullName);
-			loadingDlg(null,100);
-			loadingDlgDis(element("cfed.uploadProgress"),100);
-			loadingDlg(null,100);
-			errorTxt=uploadFileError(type);
-			if(errorTxt!=null)
-			{
-				closeThisPage();
-			}
-		}else
-		{
-			errorTxt="no exist import file";
-			closeThisPage();
-		}
+		element("abstract.importFileUpload_input",type).type(importFileFullName);
+		loadingDlg(null,100);
+		loadingDlgDis(element("cfed.uploadProgress"),100);
+		loadingDlg(null,100);
+		errorTxt=uploadFileError(type);
 		if(errorTxt!=null)
 		{
 			logger.info("click upload button(error message):"+errorTxt);
+			closeThisPage();
 		}
+
 		return errorTxt;
 	}
 	

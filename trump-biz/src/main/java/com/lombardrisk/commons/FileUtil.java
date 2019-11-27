@@ -14,16 +14,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -1061,7 +1059,7 @@ public class FileUtil extends FileUtils
 	 */
 	public static List<String> getFilesByFilter(String filePath, String excludeFilters) {
 		if (StringUtils.isNotBlank(filePath)) {
-			return listFilesByFilter(filePath, null, excludeFilters);
+			return listFilesByFilter(filePath, null, excludeFilters,false);
 		}
 		return new ArrayList<>();
 	}
@@ -1078,24 +1076,27 @@ public class FileUtil extends FileUtils
 		return Pair.of(parentPath, fileName);
 	}
 
-	public static List<String> listFilesByFilter(String filePath, String filterStr, String exfilterStr) {
+	public static List<String> listFilesByFilter(final String filePath,final String filterStr,
+												  final String exfilterStr,final boolean keepDirStructure) {
 		List<String> filePaths = new ArrayList<>();
 		File fileFullPath = new File(filePath);
-		if (StringUtils.isBlank(filterStr)) {
-			filterStr = "";
-		}
-		if (StringUtils.isBlank(exfilterStr)) {
-			exfilterStr = "";
-		}
 		if (fileFullPath.exists()) {
 			if (fileFullPath.isDirectory()) {
 				File[] files = filterFilesAndSubFolders(fileFullPath, filterStr, exfilterStr);
+				Boolean flag=true;
 				for (File file : files) {
-					filePaths.addAll(listFilesByFilter(file.getAbsolutePath(), filterStr, exfilterStr));
+					if(file.isFile()){
+						if(keepDirStructure && flag){
+							filePaths.add(file.getParent());
+							flag=false;
+						}
+						filePaths.add(file.getAbsolutePath());
+					}else{
+						filePaths.addAll(listFilesByFilter(file.getAbsolutePath(), filterStr, exfilterStr,keepDirStructure));
+					}
 				}
-			}
-			if (fileFullPath.isFile()) {
-				filePaths.add(fileFullPath.getAbsolutePath());
+			}else{
+				filePaths.add(filePath);
 			}
 		} else {
 			Pair<File, String> pathParts = splitFilePathIntoParentFileAndFileName(filePath);
@@ -1105,7 +1106,11 @@ public class FileUtil extends FileUtils
 			if (parentPath.isDirectory()) {
 				File[] files = filterFilesAndSubFolders(parentPath, fileName, exfilterStr);
 				for (File file : files) {
-					filePaths.addAll(listFilesByFilter(file.getAbsolutePath(), fileName, exfilterStr));
+					if(file.isFile()){
+						filePaths.add(file.getAbsolutePath());
+					}else{
+						filePaths.addAll(listFilesByFilter(file.getAbsolutePath(), fileName, exfilterStr,keepDirStructure));
+					}
 				}
 			} else {
 				logger.error("error: invalid path[" + filePath + "]");
@@ -1114,18 +1119,31 @@ public class FileUtil extends FileUtils
 		return filePaths;
 	}
 
-	private static File[] filterFilesAndSubFolders(File parentPath, String filterStr, String excludeFileStr) {
-		final String[] filters = filterStr.toLowerCase().split("\\*");
-		final String[] exfilters = excludeFileStr.toLowerCase().replaceAll("^\\*(.*)", "$1").split(";");
+	protected static File[] filterFilesAndSubFolders(final File parentPath,final String filterStr,final String excludeFileStr) {
+		final String[] filters = StringUtils.isBlank(filterStr)?null:filterStr.toLowerCase().split("\\*");
+		final String[] exfilters = StringUtils.isBlank(excludeFileStr)?null:excludeFileStr.toLowerCase().replaceAll("^\\*(.*)", "$1").split(";");
 
 		return parentPath.listFiles(new CustomFileNameFilter(filters, exfilters));
 	}
 
 	public static List<File> getFiles(String filePath, String filterStr, String exfilterStr){
-		List<String> fileFullPaths=listFilesByFilter(filePath,filterStr,exfilterStr);
+		List<String> fileFullPaths=listFilesByFilter(filePath,filterStr,exfilterStr,false);
 		List<File> returnFiles=new ArrayList<File>();
 		for(String fileFullPath:fileFullPaths){
 			returnFiles.add(new File(fileFullPath));
+		}
+		return returnFiles;
+	}
+
+	public static List<File> getFiles(String filePath, String filterStr, String exfilterStr,long lockerTimestamp){
+		List<String> fileFullPaths=listFilesByFilter(filePath,filterStr,exfilterStr,false);
+		List<File> returnFiles=new ArrayList<File>();
+		File file;
+		for(String fileFullPath:fileFullPaths){
+			file=new File(fileFullPath);
+			if(file.lastModified()>=lockerTimestamp){
+				returnFiles.add(file);
+			}
 		}
 		return returnFiles;
 	}
@@ -1159,58 +1177,88 @@ public class FileUtil extends FileUtils
 		return list;
 	}
 
-
-	public static String getLatestFile(String path, String filterStr,String exfileStr)
+	/***
+	 * get lasted file
+	 * @param path
+	 * @param filterStr
+	 * @param exfileStr
+	 * @param lockerTimestamp get files newer than lockerTimestamp, set -1 if does not need timestamp
+	 * @return
+	 */
+	public static String getLatestFile(String path, String filterStr,String exfileStr,long lockerTimestamp)
 	{
-		List<File> files = sortFileByModifiedTime(path,filterStr,exfileStr);
+		List<File> list;
+		if(lockerTimestamp<=0){
+			list = getFiles(path,  filterStr, exfileStr);
+		}else{
+			list = getFiles(path,  filterStr, exfileStr,lockerTimestamp);
+		}
 		try
 		{
-			return files.get(0).toString();
+			if(list!=null && list.size()>0){
+				HashMap<Long,String> timeFileMap=new HashMap<Long, String>();
+				File file=list.get(0);;
+				long flagTimestamp=file.lastModified();
+				timeFileMap.put(flagTimestamp,file.toString());
+				for(int i=1;i<list.size();i++){
+					file=list.get(i);
+					if(file.lastModified()>flagTimestamp){
+						flagTimestamp=file.lastModified();
+						timeFileMap.put(flagTimestamp,file.toString());
+					}
+				}
+				return timeFileMap.get(flagTimestamp);
+			}
 		}
 		catch (Exception e)
 		{
 			return "";
 		}
+		return "";
 	}
 	private static class CustomFileNameFilter implements FilenameFilter {
-
+		private static final String regex="\\*";
 		private final String[] filters;
 		private final String[] exFilters;
 
-		public CustomFileNameFilter(String[] filters, String[] exFilters){
+		public CustomFileNameFilter(final String[] filters,final String[] exFilters){
 
 			this.filters = filters;
 			this.exFilters = exFilters;
 		}
 
 		@Override
-		public boolean accept(File dir, String name) {
+		public boolean accept(final File dir,final String name) {
 			if (new File(dir, name).isDirectory() && !name.startsWith(".")) {
 				return true;
 			}
-			for (String filter : filters) {
-				if (StringUtils.isNotBlank(filter) && !name.toLowerCase().contains(filter)) {
-					return false;
+			if(ArrayUtils.isNotEmpty(filters)){
+				for (String filter : filters) {
+					if (StringUtils.isNotBlank(filter) && !name.toLowerCase().contains(filter)) {
+						return false;
+					}
 				}
 			}
 			return runExcludeFilters(name);
 		}
 
 		private boolean runExcludeFilters(final String name) {
-			for (String exfilter : exFilters) {
-				boolean exflag = false;
-				if (StringUtils.isNotBlank(exfilter)) {
-					exflag = true;
-					String[] subfilters = exfilter.split("\\*");
-					for (String subexfilter : subfilters) {
-						if (StringUtils.isNotBlank(subexfilter) && !name.toLowerCase().contains(subexfilter)) {
-							exflag = false;
-							break;
+			if(ArrayUtils.isNotEmpty(exFilters)){
+				for (String exfilter : exFilters) {
+					boolean exflag = false;
+					if (StringUtils.isNotBlank(exfilter)) {
+						exflag = true;
+						String[] subfilters = exfilter.split(regex);
+						for (String subexfilter : subfilters) {
+							if (StringUtils.isNotBlank(subexfilter) && !name.toLowerCase().contains(subexfilter)) {
+								exflag = false;
+								break;
+							}
 						}
 					}
-				}
-				if (exflag) {
-					return false;
+					if (exflag) {
+						return false;
+					}
 				}
 			}
 			return true;
