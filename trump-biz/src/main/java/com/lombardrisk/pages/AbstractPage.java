@@ -358,7 +358,7 @@ public abstract class AbstractPage extends PageBase
 		int backcount=60;
 		while(flag)
 		{
-			fileName = FileUtil.getLatestFile(dir,"",".ini;.lock");
+			fileName = FileUtil.getLatestFile(dir,"",".ini;.lock",latestFileLockedTime);
 			long latestFileTime=new File(fileName).lastModified();
 			if(backcount<=0){
 				flag=false;
