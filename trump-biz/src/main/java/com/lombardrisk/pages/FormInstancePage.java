@@ -611,8 +611,6 @@ private StringBuffer getGridCells(String instanceCode,String tbodyId,String grid
 				return false;
 			}
 			loadingDlg(element("fipf.pageTab"),100);
-			waitThat().timeout(5000);
-			loadingDlg(null,100);
 			if(element("abstract.ajaxstatusDlg").isDisplayed())
 			{
 				logger.info("still loading");
