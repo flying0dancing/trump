@@ -923,34 +923,22 @@ public class FileUtil extends FileUtils
 			exportReader=new BufferedReader(new FileReader(fileFullName));
 			String exportStr=null;
 			foundStrs="";
-			int foundTime=2;
-			String regex=removedByStr+"(?:\\sTime\\sZone)?\\s+(.*)";
-			Pattern pattern=Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+			int foundTime=0;
+			//String regex=removedByStr;
+			Pattern pattern=Pattern.compile(removedByStr, Pattern.CASE_INSENSITIVE);
 			strBuffer=new StringBuffer();
+			File newFile=new File(newFileFullName);
+			writeContentToEmptyFile(newFile,strBuffer.toString());
 			while((exportStr=exportReader.readLine())!=null)
 			{
+				if(StringUtils.isBlank(exportStr))continue;
 				Matcher m=pattern.matcher(exportStr);
 				if(m.find())
 				{
 					//strBuffer.append(exportStr.replace(m.group(1), "ExportTime")+System.getProperty("line.separator"));
-					foundStrs+=m.group(1)+" ";
+					foundStrs+=exportStr+System.getProperty("line.separator");
 					//System.out.println("~"+foundStrs+"~");
-					foundTime--;
-					if(foundTime==0) break;
-				}else
-				{
-					strBuffer.append(exportStr+System.getProperty("line.separator"));
-				}
-			}
-			File newFile=new File(newFileFullName);
-			writeContentToEmptyFile(newFile,strBuffer.toString());
-			strBuffer.setLength(0);//clear strBuffer
-			foundStrs=foundStrs.trim();
-			while((exportStr=exportReader.readLine())!=null)
-			{
-				if(exportStr.contains(foundStrs))
-				{
-					//strBuffer.append(exportStr.replace(foundStrs, "ExportTime")+System.getProperty("line.separator"));
+					foundTime++;
 				}else
 				{
 					strBuffer.append(exportStr+System.getProperty("line.separator"));
@@ -961,6 +949,7 @@ public class FileUtil extends FileUtils
 					strBuffer.setLength(0);//clear strBuffer
 				}
 			}
+			logger.info("remove lines("+foundTime+"): "+foundStrs);
 			FileUtil.writeContent(newFile, strBuffer.toString());	
 			strBuffer.setLength(0);//clear strBuffer
 			exportReader.close();

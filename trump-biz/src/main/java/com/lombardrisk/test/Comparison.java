@@ -711,8 +711,11 @@ public class Comparison implements IComFolder,IExecFuncFolder
 				
 				if(Strings.isNullOrEmpty(returnStatus1) && Strings.isNullOrEmpty(returnStatus2))
 				{
-					FileUtil.removeStrInTxt(otxtFullName_exported, deltxtFullName_exported, "Export Time");
-					FileUtil.removeStrInTxt(otxtFullName_expected, deltxtFullName_expected, "Export Time");
+					//FileUtil.removeStrInTxt(otxtFullName_exported, deltxtFullName_exported, "Export Time");
+					//FileUtil.removeStrInTxt(otxtFullName_expected, deltxtFullName_expected, "Export Time");
+					//add for delete time
+					FileUtil.removeStrInTxt(otxtFullName_exported, deltxtFullName_exported, ".*(?:\\d{1,2}\\:){2}\\d{1,2}.*");
+					FileUtil.removeStrInTxt(otxtFullName_expected, deltxtFullName_expected, ".*(?:\\d{1,2}\\:){2}\\d{1,2}.*");
 					
 					cmdLine="\""+path_BComp+"GenerateReport.bat\" "+"\"" + deltxtFullName_exported + "\" "+"\"" + deltxtFullName_expected + "\" "+ "\""+newReportPath+"\"";
 					returnStatus=getReturnStatus(cmdLine);
