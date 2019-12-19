@@ -822,4 +822,90 @@ public abstract class AbstractPage extends PageBase
 		}
 		loadingDlg(null,50);
 	}
+
+	/**
+	 * this for loading element at its first index
+	 * @param element
+	 * @return
+	 * @throws Exception
+	 */
+	protected Boolean loadFormFilter(IWebElementWrapper element) throws Exception
+	{
+		Boolean flag=false;
+		List<String> list=element.getAllOptionTexts();
+		String firstOpt=list.get(0);
+		int times=0;
+		while(times<=10){
+			logger.info("loading form filter");
+			if(element.getSelectedText().equalsIgnoreCase(firstOpt)){
+				flag=true;
+				break;
+			}
+			waitThat().timeout(4000);
+			times++;
+		}
+		return flag;
+
+	}
+
+	/**
+	 * select it and wait refreshElt refreshed at first index.
+	 * @param element
+	 * @param it
+	 * @param refreshElt
+	 * @return
+	 * @throws Exception
+	 */
+	protected Boolean selectIt(IWebElementWrapper element,String it,IWebElementWrapper refreshElt) throws Exception
+	{
+		Boolean flag=false;
+		if(it==null || it.trim().equals("")){return false;}
+		if (!element.getSelectedText().equalsIgnoreCase(it))
+		{
+			try{
+				element.selectByVisibleText(it.trim());
+				loadingDlg(null,15);
+				loadFormFilter(refreshElt);
+			}catch(Exception e){}
+			finally{
+				if(element.getSelectedText().equalsIgnoreCase(it.trim()))
+				{
+					flag=true;
+				}else
+				{
+					List<String> list=element.getAllOptionTexts();
+					if(list.contains(it.trim()))
+					{
+						element.selectByVisibleText(it.trim());
+						loadingDlg(null,5);//loadingDlg();
+						flag=loadFormFilter(refreshElt);
+					}else
+					{
+						for(String item:list)
+						{
+							if(it.trim().equalsIgnoreCase(item.trim()))
+							{
+								element.selectByVisibleText(item);
+								loadingDlg(null,5);//loadingDlg();
+								flag=loadFormFilter(refreshElt);
+								break;
+							}
+						}
+					}
+
+				}
+
+			}
+
+		}else
+		{flag=true;}
+
+		if(!flag)
+		{
+			logger.error("cannot find "+it);
+		}
+
+		return flag;
+
+	}
 }
