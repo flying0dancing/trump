@@ -168,26 +168,30 @@ public class ListPage extends AbstractPage implements IExportTo
 		String group=form.getEntity();
 		String formAndVersion=form.getName()+" "+form.getVersion();
 		String processDate=form.getProcessDate();
-						
+
+		IWebElementWrapper regulatorElt=element("filf.regulator");
+		IWebElementWrapper entityElt=element("filf.selectGroup");
+		IWebElementWrapper formElt=element("filf.selectForm");
+		IWebElementWrapper dateElt=element("filf.selectProcessDate");
 		logger.info("select regulator:" + regulator);
-		flag=selectIt(element("filf.regulator"),regulator);
+		flag=selectIt(regulatorElt,regulator,entityElt);
 		if(flag)
 		{
-			form.setRegulator(getRealText(element("filf.regulator"),regulator));
+			form.setRegulator(getRealText(regulatorElt,regulator));
 			logger.info("select entity:" + group);
-			flag=selectIt(element("filf.selectGroup"),group);
-			form.setEntity(getRealText(element("filf.selectGroup"),group));
+			flag=selectIt(entityElt,group,formElt);
+			form.setEntity(getRealText(entityElt,group));
 			if(flag)
 			{
 				logger.info("select form:" + formAndVersion);
-				flag=selectIt(element("filf.selectForm"),formAndVersion);
-				String tmp=getRealText(element("filf.selectForm"),formAndVersion).trim();
+				flag=selectIt(formElt,formAndVersion,dateElt);
+				String tmp=getRealText(formElt,formAndVersion).trim();
 				form.setName(tmp.substring(0, tmp.lastIndexOf(" ")));
 				
 				if (flag)
 				{
 					logger.info("select process date:" + processDate);
-					flag=selectIt(element("filf.selectProcessDate"),processDate);
+					flag=selectIt(dateElt,processDate);
 					if(!flag){return flag;}
 				}
 			}

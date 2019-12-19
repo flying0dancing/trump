@@ -35,6 +35,7 @@ usage
 -------
 change log 
 ===
-trump 1.2.0 support agile reporter version 1.16.1+
+trump 1.2.1 support agile reporter version 1.16.1+
+trump 1.2.0 support agile reporter version 1.16.1 - 19.3
 trump 1.1.0 support agile reporter version 1.15.3 - 1.16.0
 trump 1.0.0 support agile reporter version 1.15.0 - 1.15.3
