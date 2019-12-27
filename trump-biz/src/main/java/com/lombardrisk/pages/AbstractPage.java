@@ -453,18 +453,14 @@ public abstract class AbstractPage extends PageBase
 					List<String> list=element.getAllOptionTexts();
 					if(list.contains(it.trim()))
 					{
-						element.selectByVisibleText(it.trim());
-						loadingDlg(null,5);//loadingDlg();
-						flag=true;
+						flag=selectIt(element,it.trim());
 					}else
 					{
 						for(String item:list)
 						{
 							if(it.trim().equalsIgnoreCase(item.trim()))
 							{
-								element.selectByVisibleText(item);
-								loadingDlg(null,5);//loadingDlg();
-								flag=true;
+								flag=selectIt(element,item);
 								break;
 							}
 						}
@@ -876,18 +872,14 @@ public abstract class AbstractPage extends PageBase
 					List<String> list=element.getAllOptionTexts();
 					if(list.contains(it.trim()))
 					{
-						element.selectByVisibleText(it.trim());
-						loadingDlg(null,5);//loadingDlg();
-						flag=loadFormFilter(refreshElt);
+						flag=selectIt(element,it.trim(),refreshElt);
 					}else
 					{
 						for(String item:list)
 						{
 							if(it.trim().equalsIgnoreCase(item.trim()))
 							{
-								element.selectByVisibleText(item);
-								loadingDlg(null,5);//loadingDlg();
-								flag=loadFormFilter(refreshElt);
+								flag=selectIt(element,item,refreshElt);
 								break;
 							}
 						}

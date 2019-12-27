@@ -826,7 +826,39 @@ public class FileUtil extends FileUtils
 		}
 		return newFileName;
 	}
-	
+	/**
+	 * copy file from sourcePath to resultPath, if resultPath already exists fileName, add suffix like (1),(2) in fileName, and return new file name
+	 * @author kun shen
+	 * @param sourcePath
+	 * @param resultPath
+	 * @param fileName
+	 * @return
+	 * @throws Exception
+	 */
+	public static String copyToNewFile(String sourcePath,String resultPath,String fileName,String specialSuffix) throws Exception
+	{
+		String namePrefix=fileName.substring(0, fileName.lastIndexOf("."));
+		String nameSuffix=fileName.replace(namePrefix, "");
+		String newFileName=namePrefix+specialSuffix+nameSuffix;
+		if(new File(resultPath).isDirectory())
+		{
+			int count=1;
+
+			while(new File(resultPath+newFileName).exists())
+			{
+				newFileName=namePrefix+specialSuffix+"("+String.valueOf(count)+")"+nameSuffix;
+				count++;
+			}
+		}else
+		{
+			createDirectory(resultPath);
+		}
+		if(new File(sourcePath+fileName).exists())
+		{
+			FileUtils.copyFile(new File(sourcePath+fileName), new File(resultPath+newFileName));
+		}
+		return newFileName;
+	}
 	/**
 	 * rename existed file and adding suffix, return null if the file doesn't exist.
 	 * @param filePath
