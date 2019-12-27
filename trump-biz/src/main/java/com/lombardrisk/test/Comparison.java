@@ -47,7 +47,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		
 		try {
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
-			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
+			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile(),UIDISPLAY_SUFFIX);
 			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
 			form.setExec_ExpectationFile(newFilePath);
@@ -214,7 +214,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		{
 			long begin_Comparison=System.currentTimeMillis();
 			String reslutFolder=expectationFolder+UIDISPLAY+"/";
-			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
+			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile(),UIDISPLAYONEBYONE_SUFFIX);
 			
 			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
@@ -313,7 +313,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		{
 			String reslutFolder=expectationFolder+functionFolderName+"/";
 			
-			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
+			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile(),EXPORTTOEXCEL_SUFFIX);
 			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
 			form.setExec_ExpectationFile(newFilePath);
@@ -366,7 +366,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 			if(exportedFile.exists())
 			{
 				String reslutFolder=expectationFolder+functionFolderName+"/";
-				String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
+				String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile(),EXPORTTOCSV_SUFFIX);
 				form.setExec_ExpectationFile(newFileName);
 				String newFilePath=reslutFolder+newFileName;
 				
@@ -762,7 +762,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		{
 			String reslutFolder=expectationFolder+EXPORTVALIDATION+System.getProperty("file.separator");
 			
-			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
+			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile(),EXPORTVALIDATION_SUFFIX);
 			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
 			form.setExec_ExpectationFile(newFilePath);
@@ -812,7 +812,7 @@ public class Comparison implements IComFolder,IExecFuncFolder
 		{
 			String reslutFolder=expectationFolder+EXPORTPROBLEMS+System.getProperty("file.separator");
 			
-			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile());
+			String newFileName=FileUtil.copyToNewFile(expectationFolder,reslutFolder,form.getExpectationFile(),EXPORTPROBLEMS_SUFFIX);
 			//form.setExec_ExpectationFile(newFileName);
 			String newFilePath=reslutFolder+newFileName;
 			form.setExec_ExpectationFile(newFilePath);
