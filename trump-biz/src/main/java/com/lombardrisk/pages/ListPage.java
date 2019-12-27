@@ -184,7 +184,7 @@ public class ListPage extends AbstractPage implements IExportTo
 			if(flag)
 			{
 				logger.info("select form:" + formAndVersion);
-				flag=selectIt(formElt,formAndVersion,dateElt);
+				flag=selectIt(formElt,formAndVersion);
 				String tmp=getRealText(formElt,formAndVersion).trim();
 				form.setName(tmp.substring(0, tmp.lastIndexOf(" ")));
 				
