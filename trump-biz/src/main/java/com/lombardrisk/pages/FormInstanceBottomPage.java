@@ -48,20 +48,21 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	public String exportValidation() throws Exception
 	{
 		Boolean flag=false;
-		if(lockDownloadDir(downloadFolder))
+		String downloadFolder=System.getProperty("user.home")+System.getProperty("file.separator")+"downloads"+System.getProperty("file.separator");
+		if(lockDownloadDir(false,downloadFolder))
 		{
-			flag=clickExportToFile("VALIDATION");
+			flag=clickExportToVal("VALIDATION");
 		}
 		if(!flag)
 		{
-			unlockDownloadDir(downloadFolder);
+			unlockDownloadDir(false,downloadFolder);
 			closeThisPage();//close bottom page after export.
 			return null;
 		}
 		//String sourceFileFullPath=exportToFile();
-		String sourceFileFullPath=downloadFile(System.getProperty("user.home")+System.getProperty("file.separator")+"downloads"+System.getProperty("file.separator"));//update for agile reporter v1.16.2
+		String sourceFileFullPath=downloadFile(downloadFolder);//update for agile reporter v1.16.2
 		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTVALIDATION+")/");
-		unlockDownloadDir(downloadFolder);
+		unlockDownloadDir(false,downloadFolder);
 		
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
 		String destFileName=form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
@@ -69,8 +70,7 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		if(!destFileFullPath.contains(tmp)){//add for agile reporter v1.16.2;agile reporter v1.16.2 can download files with names.
 			destFileFullPath=FileUtil.renameFile(destFileFullPath, destFileName);
 		}
-		
-		
+
 		closeThisPage();//close bottom page after export.
 		Runtime.getRuntime().gc();
 		return destFileFullPath;
@@ -85,24 +85,28 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 	public String exportProblems() throws Exception
 	{
 		Boolean flag=false;
-		if(lockDownloadDir(downloadFolder))
+		String downloadFolder=System.getProperty("user.home")+System.getProperty("file.separator")+"downloads"+System.getProperty("file.separator");
+		if(lockDownloadDir(false,downloadFolder))
 		{
 			flag=clickExportToFile("PROBLEMS");
 		}
 		if(!flag)
 		{
-			unlockDownloadDir(downloadFolder);
+			unlockDownloadDir(false,downloadFolder);
 			closeThisPage();//close bottom page after export.
 			return null;
 		}
-		String sourceFileFullPath=exportToFile();
+		//String sourceFileFullPath=exportToFile();
+		String sourceFileFullPath=downloadFile(downloadFolder);//update for agile reporter v1.16.2
 		String destFileFullPath=moveDownloadFileToExpectedFolder(sourceFileFullPath,TARGET_DOWNLOAD_FOLDER+form.getRegulator()+"("+EXPORTPROBLEMS+")/");
-		unlockDownloadDir(downloadFolder);
+		unlockDownloadDir(false,downloadFolder);
 		
 		String processDateSimple=form.getProcessDate().replace("/", "").replace("-", "");
 		String destFileName=form.getName()+"_"+form.getVersion()+"_"+form.getEntity()+"_"+processDateSimple;
-		destFileFullPath=FileUtil.renameFile(destFileFullPath, destFileName);
-		
+		String tmp="_"+form.getName()+"_";
+		if(!destFileFullPath.contains(tmp)){//add for agile reporter v1.16.2;agile reporter v1.16.2 can download files with names.
+			destFileFullPath=FileUtil.renameFile(destFileFullPath, destFileName);
+		}
 		closeThisPage();//close bottom page after export.
 		Runtime.getRuntime().gc();
 		return destFileFullPath;
@@ -131,14 +135,6 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		Boolean flag=true;
 		clickLinkText(text);
 		loadingDlg(null,5);//loadingDlg(3000);
-		//logger.info("\"level\" select all \"Status\"");
-		String js = "document.getElementById('formInstDetailFooterTabView:validationForm:result').getElementsByTagName('option')[0].click();";
-		executeScript(js);
-		if(element("fidf.valResultStatus").isDisplayed()){//add in agile reporter version 1.16.2, for select level=Status
-			//selectIt(element("fidf.valResultStatus"),"Status");//<Kun:this function not work on this element, why> use next one instead
-			logger.info("\"level\" select all \"Status\"");
-			selectIt(element("fidf.valResultStatus"),"Status");
-		}
 		
 		if(element("fidf.noRecordsFound").isDisplayed())
 		{
@@ -148,15 +144,39 @@ public class FormInstanceBottomPage  extends AbstractPage implements IComFolder,
 		{
 			if (PropHelper.ENABLE_FILE_DOWNLOAD)
 			{
-				TestCaseManager.getTestCase().startTransaction("");
-				TestCaseManager.getTestCase().setPrepareToDownload(true);
+				//TestCaseManager.getTestCase().startTransaction("");
+				//TestCaseManager.getTestCase().setPrepareToDownload(true);
 				clickExportImg();
-				TestCaseManager.getTestCase().stopTransaction();
+				//TestCaseManager.getTestCase().stopTransaction();
 			}
 			else
 			{
 				clickExportImg();
 			}
+		}
+		return flag;
+	}
+	private Boolean clickExportToVal(String text) throws Exception
+	{
+		Boolean flag=true;
+		clickLinkText(text);
+		loadingDlg(null,5);//loadingDlg(3000);
+		//logger.info("\"level\" select all \"Status\"");
+		String js = "document.getElementById('formInstDetailFooterTabView:validationForm:result').getElementsByTagName('option')[0].click();";
+		executeScript(js);
+		if(element("fidf.valResultStatus").isDisplayed()){//add in agile reporter version 1.16.2, for select level=Status
+			//selectIt(element("fidf.valResultStatus"),"Status");//<Kun:this function not work on this element, why> use next one instead
+			logger.info("\"level\" select all \"Status\"");
+			selectIt(element("fidf.valResultStatus"),"Status");
+		}
+
+		if(element("fidf.noRecordsFound").isDisplayed())
+		{
+			logger.error("error: no records found to export.");
+			flag=false;
+		}else
+		{
+			clickExportImg();
 		}
 		return flag;
 	}

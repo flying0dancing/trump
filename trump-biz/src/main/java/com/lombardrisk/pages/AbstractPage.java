@@ -540,15 +540,19 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected Boolean lockDownloadDir(String downloadDirectory) throws InterruptedException, IOException
 	{
+		return lockDownloadDir(PropHelper.ENABLE_FILE_DOWNLOAD, downloadDirectory);
+	}
+	protected Boolean lockDownloadDir(Boolean proxyDownload,String downloadDirectory) throws InterruptedException, IOException
+	{
 		Boolean lockNow=false;
 		Boolean lock=true;
-		
-		if(PropHelper.ENABLE_FILE_DOWNLOAD){return true;}
-		
+
+		if(proxyDownload){return true;}
+
 		if(new File(downloadDirectory).isDirectory())
 		{
 			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
-			
+
 			while(true)
 			{
 				if(!lockFile.exists())
@@ -558,12 +562,12 @@ public abstract class AbstractPage extends PageBase
 				}
 				Thread.sleep(1500);
 			}
-			
+
 			if(!lock)
 			{
 				lockNow=lockFile.createNewFile();
 			}
-			
+
 		}
 		return lockNow;
 	}
@@ -576,10 +580,14 @@ public abstract class AbstractPage extends PageBase
 	 */
 	protected Boolean unlockDownloadDir(String downloadDirectory) throws InterruptedException, IOException
 	{
+		return unlockDownloadDir(PropHelper.ENABLE_FILE_DOWNLOAD, downloadDirectory);
+	}
+	protected Boolean unlockDownloadDir(Boolean proxyDownload,String downloadDirectory) throws InterruptedException, IOException
+	{
 		Boolean unlock=false;
-		
-		if(PropHelper.ENABLE_FILE_DOWNLOAD){return true;}
-		
+
+		if(proxyDownload){return true;}
+
 		if(new File(downloadDirectory).isDirectory())
 		{
 			File lockFile=new File(downloadDirectory+System.getProperty("file.separator")+LOCKNAME);
@@ -598,7 +606,7 @@ public abstract class AbstractPage extends PageBase
 			{
 				unlock=true;
 			}
-			
+
 		}
 		return unlock;
 	}
