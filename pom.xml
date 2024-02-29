@@ -27,7 +27,7 @@
     <dom4j.version>1.6.1</dom4j.version>
     <xmlunit.version>1.6</xmlunit.version>
     <commons-lang3.version>3.4</commons-lang3.version>
-    <commons-compress.version>1.10</commons-compress.version>
+    <commons-compress.version>1.26.0</commons-compress.version>
     <commons-dbutils.version>1.6</commons-dbutils.version>
     <jtds.version>1.2.4</jtds.version>
     <xml-apis.version>1.4.01</xml-apis.version>
